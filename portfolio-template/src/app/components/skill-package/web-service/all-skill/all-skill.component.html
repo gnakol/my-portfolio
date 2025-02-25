@@ -1,0 +1,13 @@
+<div *ngIf="loading">Chargement des compétences...</div>
+
+<div class="skill-container" *ngIf="!loading">
+  <mat-card *ngFor="let skill of skills; let i = index" class="skill-card" [@fadeIn]="i">
+    <mat-card-title>{{ skill.name }}</mat-card-title>
+    <mat-card-subtitle>
+      {{ skill.skillCategory?.name || 'Catégorie inconnue' }}
+    </mat-card-subtitle>
+    <mat-card-content>
+      <p>{{ skill.description || 'Pas de description disponible' }}</p>
+    </mat-card-content>
+  </mat-card>
+</div>

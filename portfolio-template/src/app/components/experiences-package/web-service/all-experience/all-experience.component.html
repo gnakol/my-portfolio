@@ -1,0 +1,18 @@
+<div *ngIf="loading">Chargement des expériences...</div>
+
+<div class="experience-container" *ngIf="!loading">
+  <mat-card *ngFor="let exp of experiences; let i = index" 
+            class="experience-card"
+            [@fadeIn]="i">
+    <mat-card-title>{{ exp.title }}</mat-card-title>
+    <mat-card-subtitle>
+      {{ exp.companyName }} ({{ exp.startDate }} - {{ exp.endDate || 'Présent' }})
+    </mat-card-subtitle>
+    <mat-card-content>
+      <p>{{ exp.description }}</p>
+      <span class="experience-type" *ngIf="exp.experienceType">
+        {{ exp.experienceType.name }}
+      </span>
+    </mat-card-content>
+  </mat-card>
+</div>

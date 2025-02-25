@@ -1,0 +1,13 @@
+<div *ngIf="loading">Chargement des formations...</div>
+
+<div class="training-container" *ngIf="!loading">
+  <mat-card *ngFor="let training of trainings; let i = index" class="training-card" [@fadeIn]="i">
+    <mat-card-title>{{ training.label }}</mat-card-title>
+    <mat-card-subtitle>
+      {{ training.diploma || 'Diplôme non précisé' }} - Obtenu en {{ training.yearOfObtaining | date:'yyyy' }}
+    </mat-card-subtitle>
+    <mat-card-content>
+      <p>Établissement : {{ training.establishment?.name || 'Établissement inconnu' }} ({{ training.establishment?.city || 'Ville inconnue' }})</p>
+    </mat-card-content>
+  </mat-card>
+</div>

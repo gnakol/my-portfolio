@@ -1,0 +1,14 @@
+<div *ngIf="loading">Chargement des langues...</div>
+
+<div class="language-container" *ngIf="!loading">
+  <mat-card *ngFor="let lang of languages; let i = index" class="language-card" [@fadeIn]="i">
+    <mat-card-title>{{ lang.name }}</mat-card-title>
+    <mat-card-subtitle>
+      Niveau : {{ lang.proficiencyLevel }}
+    </mat-card-subtitle>
+  </mat-card>
+</div>
+
+<div *ngIf="languages.length === 0 && !loading">
+  Aucune langue renseignée.
+</div>

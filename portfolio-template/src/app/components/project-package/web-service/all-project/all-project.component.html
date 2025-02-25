@@ -1,0 +1,20 @@
+<div *ngIf="loading">Chargement des projets...</div>
+
+<div class="project-container" *ngIf="!loading">
+  <mat-card *ngFor="let project of projects; let i = index" class="project-card" [@fadeIn]="i">
+    <mat-card-title>{{ project.title }}</mat-card-title>
+    <mat-card-subtitle>
+      {{ project.companyName }} ({{ project.startDate }} - {{ project.endDate || 'Présent' }})
+    </mat-card-subtitle>
+    <mat-card-content>
+      <p>{{ project.description }}</p>
+      <p *ngIf="project.experienceType?.name">
+        Type : {{ project.experienceType.name }}
+      </p>
+    </mat-card-content>
+  </mat-card>
+</div>
+
+<div *ngIf="projects.length === 0 && !loading">
+  Aucun projet trouvé.
+</div>

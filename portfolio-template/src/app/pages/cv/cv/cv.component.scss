@@ -1,0 +1,88 @@
+.cv-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-height: 50vh;
+  padding: 20px;
+}
+
+.cv-card {
+  width: 60%;
+  max-width: 800px;
+  padding: 20px;
+  text-align: left;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+}
+
+/* Photo et infos alignées */
+.cv-content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+.cv-photo {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+}
+
+.cv-photo img {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  object-fit: cover;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+.cv-info {
+  flex: 2;
+}
+
+.info {
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  gap: 10px;
+  align-items: center;
+}
+
+/* Navigation */
+.cv-sections {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 15px;
+  margin-top: 30px;
+  width: 80%;
+  max-width: 900px;
+}
+
+.cv-nav-card {
+  text-align: center;
+  cursor: pointer;
+  transition: transform 0.2s ease-in-out;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+  padding: 15px;
+}
+
+.cv-nav-card:hover {
+  transform: scale(1.05);
+}
+
+/* Contenu des rubriques */
+.section-container {
+  width: 80%;
+  max-width: 800px;
+  margin: 30px auto;
+}
+
+mat-card {
+  width: 100%;
+  max-width: 600px;
+  padding: 20px;
+  text-align: left;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+  margin-bottom: 20px;
+}

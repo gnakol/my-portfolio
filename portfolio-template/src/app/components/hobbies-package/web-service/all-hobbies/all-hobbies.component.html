@@ -1,0 +1,14 @@
+<div *ngIf="loading">Chargement des hobbies...</div>
+
+<div class="hobbies-container" *ngIf="!loading">
+  <mat-card *ngFor="let hobby of hobbies; let i = index" class="hobby-card" [@fadeIn]="i">
+    <mat-card-title>{{ hobby.name }}</mat-card-title>
+    <mat-card-content>
+      <p>{{ hobby.description || 'Pas de description disponible' }}</p>
+    </mat-card-content>
+  </mat-card>
+</div>
+
+<div *ngIf="hobbies.length === 0 && !loading">
+  Aucun hobby trouvé.
+</div>
