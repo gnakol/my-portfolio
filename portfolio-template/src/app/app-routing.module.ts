@@ -6,7 +6,6 @@ import { AllSkillComponent } from './components/skill-package/web-service/all-sk
 import { AllProjectsComponent } from './components/project-package/web-service/all-project/all-project.component';
 import { AllHobbiesComponent } from './components/hobbies-package/web-service/all-hobbies/all-hobbies.component';
 import { AllLanguagesComponent } from './components/language-package/web-service/all-languages/all-languages.component';
-import { DashboardComponent } from './pages/dashboard/dashboard/dashboard.component';
 import { AuthComponent } from './pages/authenticate/auth/auth.component';
 import { AddExperienceComponent } from './components/experiences-package/web-service/add-experience/add-experience.component';
 import { AddTrainingsComponent } from './components/training-package/web-services/add-trainings/add-trainings.component';
@@ -18,11 +17,11 @@ import { SkillTemplateComponent } from './components/skill-package/skill-templat
 import { TrainingTemplateComponent } from './components/training-package/training-template/training-template.component';
 import { HobbieTemplateComponent } from './components/hobbies-package/hobbie-template/hobbie-template.component';
 import { LanguageTemplateComponent } from './components/language-package/language-template/language-template.component';
+import { DashboardComponent } from './components/admin-dashboard-package/dashboard-admin/dashboard.component';
 
 const routes: Routes = [
   { path: '', loadChildren: () => import('./pages/home/home.module').then(m => m.HomeModule) },
   { path: 'cv', loadChildren: () => import('./pages/cv/cv.module').then(m => m.CvModule) },
-  { path: 'dashboard', loadChildren: () => import('./pages/dashboard/dashboard.module').then(m => m.DashboardModule) },
   { path: 'simulations', loadChildren: () => import('./pages/simulations/simulations.module').then(m => m.SimulationsModule) },
   { path: 'blog', loadChildren: () => import('./pages/blog/blog.module').then(m => m.BlogModule) },
   { path: 'contact', loadChildren: () => import('./pages/contact/contact.module').then(m => m.ContactModule) },
@@ -36,7 +35,7 @@ const routes: Routes = [
   { path: 'projects', component: AllProjectsComponent},
   { path: 'hobbies', component: AllHobbiesComponent},
   { path: 'languages', component : AllLanguagesComponent},
-  { path: 'admin', component : AuthComponent},
+  { path: 'login', component : AuthComponent},
   { path: 'dashboard-admin', component : DashboardComponent},
 
 

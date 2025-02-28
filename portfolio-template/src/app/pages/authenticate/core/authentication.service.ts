@@ -1,7 +1,7 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
-import { catchError, map, Observable, of } from 'rxjs';
+import { BehaviorSubject, catchError, map, Observable, of } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -14,20 +14,25 @@ export class AuthenticationService {
 
   private readonly tokenUrl = 'http://localhost:9000/portfolio-api/token';
 
+  private authStatus = new BehaviorSubject<boolean>(this.isAuthenticated());
+
 
 
   constructor(private http : HttpClient, private router : Router) { }
 
+  getAuthStatus(): Observable<boolean> {
+    return this.authStatus.asObservable();
+  }
+
 
   login(username: string, password: string): Observable<string> {
-    const body = { username, password };
-    return this.http.post<{ bearer: string }>(this.authUrl, body)
+    return this.http.post<{ bearer: string }>('http://localhost:9000/portfolio-api/connexion', { username, password })
       .pipe(
         map(response => {
-          console.log('API Response:', response);
-          if (response && response.bearer) {
+          if (response?.bearer) {
             localStorage.setItem('jwtToken', response.bearer);
-            this.router.navigate(['/dashboard']);  // Redirige vers le tableau de bord après la connexion
+            this.authStatus.next(true);  // 🔥 Met à jour l’état d’authentification
+            this.router.navigate(['/dashboard-admin']);
             return response.bearer;
           } else {
             throw new Error('Invalid response from server');
@@ -37,29 +42,22 @@ export class AuthenticationService {
   }
 
   logout(): void {
-    const token = this.getToken();
-
-    if (!token) {
-      console.error('No token found');
-      return;
-    }
+    const token = localStorage.getItem('jwtToken');
+    if (!token) return;
 
     const headers = new HttpHeaders({
       'Content-Type': 'application/json',
       'Authorization': `Bearer ${token}`
     });
 
-    this.http.post<{ message: string }>(this.disconnectUrl, {}, { headers }).pipe(
-      catchError(error => {
-        console.error('Error during disconnect:', error);
-        return of(null); // Return a default value to complete the observable
-      })
-    ).subscribe(response => {
-      if (response !== null) {
-        console.log('Disconnected successfully');
-        localStorage.removeItem('jwtToken');
-        this.router.navigate(['/login']);
-      }
+    this.http.post<{ message: string }>('http://localhost:9000/portfolio-api/disconnect', {}, { headers }).subscribe(() => {
+      localStorage.removeItem('jwtToken');
+      this.authStatus.next(false);  // 🔥 Met à jour l’état d’authentification
+      this.router.navigate(['/login']);
+    }, () => {
+      localStorage.removeItem('jwtToken');
+      this.authStatus.next(false);
+      this.router.navigate(['/login']);
     });
   }
 
@@ -112,6 +110,11 @@ export class AuthenticationService {
       'Authorization': `Bearer ${token}`
     });
     return this.http.post<{ isValid: boolean }>(`${this.tokenUrl}/validate-token`, { token }, { headers });
+  }
+
+  isAuthenticated() : boolean
+  {
+    return !!this.getToken();
   }
 
 

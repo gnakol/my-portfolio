@@ -1,12 +1,17 @@
 <mat-toolbar color="primary">
-    <span>📌 Mon Portfolio</span>
-    <span class="spacer"></span>
-    <button mat-button routerLink="/">Accueil</button>
-    <button mat-button routerLink="/cv">CV</button>
-    <button mat-button routerLink="/dashboard">Dashboard</button>
-    <button mat-button routerLink="/simulations">Simulations</button>
-    <button mat-button routerLink="/blog">Blog</button>
-    <button mat-button routerLink="/contact">Contact</button>
-    <button mat-button routerLink="/admin">Admin</button>
-  </mat-toolbar>
-  
+  <span>📌 Mon Portfolio</span>
+  <span class="spacer"></span>
+  <button mat-button routerLink="/">Accueil</button>
+  <button mat-button routerLink="/cv">CV</button>
+  <button mat-button routerLink="/dashboard">Dashboard</button>
+  <button mat-button routerLink="/simulations">Simulations</button>
+  <button mat-button routerLink="/blog">Blog</button>
+  <button mat-button routerLink="/contact">Contact</button>
+  <button mat-button routerLink="/login">Admin</button>
+
+    <!-- ✅ Ces boutons apparaissent SEULEMENT si l'utilisateur est connecté -->
+    <ng-container *ngIf="isAuthenticated">
+      <button mat-button routerLink="/profile">Profil</button>
+      <button mat-button (click)="logout()">Déconnexion</button>
+    </ng-container>
+</mat-toolbar>

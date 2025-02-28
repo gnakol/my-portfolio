@@ -7,6 +7,7 @@ import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
@@ -36,7 +37,8 @@ public class ConfigurationSecurityApplication {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http
-                .csrf(AbstractHttpConfigurer::disable) // Désactive CSRF
+                .csrf(AbstractHttpConfigurer::disable) // ❌ Désactive CSRF (ce qui est correct ici)
+                .cors(Customizer.withDefaults()) // ✅ Ajoute cette ligne pour dire à Spring Security d'activer CORS
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(HttpMethod.POST, "/account/add-new-account").permitAll()
                         .requestMatchers(HttpMethod.DELETE, "/account/remove-account/{idAccount}").permitAll()
@@ -60,6 +62,7 @@ public class ConfigurationSecurityApplication {
                 .addFilterBefore(tokenFilter, UsernamePasswordAuthenticationFilter.class) // Ajoute le filtre JWT avant le filtre par défaut
                 .build();
     }
+
 
 
     @Bean

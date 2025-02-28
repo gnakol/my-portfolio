@@ -1,5 +1,6 @@
 package fr.kolgna_sec.portfolio_api.token.controller;
 
+import fr.kolgna_sec.portfolio_api.security.TokenService;
 import fr.kolgna_sec.portfolio_api.token.dto.TokenDTO;
 import fr.kolgna_sec.portfolio_api.token.service.TokenBeanService;
 import lombok.RequiredArgsConstructor;
@@ -11,6 +12,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
@@ -18,12 +20,14 @@ import java.util.List;
 @RequestMapping("token")
 public class TokenController {
 
-    private final TokenBeanService tokenService;
+    private final TokenBeanService tokenBeanService;
+
+    private final TokenService tokenService;
 
     @GetMapping("all-token")
     public ResponseEntity<Page<TokenDTO>> allToken(Pageable pageable)
     {
-        return ResponseEntity.ok(this.tokenService.allToken(pageable));
+        return ResponseEntity.ok(this.tokenBeanService.allToken(pageable));
     }
 
     @DeleteMapping("remove-all-token")
@@ -34,17 +38,17 @@ public class TokenController {
         return ResponseEntity.ok("Remove all token was successfully");
     }
 
-/*    @PostMapping("validate-token")
+    @PostMapping("validate-token")
     public ResponseEntity<Map<String, Boolean>> validateToken(@RequestBody Map<String, String> request) {
         String token = request.get("token");
         boolean isValid = tokenService.validateToken(token);
         return ResponseEntity.ok(Map.of("isValid", isValid));
-    }*/
+    }
 
     @DeleteMapping("remove-token-by-id/{idToken}")
     public ResponseEntity<String> removeTokenById(@Validated @PathVariable Long idToken)
     {
-        this.tokenService.removeTokenById(idToken);
+        this.tokenBeanService.removeTokenById(idToken);
 
         return ResponseEntity.ok("Token was successfully remove");
     }
@@ -52,7 +56,7 @@ public class TokenController {
     @DeleteMapping("remove-token-by-range/{idToken}")
     public ResponseEntity<String> removeTokenByRange(@Validated @PathVariable Long startId, @PathVariable Long endId)
     {
-        this.tokenService.removeTokenByRange(startId, endId);
+        this.tokenBeanService.removeTokenByRange(startId, endId);
 
         return ResponseEntity.ok("Token was successfully remove by range");
     }
@@ -60,7 +64,7 @@ public class TokenController {
     @DeleteMapping("remove-token-by-choose-id")
     public ResponseEntity<String> removeTokenById(@Validated @RequestBody List<Long> ids)
     {
-        this.tokenService.removeTokenByCheckId(ids);
+        this.tokenBeanService.removeTokenByCheckId(ids);
 
         return ResponseEntity.ok("Token was successfully remove by check id");
     }
