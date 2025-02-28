@@ -23,4 +23,8 @@ export class HobbiesService {
   getHobbies(id: number): Observable<{ id: number; name: string; city: string }> {
     return this.http.get<{ id: number; name: string; city: string }>(`${this.hobbiesUrl}/get-by-id-hobbies/${id}`);
   }
+
+  createHobby(hobbyData: any): Observable<any> {
+    return this.http.post(this.hobbiesUrl, hobbyData);
+  }
 }

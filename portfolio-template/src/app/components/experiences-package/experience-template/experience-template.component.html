@@ -1,0 +1,77 @@
+<div class="dashboard-container">
+    <!-- Fond animé -->
+    <div class="animated-background"></div>
+  
+    <!-- Titre et sous-titre -->
+    <h1 class="dashboard-title">Gestion des Expériences</h1>
+    <p class="dashboard-subtitle">Ajoutez, modifiez ou supprimez vos expériences professionnelles et leurs types</p>
+  
+    <!-- Cartes de navigation -->
+    <div class="cards-container">
+      <!-- Carte Ajouter une expérience -->
+      <mat-card class="dashboard-card" (click)="navigateTo('add')">
+        <mat-card-title>➕ Ajouter une Expérience</mat-card-title>
+        <mat-card-content>
+          <p>Ajoutez une nouvelle expérience professionnelle</p>
+        </mat-card-content>
+      </mat-card>
+  
+      <!-- Carte Voir la liste des expériences -->
+      <mat-card class="dashboard-card" (click)="navigateTo('list-experiences')">
+        <mat-card-title>📋 Liste des Expériences</mat-card-title>
+        <mat-card-content>
+          <p>Consultez la liste de vos expériences professionnelles</p>
+        </mat-card-content>
+      </mat-card>
+  
+      <!-- Carte Recharger les données -->
+      <mat-card class="dashboard-card" (click)="reloadData()">
+        <mat-card-title>🔄 Recharger les Données</mat-card-title>
+        <mat-card-content>
+          <p>Actualisez la liste des expériences</p>
+        </mat-card-content>
+      </mat-card>
+  
+      <!-- Carte Supprimer une expérience -->
+      <mat-card class="dashboard-card" (click)="navigateTo('delete-experience')">
+        <mat-card-title>🗑 Supprimer une Expérience</mat-card-title>
+        <mat-card-content>
+          <p>Supprimez une expérience professionnelle</p>
+        </mat-card-content>
+      </mat-card>
+  
+      <!-- Nouvelles cartes pour gérer les types d'expérience -->
+  
+      <!-- Carte Ajouter un type d'expérience -->
+      <mat-card class="dashboard-card" (click)="navigateTo('add-experience-type')">
+        <mat-card-title>➕ Ajouter un Type d'Expérience</mat-card-title>
+        <mat-card-content>
+          <p>Ajoutez un nouveau type d'expérience (ex. : CDI, CDD, Freelance...)</p>
+        </mat-card-content>
+      </mat-card>
+  
+      <!-- Carte Voir la liste des types d'expérience -->
+      <mat-card class="dashboard-card" (click)="navigateTo('list-experience-types')">
+        <mat-card-title>📋 Liste des Types d'Expérience</mat-card-title>
+        <mat-card-content>
+          <p>Consultez la liste des types d'expérience disponibles</p>
+        </mat-card-content>
+      </mat-card>
+  
+      <!-- Carte Mettre à jour un type d'expérience -->
+      <mat-card class="dashboard-card" (click)="navigateTo('update-experience-type')">
+        <mat-card-title>📝 Mettre à Jour un Type d'Expérience</mat-card-title>
+        <mat-card-content>
+          <p>Modifiez les informations d'un type d'expérience existant</p>
+        </mat-card-content>
+      </mat-card>
+  
+      <!-- Carte Supprimer un type d'expérience -->
+      <mat-card class="dashboard-card" (click)="navigateTo('delete-experience-type')">
+        <mat-card-title>🗑 Supprimer un Type d'Expérience</mat-card-title>
+        <mat-card-content>
+          <p>Supprimez un type d'expérience inutilisé</p>
+        </mat-card-content>
+      </mat-card>
+    </div>
+  </div>

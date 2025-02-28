@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { Skill } from '../components/training-package/skill.model';
+import { Skill } from '../components/skill-package/skill.model';
 
 @Injectable({
   providedIn: 'root'
@@ -17,6 +17,10 @@ export class SkillService {
 
   skillById(id: number): Observable<Skill> {
     return this.http.get<Skill>(`${this.apiUrl}/get-by-id-skill/${id}`);
+  }
+
+  createSkill(skillData: any): Observable<any> {
+    return this.http.post(this.apiUrl, skillData);
   }
   
 }

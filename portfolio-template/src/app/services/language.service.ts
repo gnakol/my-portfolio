@@ -23,4 +23,8 @@ export class LanguageService {
   getLanguage(id: number): Observable<{ id: number; name: string; city: string }> {
     return this.http.get<{ id: number; name: string; city: string }>(`${this.languageUrl}/get-by-id-language/${id}`);
   }
+
+  createLanguage(languageData: any): Observable<any> {
+    return this.http.post(this.languageUrl, languageData);
+  }
 }

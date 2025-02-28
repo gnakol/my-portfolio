@@ -1,0 +1,77 @@
+<div class="dashboard-container">
+    <!-- Fond animé -->
+    <div class="animated-background"></div>
+  
+    <!-- Titre et sous-titre -->
+    <h1 class="dashboard-title">Gestion des Compétences</h1>
+    <p class="dashboard-subtitle">Ajoutez, modifiez ou supprimez vos compétences et leurs catégories</p>
+  
+    <!-- Cartes de navigation -->
+    <div class="cards-container">
+      <!-- Carte Ajouter une compétence -->
+      <mat-card class="dashboard-card" (click)="navigateTo('add-skill')">
+        <mat-card-title>➕ Ajouter une Compétence</mat-card-title>
+        <mat-card-content>
+          <p>Ajoutez une nouvelle compétence</p>
+        </mat-card-content>
+      </mat-card>
+  
+      <!-- Carte Voir la liste des compétences -->
+      <mat-card class="dashboard-card" (click)="navigateTo('list-skills')">
+        <mat-card-title>📋 Liste des Compétences</mat-card-title>
+        <mat-card-content>
+          <p>Consultez la liste de vos compétences</p>
+        </mat-card-content>
+      </mat-card>
+  
+      <!-- Carte Mettre à jour une compétence -->
+      <mat-card class="dashboard-card" (click)="navigateTo('update-skill')">
+        <mat-card-title>📝 Mettre à Jour une Compétence</mat-card-title>
+        <mat-card-content>
+          <p>Modifiez les informations d'une compétence existante</p>
+        </mat-card-content>
+      </mat-card>
+  
+      <!-- Carte Supprimer une compétence -->
+      <mat-card class="dashboard-card" (click)="navigateTo('delete-skill')">
+        <mat-card-title>🗑 Supprimer une Compétence</mat-card-title>
+        <mat-card-content>
+          <p>Supprimez une compétence inutilisée</p>
+        </mat-card-content>
+      </mat-card>
+  
+      <!-- Nouvelles cartes pour gérer les catégories de compétences -->
+  
+      <!-- Carte Ajouter une catégorie de compétence -->
+      <mat-card class="dashboard-card" (click)="navigateTo('add-skill-category')">
+        <mat-card-title>➕ Ajouter une Catégorie de Compétence</mat-card-title>
+        <mat-card-content>
+          <p>Ajoutez une nouvelle catégorie de compétence (ex. : Programmation, Design...)</p>
+        </mat-card-content>
+      </mat-card>
+  
+      <!-- Carte Voir la liste des catégories de compétences -->
+      <mat-card class="dashboard-card" (click)="navigateTo('list-skill-categories')">
+        <mat-card-title>📋 Liste des Catégories de Compétence</mat-card-title>
+        <mat-card-content>
+          <p>Consultez la liste des catégories de compétences disponibles</p>
+        </mat-card-content>
+      </mat-card>
+  
+      <!-- Carte Mettre à jour une catégorie de compétence -->
+      <mat-card class="dashboard-card" (click)="navigateTo('update-skill-category')">
+        <mat-card-title>📝 Mettre à Jour une Catégorie de Compétence</mat-card-title>
+        <mat-card-content>
+          <p>Modifiez les informations d'une catégorie de compétence existante</p>
+        </mat-card-content>
+      </mat-card>
+  
+      <!-- Carte Supprimer une catégorie de compétence -->
+      <mat-card class="dashboard-card" (click)="navigateTo('delete-skill-category')">
+        <mat-card-title>🗑 Supprimer une Catégorie de Compétence</mat-card-title>
+        <mat-card-content>
+          <p>Supprimez une catégorie de compétence inutilisée</p>
+        </mat-card-content>
+      </mat-card>
+    </div>
+  </div>

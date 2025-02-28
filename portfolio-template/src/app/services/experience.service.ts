@@ -44,4 +44,10 @@ export class ExperienceService {
   experienceById(id: number): Observable<Experience> {
     return this.http.get<Experience>(`${this.apiUrl}/get-by-id-experience/${id}`);
   }
+
+  // A modifie plutard
+
+  createExperience(experienceData: any): Observable<any> {
+    return this.http.post(this.apiUrl, experienceData);
+  }
 }

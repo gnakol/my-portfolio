@@ -3,7 +3,7 @@ import { trigger, transition, style, animate, query, stagger } from '@angular/an
 import { SkillService } from '../../../../services/skill.service';
 import { CommonModule } from '@angular/common';
 import { MatCardModule } from '@angular/material/card';
-import { Skill } from '../../../training-package/skill.model';
+import { Skill } from '../../skill.model';
 import { SkillCategoryService } from '../../../../services/category_skill.service';
 
 @Component({

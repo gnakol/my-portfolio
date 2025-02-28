@@ -1,4 +1,8 @@
 <div class="cv-container">
+  <!-- Fond animé -->
+  <div class="animated-background"></div>
+
+  <!-- Carte du CV -->
   <mat-card class="cv-card">
     <mat-card-content class="cv-content">
       <!-- Photo de profil -->
@@ -26,76 +30,78 @@
       </div>
     </mat-card-content>
   </mat-card>
-</div>
 
-<!-- 🔥 Navigation des rubriques -->
-<div class="cv-sections">
-  <mat-card class="cv-nav-card" (click)="showSection('experiences')">
-    <mat-card-title>📄 Expériences</mat-card-title>
-  </mat-card>
+  <!-- 🔥 Navigation des rubriques à côté du CV -->
+  <div class="cv-sections">
+    <mat-card class="cv-nav-card" (click)="showSection('experiences')">
+      <mat-card-title>📄 Expériences</mat-card-title>
+    </mat-card>
 
-  <mat-card class="cv-nav-card" (click)="showSection('trainings')">
-    <mat-card-title>🎓 Formations</mat-card-title>
-  </mat-card>
+    <mat-card class="cv-nav-card" (click)="showSection('trainings')">
+      <mat-card-title>🎓 Formations</mat-card-title>
+    </mat-card>
 
-  <mat-card class="cv-nav-card" (click)="showSection('skills')">
-    <mat-card-title>⚡ Compétences</mat-card-title>
-  </mat-card>
+    <mat-card class="cv-nav-card" (click)="showSection('skills')">
+      <mat-card-title>⚡ Compétences</mat-card-title>
+    </mat-card>
 
-  <mat-card class="cv-nav-card" (click)="showSection('projects')">
-    <mat-card-title>🚀 Projets</mat-card-title>
-  </mat-card>
+    <mat-card class="cv-nav-card" (click)="showSection('projects')">
+      <mat-card-title>🚀 Projets</mat-card-title>
+    </mat-card>
 
-  <mat-card class="cv-nav-card" (click)="showSection('hobbies')">
-    <mat-card-title>🎭 Centres d'intérêt</mat-card-title>
-  </mat-card>
+    <mat-card class="cv-nav-card" (click)="showSection('hobbies')">
+      <mat-card-title>🎭 Centres d'intérêt</mat-card-title>
+    </mat-card>
 
-  <mat-card class="cv-nav-card" (click)="showSection('languages')">
-    <mat-card-title>🌍 Langues</mat-card-title>
-  </mat-card>
+    <mat-card class="cv-nav-card" (click)="showSection('languages')">
+      <mat-card-title>🌍 Langues</mat-card-title>
+    </mat-card>
+  </div>
 </div>
 
 <!-- 🔥 Affichage dynamique des rubriques -->
 <div class="section-container">
-  <div *ngIf="selectedSection === 'experiences'">
+  <div *ngIf="selectedSection === 'experiences'" class="section-content">
     <h2>Expériences</h2>
-    <mat-card *ngFor="let exp of experiences">
-      <mat-card-title>{{ exp.title }}</mat-card-title>
-      <mat-card-subtitle>
-        {{ exp.company_name }} ({{ exp.start_date }} - {{ exp.end_date || 'Présent' }})
-      </mat-card-subtitle>
-      <mat-card-content>
-        <p>{{ exp.description }}</p>
-      </mat-card-content>
-      <mat-card-actions>
-        <button mat-raised-button color="warn" (click)="deleteExperience(exp.idExperience)">
-          🗑 Supprimer
-        </button>
-      </mat-card-actions>
-    </mat-card>
+    <div class="scrollable-content">
+      <mat-card *ngFor="let exp of experiences">
+        <mat-card-title>{{ exp.title }}</mat-card-title>
+        <mat-card-subtitle>
+          {{ exp.company_name }} ({{ exp.start_date }} - {{ exp.end_date || 'Présent' }})
+        </mat-card-subtitle>
+        <mat-card-content>
+          <p>{{ exp.description }}</p>
+        </mat-card-content>
+        <mat-card-actions>
+          <button mat-raised-button color="warn" (click)="deleteExperience(exp.idExperience)">
+            🗑 Supprimer
+          </button>
+        </mat-card-actions>
+      </mat-card>
+    </div>
   </div>
 
-  <div *ngIf="selectedSection === 'trainings'">
+  <div *ngIf="selectedSection === 'trainings'" class="section-content">
     <h2>Formations</h2>
     <p>🚧 Section en construction...</p>
   </div>
 
-  <div *ngIf="selectedSection === 'skills'">
+  <div *ngIf="selectedSection === 'skills'" class="section-content">
     <h2>Compétences</h2>
     <p>🚧 Section en construction...</p>
   </div>
 
-  <div *ngIf="selectedSection === 'projects'">
+  <div *ngIf="selectedSection === 'projects'" class="section-content">
     <h2>Projets</h2>
     <p>🚧 Section en construction...</p>
   </div>
 
-  <div *ngIf="selectedSection === 'hobbies'">
+  <div *ngIf="selectedSection === 'hobbies'" class="section-content">
     <h2>Centres d'intérêt</h2>
     <p>🚧 Section en construction...</p>
   </div>
 
-  <div *ngIf="selectedSection === 'languages'">
+  <div *ngIf="selectedSection === 'languages'" class="section-content">
     <h2>Langues</h2>
     <p>🚧 Section en construction...</p>
   </div>

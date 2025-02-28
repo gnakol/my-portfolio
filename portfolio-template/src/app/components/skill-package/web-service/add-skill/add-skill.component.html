@@ -1,1 +1,44 @@
-<p>add-skill works!</p>
+<div class="form-container">
+    <!-- Fond animé -->
+    <div class="animated-background"></div>
+  
+    <!-- Carte du formulaire -->
+    <mat-card class="form-card">
+      <mat-card-header>
+        <mat-card-title>Ajouter une Compétence</mat-card-title>
+        <mat-card-subtitle>Remplissez les détails de votre compétence</mat-card-subtitle>
+      </mat-card-header>
+  
+      <mat-card-content>
+        <!-- Formulaire de saisie -->
+        <form [formGroup]="skillForm" (ngSubmit)="onSubmit()">
+          <!-- Nom -->
+          <mat-form-field appearance="fill">
+            <mat-label>Nom</mat-label>
+            <input matInput formControlName="name" required>
+          </mat-form-field>
+  
+          <!-- Description -->
+          <mat-form-field appearance="fill">
+            <mat-label>Description</mat-label>
+            <textarea matInput formControlName="description" rows="4"></textarea>
+          </mat-form-field>
+  
+          <!-- Catégorie de compétence -->
+          <mat-form-field appearance="fill">
+            <mat-label>Catégorie</mat-label>
+            <mat-select formControlName="skillCategory_id" required>
+              <mat-option *ngFor="let category of skillCategories" [value]="category.id_skill_category">
+                {{ category.name }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+  
+          <!-- Bouton de soumission -->
+          <button mat-raised-button color="primary" type="submit" class="submit-button">
+            Enregistrer
+          </button>
+        </form>
+      </mat-card-content>
+    </mat-card>
+  </div>

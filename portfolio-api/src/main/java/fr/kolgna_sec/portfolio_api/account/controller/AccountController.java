@@ -7,6 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -25,7 +26,7 @@ public class AccountController {
         return ResponseEntity.ok(this.accountService.all(pageable));
     }
 
-    @PostMapping("/add-account")
+    @PostMapping(path = "add-new-account", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<AccountDTO> addAccount(@Validated @RequestBody AccountDTO accountDTO)
     {
         return ResponseEntity.status(HttpStatus.CREATED).body(this.accountService.add(accountDTO));
@@ -37,7 +38,7 @@ public class AccountController {
         return ResponseEntity.status(202).body(this.accountService.update(idAccount, accountDTO));
     }
 
-    @DeleteMapping("/remove-account/{idAccount}")
+    @DeleteMapping(path = "remove-account/{idAccount}", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> removeAccount(@Validated @PathVariable Long idAccount)
     {
         this.accountService.remove(idAccount);

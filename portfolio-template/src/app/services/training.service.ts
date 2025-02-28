@@ -24,4 +24,9 @@ export class TrainingService {
   getEstablishmentById(id: number): Observable<{ id: number; name: string; city: string }> {
     return this.http.get<{ id: number; name: string; city: string }>(`${this.establishmentUrl}/get-by-id-establishment/${id}`);
   }
+
+  createTraining(trainingData: any): Observable<any> {
+    return this.http.post(this.apiUrl, trainingData);
+  }
+  
 }

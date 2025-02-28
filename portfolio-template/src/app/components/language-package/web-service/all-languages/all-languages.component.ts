@@ -3,7 +3,7 @@ import { trigger, transition, style, animate, query, stagger } from '@angular/an
 import { Language } from '../../language.model';
 import { CommonModule } from '@angular/common';
 import { MatCardModule } from '@angular/material/card';
-import { LanguageService } from '../../../../services/Language.service';
+import { LanguageService } from '../../../../services/language.service';
 
 @Component({
   selector: 'app-all-languages',

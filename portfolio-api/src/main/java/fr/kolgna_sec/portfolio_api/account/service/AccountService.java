@@ -9,19 +9,25 @@ import fr.kolgna_sec.portfolio_api.webservices.Webservices;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
-public class AccountService implements Webservices<AccountDTO> {
+public class AccountService implements Webservices<AccountDTO>, UserDetailsService {
 
     private final AccountRepository accountRepository;
 
     private final AccountMapper accountMapper;
 
     private final UuidService uuidService;
+
+    private final BCryptPasswordEncoder passwordEncoder;
 
     @Override
     public Page<AccountDTO> all(Pageable pageable) {
@@ -32,6 +38,8 @@ public class AccountService implements Webservices<AccountDTO> {
     public AccountDTO add(AccountDTO e) {
 
         e.setRefAccount(this.uuidService.generateUuid());
+        e.setPassword(this.passwordEncoder.encode(e.getPassword()));
+
         return this.accountMapper.fromAccount(this.accountRepository.save(this.accountMapper.fromAccountDTO(e)));
     }
 
@@ -81,5 +89,11 @@ public class AccountService implements Webservices<AccountDTO> {
     public Optional<AccountDTO> getById(Long id) {
         return this.accountRepository.findById(id)
                 .map(this.accountMapper::fromAccount);
+    }
+
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        return this.accountRepository.findByEmail(username)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
     }
 }

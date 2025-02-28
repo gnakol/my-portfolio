@@ -1,1 +1,52 @@
-<p>add-trainings works!</p>
+<div class="form-container">
+    <!-- Fond animé -->
+    <div class="animated-background"></div>
+  
+    <!-- Carte du formulaire -->
+    <mat-card class="form-card">
+      <mat-card-header>
+        <mat-card-title>Ajouter une Formation</mat-card-title>
+        <mat-card-subtitle>Remplissez les détails de votre formation académique</mat-card-subtitle>
+      </mat-card-header>
+  
+      <mat-card-content>
+        <!-- Formulaire de saisie -->
+        <form [formGroup]="trainingForm" (ngSubmit)="onSubmit()">
+          <!-- Label -->
+          <mat-form-field appearance="fill">
+            <mat-label>Titre de la formation</mat-label>
+            <input matInput formControlName="label" required>
+          </mat-form-field>
+  
+          <!-- Diplôme -->
+          <mat-form-field appearance="fill">
+            <mat-label>Diplôme</mat-label>
+            <input matInput formControlName="diploma" required>
+          </mat-form-field>
+  
+          <!-- Année d'obtention -->
+          <mat-form-field appearance="fill">
+            <mat-label>Année d'obtention</mat-label>
+            <input matInput [matDatepicker]="yearPicker" formControlName="yearOfObtaining" required>
+            <mat-datepicker-toggle matSuffix [for]="yearPicker"></mat-datepicker-toggle>
+            <mat-datepicker #yearPicker></mat-datepicker>
+          </mat-form-field>
+  
+          <!-- Établissement -->
+          <mat-form-field appearance="fill">
+            <mat-label>Établissement</mat-label>
+            <mat-select formControlName="establishment_id" required>
+              <mat-option *ngFor="let establishment of establishments" [value]="establishment.id_establishment">
+                {{ establishment.name }} ({{ establishment.city }})
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+  
+          <!-- Bouton de soumission -->
+          <button mat-raised-button color="primary" type="submit" class="submit-button">
+            Enregistrer
+          </button>
+        </form>
+      </mat-card-content>
+    </mat-card>
+  </div>

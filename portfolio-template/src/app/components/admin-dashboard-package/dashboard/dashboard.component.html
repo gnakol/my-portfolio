@@ -1,0 +1,47 @@
+<div class="dashboard-container">
+  <h1 class="dashboard-title">Dashboard Admin</h1>
+  <p class="dashboard-subtitle">Gérez les rubriques de votre CV</p>
+
+  <!-- Cartes des rubriques -->
+  <div class="cards-container">
+    <!-- Carte Expériences -->
+    <mat-card class="dashboard-card" (click)="showSection('experience-template')">
+      <mat-card-title>📄 Expériences</mat-card-title>
+      <mat-card-content>
+        <p>Gérez vos expériences professionnelles</p>
+      </mat-card-content>
+    </mat-card>
+
+    <!-- Carte Formations -->
+    <mat-card class="dashboard-card" (click)="showSection('training-template')">
+      <mat-card-title>🎓 Formations</mat-card-title>
+      <mat-card-content>
+        <p>Gérez vos formations académiques</p>
+      </mat-card-content>
+    </mat-card>
+
+    <!-- Carte Compétences -->
+    <mat-card class="dashboard-card" (click)="showSection('skill-template')">
+      <mat-card-title>⚡ Compétences</mat-card-title>
+      <mat-card-content>
+        <p>Gérez vos compétences techniques</p>
+      </mat-card-content>
+    </mat-card>
+
+    <!-- Carte Centres d'intérêt -->
+    <mat-card class="dashboard-card" (click)="showSection('hobbie-template')">
+      <mat-card-title>🎭 Centres d'intérêt</mat-card-title>
+      <mat-card-content>
+        <p>Gérez vos centres d'intérêt</p>
+      </mat-card-content>
+    </mat-card>
+
+    <!-- Carte Langues -->
+    <mat-card class="dashboard-card" (click)="showSection('language-template')">
+      <mat-card-title>🌍 Langues</mat-card-title>
+      <mat-card-content>
+        <p>Gérez vos langues parlées</p>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>

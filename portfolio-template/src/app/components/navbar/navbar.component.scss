@@ -1,8 +1,5 @@
-.spacer {
-    flex: 1;
-  }
-  mat-toolbar {
-    display: flex;
-    justify-content: space-between;
-  }
-  
+mat-toolbar {
+  background: linear-gradient(90deg, #4facfe 0%, #00f2fe 100%);
+  color: white;
+  font-weight: bold;
+}

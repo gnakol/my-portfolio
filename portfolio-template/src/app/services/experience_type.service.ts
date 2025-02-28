@@ -13,5 +13,9 @@ export class experienceTypeService {
   getExperienceTypeById(id: number): Observable<{ idExperienceType: number; name: string }> {
     return this.http.get<{ idExperienceType: number; name: string }>(`http://localhost:9000/portfolio-api/experience-type/get-by-id-experience-type/${id}`);
   }
+
+  getAllExperienceTypes(): Observable<any[]> {
+    return this.http.get<any[]>(this.skillCategoryUrl);
+  }
   
 }

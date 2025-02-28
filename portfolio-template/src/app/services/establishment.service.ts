@@ -23,4 +23,8 @@ export class EstablishmentService {
   getEstablishmentById(id: number): Observable<{ id: number; name: string; city: string }> {
     return this.http.get<{ id: number; name: string; city: string }>(`${this.establishmentUrl}/get-by-id-establishment/${id}`);
   }
+
+  getAllEstablishments(): Observable<any[]> {
+    return this.http.get<any[]>(`${this.establishmentUrl}/all-establishment`);
+  }
 }
