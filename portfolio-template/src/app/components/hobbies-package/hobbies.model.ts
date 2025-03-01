@@ -8,3 +8,18 @@ export interface Hobbies{
 
     description : string;
 }
+
+  export interface HobbiesResponse {
+  
+      content: Hobbies[]; 
+  
+      pageable: any;
+  
+      totalElements: number;
+  
+      totalPages: number;
+  
+      last: boolean;
+      
+      size: number;
+  }

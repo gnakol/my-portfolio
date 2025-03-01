@@ -1,13 +1,30 @@
-<div *ngIf="loading">Chargement des compétences...</div>
+<div class="skill-page">
+  <div class="animated-background"></div>
 
-<div class="skill-container" *ngIf="!loading">
-  <mat-card *ngFor="let skill of skills; let i = index" class="skill-card" [@fadeIn]="i">
-    <mat-card-title>{{ skill.name }}</mat-card-title>
-    <mat-card-subtitle>
-      {{ skill.skillCategory?.name || 'Catégorie inconnue' }}
-    </mat-card-subtitle>
-    <mat-card-content>
-      <p>{{ skill.description || 'Pas de description disponible' }}</p>
-    </mat-card-content>
-  </mat-card>
+  <div class="skill-container" *ngIf="!loading">
+    <ng-container *ngIf="loading; else content">
+      <p class="loading-message">Chargement des compétences...</p>
+    </ng-container>
+
+    <ng-template #content>
+      <mat-card *ngFor="let skill of skills; let i = index" class="skill-card" [@fadeIn]="i">
+        <mat-card-title>{{ skill.name }}</mat-card-title>
+        <mat-card-subtitle class="skill-category">
+          {{ skill.skillCategory?.name || 'Catégorie inconnue' }}
+        </mat-card-subtitle>
+        <mat-card-content>
+          <p>{{ skill.description || 'Pas de description disponible' }}</p>
+        </mat-card-content>
+        <mat-card-actions>
+          <button mat-icon-button class="delete-button" (click)="deleteSkill(skill.idSkill)">
+            <mat-icon>delete</mat-icon>
+          </button>
+        </mat-card-actions>
+      </mat-card>
+    </ng-template>
+  </div>
+
+  <button mat-raised-button (click)="navigateToTemplate()" class="view-all-button">
+    Voir tous les modèles de compétences
+  </button>
 </div>

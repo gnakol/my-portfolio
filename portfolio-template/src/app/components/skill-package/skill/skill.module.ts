@@ -19,11 +19,13 @@ import { MatNativeDateModule } from '@angular/material/core'; // ✅ Ajouté ici
 import { ReactiveFormsModule } from '@angular/forms';
 import { AddSkillComponent } from '../web-service/add-skill/add-skill.component';
 import { SkillTemplateComponent } from '../skill-template/skill-template.component';
+import { AllSkillCategoryComponent } from '../web-service/all-skill-category/all-skill-category.component';
 
 const routes: Routes = [
   { path: '', component: AllSkillComponent },
   { path: '', component: AddSkillComponent},
-  { path: '', component: SkillTemplateComponent}
+  { path: '', component: SkillTemplateComponent},
+  { path: '', component: AllSkillCategoryComponent}
 ];
 
 @NgModule({

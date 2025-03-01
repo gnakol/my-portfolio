@@ -1,36 +1,51 @@
 import { Component, OnInit } from '@angular/core';
-import { trigger, transition, style, animate, query, stagger } from '@angular/animations';
-import { Experience } from '../../experience.model';
 import { ExperienceService } from '../../../../services/experience.service';
-import { CommonModule } from '@angular/common';
-import { MatCardModule } from '@angular/material/card';
+import { Router } from '@angular/router';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { ReactiveFormsModule } from '@angular/forms';
+
+
+// Angular Material Modules
+import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatButtonModule } from '@angular/material/button';
+import { MatCardModule } from '@angular/material/card';
+import { MatIconModule } from '@angular/material/icon';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatSnackBarModule } from '@angular/material/snack-bar'; // Ajouté pour MatSnackBar
+import {MatDatepickerModule} from '@angular/material/datepicker';
+import {MatSelectModule} from '@angular/material/select';
+import { MatNativeDateModule } from '@angular/material/core';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-all-experience',
-  standalone: true,
-  imports: [
-    CommonModule, // Requis pour les directives standard (ex : *ngFor)
-    MatCardModule, // Requis pour <mat-card>
-    MatButtonModule, // Requis pour <button mat-raised-button>
+  imports : [
+        CommonModule,
+        MatToolbarModule,
+        MatButtonModule,
+        MatCardModule,
+        MatIconModule,
+        MatFormFieldModule,
+        MatInputModule,
+        MatSnackBarModule, // Ajouté ici
+        MatDatepickerModule,
+        MatSelectModule,
+        ReactiveFormsModule,
+        MatNativeDateModule
   ],
   templateUrl: './all-experience.component.html',
-  styleUrls: ['./all-experience.component.scss'],
-  animations: [
-    trigger('fadeIn', [
-      transition(':enter', [
-        style({ opacity: 0, transform: 'translateY(20px)' }),
-        animate('500ms ease-in-out', style({ opacity: 1, transform: 'translateY(0)' }))
-      ])
-    ])
-  ]
+  styleUrls: ['./all-experience.component.scss']
 })
 export class AllExperienceComponent implements OnInit {
+  experiences: any[] = [];
+  loading = true;
 
-  experiences: Experience[] = [];
-  loading = true; // Pour gérer le chargement
-
-  constructor(private experienceService: ExperienceService) {}
+  constructor(
+    private experienceService: ExperienceService,
+    private router: Router,
+    private snackBar: MatSnackBar
+  ) {}
 
   ngOnInit(): void {
     this.loadExperiences();
@@ -39,13 +54,35 @@ export class AllExperienceComponent implements OnInit {
   loadExperiences(): void {
     this.experienceService.getAllExperiences().subscribe({
       next: (data) => {
-        this.experiences = data.content || []; // ✅ Correction ici : on prend `data.content`
+        this.experiences = data.content || [];
         this.loading = false;
       },
-      error: (err) => {
-        console.error('Erreur lors du chargement des expériences :', err);
+      error: (error) => {
+        console.error('Erreur lors du chargement des expériences :', error);
+        this.snackBar.open('Impossible de charger les expériences.', 'Fermer', { duration: 3000 });
         this.loading = false;
       }
     });
+  }
+
+  viewExperience(id: number): void {
+    this.router.navigate(['/experience-detail', id]);
+  }
+
+  deleteExperience(id: number): void {
+    this.experienceService.deleteExperience(id).subscribe({
+      next: () => {
+        this.snackBar.open('Expérience supprimée avec succès !', 'Fermer', { duration: 3000 });
+        this.experiences = this.experiences.filter((exp) => exp.id !== id);
+      },
+      error: (error) => {
+        console.error('Erreur lors de la suppression :', error);
+        this.snackBar.open('Erreur lors de la suppression.', 'Fermer', { duration: 3000 });
+      }
+    });
+  }
+
+  navigateToTemplate(): void {
+    this.router.navigate(['/experience-template']);
   }
 }

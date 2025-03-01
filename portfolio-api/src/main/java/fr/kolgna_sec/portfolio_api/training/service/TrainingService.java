@@ -99,6 +99,8 @@ public class TrainingService implements Webservices<TrainingDTO> {
         if (training.isEmpty())
             throw new RuntimeException("Training with ID :" +id+ " was not found");
 
+        this.trainingRepository.delete(training.get());
+
     }
 
     @Override

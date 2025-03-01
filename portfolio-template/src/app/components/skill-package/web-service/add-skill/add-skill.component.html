@@ -28,7 +28,7 @@
           <mat-form-field appearance="fill">
             <mat-label>Catégorie</mat-label>
             <mat-select formControlName="skillCategory_id" required>
-              <mat-option *ngFor="let category of skillCategories" [value]="category.id_skill_category">
+              <mat-option *ngFor="let category of skillCategories" [value]="category.idSkillCategory">
                 {{ category.name }}
               </mat-option>
             </mat-select>

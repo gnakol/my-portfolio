@@ -18,17 +18,25 @@ import { AddExperienceComponent } from './web-service/add-experience/add-experie
 import {MatDatepickerModule} from '@angular/material/datepicker';
 import {MatSelectModule} from '@angular/material/select';
 import { MatNativeDateModule } from '@angular/material/core';
-import { ExperienceTemplateComponent } from './experience-template/experience-template.component'; // ✅ Ajouté ici
+import { ExperienceTemplateComponent } from './experience-template/experience-template.component';
+import { AllTypeExperienceComponent } from './web-service/all-type-experience/all-type-experience.component';
+import { RemoveTypeExperienceComponent } from './web-service/remove-type-experience/remove-type-experience.component';
+import { RemoveExperienceComponent } from './web-service/remove-experience/remove-experience.component';
+import { AddTypeExperienceComponent } from './web-service/add-type-experience/add-type-experience.component'; // ✅ Ajouté ici
 
 const routes: Routes = [
   { path: '', component: AllExperienceComponent },
   { path: 'add', component: AddExperienceComponent},
-  { path: '', component : ExperienceTemplateComponent}
+  { path: '', component : ExperienceTemplateComponent},
+  { path: 'all-experiences-type', component : AllTypeExperienceComponent },
+  { path: 'add-experiences-type', component : AddTypeExperienceComponent}
 ];
 
 @NgModule({
   declarations: [
     AddExperienceComponent,
+    RemoveTypeExperienceComponent,
+    RemoveExperienceComponent
   ],
   imports: [
     CommonModule,

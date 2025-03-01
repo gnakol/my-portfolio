@@ -81,28 +81,35 @@ export class AuthenticationService {
   }
 
   getUserIdFromToken(): Observable<number> {
-
     const token = this.getToken();
 
     if (!token) {
-      throw new Error('Token not found');
+        throw new Error('Token not found');
     }
+
     const parsedToken = this.parseJwt(token);
 
     if (parsedToken && parsedToken.sub) {
-      const email = parsedToken.sub;
-      const headers = new HttpHeaders({
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${token}`
-      });
-      return this.http.get<any>(`http://localhost:900/portfolio-api/account/get-user-id-by-email?email=${email}`, { headers })
-        .pipe(
-          map(response => response.userId)
-        );
+        const email = parsedToken.sub;
+        const headers = new HttpHeaders({
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+        });
+
+        console.log('🔍 Je suis la méthode getUserIdFromToken : Email extrait du token :', email);
+
+        return this.http.get<any>(`http://localhost:9000/portfolio-api/account/get-account-id-by-email?email=${email}`, { headers })
+            .pipe(
+                map(response => {
+                    console.log('Je suis la méthode getUserIdFromToken ✅ ID utilisateur récupéré :', response);
+                    return response.userId; // Vérifie que `userId` est bien renvoyé
+                })
+            );
     } else {
-      throw new Error('User ID not found in token');
+        throw new Error('User ID not found in token');
     }
-  }
+}
+
 
   validateTokenWithServer(token: string): Observable<{ isValid: boolean }> {
     const headers = new HttpHeaders({

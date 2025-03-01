@@ -1,14 +1,25 @@
-<div *ngIf="loading">Chargement des langues...</div>
+<div class="languages-page">
+  <div class="animated-background"></div>
 
-<div class="language-container" *ngIf="!loading">
-  <mat-card *ngFor="let lang of languages; let i = index" class="language-card" [@fadeIn]="i">
-    <mat-card-title>{{ lang.name }}</mat-card-title>
-    <mat-card-subtitle>
-      Niveau : {{ lang.proficiencyLevel }}
-    </mat-card-subtitle>
-  </mat-card>
-</div>
+  <div *ngIf="loading" class="loading-message">Chargement des langues...</div>
 
-<div *ngIf="languages.length === 0 && !loading">
-  Aucune langue renseignée.
+  <div class="language-container" *ngIf="!loading">
+    <mat-card *ngFor="let lang of languages; let i = index" class="language-card" [@fadeIn]="i">
+      <mat-card-title>{{ lang.name }}</mat-card-title>
+      <mat-card-subtitle>
+        Niveau : {{ lang.proficiencyLevel }}
+      </mat-card-subtitle>
+
+      <!-- Icône de suppression -->
+      <mat-card-actions>
+        <button mat-icon-button color="warn" (click)="deleteLanguage(lang.idLanguage)">
+          <mat-icon>delete</mat-icon>
+        </button>
+      </mat-card-actions>
+    </mat-card>
+  </div>
+
+  <div *ngIf="languages.length === 0 && !loading" class="no-data-message">
+    Aucune langue renseignée.
+  </div>
 </div>

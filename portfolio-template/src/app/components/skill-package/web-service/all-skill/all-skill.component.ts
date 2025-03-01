@@ -2,17 +2,42 @@ import { Component, OnInit } from '@angular/core';
 import { trigger, transition, style, animate, query, stagger } from '@angular/animations';
 import { SkillService } from '../../../../services/skill.service';
 import { CommonModule } from '@angular/common';
-import { MatCardModule } from '@angular/material/card';
 import { Skill } from '../../skill.model';
 import { SkillCategoryService } from '../../../../services/category_skill.service';
+import { ReactiveFormsModule } from '@angular/forms';
+
+
+// Angular Material Modules
+import { MatToolbarModule } from '@angular/material/toolbar';
+import { MatButtonModule } from '@angular/material/button';
+import { MatCardModule } from '@angular/material/card';
+import { MatIconModule } from '@angular/material/icon';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar'; // Ajouté pour MatSnackBar
+import {MatDatepickerModule} from '@angular/material/datepicker';
+import {MatSelectModule} from '@angular/material/select';
+import { MatNativeDateModule } from '@angular/material/core';
+import { Router } from '@angular/router';
+import { AccountService } from '../../../../services/account.service';
 
 @Component({
   selector: 'app-all-skill',
   standalone: true,
-  imports: [
+  imports : [
     CommonModule,
-    MatCardModule
-  ],
+    MatToolbarModule,
+    MatButtonModule,
+    MatCardModule,
+    MatIconModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatSnackBarModule, // Ajouté ici
+    MatDatepickerModule,
+    MatSelectModule,
+    ReactiveFormsModule,
+    MatNativeDateModule
+],
   templateUrl: './all-skill.component.html',
   styleUrls: ['./all-skill.component.scss'],
   animations: [
@@ -25,40 +50,58 @@ import { SkillCategoryService } from '../../../../services/category_skill.servic
   ]
 })
 export class AllSkillComponent implements OnInit {
-  skills: Skill[] = [];
+
+  skills: any[] = [];
+
   loading = true;
 
   constructor(
     private skillService: SkillService,
-    private skillCategoryService: SkillCategoryService
+    private router: Router,
+    private snackBar: MatSnackBar,
+    private skillCategory : SkillCategoryService,
+    private account : AccountService
   ) {}
 
   ngOnInit(): void {
-    this.loadSkills();
+    this.loadSkill();
   }
 
-  loadSkills(): void {
-    this.skillService.allSkill().subscribe({
+  loadSkill(): void {
+    this.skillService.getAllSkill().subscribe({
       next: (data) => {
-        this.skills = data.content;
-
-        // 🔥 Boucle sur les compétences pour récupérer les catégories si elles ne sont pas déjà fournies
-        this.skills.forEach((skill) => {
-          if (skill.skillCategory_id) {
-            this.skillCategoryService.getSkillCategoryById(skill.skillCategory_id).subscribe(category => {
-              skill.skillCategory = category; // 🔥 Remplace l’ID par l’objet complet
-            });
-          } else {
-            skill.skillCategory = { id: -1, name: 'Catégorie inconnue' };
-          }
-        });
-
+        this.skills = data.content || [];
         this.loading = false;
       },
-      error: (err) => {
-        console.error('Erreur lors du chargement des compétences :', err);
+      error: (error) => {
+        console.error('Erreur lors du chargement des compétences :', error);
+        this.snackBar.open('Impossible de charger les compétences.', 'Fermer', { duration: 3000 });
         this.loading = false;
       }
     });
+  }
+
+  viewSkill(id: number): void {
+    this.router.navigate(['/skill-detail', id]);
+  }
+
+  deleteSkill(id: number): void {
+    this.skillService.deleteSkill(id).subscribe({
+      next: () => {
+        this.snackBar.open('Compétence supprimée avec succès !', 'Fermer', { duration: 3000 });
+        
+        // ✅ Mettre à jour la liste des compétences localement sans rechargement
+        this.skills = this.skills.filter((skill) => skill.idSkill !== id);
+      },
+      error: (error) => {
+        console.error('Erreur lors de la suppression :', error);
+        this.snackBar.open('Erreur lors de la suppression.', 'Fermer', { duration: 3000 });
+      }
+    });
+}
+
+
+  navigateToTemplate(): void {
+    this.router.navigate(['/skill-template']);
   }
 }

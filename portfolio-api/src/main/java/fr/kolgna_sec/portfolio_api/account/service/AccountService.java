@@ -96,4 +96,11 @@ public class AccountService implements Webservices<AccountDTO>, UserDetailsServi
         return this.accountRepository.findByEmail(username)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found"));
     }
+
+    public Long getAccountIdByEmail(String email)
+    {
+        Account account = this.accountRepository.findByEmail(email).get();
+
+        return account.getIdAccount();
+    }
 }

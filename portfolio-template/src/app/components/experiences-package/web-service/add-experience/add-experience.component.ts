@@ -3,6 +3,8 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { experienceTypeService } from '../../../../services/experience_type.service';
 import { ExperienceService } from '../../../../services/experience.service';
+import { Router } from '@angular/router';
+import { AccountService } from '../../../../services/account.service';
 
 @Component({
   selector: 'app-experience-form',
@@ -13,14 +15,18 @@ import { ExperienceService } from '../../../../services/experience.service';
 export class AddExperienceComponent implements OnInit {
 
   experienceForm: FormGroup;
-  
-  experienceTypes: any[] = []; // Liste des types d'expérience
+
+  experienceTypes: any[] = [];
+
+  accountId: number | null = null; // ✅ Stocker l'ID utilisateur
 
   constructor(
     private fb: FormBuilder,
     private snackBar: MatSnackBar,
     private experienceTypeService: experienceTypeService,
-    private experienceService: ExperienceService
+    private experienceService: ExperienceService,
+    private accountService: AccountService,
+    private router: Router
   ) {
     this.experienceForm = this.fb.group({
       title: ['', Validators.required],
@@ -28,49 +34,69 @@ export class AddExperienceComponent implements OnInit {
       startDate: ['', Validators.required],
       endDate: [''],
       companyName: ['', Validators.required],
-      experienceType: ['', Validators.required]
+      experienceType: ['', Validators.required] // Sélection de l'ID
     });
   }
 
   ngOnInit(): void {
     this.loadExperienceTypes();
+
+    this.loadUserId(); // ✅ Charger l'ID utilisateur dès le début
   }
 
-  // Charger les types d'expérience
+  // ✅ Charger la liste des types d'expérience
   loadExperienceTypes(): void {
-    this.experienceTypeService.getAllExperienceTypes().subscribe(
-      (data) => {
-        this.experienceTypes = data;
+    this.experienceTypeService.getAllExperienceTypes().subscribe({
+      next: (data) => {
+        this.experienceTypes = data.content || [];
       },
-      (error) => {
-        this.snackBar.open('Erreur lors du chargement des types d\'expérience.', 'Fermer', {
-          duration: 3000,
+      error: (error) => {
+        console.error('Erreur lors du chargement des types d\'expérience :', error);
+        this.snackBar.open('Impossible de charger les types d\'expériences.', 'Fermer', { duration: 3000 });
+      }
+    });
+  }
+
+    // ✅ Charger l'ID utilisateur depuis le token
+    loadUserId(): void {
+      const token = localStorage.getItem('jwtToken');
+      if (token) {
+        const payload = JSON.parse(atob(token.split('.')[1]));
+        const email = payload.sub;
+  
+        this.accountService.getAccountIdByEmail(email).subscribe({
+          next: (userId) => {
+            this.accountId = userId;
+            console.log("✅ ID utilisateur chargé :", this.accountId);
+          },
+          error: (error) => {
+            console.error("❌ Erreur récupération ID utilisateur :", error);
+            this.accountId = null;
+          }
         });
       }
-    );
-  }
+    }
 
-  // Soumettre le formulaire
+  // ✅ Soumettre le formulaire
   onSubmit(): void {
-    if (this.experienceForm.valid) {
-      const experienceData = this.experienceForm.value;
-      this.experienceService.createExperience(experienceData).subscribe(
-        (response) => {
-          this.snackBar.open('Expérience enregistrée avec succès !', 'Fermer', {
-            duration: 3000,
-          });
-          this.experienceForm.reset();
+    if (this.experienceForm.valid && this.accountId) {
+      const experienceData = {
+        ...this.experienceForm.value,
+        experienceType_id: this.experienceForm.value.experienceType, // ✅ On envoie l'ID du type d'expérience
+        account_id: this.accountId // ✅ On ajoute l'ID utilisateur
+      };
+
+      this.experienceService.addExperience(experienceData).subscribe({
+        next: () => {
+          this.snackBar.open('Expérience enregistrée avec succès !', 'Fermer', { duration: 3000 });
+          this.router.navigate(['/experiences']); // ✅ Redirection après ajout
         },
-        (error) => {
-          this.snackBar.open('Erreur lors de l\'enregistrement de l\'expérience.', 'Fermer', {
-            duration: 3000,
-          });
+        error: () => {
+          this.snackBar.open('Erreur lors de l\'enregistrement de l\'expérience.', 'Fermer', { duration: 3000 });
         }
-      );
-    } else {
-      this.snackBar.open('Veuillez remplir correctement le formulaire.', 'Fermer', {
-        duration: 3000,
       });
+    } else {
+      this.snackBar.open('Veuillez remplir correctement le formulaire.', 'Fermer', { duration: 3000 });
     }
   }
 }

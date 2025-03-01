@@ -18,6 +18,10 @@ import { TrainingTemplateComponent } from './components/training-package/trainin
 import { HobbieTemplateComponent } from './components/hobbies-package/hobbie-template/hobbie-template.component';
 import { LanguageTemplateComponent } from './components/language-package/language-template/language-template.component';
 import { DashboardComponent } from './components/admin-dashboard-package/dashboard-admin/dashboard.component';
+import { AllEstablishmentComponent } from './components/establishment-package/web-service/all-establishment/all-establishment.component';
+import { AddEstablishmentComponent } from './components/establishment-package/web-service/add-establishment/add-establishment.component';
+import { AllSkillCategoryComponent } from './components/skill-package/web-service/all-skill-category/all-skill-category.component';
+import { AddSkillCategoryComponent } from './components/skill-package/web-service/add-skill-category/add-skill-category.component';
 
 const routes: Routes = [
   { path: '', loadChildren: () => import('./pages/home/home.module').then(m => m.HomeModule) },
@@ -35,6 +39,12 @@ const routes: Routes = [
   { path: 'projects', component: AllProjectsComponent},
   { path: 'hobbies', component: AllHobbiesComponent},
   { path: 'languages', component : AllLanguagesComponent},
+  { path: 'all-establishment', component : AllEstablishmentComponent},
+  { path: 'all-skill-category', component : AllSkillCategoryComponent},
+
+
+
+
   { path: 'login', component : AuthComponent},
   { path: 'dashboard-admin', component : DashboardComponent},
 
@@ -43,6 +53,8 @@ const routes: Routes = [
   { path: 'add-skill', component : AddSkillComponent},
   { path: 'add-hobbie', component : AddHobbiesComponent},
   { path: 'add-language', component : AddLanguagesComponent}, 
+  { path: 'add-establishment', component : AddEstablishmentComponent},
+  { path: 'add-skill-category', component : AddSkillCategoryComponent},
 
   { path: 'experience-template', component : ExperienceTemplateComponent},
   { path: 'skill-template', component : SkillTemplateComponent},

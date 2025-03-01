@@ -7,8 +7,6 @@ import { provideAnimationsAsync } from '@angular/platform-browser/animations/asy
 import { MatButtonModule } from '@angular/material/button';
 import { SharedModule } from './components/shared/shared.module';
 import { HttpClientModule } from '@angular/common/http';
-import { AllEstablishmentComponent } from './components/establishment-package/web-service/all-establishment/all-establishment.component';
-import { AddEstablishmentComponent } from './components/establishment-package/web-service/add-establishment/add-establishment.component';
 import { MatCardModule } from '@angular/material/card';
 import { LoginModule } from './pages/authenticate/login/login.module';
 import { ExperienceModule } from './components/experiences-package/experience.module';
@@ -16,8 +14,6 @@ import { ExperienceModule } from './components/experiences-package/experience.mo
 @NgModule({
   declarations: [
     AppComponent,
-    AllEstablishmentComponent,
-    AddEstablishmentComponent
   ],
   imports: [
     BrowserModule,

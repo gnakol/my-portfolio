@@ -12,6 +12,8 @@ import { MatIconModule } from '@angular/material/icon';
 import { CommonModule } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDatepickerModule } from '@angular/material/datepicker';
+import { Router } from '@angular/router';
+import { AccountService } from '../../../../services/account.service';
 
 @Component({
   selector: 'app-add-trainings',
@@ -38,11 +40,15 @@ export class AddTrainingsComponent implements OnInit {
 
   establishments: any[] = []; // Liste des établissements
 
+  accountId: number | null = null; // ✅ Stocker l'ID utilisateur
+
   constructor(
     private fb: FormBuilder,
     private snackBar: MatSnackBar,
     private establishmentService: EstablishmentService,
-    private trainingService: TrainingService
+    private trainingService: TrainingService,
+    private router : Router,
+    private accountService : AccountService
   ) {
     this.trainingForm = this.fb.group({
       label: ['', Validators.required],
@@ -53,44 +59,70 @@ export class AddTrainingsComponent implements OnInit {
   }
 
   ngOnInit(): void {
+
     this.loadEstablishments();
+
+    this.loadUserId();
   }
 
   // Charger les établissements
   loadEstablishments(): void {
-    this.establishmentService.getAllEstablishments().subscribe(
-      (data) => {
-        this.establishments = data;
+    this.establishmentService.getAllEstablishment().subscribe({
+      next: (data) => {
+        this.establishments = data.content || [];
       },
-      (error) => {
-        this.snackBar.open('Erreur lors du chargement des établissements.', 'Fermer', {
-          duration: 3000,
-        });
+      error: (error) => {
+        console.error('Erreur lors du chargement des établissements :', error);
+        this.snackBar.open('Impossible de charger les établissement.', 'Fermer', { duration: 3000 });
       }
-    );
+    });
   }
 
-  // Soumettre le formulaire
-  onSubmit(): void {
-    if (this.trainingForm.valid) {
-      const trainingData = this.trainingForm.value;
-      this.trainingService.createTraining(trainingData).subscribe(
-        (response) => {
-          this.snackBar.open('Formation enregistrée avec succès !', 'Fermer', {
-            duration: 3000,
-          });
-          this.trainingForm.reset();
-        },
-        (error) => {
-          this.snackBar.open('Erreur lors de l\'enregistrement de la formation.', 'Fermer', {
-            duration: 3000,
+      // ✅ Charger l'ID utilisateur depuis le token
+      loadUserId(): void {
+        const token = localStorage.getItem('jwtToken');
+        if (token) {
+          const payload = JSON.parse(atob(token.split('.')[1]));
+          const email = payload.sub;
+    
+          this.accountService.getAccountIdByEmail(email).subscribe({
+            next: (userId) => {
+              this.accountId = userId;
+              console.log("✅ ID utilisateur chargé :", this.accountId);
+            },
+            error: (error) => {
+              console.error("❌ Erreur récupération ID utilisateur :", error);
+              this.accountId = null;
+            }
           });
         }
-      );
+      }
+
+  // ✅ Soumettre le formulaire
+  onSubmit(): void {
+    console.log("Formulaire valide ?", this.trainingForm.valid);
+    console.log("Valeurs du formulaire :", this.trainingForm.value);
+
+    if (this.trainingForm.valid && this.accountId) {
+        const trainingData = {
+            ...this.trainingForm.value,
+            account_id: this.accountId // ✅ Utilisation directe du formControlName
+        };
+
+        console.log("🚀 Données envoyées au backend :", trainingData);
+
+        this.trainingService.addTraining(trainingData).subscribe({
+            next: () => {
+                this.snackBar.open('Formation enregistrée avec succès !', 'Fermer', { duration: 3000 });
+                this.router.navigate(['/trainings']);
+            },
+            error: () => {
+                this.snackBar.open('Erreur lors de l\'enregistrement de la formation.', 'Fermer', { duration: 3000 });
+            }
+        });
     } else {
-      this.snackBar.open('Veuillez remplir correctement le formulaire.', 'Fermer', {
-        duration: 3000,
-      });
+        this.snackBar.open('Veuillez remplir correctement le formulaire.', 'Fermer', { duration: 3000 });
     }
-  }
+}
+
 }

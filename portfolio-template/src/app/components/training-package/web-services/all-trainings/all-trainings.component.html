@@ -1,13 +1,31 @@
-<div *ngIf="loading">Chargement des formations...</div>
+<div class="training-page">
+  <div class="animated-background"></div>
 
-<div class="training-container" *ngIf="!loading">
-  <mat-card *ngFor="let training of trainings; let i = index" class="training-card" [@fadeIn]="i">
-    <mat-card-title>{{ training.label }}</mat-card-title>
-    <mat-card-subtitle>
-      {{ training.diploma || 'Diplôme non précisé' }} - Obtenu en {{ training.yearOfObtaining | date:'yyyy' }}
-    </mat-card-subtitle>
-    <mat-card-content>
-      <p>Établissement : {{ training.establishment?.name || 'Établissement inconnu' }} ({{ training.establishment?.city || 'Ville inconnue' }})</p>
-    </mat-card-content>
-  </mat-card>
+  <div class="training-container">
+    <ng-container *ngIf="loading; else content">
+      <p class="loading-message">Chargement des formations...</p>
+    </ng-container>
+
+    <ng-template #content>
+      <mat-card class="training-card" *ngFor="let training of trainings" [@fadeIn]>
+        <mat-card-title>{{ training.label }}</mat-card-title>
+        <mat-card-subtitle>
+          {{ training.diploma || 'Diplôme non précisé' }} - 
+          Obtenu en {{ training.yearOfObtaining | date:'yyyy' }}
+        </mat-card-subtitle>
+        <mat-card-content>
+          <p>Établissement : {{ training.establishment?.name }} ({{ training.establishment?.city }})</p>
+        </mat-card-content>
+        <mat-card-actions>
+          <button mat-icon-button color="warn" (click)="deleteTraining(training.idTraining)">
+            <mat-icon>delete</mat-icon>
+          </button>
+        </mat-card-actions>
+      </mat-card>
+    </ng-template>
+  </div>
+
+  <button mat-raised-button (click)="navigateToTemplate()" class="view-all-button">
+    Voir tous les modèles de formations
+  </button>
 </div>

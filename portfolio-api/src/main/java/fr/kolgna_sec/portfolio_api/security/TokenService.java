@@ -37,7 +37,7 @@ public class TokenService {
 
     private Map<String, String> generateJwt(Account account) {
         final long currentTime = System.currentTimeMillis();
-        final long expirationTime = currentTime + 3 * 60 * 1000;
+        final long expirationTime = currentTime + 60 * 60 * 1000;
 
         System.out.println("*******************Generating token for account: " + account.getEmail());
         System.out.println("*******************Token expiration time: " + new Date(expirationTime));

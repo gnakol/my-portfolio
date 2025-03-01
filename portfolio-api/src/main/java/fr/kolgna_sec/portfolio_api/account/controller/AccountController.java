@@ -58,4 +58,10 @@ public class AccountController {
                     return new RuntimeException("Unable to retrieve Account. Please check provide ID");
                 });
     }
+
+    @GetMapping("get-account-id-by-email")
+    public ResponseEntity<Long> getUserIdByEmail(@RequestParam String email) {
+        Long userId = accountService.getAccountIdByEmail(email); // Implémentez cette méthode dans votre service
+        return ResponseEntity.ok(userId);
+    }
 }
