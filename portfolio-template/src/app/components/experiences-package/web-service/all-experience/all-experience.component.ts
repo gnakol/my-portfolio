@@ -38,7 +38,9 @@ import { CommonModule } from '@angular/common';
   styleUrls: ['./all-experience.component.scss']
 })
 export class AllExperienceComponent implements OnInit {
+
   experiences: any[] = [];
+
   loading = true;
 
   constructor(
@@ -70,10 +72,11 @@ export class AllExperienceComponent implements OnInit {
   }
 
   deleteExperience(id: number): void {
+    
     this.experienceService.deleteExperience(id).subscribe({
       next: () => {
         this.snackBar.open('Expérience supprimée avec succès !', 'Fermer', { duration: 3000 });
-        this.experiences = this.experiences.filter((exp) => exp.id !== id);
+        this.experiences = this.experiences.filter(experience => experience.idExperience !== id);
       },
       error: (error) => {
         console.error('Erreur lors de la suppression :', error);

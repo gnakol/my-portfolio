@@ -13,6 +13,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -32,6 +33,15 @@ public class HobbiesService implements Webservices<HobbiesDTO> {
         return this.hobbiesRepository.findAll(pageable)
                 .map(this.hobbiesMapper::fromHobbies);
     }
+
+    // Service pour récupérer tous les centres d'intérêt
+    public List<HobbiesDTO> getAllHobbies() {
+        return this.hobbiesRepository.findAll()
+                .stream()
+                .map(this.hobbiesMapper::fromHobbies)
+                .toList();
+    }
+
 
     @Override
     public HobbiesDTO add(HobbiesDTO e) {

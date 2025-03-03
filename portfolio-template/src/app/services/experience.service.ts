@@ -89,6 +89,7 @@ export class ExperienceService {
     deleteExperience(id: number): Observable<any> {
 
       const headers = this.genericMethodeService.getHeaders();
+      
       return this.http.delete(`${this.apiUrl}/remove-experience/${id}`, {
         headers,
         responseType: 'text' as 'json'

@@ -11,6 +11,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequiredArgsConstructor
 @Slf4j
@@ -24,6 +26,13 @@ public class SkillController {
     {
         return ResponseEntity.ok(this.skillService.all(pageable));
     }
+
+    // Endpoint dans SkillController
+    @GetMapping("/all-skills-for-cv")
+    public ResponseEntity<List<SkillDTO>> getAllSkillsForCv() {
+        return ResponseEntity.ok(this.skillService.getAllSkills());
+    }
+
 
     @PostMapping("/add-skill")
     public ResponseEntity<SkillDTO> addSkill(@Validated @RequestBody SkillDTO skillDTO)

@@ -11,6 +11,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequiredArgsConstructor
 @Slf4j
@@ -24,6 +26,13 @@ public class TrainingController {
     {
         return ResponseEntity.ok(this.trainingService.all(pageable));
     }
+
+    // Endpoint dans TrainingController
+    @GetMapping("/all-trainings-for-cv")
+    public ResponseEntity<List<TrainingDTO>> getAllTrainingsForCv() {
+        return ResponseEntity.ok(this.trainingService.getAllTrainings());
+    }
+
 
     @PostMapping("add-training")
     public ResponseEntity<TrainingDTO> addTraining(@Validated @RequestBody TrainingDTO trainingDTO)

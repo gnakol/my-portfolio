@@ -11,6 +11,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -28,6 +29,15 @@ public class LanguageService implements Webservices<LanguageDTO> {
         return this.languageRepository.findAll(pageable)
                 .map(this.languageMapper::fromLanguage);
     }
+
+    // Service pour récupérer toutes les langues
+    public List<LanguageDTO> getAllLanguages() {
+        return this.languageRepository.findAll()
+                .stream()
+                .map(this.languageMapper::fromLanguage)
+                .toList();
+    }
+
 
     @Override
     public LanguageDTO add(LanguageDTO e) {

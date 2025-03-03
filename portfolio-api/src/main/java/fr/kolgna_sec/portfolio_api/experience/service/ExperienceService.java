@@ -15,6 +15,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -36,6 +37,26 @@ public class ExperienceService implements Webservices<ExperienceDTO> {
         return this.experienceRepository.findAll(pageable)
                 .map(this.experienceMapper::fromExperience);
     }
+
+    // Service pour récupérer toutes les expériences sauf celles de type "Projet"
+    public List<ExperienceDTO> getAllNonProjectExperiences() {
+        return this.experienceRepository.findAll()
+                .stream()
+                .filter(exp -> !exp.getExperienceType().getName().equalsIgnoreCase("Projet"))
+                .map(this.experienceMapper::fromExperience)
+                .toList();
+    }
+
+
+    // Service pour récupérer uniquement les expériences de type "Projet"
+    public List<ExperienceDTO> getAllProjects() {
+        return this.experienceRepository.findAll()
+                .stream()
+                .filter(exp -> exp.getExperienceType().getName().equalsIgnoreCase("Projet"))
+                .map(this.experienceMapper::fromExperience)
+                .toList();
+    }
+
 
     @Override
     public ExperienceDTO add(ExperienceDTO e) {

@@ -10,10 +10,12 @@ import { HttpClientModule } from '@angular/common/http';
 import { MatCardModule } from '@angular/material/card';
 import { LoginModule } from './pages/authenticate/login/login.module';
 import { ExperienceModule } from './components/experiences-package/experience.module';
+import { AccountTemplateComponent } from './components/account-package/account-template/account-template.component';
 
 @NgModule({
   declarations: [
     AppComponent,
+    AccountTemplateComponent,
   ],
   imports: [
     BrowserModule,

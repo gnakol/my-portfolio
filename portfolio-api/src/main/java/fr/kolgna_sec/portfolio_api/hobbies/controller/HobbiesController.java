@@ -11,6 +11,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequiredArgsConstructor
 @Slf4j
@@ -24,6 +26,13 @@ public class HobbiesController {
     {
         return ResponseEntity.ok(this.hobbiesService.all(pageable));
     }
+
+    // Endpoint dans HobbiesController
+    @GetMapping("/all-hobbies-for-cv")
+    public ResponseEntity<List<HobbiesDTO>> getAllHobbiesForCv() {
+        return ResponseEntity.ok(this.hobbiesService.getAllHobbies());
+    }
+
 
     @PostMapping("/add-hobbies")
     public ResponseEntity<HobbiesDTO> addHobby(@Validated @RequestBody HobbiesDTO hobbiesDTO)

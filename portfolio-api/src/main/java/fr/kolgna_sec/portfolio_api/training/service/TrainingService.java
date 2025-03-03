@@ -15,6 +15,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -36,6 +37,15 @@ public class TrainingService implements Webservices<TrainingDTO> {
         return this.trainingRepository.findAll(pageable)
                 .map(this.trainingMapper::fromTraining);
     }
+
+    // Service pour récupérer toutes les formations avec les établissements
+    public List<TrainingDTO> getAllTrainings() {
+        return this.trainingRepository.findAll()
+                .stream()
+                .map(this.trainingMapper::fromTraining)
+                .toList();
+    }
+
 
     @Override
     public TrainingDTO add(TrainingDTO e) {

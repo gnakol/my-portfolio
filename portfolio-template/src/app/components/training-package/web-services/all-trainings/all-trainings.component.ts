@@ -60,6 +60,7 @@ export class AllTrainingsComponent implements OnInit {
   }
 
   deleteTraining(id: number): void {
+    
     this.trainingService.deleteTraining(id).subscribe({
       next: () => {
         this.snackBar.open('Formation supprimée avec succès !', 'Fermer', { duration: 3000 });

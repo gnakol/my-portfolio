@@ -11,6 +11,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequiredArgsConstructor
 @Slf4j
@@ -24,6 +26,21 @@ public class ExperienceController {
     {
         return ResponseEntity.ok(this.experienceService.all(pageable));
     }
+
+    // Endpoint dans ExperienceController pour les Expériences
+    @GetMapping("/all-experiences-for-cv")
+    public ResponseEntity<List<ExperienceDTO>> getAllNonProjectExperiencesForCv() {
+        return ResponseEntity.ok(this.experienceService.getAllNonProjectExperiences());
+    }
+
+
+    // Endpoint dans ExperienceController pour les Projets
+    @GetMapping("/all-projects-for-cv")
+    public ResponseEntity<List<ExperienceDTO>> getAllProjectsForCv() {
+        return ResponseEntity.ok(this.experienceService.getAllProjects());
+    }
+
+
 
     @PostMapping("/add-experience")
     public ResponseEntity<ExperienceDTO> addExperience(@Validated @RequestBody ExperienceDTO experienceDTO)

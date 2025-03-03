@@ -11,6 +11,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequiredArgsConstructor
 @Slf4j
@@ -24,6 +26,13 @@ public class LanguageController {
     {
         return ResponseEntity.ok(this.languageService.all(pageable));
     }
+
+    // Endpoint dans LanguageController
+    @GetMapping("/all-languages-for-cv")
+    public ResponseEntity<List<LanguageDTO>> getAllLanguagesForCv() {
+        return ResponseEntity.ok(this.languageService.getAllLanguages());
+    }
+
 
     @PostMapping("/add-language")
     public ResponseEntity<LanguageDTO> addLanguage(@Validated @RequestBody LanguageDTO languageDTO)

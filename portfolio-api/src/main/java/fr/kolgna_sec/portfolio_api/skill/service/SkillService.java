@@ -15,6 +15,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -36,6 +37,15 @@ public class SkillService implements Webservices<SkillDTO> {
         return this.skillRepository.findAll(pageable)
                 .map(this.skillMapper::fromSkill);
     }
+
+    // Service pour récupérer toutes les compétences avec leurs catégories
+    public List<SkillDTO> getAllSkills() {
+        return this.skillRepository.findAll()
+                .stream()
+                .map(this.skillMapper::fromSkill)
+                .toList();
+    }
+
 
     @Override
     public SkillDTO add(SkillDTO e) {
