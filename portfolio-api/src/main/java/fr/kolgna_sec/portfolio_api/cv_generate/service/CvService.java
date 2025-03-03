@@ -49,13 +49,14 @@ public class CvService {
             PdfWriter.getInstance(document, out);
             document.open();
 
-            // 🟢 En-tête du CV
-            addHeader(document);
+            // 🟢 Barre latérale colorée avec les informations personnelles
+            addSidebar(document);
 
             // 🟢 Mise en page en deux colonnes
             PdfPTable table = new PdfPTable(2);
             table.setWidthPercentage(100);
-            table.setWidths(new int[]{4, 6}); // 40% - 60%
+            table.setWidths(new int[]{3, 7}); // 30% - 70%
+            table.setSpacingBefore(10);
 
             // Colonne gauche : Formations, Compétences, Centres d'intérêt, Langues
             PdfPCell leftCell = new PdfPCell();
@@ -84,18 +85,29 @@ public class CvService {
         return new ByteArrayInputStream(out.toByteArray());
     }
 
-    // 🟢 Méthode pour l'en-tête du CV
-    private void addHeader(Document document) throws DocumentException, IOException {
-        // En-tête aligné à droite
-        Paragraph header = new Paragraph();
-        header.setAlignment(Element.ALIGN_RIGHT);
-        header.add(new Chunk("CV de N'GNA KOLIE\n", FontFactory.getFont("Roboto", 16, Font.BOLD, BaseColor.DARK_GRAY)));
-        header.add(new Chunk("Email : gna.kolie@yahoo.fr\n", FontFactory.getFont("Roboto", 10)));
-        header.add(new Chunk("LinkedIn : linkedin.com/in/ngnakolie\n", FontFactory.getFont("Roboto", 10)));
-        header.add(new Chunk("GitHub : github.com/ngnakolie\n", FontFactory.getFont("Roboto", 10)));
-        header.add(new Chunk("Adresse : 10 rue Utrillo, Arras", FontFactory.getFont("Roboto", 10)));
-        document.add(header);
-        document.add(new Paragraph("\n"));
+    // 🟢 Méthode pour la barre latérale colorée
+    private void addSidebar(Document document) throws DocumentException, IOException {
+        PdfPTable sidebar = new PdfPTable(1);
+        sidebar.setWidthPercentage(20);
+        sidebar.setHorizontalAlignment(Element.ALIGN_LEFT);
+        sidebar.getDefaultCell().setBorder(Rectangle.NO_BORDER);
+        sidebar.getDefaultCell().setBackgroundColor(new BaseColor(33, 150, 243)); // Bleu moderne
+
+        // Informations personnelles dans la barre latérale
+        Paragraph personalInfo = new Paragraph();
+        personalInfo.add(new Chunk("N'GNA KOLIE\n", FontFactory.getFont("Roboto", 14, Font.BOLD, BaseColor.WHITE)));
+        personalInfo.add(new Chunk("Développeur FullStack\n", FontFactory.getFont("Roboto", 10, Font.NORMAL, BaseColor.WHITE)));
+        personalInfo.add(new Chunk("Email : gna.kolie@yahoo.fr\n", FontFactory.getFont("Roboto", 8, Font.NORMAL, BaseColor.WHITE)));
+        personalInfo.add(new Chunk("LinkedIn : linkedin.com/in/ngnakolie\n", FontFactory.getFont("Roboto", 8, Font.NORMAL, BaseColor.WHITE)));
+        personalInfo.add(new Chunk("GitHub : github.com/ngnakolie\n", FontFactory.getFont("Roboto", 8, Font.NORMAL, BaseColor.WHITE)));
+        personalInfo.add(new Chunk("Adresse : 10 rue Utrillo, Arras", FontFactory.getFont("Roboto", 8, Font.NORMAL, BaseColor.WHITE)));
+
+        PdfPCell sidebarCell = new PdfPCell(personalInfo);
+        sidebarCell.setBorder(Rectangle.NO_BORDER);
+        sidebarCell.setPadding(10);
+        sidebar.addCell(sidebarCell);
+
+        document.add(sidebar);
     }
 
     // 🟢 Section Expériences Professionnelles
