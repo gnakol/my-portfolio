@@ -19,3 +19,6 @@ server:
 
   servlet:
     context-path: /portfolio-api
+
+  liquibase:
+    change-log: classpath:db/changelog/db.changelog-master.yaml

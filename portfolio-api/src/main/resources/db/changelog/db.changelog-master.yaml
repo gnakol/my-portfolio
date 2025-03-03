@@ -1,0 +1,1058 @@
+databaseChangeLog:
+- changeSet:
+    id: 1741023305383-1
+    author: kolgna (generated)
+    changes:
+    - createTable:
+        columns:
+        - column:
+            autoIncrement: true
+            constraints:
+              nullable: false
+              primaryKey: true
+            name: id_account
+            type: INT
+        - column:
+            name: ref_account
+            type: VARCHAR(100)
+        - column:
+            name: name
+            type: VARCHAR(50)
+        - column:
+            name: first_name
+            type: VARCHAR(50)
+        - column:
+            name: email
+            type: VARCHAR(50)
+        - column:
+            name: password
+            type: VARCHAR(300)
+        - column:
+            name: phone_number
+            type: INT
+        - column:
+            name: civility
+            type: VARCHAR(50)
+        - column:
+            name: github
+            type: VARCHAR(50)
+        - column:
+            name: linkedin
+            type: VARCHAR(50)
+        - column:
+            name: address
+            type: VARCHAR(50)
+        tableName: account
+- changeSet:
+    id: 1741023305383-2
+    author: kolgna (generated)
+    changes:
+    - createTable:
+        columns:
+        - column:
+            autoIncrement: true
+            constraints:
+              nullable: false
+              primaryKey: true
+            name: id_article
+            type: INT
+        - column:
+            name: ref_article
+            type: VARCHAR(100)
+        - column:
+            constraints:
+              nullable: false
+            name: title
+            type: VARCHAR(200)
+        - column:
+            constraints:
+              nullable: false
+            name: content
+            type: TEXT
+        - column:
+            defaultValueComputed: CURRENT_TIMESTAMP
+            name: publication_date
+            type: datetime
+        - column:
+            constraints:
+              nullable: false
+            name: id_account
+            type: INT
+        tableName: article
+- changeSet:
+    id: 1741023305383-3
+    author: kolgna (generated)
+    changes:
+    - createTable:
+        columns:
+        - column:
+            constraints:
+              nullable: false
+              primaryKey: true
+            name: id_article
+            type: INT
+        - column:
+            constraints:
+              nullable: false
+              primaryKey: true
+            name: id_tag
+            type: INT
+        tableName: article_tag
+- changeSet:
+    id: 1741023305383-4
+    author: kolgna (generated)
+    changes:
+    - createTable:
+        columns:
+        - column:
+            autoIncrement: true
+            constraints:
+              nullable: false
+              primaryKey: true
+            name: id_comment
+            type: INT
+        - column:
+            name: ref_comment
+            type: VARCHAR(100)
+        - column:
+            constraints:
+              nullable: false
+            name: content
+            type: TEXT
+        - column:
+            defaultValueComputed: CURRENT_TIMESTAMP
+            name: date_comment
+            type: datetime
+        - column:
+            constraints:
+              nullable: false
+            name: id_article
+            type: INT
+        - column:
+            constraints:
+              nullable: false
+            name: id_account
+            type: INT
+        tableName: comment
+- changeSet:
+    id: 1741023305383-5
+    author: kolgna (generated)
+    changes:
+    - createTable:
+        columns:
+        - column:
+            autoIncrement: true
+            constraints:
+              nullable: false
+              primaryKey: true
+            name: id_configuration
+            type: INT
+        - column:
+            name: ref_configuration
+            type: VARCHAR(100)
+        - column:
+            constraints:
+              nullable: false
+            name: name
+            type: VARCHAR(100)
+        - column:
+            name: description
+            type: TEXT
+        - column:
+            name: json_content
+            type: JSON(1073741824)
+        - column:
+            defaultValueComputed: CURRENT_TIMESTAMP
+            name: date_creation
+            type: datetime
+        - column:
+            constraints:
+              nullable: false
+            name: id_account
+            type: INT
+        tableName: configuration_network
+- changeSet:
+    id: 1741023305383-6
+    author: kolgna (generated)
+    changes:
+    - createTable:
+        columns:
+        - column:
+            autoIncrement: true
+            constraints:
+              nullable: false
+              primaryKey: true
+            name: id_establishment
+            type: INT
+        - column:
+            name: ref_establishment
+            type: VARCHAR(100)
+        - column:
+            name: name
+            type: VARCHAR(50)
+        - column:
+            name: city
+            type: VARCHAR(50)
+        tableName: establishment
+- changeSet:
+    id: 1741023305383-7
+    author: kolgna (generated)
+    changes:
+    - createTable:
+        columns:
+        - column:
+            autoIncrement: true
+            constraints:
+              nullable: false
+              primaryKey: true
+            name: id_experience
+            type: INT
+        - column:
+            name: ref_experience
+            type: VARCHAR(100)
+        - column:
+            constraints:
+              nullable: false
+            name: title
+            type: VARCHAR(100)
+        - column:
+            name: description
+            type: TEXT
+        - column:
+            constraints:
+              nullable: false
+            name: start_date
+            type: date
+        - column:
+            name: end_date
+            type: date
+        - column:
+            name: company_name
+            type: VARCHAR(100)
+        - column:
+            constraints:
+              nullable: false
+            name: id_experience_type
+            type: INT
+        - column:
+            constraints:
+              nullable: false
+            name: id_account
+            type: INT
+        tableName: experience
+- changeSet:
+    id: 1741023305383-8
+    author: kolgna (generated)
+    changes:
+    - createTable:
+        columns:
+        - column:
+            autoIncrement: true
+            constraints:
+              nullable: false
+              primaryKey: true
+            name: id_experience_type
+            type: INT
+        - column:
+            name: ref_experience_type
+            type: VARCHAR(100)
+        - column:
+            constraints:
+              nullable: false
+            name: name
+            type: VARCHAR(50)
+        tableName: experience_type
+- changeSet:
+    id: 1741023305383-9
+    author: kolgna (generated)
+    changes:
+    - createTable:
+        columns:
+        - column:
+            autoIncrement: true
+            constraints:
+              nullable: false
+              primaryKey: true
+            name: id_hobby
+            type: INT
+        - column:
+            constraints:
+              nullable: false
+            name: name
+            type: VARCHAR(100)
+        - column:
+            name: description
+            type: TEXT
+        - column:
+            name: id_account
+            type: INT
+        - column:
+            name: ref_hobby
+            type: VARCHAR(150)
+        tableName: hobbies
+- changeSet:
+    id: 1741023305383-10
+    author: kolgna (generated)
+    changes:
+    - createTable:
+        columns:
+        - column:
+            autoIncrement: true
+            constraints:
+              nullable: false
+              primaryKey: true
+            name: id_language
+            type: INT
+        - column:
+            name: ref_language
+            type: VARCHAR(100)
+        - column:
+            name: name
+            type: VARCHAR(50)
+        - column:
+            name: proficiency_level
+            type: VARCHAR(50)
+        tableName: language
+- changeSet:
+    id: 1741023305383-11
+    author: kolgna (generated)
+    changes:
+    - createTable:
+        columns:
+        - column:
+            autoIncrement: true
+            constraints:
+              nullable: false
+              primaryKey: true
+            name: id_log
+            type: INT
+        - column:
+            constraints:
+              nullable: false
+            name: type_log
+            type: ENUM('Faille', 'vnement', 'Alerte')
+        - column:
+            constraints:
+              nullable: false
+            name: message
+            type: TEXT
+        - column:
+            defaultValueComputed: CURRENT_TIMESTAMP
+            name: date_log
+            type: datetime
+        - column:
+            name: ip_source
+            type: VARCHAR(100)
+        tableName: log_security
+- changeSet:
+    id: 1741023305383-12
+    author: kolgna (generated)
+    changes:
+    - createTable:
+        columns:
+        - column:
+            autoIncrement: true
+            constraints:
+              nullable: false
+              primaryKey: true
+            name: id_permission
+            type: INT
+        - column:
+            name: name_permission
+            type: VARCHAR(50)
+        tableName: permission
+- changeSet:
+    id: 1741023305383-13
+    author: kolgna (generated)
+    changes:
+    - createTable:
+        columns:
+        - column:
+            autoIncrement: true
+            constraints:
+              nullable: false
+              primaryKey: true
+            name: id_role
+            type: INT
+        - column:
+            name: ref_role
+            type: VARCHAR(100)
+        - column:
+            constraints:
+              nullable: false
+            name: name
+            type: VARCHAR(50)
+        tableName: role
+- changeSet:
+    id: 1741023305383-14
+    author: kolgna (generated)
+    changes:
+    - createTable:
+        columns:
+        - column:
+            constraints:
+              nullable: false
+              primaryKey: true
+            name: id_account
+            type: INT
+        - column:
+            constraints:
+              nullable: false
+              primaryKey: true
+            name: id_role
+            type: INT
+        tableName: role_account
+- changeSet:
+    id: 1741023305383-15
+    author: kolgna (generated)
+    changes:
+    - createTable:
+        columns:
+        - column:
+            constraints:
+              nullable: false
+              primaryKey: true
+            name: id_role
+            type: INT
+        - column:
+            constraints:
+              nullable: false
+              primaryKey: true
+            name: id_permission
+            type: INT
+        tableName: role_permission
+- changeSet:
+    id: 1741023305383-16
+    author: kolgna (generated)
+    changes:
+    - createTable:
+        columns:
+        - column:
+            autoIncrement: true
+            constraints:
+              nullable: false
+              primaryKey: true
+            name: id_simulation
+            type: INT
+        - column:
+            name: ref_simulation
+            type: VARCHAR(100)
+        - column:
+            constraints:
+              nullable: false
+            name: description
+            type: TEXT
+        - column:
+            constraints:
+              nullable: false
+            name: command_test
+            type: TEXT
+        - column:
+            constraints:
+              nullable: false
+            name: expected_result
+            type: TEXT
+        - column:
+            constraints:
+              nullable: false
+            name: id_skill
+            type: INT
+        tableName: simulation
+- changeSet:
+    id: 1741023305383-17
+    author: kolgna (generated)
+    changes:
+    - createTable:
+        columns:
+        - column:
+            autoIncrement: true
+            constraints:
+              nullable: false
+              primaryKey: true
+            name: id_skill
+            type: INT
+        - column:
+            name: ref_skill
+            type: VARCHAR(100)
+        - column:
+            constraints:
+              nullable: false
+            name: name
+            type: VARCHAR(100)
+        - column:
+            name: description
+            type: TEXT
+        - column:
+            name: id_skill_category
+            type: INT
+        - column:
+            name: id_account
+            type: INT
+        tableName: skill
+- changeSet:
+    id: 1741023305383-18
+    author: kolgna (generated)
+    changes:
+    - createTable:
+        columns:
+        - column:
+            autoIncrement: true
+            constraints:
+              nullable: false
+              primaryKey: true
+            name: id_skill_category
+            type: INT
+        - column:
+            name: ref_skill_category
+            type: VARCHAR(100)
+        - column:
+            name: name
+            type: VARCHAR(50)
+        tableName: skill_category
+- changeSet:
+    id: 1741023305383-19
+    author: kolgna (generated)
+    changes:
+    - createTable:
+        columns:
+        - column:
+            autoIncrement: true
+            constraints:
+              nullable: false
+              primaryKey: true
+            name: id_tag
+            type: INT
+        - column:
+            name: ref_tag
+            type: VARCHAR(100)
+        - column:
+            constraints:
+              nullable: false
+            name: name
+            type: VARCHAR(100)
+        tableName: tag
+- changeSet:
+    id: 1741023305383-20
+    author: kolgna (generated)
+    changes:
+    - createTable:
+        columns:
+        - column:
+            autoIncrement: true
+            constraints:
+              nullable: false
+              primaryKey: true
+            name: id_token
+            type: INT
+        - column:
+            name: value_token
+            type: VARCHAR(250)
+        - column:
+            name: status_token
+            type: BIT(1)
+        - column:
+            name: expiration_token
+            type: BIT(1)
+        - column:
+            name: id_account
+            type: INT
+        tableName: token
+- changeSet:
+    id: 1741023305383-21
+    author: kolgna (generated)
+    changes:
+    - createTable:
+        columns:
+        - column:
+            autoIncrement: true
+            constraints:
+              nullable: false
+              primaryKey: true
+            name: id_training
+            type: INT
+        - column:
+            name: ref_training
+            type: VARCHAR(100)
+        - column:
+            name: label
+            type: VARCHAR(50)
+        - column:
+            name: diploma
+            type: VARCHAR(50)
+        - column:
+            name: year_of_obtaining
+            type: date
+        - column:
+            constraints:
+              nullable: false
+            name: id_establishment
+            type: INT
+        - column:
+            constraints:
+              nullable: false
+            name: id_account
+            type: INT
+        tableName: training
+- changeSet:
+    id: 1741023305383-22
+    author: kolgna (generated)
+    changes:
+    - createTable:
+        columns:
+        - column:
+            autoIncrement: true
+            constraints:
+              nullable: false
+              primaryKey: true
+            name: id_uuid
+            type: INT
+        - column:
+            name: uuid
+            type: VARCHAR(100)
+        tableName: uuid
+- changeSet:
+    id: 1741023305383-23
+    author: kolgna (generated)
+    changes:
+    - createIndex:
+        columns:
+        - column:
+            name: id_account
+        indexName: id_account
+        tableName: article
+- changeSet:
+    id: 1741023305383-24
+    author: kolgna (generated)
+    changes:
+    - createIndex:
+        columns:
+        - column:
+            name: id_account
+        indexName: id_account
+        tableName: comment
+- changeSet:
+    id: 1741023305383-25
+    author: kolgna (generated)
+    changes:
+    - createIndex:
+        columns:
+        - column:
+            name: id_account
+        indexName: id_account
+        tableName: configuration_network
+- changeSet:
+    id: 1741023305383-26
+    author: kolgna (generated)
+    changes:
+    - createIndex:
+        columns:
+        - column:
+            name: id_account
+        indexName: id_account
+        tableName: experience
+- changeSet:
+    id: 1741023305383-27
+    author: kolgna (generated)
+    changes:
+    - createIndex:
+        columns:
+        - column:
+            name: id_account
+        indexName: id_account
+        tableName: hobbies
+- changeSet:
+    id: 1741023305383-28
+    author: kolgna (generated)
+    changes:
+    - createIndex:
+        columns:
+        - column:
+            name: id_account
+        indexName: id_account
+        tableName: skill
+- changeSet:
+    id: 1741023305383-29
+    author: kolgna (generated)
+    changes:
+    - createIndex:
+        columns:
+        - column:
+            name: id_account
+        indexName: id_account
+        tableName: token
+- changeSet:
+    id: 1741023305383-30
+    author: kolgna (generated)
+    changes:
+    - createIndex:
+        columns:
+        - column:
+            name: id_account
+        indexName: id_account
+        tableName: training
+- changeSet:
+    id: 1741023305383-31
+    author: kolgna (generated)
+    changes:
+    - createIndex:
+        columns:
+        - column:
+            name: id_article
+        indexName: id_article
+        tableName: comment
+- changeSet:
+    id: 1741023305383-32
+    author: kolgna (generated)
+    changes:
+    - createIndex:
+        columns:
+        - column:
+            name: id_establishment
+        indexName: id_establishment
+        tableName: training
+- changeSet:
+    id: 1741023305383-33
+    author: kolgna (generated)
+    changes:
+    - createIndex:
+        columns:
+        - column:
+            name: id_experience_type
+        indexName: id_experience_type
+        tableName: experience
+- changeSet:
+    id: 1741023305383-34
+    author: kolgna (generated)
+    changes:
+    - createIndex:
+        columns:
+        - column:
+            name: id_permission
+        indexName: id_permission
+        tableName: role_permission
+- changeSet:
+    id: 1741023305383-35
+    author: kolgna (generated)
+    changes:
+    - createIndex:
+        columns:
+        - column:
+            name: id_role
+        indexName: id_role
+        tableName: role_account
+- changeSet:
+    id: 1741023305383-36
+    author: kolgna (generated)
+    changes:
+    - createIndex:
+        columns:
+        - column:
+            name: id_skill
+        indexName: id_skill
+        tableName: simulation
+- changeSet:
+    id: 1741023305383-37
+    author: kolgna (generated)
+    changes:
+    - createIndex:
+        columns:
+        - column:
+            name: id_skill_category
+        indexName: id_skill_category
+        tableName: skill
+- changeSet:
+    id: 1741023305383-38
+    author: kolgna (generated)
+    changes:
+    - createIndex:
+        columns:
+        - column:
+            name: id_tag
+        indexName: id_tag
+        tableName: article_tag
+- changeSet:
+    id: 1741023305383-39
+    author: kolgna (generated)
+    changes:
+    - addForeignKeyConstraint:
+        baseColumnNames: id_account
+        baseTableName: article
+        constraintName: article_ibfk_1
+        deferrable: false
+        initiallyDeferred: false
+        onDelete: CASCADE
+        onUpdate: RESTRICT
+        referencedColumnNames: id_account
+        referencedTableName: account
+        validate: true
+- changeSet:
+    id: 1741023305383-40
+    author: kolgna (generated)
+    changes:
+    - addForeignKeyConstraint:
+        baseColumnNames: id_article
+        baseTableName: article_tag
+        constraintName: article_tag_ibfk_1
+        deferrable: false
+        initiallyDeferred: false
+        onDelete: CASCADE
+        onUpdate: RESTRICT
+        referencedColumnNames: id_article
+        referencedTableName: article
+        validate: true
+- changeSet:
+    id: 1741023305383-41
+    author: kolgna (generated)
+    changes:
+    - addForeignKeyConstraint:
+        baseColumnNames: id_tag
+        baseTableName: article_tag
+        constraintName: article_tag_ibfk_2
+        deferrable: false
+        initiallyDeferred: false
+        onDelete: CASCADE
+        onUpdate: RESTRICT
+        referencedColumnNames: id_tag
+        referencedTableName: tag
+        validate: true
+- changeSet:
+    id: 1741023305383-42
+    author: kolgna (generated)
+    changes:
+    - addForeignKeyConstraint:
+        baseColumnNames: id_article
+        baseTableName: comment
+        constraintName: comment_ibfk_1
+        deferrable: false
+        initiallyDeferred: false
+        onDelete: CASCADE
+        onUpdate: RESTRICT
+        referencedColumnNames: id_article
+        referencedTableName: article
+        validate: true
+- changeSet:
+    id: 1741023305383-43
+    author: kolgna (generated)
+    changes:
+    - addForeignKeyConstraint:
+        baseColumnNames: id_account
+        baseTableName: comment
+        constraintName: comment_ibfk_2
+        deferrable: false
+        initiallyDeferred: false
+        onDelete: CASCADE
+        onUpdate: RESTRICT
+        referencedColumnNames: id_account
+        referencedTableName: account
+        validate: true
+- changeSet:
+    id: 1741023305383-44
+    author: kolgna (generated)
+    changes:
+    - addForeignKeyConstraint:
+        baseColumnNames: id_account
+        baseTableName: configuration_network
+        constraintName: configuration_network_ibfk_1
+        deferrable: false
+        initiallyDeferred: false
+        onDelete: CASCADE
+        onUpdate: RESTRICT
+        referencedColumnNames: id_account
+        referencedTableName: account
+        validate: true
+- changeSet:
+    id: 1741023305383-45
+    author: kolgna (generated)
+    changes:
+    - addForeignKeyConstraint:
+        baseColumnNames: id_experience_type
+        baseTableName: experience
+        constraintName: experience_ibfk_1
+        deferrable: false
+        initiallyDeferred: false
+        onDelete: CASCADE
+        onUpdate: RESTRICT
+        referencedColumnNames: id_experience_type
+        referencedTableName: experience_type
+        validate: true
+- changeSet:
+    id: 1741023305383-46
+    author: kolgna (generated)
+    changes:
+    - addForeignKeyConstraint:
+        baseColumnNames: id_account
+        baseTableName: experience
+        constraintName: experience_ibfk_2
+        deferrable: false
+        initiallyDeferred: false
+        onDelete: CASCADE
+        onUpdate: RESTRICT
+        referencedColumnNames: id_account
+        referencedTableName: account
+        validate: true
+- changeSet:
+    id: 1741023305383-47
+    author: kolgna (generated)
+    changes:
+    - addForeignKeyConstraint:
+        baseColumnNames: id_account
+        baseTableName: hobbies
+        constraintName: hobbies_ibfk_1
+        deferrable: false
+        initiallyDeferred: false
+        onDelete: CASCADE
+        onUpdate: RESTRICT
+        referencedColumnNames: id_account
+        referencedTableName: account
+        validate: true
+- changeSet:
+    id: 1741023305383-48
+    author: kolgna (generated)
+    changes:
+    - addForeignKeyConstraint:
+        baseColumnNames: id_account
+        baseTableName: role_account
+        constraintName: role_account_ibfk_1
+        deferrable: false
+        initiallyDeferred: false
+        onDelete: RESTRICT
+        onUpdate: RESTRICT
+        referencedColumnNames: id_account
+        referencedTableName: account
+        validate: true
+- changeSet:
+    id: 1741023305383-49
+    author: kolgna (generated)
+    changes:
+    - addForeignKeyConstraint:
+        baseColumnNames: id_role
+        baseTableName: role_account
+        constraintName: role_account_ibfk_2
+        deferrable: false
+        initiallyDeferred: false
+        onDelete: RESTRICT
+        onUpdate: RESTRICT
+        referencedColumnNames: id_role
+        referencedTableName: role
+        validate: true
+- changeSet:
+    id: 1741023305383-50
+    author: kolgna (generated)
+    changes:
+    - addForeignKeyConstraint:
+        baseColumnNames: id_role
+        baseTableName: role_permission
+        constraintName: role_permission_ibfk_1
+        deferrable: false
+        initiallyDeferred: false
+        onDelete: RESTRICT
+        onUpdate: RESTRICT
+        referencedColumnNames: id_role
+        referencedTableName: role
+        validate: true
+- changeSet:
+    id: 1741023305383-51
+    author: kolgna (generated)
+    changes:
+    - addForeignKeyConstraint:
+        baseColumnNames: id_permission
+        baseTableName: role_permission
+        constraintName: role_permission_ibfk_2
+        deferrable: false
+        initiallyDeferred: false
+        onDelete: RESTRICT
+        onUpdate: RESTRICT
+        referencedColumnNames: id_permission
+        referencedTableName: permission
+        validate: true
+- changeSet:
+    id: 1741023305383-52
+    author: kolgna (generated)
+    changes:
+    - addForeignKeyConstraint:
+        baseColumnNames: id_skill
+        baseTableName: simulation
+        constraintName: simulation_ibfk_1
+        deferrable: false
+        initiallyDeferred: false
+        onDelete: CASCADE
+        onUpdate: RESTRICT
+        referencedColumnNames: id_skill
+        referencedTableName: skill
+        validate: true
+- changeSet:
+    id: 1741023305383-53
+    author: kolgna (generated)
+    changes:
+    - addForeignKeyConstraint:
+        baseColumnNames: id_skill_category
+        baseTableName: skill
+        constraintName: skill_ibfk_1
+        deferrable: false
+        initiallyDeferred: false
+        onDelete: RESTRICT
+        onUpdate: RESTRICT
+        referencedColumnNames: id_skill_category
+        referencedTableName: skill_category
+        validate: true
+- changeSet:
+    id: 1741023305383-54
+    author: kolgna (generated)
+    changes:
+    - addForeignKeyConstraint:
+        baseColumnNames: id_account
+        baseTableName: skill
+        constraintName: skill_ibfk_2
+        deferrable: false
+        initiallyDeferred: false
+        onDelete: RESTRICT
+        onUpdate: RESTRICT
+        referencedColumnNames: id_account
+        referencedTableName: account
+        validate: true
+- changeSet:
+    id: 1741023305383-55
+    author: kolgna (generated)
+    changes:
+    - addForeignKeyConstraint:
+        baseColumnNames: id_account
+        baseTableName: token
+        constraintName: token_ibfk_1
+        deferrable: false
+        initiallyDeferred: false
+        onDelete: RESTRICT
+        onUpdate: RESTRICT
+        referencedColumnNames: id_account
+        referencedTableName: account
+        validate: true
+- changeSet:
+    id: 1741023305383-56
+    author: kolgna (generated)
+    changes:
+    - addForeignKeyConstraint:
+        baseColumnNames: id_establishment
+        baseTableName: training
+        constraintName: training_ibfk_1
+        deferrable: false
+        initiallyDeferred: false
+        onDelete: RESTRICT
+        onUpdate: RESTRICT
+        referencedColumnNames: id_establishment
+        referencedTableName: establishment
+        validate: true
+- changeSet:
+    id: 1741023305383-57
+    author: kolgna (generated)
+    changes:
+    - addForeignKeyConstraint:
+        baseColumnNames: id_account
+        baseTableName: training
+        constraintName: training_ibfk_2
+        deferrable: false
+        initiallyDeferred: false
+        onDelete: RESTRICT
+        onUpdate: RESTRICT
+        referencedColumnNames: id_account
+        referencedTableName: account
+        validate: true
+
