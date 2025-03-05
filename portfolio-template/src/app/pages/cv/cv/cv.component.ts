@@ -3,8 +3,9 @@ import { ExperienceService } from '../../../services/experience.service';
 import { CommonModule } from '@angular/common';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
-import { AllExperienceComponent } from '../../../components/experiences-package/web-service/all-experience/all-experience.component';
 import { Router } from '@angular/router';
+import html2canvas from 'html2canvas';
+import { jsPDF } from 'jspdf';
 
 @Component({
   selector: 'app-cv',
@@ -13,7 +14,6 @@ import { Router } from '@angular/router';
     CommonModule, // Requis pour les directives standard (ex : *ngFor)
     MatCardModule, // Requis pour <mat-card>
     MatButtonModule, // Requis pour <button mat-raised-button>
-    //AllExperienceComponent
   ],
   templateUrl: './cv.component.html',
   styleUrls: ['./cv.component.scss']
@@ -22,29 +22,16 @@ export class CvComponent implements OnInit {
 
   email: string = 'gna.kolie@yahoo.fr';
 
-  experiences: any[] = [];
+  constructor(private router: Router) {}
 
-  selectedSection: string | null = null; // 🔥 Nouvelle variable pour stocker la section sélectionnée
+  ngOnInit(): void {}
 
-  constructor(private experienceService: ExperienceService, private router : Router) {}
-
-  ngOnInit(): void {
-    this.loadExperiences();
-  }
-
-  loadExperiences(): void {
-    this.experienceService.getAllExperiences().subscribe(data => {
-      this.experiences = data.content; // API retourne une `Page`
-    });
-  }
-
-  deleteExperience(id: number): void {
-    this.experienceService.deleteExperience(id).subscribe(() => {
-      this.experiences = this.experiences.filter(exp => exp.idExperience !== id);
-    });
-  }
-
-  showSection(section: string) {
+  showSection(section: string): void {
     this.router.navigate([section]);
   }
-}
+
+  generatePdf(): void {
+
+    this.router.navigate(['/pdf-generator']);
+  }
+} 

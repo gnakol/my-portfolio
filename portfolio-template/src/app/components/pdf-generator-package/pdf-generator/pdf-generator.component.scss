@@ -1,0 +1,162 @@
+.pdf-container {
+  background: #ffffff;
+  padding: 20px;
+  font-family: 'Arial', sans-serif;
+  color: #333;
+  line-height: 1.6;
+
+  .header-section {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+
+    .profile-photo {
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      border: 3px solid #4facfe;
+      margin-right: 20px;
+    }
+
+    .personal-info {
+      h1 {
+        font-size: 24px;
+        color: #4facfe;
+        margin: 0;
+      }
+
+      p {
+        font-size: 12px;
+        margin: 5px 0;
+      }
+
+      a {
+        color: #00f2fe;
+        text-decoration: none;
+        font-weight: bold;
+
+        &:hover {
+          text-decoration: underline;
+        }
+      }
+    }
+  }
+
+  .two-columns {
+    display: flex;
+    justify-content: space-between;
+
+    .left-column,
+    .right-column {
+      width: 48%;
+    }
+
+    .section {
+      margin-bottom: 20px;
+
+      h2 {
+        font-size: 16px;
+        color: #4facfe;
+        margin-bottom: 10px;
+        display: flex;
+        align-items: center;
+
+        i {
+          margin-right: 10px;
+        }
+      }
+
+      ul {
+        list-style-type: none;
+        padding: 0;
+
+        li {
+          margin-bottom: 10px;
+
+          strong {
+            color: #555;
+            font-weight: bold;
+          }
+
+          p {
+            font-size: 12px;
+            color: #666;
+            margin: 5px 0;
+          }
+        }
+      }
+    }
+  }
+}
+
+.skills-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 15px;
+
+  .skill-card {
+    background: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 10px;
+    text-align: center;
+
+    strong {
+      font-size: 14px;
+      color: #4facfe;
+      display: block;
+      margin-bottom: 5px;
+    }
+
+    p {
+      font-size: 12px;
+      color: #666;
+      margin: 0;
+    }
+  }
+}
+
+.experience-cell,
+.project-cell {
+  background: #f9f9f9;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 10px;
+  margin-bottom: 10px;
+
+  strong {
+    font-size: 14px;
+    color: #555;
+    display: block;
+    margin-bottom: 5px;
+  }
+
+  p {
+    font-size: 12px;
+    color: #666;
+    margin: 0;
+  }
+}
+
+.training-cell,
+.hobby-cell,
+.language-cell {
+  background: #f9f9f9;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 10px;
+  margin-bottom: 10px;
+
+  strong {
+    font-size: 14px;
+    color: #555;
+    display: block;
+    margin-bottom: 5px;
+  }
+
+  p {
+    font-size: 12px;
+    color: #666;
+    margin: 0;
+  }
+}

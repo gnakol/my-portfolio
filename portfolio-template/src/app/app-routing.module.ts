@@ -22,6 +22,7 @@ import { AllEstablishmentComponent } from './components/establishment-package/we
 import { AddEstablishmentComponent } from './components/establishment-package/web-service/add-establishment/add-establishment.component';
 import { AllSkillCategoryComponent } from './components/skill-package/web-service/all-skill-category/all-skill-category.component';
 import { AddSkillCategoryComponent } from './components/skill-package/web-service/add-skill-category/add-skill-category.component';
+import { PdfGeneratorComponent } from './components/pdf-generator-package/pdf-generator/pdf-generator.component';
 
 const routes: Routes = [
   { path: '', loadChildren: () => import('./pages/home/home.module').then(m => m.HomeModule) },
@@ -60,7 +61,9 @@ const routes: Routes = [
   { path: 'skill-template', component : SkillTemplateComponent},
   { path: 'training-template', component : TrainingTemplateComponent},
   { path: 'hobbie-template', component : HobbieTemplateComponent},
-  { path: 'language-template', component : LanguageTemplateComponent}
+  { path: 'language-template', component : LanguageTemplateComponent},
+
+  { path: 'pdf-generator', component : PdfGeneratorComponent}
   
   
 ];

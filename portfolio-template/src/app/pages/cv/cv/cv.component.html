@@ -1,37 +1,29 @@
-<div class="cv-container">
-  <!-- Fond animé -->
+<div class="cv-container" id="cv-content">
   <div class="animated-background"></div>
 
-  <!-- Carte du CV -->
   <mat-card class="cv-card">
     <mat-card-content class="cv-content">
-      <!-- Photo de profil -->
       <div class="cv-photo">
         <img src="images/profile.jpg" alt="Photo de profil">
       </div>
 
-      <!-- Infos personnelles -->
       <div class="cv-info">
         <mat-card-title>Mon CV</mat-card-title>
         <div class="info">
-          <p><strong>Nom :</strong></p> <p>N'GNA KOLIE</p>
-          <p><strong>Email :</strong></p> 
-          <p><a [attr.href]="'mailto:' + email">{{ email }}</a></p>
-          <p><strong>LinkedIn :</strong></p> 
-          <p><a href="https://linkedin.com/" target="_blank">Mon LinkedIn</a></p>
-          <p><strong>GitHub :</strong></p> 
-          <p><a href="https://github.com/" target="_blank">Mon GitHub</a></p>
-          <p><strong>Adresse :</strong></p> <p>10 rue Utrillo, Arras</p>
+          <p><strong>Nom :</strong> N'GNA KOLIE</p>
+          <p><strong>Email :</strong> <a [attr.href]="'mailto:' + email">{{ email }}</a></p>
+          <p><strong>LinkedIn :</strong> <a href="https://linkedin.com/" target="_blank">Mon LinkedIn</a></p>
+          <p><strong>GitHub :</strong> <a href="https://github.com/" target="_blank">Mon GitHub</a></p>
+          <p><strong>Adresse :</strong> 10 rue Utrillo, Arras</p>
         </div>
 
         <div class="cv-actions">
-          <button mat-raised-button color="primary">📥 Télécharger le CV</button>
+          <button mat-raised-button color="primary" (click)="generatePdf()">📥 Télécharger le CV</button>
         </div>
       </div>
     </mat-card-content>
   </mat-card>
 
-  <!-- 🔥 Navigation des rubriques à côté du CV -->
   <div class="cv-sections">
     <mat-card class="cv-nav-card" (click)="showSection('experiences')">
       <mat-card-title>📄 Expériences</mat-card-title>
@@ -56,53 +48,5 @@
     <mat-card class="cv-nav-card" (click)="showSection('languages')">
       <mat-card-title>🌍 Langues</mat-card-title>
     </mat-card>
-  </div>
-</div>
-
-<!-- 🔥 Affichage dynamique des rubriques -->
-<div class="section-container">
-  <div *ngIf="selectedSection === 'experiences'" class="section-content">
-    <h2>Expériences</h2>
-    <div class="scrollable-content">
-      <mat-card *ngFor="let exp of experiences">
-        <mat-card-title>{{ exp.title }}</mat-card-title>
-        <mat-card-subtitle>
-          {{ exp.company_name }} ({{ exp.start_date }} - {{ exp.end_date || 'Présent' }})
-        </mat-card-subtitle>
-        <mat-card-content>
-          <p>{{ exp.description }}</p>
-        </mat-card-content>
-        <mat-card-actions>
-          <button mat-raised-button color="warn" (click)="deleteExperience(exp.idExperience)">
-            🗑 Supprimer
-          </button>
-        </mat-card-actions>
-      </mat-card>
-    </div>
-  </div>
-
-  <div *ngIf="selectedSection === 'trainings'" class="section-content">
-    <h2>Formations</h2>
-    <p>🚧 Section en construction...</p>
-  </div>
-
-  <div *ngIf="selectedSection === 'skills'" class="section-content">
-    <h2>Compétences</h2>
-    <p>🚧 Section en construction...</p>
-  </div>
-
-  <div *ngIf="selectedSection === 'projects'" class="section-content">
-    <h2>Projets</h2>
-    <p>🚧 Section en construction...</p>
-  </div>
-
-  <div *ngIf="selectedSection === 'hobbies'" class="section-content">
-    <h2>Centres d'intérêt</h2>
-    <p>🚧 Section en construction...</p>
-  </div>
-
-  <div *ngIf="selectedSection === 'languages'" class="section-content">
-    <h2>Langues</h2>
-    <p>🚧 Section en construction...</p>
   </div>
 </div>
