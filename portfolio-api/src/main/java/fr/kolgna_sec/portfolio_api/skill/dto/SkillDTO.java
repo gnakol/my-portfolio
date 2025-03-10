@@ -17,6 +17,8 @@ public class SkillDTO {
 
     private String description;
 
+    private Long levelSkill;
+
     private Long skillCategory_id;
 
     private Long account_id;

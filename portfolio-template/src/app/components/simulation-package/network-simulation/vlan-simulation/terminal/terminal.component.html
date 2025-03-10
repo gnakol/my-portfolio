@@ -1,0 +1,28 @@
+<div class="terminal-page">
+    <div class="terminal-section">
+        <div class="terminal-container">
+            <div class="terminal-output">
+                <pre>{{ terminalOutput }}</pre>
+            </div>
+
+            <div class="terminal-input">
+                <input 
+                    type="text" 
+                    [(ngModel)]="command" 
+                    (keydown.enter)="sendCommand()" 
+                    placeholder="Entrez votre commande..." 
+                    class="terminal-input-field"
+                    autofocus
+                />
+                <button mat-raised-button color="primary" (click)="sendCommand()" class="animated-button">
+                    Envoyer
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div class="animation-section">
+        <!-- Déplacer l'AnimationComponent à côté du terminal -->
+        <app-animation [animationType]="currentAnimation"></app-animation>
+    </div>
+</div>

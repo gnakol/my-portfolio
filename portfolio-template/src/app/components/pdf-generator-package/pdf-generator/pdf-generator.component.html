@@ -1,79 +1,93 @@
-<div id="pdf-content" class="pdf-container">
-    <!-- Section Informations Personnelles -->
-    <div class="header-section">
-      <img src="/images/profile.jpg" alt="Photo de profil" class="profile-photo" onerror="this.src='assets/default-profile.jpg';">
-      <div class="personal-info">
-        <h1>{{ name }}</h1>
-        <p><i class="fas fa-envelope"></i> Email : {{ email }}</p>
-        <p><i class="fab fa-linkedin"></i> LinkedIn : <a href="{{ linkedinUrl }}" target="_blank">{{ linkedinUrl }}</a></p>
-        <p><i class="fab fa-github"></i> GitHub : <a href="{{ githubUrl }}" target="_blank">{{ githubUrl }}</a></p>
-        <p><i class="fas fa-map-marker-alt"></i> Adresse : {{ address }}</p>
-      </div>
+<div id="pdf-content" class="bg-white p-6 font-sans text-gray-800 leading-relaxed">
+  <!-- Section Informations Personnelles avec photo -->
+  <div class="flex items-center mb-6">
+    <img src="/images/profile.jpg" alt="Photo de profil" class="w-32 h-32 rounded-full border-4 border-blue-400 mr-6" onerror="this.src='assets/default-profile.jpg';">
+    <div class="personal-info">
+      <h1 class="text-2xl text-blue-400 font-bold">{{ name }}</h1>
+      <p class="text-sm"><i class="fas fa-envelope"></i> 📧 Email : {{ email }}</p>
+      <p class="text-sm"><i class="fab fa-linkedin"></i> 🔗 LinkedIn : <a href="{{ linkedinUrl }}" target="_blank" class="text-blue-300 font-bold hover:underline">{{ linkedinUrl }}</a></p>
+      <p class="text-sm"><i class="fab fa-github"></i> 🐱 GitHub : <a href="{{ githubUrl }}" target="_blank" class="text-blue-300 font-bold hover:underline">{{ githubUrl }}</a></p>
+      <p class="text-sm"><i class="fas fa-map-marker-alt"></i> 📍 Adresse : {{ address }}</p>
     </div>
-  
-    <!-- Contenu en deux colonnes -->
-    <div class="two-columns">
-      <!-- Colonne de gauche -->
-      <div class="left-column">
-        <div class="section">
-          <h2><i class="fas fa-graduation-cap"></i> Formations</h2>
-          <ul>
-            <li *ngFor="let training of trainings" class="training-cell">
-              <strong>{{ training.label }}</strong> - {{ training.diploma }} ({{ training.yearOfObtaining }})
-            </li>
-          </ul>
-        </div>
-  
-        <div class="section">
-          <h2><i class="fas fa-code"></i> Compétences</h2>
-          <div class="skills-grid">
-            <div *ngFor="let skill of skills" class="skill-card">
-              <strong>{{ skill.name }}</strong>
-              <p>{{ skill.description }}</p>
+  </div>
+
+  <!-- Section Objectif Professionnel -->
+  <div class="mb-6">
+    <h2 class="text-lg text-blue-400 font-bold"><i class="fas fa-bullseye"></i> Objectif Professionnel</h2>
+    <p class="text-sm">Développeur FullStack passionné par la création d'applications web et mobiles, avec une expertise en réseaux et sécurité. Je cherche à mettre mes compétences en Java, Angular et administration système au service de projets innovants.</p>
+  </div>
+
+  <!-- Contenu en deux colonnes -->
+  <div class="flex justify-between">
+    <!-- Colonne de gauche -->
+    <div class="w-1/2">
+      <!-- Section Formations -->
+      <div class="mb-6">
+        <h2 class="text-lg text-blue-400 font-bold"><i class="fas fa-graduation-cap"></i> Formations</h2>
+        <ul>
+          <li *ngFor="let training of trainings" class="bg-gray-50 border border-gray-200 rounded-lg p-3 mb-3">
+            <strong class="text-gray-700">{{ training.label }}</strong> - {{ training.diploma }} ({{ training.yearOfObtaining }})
+          </li>
+        </ul>
+      </div>
+
+      <!-- Section Compétences avec barres de progression -->
+      <div class="mb-6">
+        <h2 class="text-lg text-blue-400 font-bold"><i class="fas fa-code"></i> Compétences</h2>
+        <div class="grid grid-cols-2 gap-4">
+          <div *ngFor="let skill of skills" class="bg-gray-50 border border-gray-200 rounded-lg p-3 text-center">
+            <strong class="text-blue-400">{{ skill.name }}</strong>
+            <div class="w-full bg-gray-200 rounded-full h-2.5 mt-2">
+              <div class="bg-blue-400 h-2.5 rounded-full" [style.width.%]="skill.levelSkill * 20"></div>
             </div>
           </div>
         </div>
-  
-        <div class="section">
-          <h2><i class="fas fa-gamepad"></i> Centres d'intérêt</h2>
-          <ul>
-            <li *ngFor="let hobby of hobbies" class="hobby-cell">
-              <strong>{{ hobby.name }}</strong> - {{ hobby.description }}
-            </li>
-          </ul>
-        </div>
-  
-        <div class="section">
-          <h2><i class="fas fa-language"></i> Langues</h2>
-          <ul>
-            <li *ngFor="let language of languages" class="language-cell">
-              <strong>{{ language.name }}</strong> - {{ language.proficiencyLevel }}
-            </li>
-          </ul>
-        </div>
       </div>
-  
-      <!-- Colonne de droite -->
-      <div class="right-column">
-        <div class="section">
-          <h2><i class="fas fa-briefcase"></i> Expériences Professionnelles</h2>
-          <ul>
-            <li *ngFor="let exp of experiences" class="experience-cell">
-              <strong>{{ exp.title }}</strong> - {{ exp.companyName }} ({{ exp.startDate }} - {{ exp.endDate || 'Présent' }})
-              <p>{{ exp.description }}</p>
-            </li>
-          </ul>
-        </div>
-  
-        <div class="section">
-          <h2><i class="fas fa-project-diagram"></i> Projets</h2>
-          <ul>
-            <li *ngFor="let project of projects" class="project-cell">
-              <strong>{{ project.title }}</strong>
-              <p>{{ project.description }}</p>
-            </li>
-          </ul>
-        </div>
+
+      <!-- Section Langues -->
+      <div class="mb-6">
+        <h2 class="text-lg text-blue-400 font-bold"><i class="fas fa-language"></i> Langues</h2>
+        <ul>
+          <li *ngFor="let language of languages" class="bg-gray-50 border border-gray-200 rounded-lg p-3 mb-3">
+            <strong class="text-gray-700">{{ language.name }}</strong> - {{ language.proficiencyLevel }}
+          </li>
+        </ul>
+      </div>
+
+      <!-- Section Centres d'intérêt -->
+      <div class="mb-6">
+        <h2 class="text-lg text-blue-400 font-bold"><i class="fas fa-gamepad"></i> Centres d'intérêt</h2>
+        <ul>
+          <li *ngFor="let hobby of hobbies" class="bg-gray-50 border border-gray-200 rounded-lg p-3 mb-3">
+            <strong class="text-gray-700">{{ hobby.name }}</strong> - {{ hobby.description }}
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Colonne de droite -->
+    <div class="w-1/2">
+      <!-- Section Expériences Professionnelles -->
+      <div class="mb-6">
+        <h2 class="text-lg text-blue-400 font-bold"><i class="fas fa-briefcase"></i> Expériences Professionnelles</h2>
+        <ul>
+          <li *ngFor="let exp of experiences" class="bg-gray-50 border border-gray-200 rounded-lg p-3 mb-3">
+            <strong class="text-gray-700">{{ exp.title }}</strong> - {{ exp.companyName }} ({{ exp.startDate }} - {{ exp.endDate || 'Présent' }})
+            <p class="text-gray-600">{{ exp.description }}</p>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Section Projets -->
+      <div class="mb-6">
+        <h2 class="text-lg text-blue-400 font-bold"><i class="fas fa-project-diagram"></i> Projets</h2>
+        <ul>
+          <li *ngFor="let project of projects" class="bg-gray-50 border border-gray-200 rounded-lg p-3 mb-3">
+            <strong class="text-gray-700">{{ project.title }}</strong>
+            <p class="text-gray-600">{{ project.description }}</p>
+          </li>
+        </ul>
       </div>
     </div>
   </div>
+</div>

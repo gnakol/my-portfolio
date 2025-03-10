@@ -55,6 +55,7 @@ public class ConfigurationSecurityApplication {
                         .requestMatchers(HttpMethod.GET, "/training/all-training").permitAll()
                         .requestMatchers(HttpMethod.GET, "/establishment/all-establishment").permitAll()
                         .requestMatchers(HttpMethod.GET, "/language/all-language").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/cv/download").permitAll()
                         .anyRequest().authenticated()) // Toutes les autres requêtes nécessitent une authentification
                 .exceptionHandling(exceptions -> exceptions
                         .authenticationEntryPoint(jwtAuthenticationEntryPoint)) // Configure l'entry point d'authentification

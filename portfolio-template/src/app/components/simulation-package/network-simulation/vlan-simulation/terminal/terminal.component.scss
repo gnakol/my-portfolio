@@ -1,0 +1,103 @@
+.terminal-page {
+    display: flex;
+    flex-direction: row; /* Mettre le terminal et l'animation côte à côte */
+    min-height: 100vh;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    background: linear-gradient(135deg, #1a1a1a, #34495e);
+}
+
+.terminal-section {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 2;
+}
+
+.animation-section {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1; /* Assurer que l'animation soit visible */
+}
+
+.terminal-container {
+    display: flex;
+    flex-direction: column;
+    background: rgba(0, 0, 0, 0.8);
+    color: #00ff00;
+    border-radius: 10px;
+    padding: 15px;
+    max-width: 600px;
+    width: 100%;
+    margin: auto;
+    z-index: 3; /* Assurer que le terminal soit bien visible */
+    box-shadow: 0px 8px 25px rgba(0, 0, 0, 0.3);
+    animation: fadeIn 1.5s ease-in-out;
+}
+
+.terminal-output {
+    background: rgba(255, 255, 255, 0.1);
+    padding: 15px;
+    border-radius: 5px;
+    max-height: 300px;
+    overflow-y: auto;
+    white-space: pre-wrap;
+    margin-bottom: 10px;
+    color: white;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.terminal-input {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+.terminal-input-field {
+    flex: 1;
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid #333;
+    background-color: rgba(255, 255, 255, 0.1);
+    color: white;
+    outline: none;
+    transition: border-color 0.3s;
+}
+
+.terminal-input-field:focus {
+    border-color: #4facfe;
+}
+
+.animated-button {
+    overflow: hidden;
+    border: none;
+    border-radius: 50px;
+    padding: 10px 20px;
+    font-size: 1rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.2);
+    background-color: #4facfe;
+    color: white;
+}
+
+.animated-button:hover {
+    transform: translateY(-5px);
+    box-shadow: 0px 8px 25px rgba(0, 0, 0, 0.3);
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}

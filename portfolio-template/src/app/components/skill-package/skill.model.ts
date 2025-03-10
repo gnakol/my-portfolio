@@ -8,6 +8,8 @@ export interface Skill {
 
     description: string;
 
+    levelSkill : number;
+
     skillCategory_id: number; // 🔥 L'API envoie ça
     
     skillCategory?: { id: number; name: string }; // 🔥 On le récupère après si absent

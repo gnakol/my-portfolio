@@ -1,0 +1,18 @@
+<div class="feedback-container">
+    <h2>Votre avis sur cette expérience ?</h2>
+
+    <div class="emoji-options">
+        <button 
+            *ngFor="let option of feedbackOptions" 
+            [ngClass]="{'selected': selectedFeedback === option.value}" 
+            (click)="selectedFeedback = option.value"
+        >
+            {{ option.label }}
+        </button>
+    </div>
+
+    <div class="actions">
+        <button (click)="submitFeedback()" [disabled]="!selectedFeedback">Envoyer</button>
+        <button (click)="closeDialog()">Annuler</button>
+    </div>
+</div>

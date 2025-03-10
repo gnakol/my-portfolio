@@ -1,0 +1,74 @@
+<!-- all-log-security.component.html -->
+<div class="home-container">
+  <div class="hero-section">
+    <h1 class="hero-title">Logs de Sécurité</h1>
+    <p class="hero-subtitle">Gestion des logs de sécurité</p>
+
+    <!-- Bouton de suppression en haut à droite -->
+    <div class="action-buttons">
+      <button mat-raised-button color="warn" (click)="onDeleteSelectedLogs()" [disabled]="selectedLogs.length === 0">
+        Supprimer les logs sélectionnés
+      </button>
+    </div>
+
+    <!-- Tableau des logs -->
+    <div class="table-container">
+      <table mat-table [dataSource]="logs" class="mat-elevation-z8">
+        <!-- Colonne de sélection -->
+        <ng-container matColumnDef="select">
+          <th mat-header-cell *matHeaderCellDef>
+            <mat-checkbox (change)="$event ? selectAll() : null"
+                          [checked]="selectedLogs.length === logs.length">
+            </mat-checkbox>
+          </th>
+          <td mat-cell *matCellDef="let log">
+            <mat-checkbox (change)="onSelectLog(log.idLog)"
+                          [checked]="selectedLogs.includes(log.idLog)">
+            </mat-checkbox>
+          </td>
+        </ng-container>
+
+        <!-- Colonne ID -->
+        <ng-container matColumnDef="idLog">
+          <th mat-header-cell *matHeaderCellDef> ID </th>
+          <td mat-cell *matCellDef="let log"> {{ log.idLog }} </td>
+        </ng-container>
+
+        <!-- Colonne Type -->
+        <ng-container matColumnDef="typeLog">
+          <th mat-header-cell *matHeaderCellDef> Type </th>
+          <td mat-cell *matCellDef="let log"> {{ log.typeLog }} </td>
+        </ng-container>
+
+        <!-- Colonne Message -->
+        <ng-container matColumnDef="message">
+          <th mat-header-cell *matHeaderCellDef> Message </th>
+          <td mat-cell *matCellDef="let log"> {{ log.message }} </td>
+        </ng-container>
+
+        <!-- Colonne Date -->
+        <ng-container matColumnDef="dateLog">
+          <th mat-header-cell *matHeaderCellDef> Date </th>
+          <td mat-cell *matCellDef="let log"> {{ log.dateLog | date: 'medium' }} </td>
+        </ng-container>
+
+        <!-- Colonne IP Source -->
+        <ng-container matColumnDef="ipSource">
+          <th mat-header-cell *matHeaderCellDef> IP Source </th>
+          <td mat-cell *matCellDef="let log"> {{ log.ipSource }} </td>
+        </ng-container>
+
+        <!-- Lignes du tableau -->
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+      </table>
+    </div>
+
+    <!-- Paginateur en bas -->
+    <mat-paginator [length]="totalElements"
+                   [pageSize]="size"
+                   [pageSizeOptions]="[5, 10, 20]"
+                   (page)="onPageChange($event)">
+    </mat-paginator>
+  </div>
+</div>

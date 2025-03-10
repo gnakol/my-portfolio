@@ -1,0 +1,16 @@
+<div class="eigrp-network-diagram">
+    <!-- Routeur central -->
+    <div class="device router" [ngClass]="networkState['router']">Routeur</div>
+
+    <!-- Réseaux connectés au routeur -->
+    <div class="device network" [ngClass]="networkState['network1']">Réseau 192.168.1.0</div>
+    <div class="device network" [ngClass]="networkState['network2']">Réseau 192.168.2.0</div>
+
+    <!-- Ordinateurs connectés aux réseaux -->
+    <div class="device pc" [ngClass]="networkState['pc1']">PC 1 (192.168.1.10)</div>
+    <div class="device pc" [ngClass]="networkState['pc2']">PC 2 (192.168.2.10)</div>
+
+    <!-- Câbles animés pour montrer la connectivité -->
+    <div class="cable router-to-network1" [ngClass]="{'active': networkState['network1'] === 'connected'}"></div>
+    <div class="cable router-to-network2" [ngClass]="{'active': networkState['network2'] === 'connected'}"></div>
+</div>

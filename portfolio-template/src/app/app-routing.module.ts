@@ -23,6 +23,16 @@ import { AddEstablishmentComponent } from './components/establishment-package/we
 import { AllSkillCategoryComponent } from './components/skill-package/web-service/all-skill-category/all-skill-category.component';
 import { AddSkillCategoryComponent } from './components/skill-package/web-service/add-skill-category/add-skill-category.component';
 import { PdfGeneratorComponent } from './components/pdf-generator-package/pdf-generator/pdf-generator.component';
+import { SimulationDashboardComponent } from './components/simulation-package/simulation-dashboard/simulation-dashboard.component';
+import { PingSimulationsComponent } from './components/simulation-package/ping-simulations/ping-simulations.component';
+import { NetworkSimulationComponent } from './components/simulation-package/network-simulation/network-simulation.component';
+import { VlanSimulationComponent } from './components/simulation-package/network-simulation/vlan-simulation/vlan-simulation.component';
+import { IntroComponent } from './components/simulation-package/network-simulation/vlan-simulation/intro/intro.component';
+import { TerminalComponent } from './components/simulation-package/network-simulation/vlan-simulation/terminal/terminal.component';
+import { AllLogSecurityComponent } from './components/log-security-package/web-services/all-log-security/all-log-security.component';
+import { IntroEigrpComponent } from './components/simulation-package/network-simulation/eigrp-simulation/intro/intro.component';
+import { EigrpSimulationComponent } from './components/simulation-package/network-simulation/eigrp-simulation/eigrp-simulation.component';
+import { TerminalEigrpComponent } from './components/simulation-package/network-simulation/eigrp-simulation/terminal-eigrp/terminal-eigrp.component';
 
 const routes: Routes = [
   { path: '', loadChildren: () => import('./pages/home/home.module').then(m => m.HomeModule) },
@@ -42,12 +52,18 @@ const routes: Routes = [
   { path: 'languages', component : AllLanguagesComponent},
   { path: 'all-establishment', component : AllEstablishmentComponent},
   { path: 'all-skill-category', component : AllSkillCategoryComponent},
+  { path: 'all-log-security', component : AllLogSecurityComponent},
 
 
 
 
   { path: 'login', component : AuthComponent},
   { path: 'dashboard-admin', component : DashboardComponent},
+  { path: 'dashboard-simulation', component : SimulationDashboardComponent},
+  { path: 'network-simulation', component : NetworkSimulationComponent},
+  { path: 'vlan-simulation', component : VlanSimulationComponent},
+  { path: 'eigrp-simulation', component : EigrpSimulationComponent},
+
 
 
   { path: 'add-training', component : AddTrainingsComponent},
@@ -63,8 +79,21 @@ const routes: Routes = [
   { path: 'hobbie-template', component : HobbieTemplateComponent},
   { path: 'language-template', component : LanguageTemplateComponent},
 
-  { path: 'pdf-generator', component : PdfGeneratorComponent}
-  
+  { path: 'pdf-generator', component : PdfGeneratorComponent},
+
+  // Simulation
+
+  {path: 'ping-simulation', component : PingSimulationsComponent},
+
+
+
+  // For vlan
+  { path : 'intro-vlan', component : IntroComponent},
+  { path : 'terminal-vlan-config', component : TerminalComponent},
+
+  // For eigrp
+  { path : 'terminal-eigrp-config', component : TerminalEigrpComponent},
+  { path : 'intro-eigrp', component : IntroEigrpComponent}
   
 ];
 

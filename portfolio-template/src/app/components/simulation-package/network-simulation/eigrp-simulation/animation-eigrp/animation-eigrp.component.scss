@@ -1,0 +1,87 @@
+.eigrp-network-diagram {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    padding: 40px;
+    justify-items: center;
+    align-items: center;
+    background-color: rgba(0, 0, 0, 0.7);
+    border-radius: 10px;
+    min-height: 50vh;
+    position: relative;
+}
+
+.device {
+    padding: 20px;
+    border-radius: 10px;
+    color: white;
+    font-weight: bold;
+    text-align: center;
+    min-width: 120px;
+    transition: all 0.3s ease;
+    border: 2px solid transparent;
+}
+
+.router {
+    background-color: #8e44ad;
+}
+
+.network {
+    background-color: #34495e;
+}
+
+.pc {
+    background-color: #2980b9;
+}
+
+/* États actifs */
+.router.eigrp {
+    background-color: #2ecc71; /* Vert EIGRP activé */
+    border-color: #27ae60;
+    animation: blink 1s infinite alternate;
+}
+
+.network.connected {
+    background-color: #3498db; /* Réseau connecté */
+    border-color: #2980b9;
+}
+
+.pc.active {
+    background-color: #1abc9c; /* PC actif */
+    border-color: #16a085;
+}
+
+.pc.pinging {
+    background-color: #f39c12; /* PC en cours de ping */
+    animation: pingAnimation 1s infinite;
+}
+
+.pc.pingSuccess {
+    background-color: #2ecc71; /* Réponse au ping réussie */
+    border-color: #27ae60;
+}
+
+/* Câbles animés */
+.cable {
+    width: 5px;
+    height: 100px;
+    background-color: #bdc3c7;
+    transition: background-color 0.5s;
+}
+
+.cable.active {
+    background-color: #e74c3c; /* Câble actif (EIGRP en cours) */
+    animation: blink 1s infinite alternate;
+}
+
+/* Animations */
+@keyframes blink {
+    0% { opacity: 1; }
+    100% { opacity: 0.5; }
+}
+
+@keyframes pingAnimation {
+    0% { background-color: #f39c12; }
+    50% { background-color: #e67e22; }
+    100% { background-color: #f39c12; }
+}

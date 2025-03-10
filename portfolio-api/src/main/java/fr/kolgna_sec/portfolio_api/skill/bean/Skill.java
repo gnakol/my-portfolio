@@ -31,6 +31,9 @@ public class Skill {
     @Column(name = "description")
     private String description;
 
+    @Column(name = "level")
+    private Long levelSkill;
+
     @ManyToOne(cascade = CascadeType.DETACH)
     @JsonIgnoreProperties({"skills"})
     @JoinColumn(name = "id_skill_category", nullable = true)

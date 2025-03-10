@@ -1,0 +1,31 @@
+<div class="ping-container">
+  <div class="ping-hero">
+      <h2 class="ping-title">Simulation de Ping</h2>
+      <p class="ping-subtitle">
+          Testez la connectivité d'une adresse IP en temps réel<br>
+          <span class="ping-info">
+              💡 La commande de ping est exécutée côté serveur (Linux/Windows). 
+              Les options utilisées peuvent différer selon le système d'exploitation :
+              <br>
+              <strong>Linux/macOS :</strong> <code>ping -c 4 [adresse IP]</code><br>
+              <strong>Windows :</strong> <code>ping -n 4 [adresse IP]</code>
+          </span>
+      </p>
+
+      <div class="ping-input">
+          <input 
+              type="text" 
+              [(ngModel)]="ipAddress" 
+              placeholder="Entrez une adresse IP (ex: 8.8.8.8)" 
+              class="ping-input-field" 
+          />
+          <button mat-raised-button color="primary" (click)="testPing()" class="animated-button">
+              Lancer le Ping
+          </button>
+      </div>
+
+      <pre class="ping-result">{{ pingResult }}</pre>
+  </div>
+
+  <div class="particles"></div>
+</div>

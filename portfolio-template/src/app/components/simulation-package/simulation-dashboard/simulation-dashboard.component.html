@@ -1,0 +1,39 @@
+<div class="dashboard-container">
+  <!-- Fond animé -->
+  <div class="animated-background"></div>
+
+  <!-- Titre et sous-titre -->
+  <h1 class="dashboard-title">Dashboard des Simulations</h1>
+  <p class="dashboard-subtitle">Explorez et gérez vos simulations en un seul endroit</p>
+
+  <!-- Cartes de navigation -->
+  <div class="cards-container">
+    <!-- Carte Simulations Réseau -->
+    <div class="dashboard-card" (click)="navigateTo('network-simulation')">
+      <div class="card-icon">🛠️</div>
+      <h2 class="card-title">Simulations Réseau</h2>
+      <p class="card-description">Gérez et simulez des configurations réseau</p>
+    </div>
+
+    <!-- Carte Simulations Administration -->
+    <div class="dashboard-card" (click)="navigateTo('/simulation/admin')">
+      <div class="card-icon">🖥️</div>
+      <h2 class="card-title">Simulations Administration</h2>
+      <p class="card-description">Simulez des tâches administratives</p>
+    </div>
+
+    <!-- Carte Simulations Sécurité -->
+    <div class="dashboard-card" (click)="navigateTo('/simulation/security')">
+      <div class="card-icon">🔐</div>
+      <h2 class="card-title">Simulations Sécurité</h2>
+      <p class="card-description">Testez des scénarios de sécurité</p>
+    </div>
+
+    <!-- Carte Tester le Ping -->
+    <div class="dashboard-card" (click)="navigateTo('ping-simulation')">
+      <div class="card-icon">🌐</div>
+      <h2 class="card-title">Tester le Ping</h2>
+      <p class="card-description">Vérifiez la connectivité réseau</p>
+    </div>
+  </div>
+</div>

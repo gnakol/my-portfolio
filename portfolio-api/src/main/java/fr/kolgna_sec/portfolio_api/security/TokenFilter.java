@@ -33,7 +33,8 @@ public class TokenFilter extends OncePerRequestFilter {
         // Liste des endpoints qui ne nécessitent pas de vérification de token
         List<String> skipPaths = List.of("/connexion", "/account/add-new-account", "/activation", "/reset-password", "/forgot-password", "/refresh-token",
                 "/experience/all-experience", "/establishment/all-establishment", "/training/all-training", "/experience/all-experience-type", "/skill/all-skill",
-                "/skill/all-skill-category", "/language/all-language", "/hobbies/all-hobbies", "/account/remove-account/{idAccount}");
+                "/skill/all-skill-category", "/language/all-language", "/hobbies/all-hobbies", "/account/remove-account/{idAccount}",
+                "/cv/download");
 
         if (skipPaths.stream().anyMatch(path::startsWith) || path.contains("/refresh-token")) {
             filterChain.doFilter(request, response);

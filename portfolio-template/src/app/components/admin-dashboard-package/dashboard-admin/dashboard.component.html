@@ -1,6 +1,6 @@
 <div class="dashboard-container">
   <h1 class="dashboard-title">Dashboard Admin</h1>
-  <p class="dashboard-subtitle">Gérez les rubriques de votre CV</p>
+  <p class="dashboard-subtitle">Gérez les rubriques de votre CV et les logs de sécurité</p>
 
   <!-- Cartes des rubriques -->
   <div class="cards-container">
@@ -41,6 +41,14 @@
       <mat-card-title>🌍 Langues</mat-card-title>
       <mat-card-content>
         <p>Gérez vos langues parlées</p>
+      </mat-card-content>
+    </mat-card>
+
+    <!-- Carte Logs de Sécurité -->
+    <mat-card class="dashboard-card" (click)="showSection('all-log-security')">
+      <mat-card-title>🔒 Logs de Sécurité</mat-card-title>
+      <mat-card-content>
+        <p>Consultez et gérez les logs de sécurité</p>
       </mat-card-content>
     </mat-card>
   </div>

@@ -1,0 +1,58 @@
+.network-diagram {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    padding: 40px;
+    justify-items: center;
+    align-items: center;
+    background-color: rgba(0, 0, 0, 0.7);
+    border-radius: 10px;
+    box-shadow: 0px 8px 25px rgba(0, 0, 0, 0.3);
+}
+
+.device {
+    padding: 20px;
+    border-radius: 10px;
+    color: white;
+    font-weight: bold;
+    text-align: center;
+    min-width: 100px;
+    transition: all 0.3s ease;
+}
+
+.pc {
+    background-color: #34495e; /* Par défaut */
+}
+
+.switch {
+    grid-column: 2;
+    background-color: #8e44ad;
+}
+
+.pc.default {
+    background-color: #34495e;
+}
+
+.pc.vlan10 {
+    background-color: #3498db; /* Bleu pour VLAN 10 */
+}
+
+.pc.vlan20 {
+    background-color: #e74c3c; /* Rouge pour VLAN 20 */
+}
+
+.switch.default {
+    background-color: #8e44ad;
+}
+
+.switch.port1Selected {
+    background-color: #f39c12; /* Orange pour sélection du port */
+}
+
+.switch.modeAccess {
+    background-color: #2ecc71; /* Vert pour le mode access */
+}
+
+.switch.vlan10 {
+    background-color: #3498db; /* Switch configuré pour VLAN 10 */
+}

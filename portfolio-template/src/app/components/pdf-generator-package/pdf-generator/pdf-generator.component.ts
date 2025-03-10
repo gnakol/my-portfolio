@@ -10,19 +10,30 @@ import { TrainingService } from '../../../services/training.service';
 import { SkillService } from '../../../services/skill.service';
 import { HobbiesService } from '../../../services/hobbies.service';
 import { LanguageService } from '../../../services/language.service';
-import html2canvas from 'html2canvas';
-import { jsPDF } from 'jspdf';
 import { CommonModule } from '@angular/common';
+//import { jsPDF } from 'jspdf';
+import * as pdfMake from 'pdfmake/build/pdfmake';
+import * as pdfFonts from 'pdfmake/build/vfs_fonts';
+
+// Créer une instance locale de pdfMake avec vfs défini
+const pdfMakeInstance: any = { ...pdfMake };
+pdfMakeInstance.vfs = pdfFonts?.pdfMake?.vfs || {};
+
+if (!pdfMakeInstance.vfs) {
+    console.error('pdfMake.vfs est indéfini.');
+}
+
+
+
 
 @Component({
   selector: 'app-pdf-generator',
   standalone: true,
   templateUrl: './pdf-generator.component.html',
   styleUrls: ['./pdf-generator.component.scss'],
-  imports: [CommonModule]
+  imports : [CommonModule]
 })
 export class PdfGeneratorComponent implements OnInit {
-
   // Informations personnelles
   name: string = "N'GNA KOLIE";
   email: string = "gna.kolie@yahoo.fr";
@@ -32,7 +43,7 @@ export class PdfGeneratorComponent implements OnInit {
 
   // Données dynamiques du CV
   experiences: Experience[] = [];
-  projects: Experience[] = []; // 🚨 Ajout du tableau pour les projets
+  projects: Experience[] = [];
   trainings: Training[] = [];
   skills: Skill[] = [];
   hobbies: Hobbies[] = [];
@@ -48,9 +59,9 @@ export class PdfGeneratorComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    // Charger toutes les données avant de générer le PDF
     this.loadDataAndGeneratePdf();
   }
+  
 
   async loadDataAndGeneratePdf() {
     try {
@@ -58,14 +69,10 @@ export class PdfGeneratorComponent implements OnInit {
         this.loadExperience(),
         this.loadTraining(),
         this.loadSkill(),
-        this.loadHobbies(),
-        this.loadLanguage()
+        this.loadHobbies(), // Correction du typo "hobbies"
+        this.loadLanguage(),
       ]);
-
-      setTimeout(() => {
-        this.generatePdf();
-      }, 500); // Petit délai pour s'assurer que tout est bien rendu
-
+      this.generatePdf(); // Ajout de cette ligne
     } catch (error) {
       console.error("Erreur lors du chargement des données pour le PDF :", error);
     }
@@ -73,18 +80,17 @@ export class PdfGeneratorComponent implements OnInit {
 
   loadExperience(): Promise<void> {
     return new Promise((resolve) => {
-      this.experienceService.getAllExperiences().subscribe(data => {
-        this.experiences = data.content.filter(exp => exp.experienceType.name !== 'Projet'); // 🎯 Exclure les projets
-        this.projects = data.content.filter(exp => exp.experienceType.name === 'Projet'); // 🎯 Récupérer uniquement les projets
+      this.experienceService.getAllExperiences().subscribe((data) => {
+        this.experiences = data.content.filter((exp) => exp.experienceType.name !== 'Projet');
+        this.projects = data.content.filter((exp) => exp.experienceType.name === 'Projet');
         resolve();
       });
     });
   }
 
-  // Les autres méthodes restent inchangées
   loadTraining(): Promise<void> {
     return new Promise((resolve) => {
-      this.trainingService.getAllTraining().subscribe(data => {
+      this.trainingService.getAllTraining().subscribe((data) => {
         this.trainings = data.content;
         resolve();
       });
@@ -93,7 +99,7 @@ export class PdfGeneratorComponent implements OnInit {
 
   loadSkill(): Promise<void> {
     return new Promise((resolve) => {
-      this.skillService.getAllSkill().subscribe(data => {
+      this.skillService.getAllSkill().subscribe((data) => {
         this.skills = data.content;
         resolve();
       });
@@ -102,7 +108,7 @@ export class PdfGeneratorComponent implements OnInit {
 
   loadHobbies(): Promise<void> {
     return new Promise((resolve) => {
-      this.hobbiesService.allHobbies().subscribe(data => {
+      this.hobbiesService.allHobbies().subscribe((data) => {
         this.hobbies = data.content;
         resolve();
       });
@@ -111,7 +117,7 @@ export class PdfGeneratorComponent implements OnInit {
 
   loadLanguage(): Promise<void> {
     return new Promise((resolve) => {
-      this.languageService.allLanguage().subscribe(data => {
+      this.languageService.allLanguage().subscribe((data) => {
         this.languages = data.content;
         resolve();
       });
@@ -119,30 +125,100 @@ export class PdfGeneratorComponent implements OnInit {
   }
 
   generatePdf(): void {
-    const element = document.getElementById('pdf-content');
-
-    if (element) {
-      html2canvas(element, { scale: 2, logging: false }).then((canvas) => {
-        const imgData = canvas.toDataURL('image/jpeg', 0.4); // JPEG avec qualité 40%
-
-        const pdf = new jsPDF({
-          orientation: 'p',
-          unit: 'mm',
-          format: 'a4',
-          compress: true // Activer la compression interne
-        });
-
-        const imgWidth = 210;
-        const imgHeight = (canvas.height * imgWidth) / canvas.width;
-
-        pdf.addImage(imgData, 'JPEG', 0, 0, imgWidth, imgHeight, '', 'FAST');
-        pdf.save('cv.pdf');
-
-        this.router.navigate(['/cv']); // Retourner à la page CV après le téléchargement
-      }).catch(error => {
-        console.error("Erreur lors de la génération du PDF :", error);
-      });
-    }
+    const documentDefinition = this.getDocumentDefinition();
+    pdfMake.createPdf(documentDefinition).download('cv.pdf');
   }
 
+  getDocumentDefinition() {
+    return {
+      content: [
+        // Section Informations Personnelles
+        { text: this.name, style: 'header' },
+        { text: `Email : ${this.email}`, style: 'subheader' },
+        { text: `LinkedIn : ${this.linkedinUrl}`, style: 'subheader' },
+        { text: `GitHub : ${this.githubUrl}`, style: 'subheader' },
+        { text: `Adresse : ${this.address}`, style: 'subheader' },
+        { text: ' ', margin: [0, 5] }, // Espacement réduit
+  
+        // Deux colonnes
+        {
+          columns: [
+            // Colonne de gauche
+            [
+              // Section Formations
+              { text: 'Formations', style: 'sectionHeader' },
+              ...this.trainings.map((training) => ({
+                text: `${training.label} - ${training.diploma} (${training.yearOfObtaining})`,
+                style: 'body',
+              })),
+              { text: ' ', margin: [0, 5] }, // Espacement réduit
+  
+              // Section Compétences
+              { text: 'Compétences', style: 'sectionHeader' },
+              ...this.skills.map((skill) => ({
+                text: `${skill.name} : ${skill.description}`,
+                style: 'body',
+              })),
+              { text: ' ', margin: [0, 5] }, // Espacement réduit
+  
+              // Section Langues
+              { text: 'Langues', style: 'sectionHeader' },
+              ...this.languages.map((language) => ({
+                text: `${language.name} - ${language.proficiencyLevel}`,
+                style: 'body',
+              })),
+              { text: ' ', margin: [0, 5] }, // Espacement réduit
+  
+              // Section Centres d'intérêt
+              { text: 'Centres d\'intérêt', style: 'sectionHeader' },
+              ...this.hobbies.map((hobby) => ({
+                text: `${hobby.name} - ${hobby.description}`,
+                style: 'body',
+              })),
+            ],
+  
+            // Colonne de droite
+            [
+              // Section Expériences Professionnelles
+              { text: 'Expériences Professionnelles', style: 'sectionHeader' },
+              ...this.experiences.map((exp) => ({
+                text: `${exp.title} - ${exp.companyName} (${exp.startDate} - ${exp.endDate || 'Présent'})`,
+                style: 'body',
+              })),
+              { text: ' ', margin: [0, 5] }, // Espacement réduit
+  
+              // Section Projets
+              { text: 'Projets', style: 'sectionHeader' },
+              ...this.projects.map((project) => ({
+                text: `${project.title} : ${project.description}`,
+                style: 'body',
+              })),
+            ],
+          ],
+        },
+      ],
+      styles: {
+        header: {
+          fontSize: 20, // Taille réduite
+          bold: true,
+          color: '#4facfe',
+          margin: [0, 0, 0, 5], // Marge réduite
+        },
+        subheader: {
+          fontSize: 10, // Taille réduite
+          margin: [0, 0, 0, 3], // Marge réduite
+        },
+        sectionHeader: {
+          fontSize: 14, // Taille réduite
+          bold: true,
+          color: '#4facfe',
+          margin: [0, 5, 0, 3], // Marge réduite
+        },
+        body: {
+          fontSize: 10, // Taille réduite
+          margin: [0, 0, 0, 3], // Marge réduite
+        },
+      },
+    };
+  }
 }

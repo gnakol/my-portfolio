@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { SimulationsComponent } from './simulations.component';
+import { VlanSimulationComponent } from './vlan-simulation.component';
 
-describe('SimulationsComponent', () => {
-  let component: SimulationsComponent;
-  let fixture: ComponentFixture<SimulationsComponent>;
+describe('VlanSimulationComponent', () => {
+  let component: VlanSimulationComponent;
+  let fixture: ComponentFixture<VlanSimulationComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [SimulationsComponent]
+      declarations: [VlanSimulationComponent]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(SimulationsComponent);
+    fixture = TestBed.createComponent(VlanSimulationComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

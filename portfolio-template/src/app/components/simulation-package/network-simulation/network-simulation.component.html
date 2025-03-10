@@ -1,0 +1,39 @@
+<div class="network-container">
+    <div class="animated-background"></div>
+  
+    <h1 class="network-title">Simulations Réseau</h1>
+    <p class="network-subtitle">Explorez différentes configurations réseau en toute simplicité</p>
+  
+    <div class="cards-container">
+      <div class="network-card" (click)="navigateTo('vlan-simulation')">
+        <div class="card-icon">🔗</div>
+        <h2 class="card-title">Configurer un VLAN</h2>
+        <p class="card-description">Créez et gérez vos VLANs de manière interactive</p>
+      </div>
+  
+      <div class="network-card" (click)="navigateTo('eigrp-simulation')">
+        <div class="card-icon">📡</div>
+        <h2 class="card-title">Routage EIGRP</h2>
+        <p class="card-description">Simulez des configurations de routage dynamiques</p>
+      </div>
+  
+      <div class="network-card" (click)="navigateTo('/simulation/ospf')">
+        <div class="card-icon">🌐</div>
+        <h2 class="card-title">Routage OSPF</h2>
+        <p class="card-description">Apprenez à configurer OSPF efficacement</p>
+      </div>
+  
+      <div class="network-card" (click)="navigateTo('/simulation/dhcp')">
+        <div class="card-icon">📶</div>
+        <h2 class="card-title">DHCP (Relay/Full)</h2>
+        <p class="card-description">Configurez un serveur DHCP avec facilité</p>
+      </div>
+  
+      <div class="network-card" (click)="navigateTo('/simulation/nat')">
+        <div class="card-icon">🚦</div>
+        <h2 class="card-title">NAT/PAT</h2>
+        <p class="card-description">Découvrez la traduction d'adresses réseau</p>
+      </div>
+    </div>
+  </div>
+  
