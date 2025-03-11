@@ -13,6 +13,10 @@ import { ExperienceModule } from './components/experiences-package/experience.mo
 import { AccountTemplateComponent } from './components/account-package/account-template/account-template.component';
 import { AdminSimulationsComponent } from './components/simulation-package/admin-simulations/admin-simulations.component';
 import { SecuritySimulationsComponent } from './components/simulation-package/security-simulations/security-simulations.component';
+import { DhcpComponent } from './components/simulation-package/network-simulation/dhcp/dhcp.component';
+import { RelayComponent } from './components/simulation-package/network-simulation/dhcp/relay/relay.component';
+import { FullComponent } from './components/simulation-package/network-simulation/dhcp/full/full.component';
+import { IntroDhcpComponent } from './components/simulation-package/network-simulation/dhcp/intro-dhcp/intro-dhcp.component';
 
 
 @NgModule({
@@ -20,7 +24,11 @@ import { SecuritySimulationsComponent } from './components/simulation-package/se
     AppComponent,
     AccountTemplateComponent,
     AdminSimulationsComponent,
-    SecuritySimulationsComponent
+    SecuritySimulationsComponent,
+    DhcpComponent,
+    RelayComponent,
+    FullComponent,
+    IntroDhcpComponent
   ],
   imports: [
     BrowserModule,

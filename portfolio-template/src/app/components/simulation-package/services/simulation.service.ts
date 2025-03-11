@@ -51,6 +51,14 @@ export class SimulationService {
 
       return this.http.post<SimulationResponse>(`${this.apiUrl}/eigrp`, requestBody, { headers });
     }
+
+    simulateEigrpConfiguration(request: { network: string, wildcard: string, processId: string }): Observable<SimulationResponse> {
+
+      const headers = this.genericMethodeService.getHeaders();
+
+      return this.http.post<SimulationResponse>(`${this.apiUrl}/eigrp`, request, {headers});
+
+    }
     
 
     addFeedback(feedback: FeedbackDTO): Observable<FeedbackDTO> {

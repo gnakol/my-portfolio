@@ -1,9 +1,50 @@
-<!-- Bouton pour ouvrir le terminal en pop-up -->
-<button mat-raised-button color="accent" (click)="openTerminalDialog()" class="open-terminal-button">
-    Ouvrir le Terminal
-</button>
+<div *ngIf="!configCompleted">
+    <!-- Terminal et Configuration -->
+    <div class="terminal-container">
+        <div class="topology">
+            <!-- Routeur -->
+            <div class="device">
+                <img src="assets/images/router-svgrepo-com.svg" class="router" [ngClass]="{'active': router.active}">
+                <p class="device-label">🖧 Routeur</p>
+            </div>
 
-<!-- Animation EIGRP reste visible en arrière-plan -->
-<div class="animation-section">
-    <app-animation-eigrp [animationType]="currentAnimation"></app-animation-eigrp>
+            <!-- PC 1 -->
+            <div class="device">
+                <img src="assets/images/pc-svgrepo-com.svg" class="pc" [ngClass]="{'active': pcs[0].active}">
+                <p class="device-label">💻 PC 1</p>
+            </div>
+
+            <!-- PC 2 -->
+            <div class="device">
+                <img src="assets/images/pc-svgrepo-com.svg" class="pc" [ngClass]="{'active': pcs[1].active}">
+                <p class="device-label">💻 PC 2</p>
+            </div>
+
+            <!-- Câbles Réseau qui s’animent -->
+            <div class="cable">
+                <img src="assets/images/cable-plug-connector-svgrepo-com.svg" class="cable" [ngClass]="{'connected': cables[0].connected, 'stretch': cables[0].active}">
+            </div>
+
+            <div class="cable">
+                <img src="assets/images/cable-plug-connector-svgrepo-com.svg" class="cable" [ngClass]="{'connected': cables[1].connected, 'stretch': cables[1].active}">
+            </div>
+        </div>
+
+        <!-- Affichage Progressif des Commandes -->
+        <div class="command-guide">
+            <p>💡 Tapez la commande :</p>
+            <p class="command" *ngIf="currentCommandIndex < guideCommands.length">
+                {{ guideCommands[currentCommandIndex].command }}
+            </p>        
+        </div>
+
+        <!-- Terminal -->
+        <div class="terminal">
+            <p>👨‍💻 Terminal de configuration EIGRP :</p>
+            <input type="text" [(ngModel)]="command" (keyup.enter)="executeCommand()" placeholder="Tapez une commande...">
+        </div>
+    </div>
 </div>
+
+<!-- Simulation finale après configuration -->
+<app-simulation-result *ngIf="configCompleted"></app-simulation-result>

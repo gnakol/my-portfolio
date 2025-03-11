@@ -1,0 +1,32 @@
+<div class="simulation-container">
+    <h2>📡 Vérification de la Connectivité</h2>
+
+    <div class="network">
+        <div class="device">
+            <img src="assets/images/pc-svgrepo-com.svg" class="pc">
+            <p>PC 1</p>
+        </div>
+
+        <div class="cable">
+            <div class="packet" *ngIf="startAnimation"></div>
+        </div>
+
+        <div class="device">
+            <img src="assets/images/router-svgrepo-com.svg" class="router">
+            <p>Routeur</p>
+        </div>
+
+        <div class="cable">
+            <div class="packet" *ngIf="startAnimation"></div>
+        </div>
+
+        <div class="device">
+            <img src="assets/images/pc-svgrepo-com.svg" class="pc">
+            <p>PC 2</p>
+        </div>
+    </div>
+
+    <p *ngIf="startAnimation" class="status">📨 Ping en cours...</p>
+
+    <button *ngIf="!startAnimation" (click)="restartSimulation()">🔄 Recommencer</button>
+</div>

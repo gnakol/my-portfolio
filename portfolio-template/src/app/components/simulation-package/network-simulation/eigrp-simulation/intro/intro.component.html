@@ -1,19 +1,32 @@
 <div class="intro-container">
-    <div class="animated-background"></div>
+    <!-- Texte en mode diaporama -->
+    <div class="text-slideshow">
+        <p *ngIf="step === 1" class="slide-text">Bienvenue dans la simulation EIGRP.</p>
+        <p *ngIf="step === 2" class="slide-text">Dans cette simulation, vous apprendrez à configurer le protocole de routage dynamique.</p>
+        <p *ngIf="step === 3" class="slide-text">👨‍💻 <strong>Objectif :</strong> Configurer EIGRP pour assurer le routage dynamique.</p>
+        <p *ngIf="step === 4" class="slide-text">⚙️ <strong>Étapes :</strong> Initialiser le protocole, configurer les réseaux.</p>
+        <p *ngIf="step === 5" class="slide-text">🚀 Voici les équipements disponibles :</p>
+    </div>
 
-    <div class="intro-content">
-        <h1 class="intro-title">Bienvenue dans la simulation de routage EIGRP !</h1>
-        <p class="intro-subtitle">
-            Dans cette simulation, vous allez apprendre à configurer le protocole de routage dynamique EIGRP.
-        </p>
-
-        <div class="intro-instructions">
-            <p>👨‍💻 <strong>Objectif :</strong> Configurer EIGRP pour assurer le routage dynamique entre plusieurs réseaux.</p>
-            <p>⚙️ <strong>Étapes :</strong> Initialisez le protocole, configurez les réseaux et validez la connectivité.</p>
-            <p>🚦 <strong>Conseil :</strong> Suivez les instructions étape par étape et n'hésitez pas à tester différentes commandes.</p>
+    <!-- Animation des équipements réseau -->
+    <div class="network-animation">
+        <div class="device" *ngIf="showRouter">
+            <img src="assets/images/router-svgrepo-com.svg" alt="Router" class="router">
+            <p class="device-label">🖧 Routeur</p>
         </div>
+        <div class="device" *ngIf="showPc">
+            <img src="assets/images/pc-svgrepo-com.svg" alt="PC" class="pc">
+            <p class="device-label">💻 Ordinateur</p>
+        </div>
+        <div class="device" *ngIf="showCable">
+            <img src="assets/images/cable-plug-connector-svgrepo-com.svg" alt="Cable" class="cable">
+            <p class="device-label">🔗 Câble réseau</p>
+        </div>
+    </div>
 
-        <button mat-raised-button color="primary" class="start-button" [routerLink]="'/terminal-eigrp-config'">
+    <!-- Apparition finale du bouton de simulation -->
+    <div class="start-section" *ngIf="showButton">
+        <button mat-raised-button color="primary" class="start-button" [routerLink]="'/terminal-eigrp-config'" (click)="onStart()">
             Commencer la Simulation 🚀
         </button>
     </div>

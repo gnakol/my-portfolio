@@ -107,7 +107,6 @@ public class SimulationService {
     }
 
     public SimulationDTO simulateEigrpConfiguration(Map<String, String> request) {
-
         String network = request.get("network");
         String wildcard = request.get("wildcard");
         String processId = request.get("processId");
@@ -116,12 +115,18 @@ public class SimulationService {
         LocalDateTime dateLog = LocalDateTime.now();
 
         try {
+            // Validation des entrées
+            if (network == null || wildcard == null || processId == null) {
+                throw new IllegalArgumentException("Les paramètres 'network', 'wildcard' et 'processId' sont requis.");
+            }
+
             // Simulation EIGRP (exemple fictif)
             output.append("Configuration EIGRP :\n");
             output.append("router eigrp ").append(processId).append("\n");
             output.append("network ").append(network).append(" ").append(wildcard).append("\n");
             output.append("EIGRP configuré avec succès !\n");
 
+            // Sauvegarde du log de sécurité
             logSecurityRepository.save(LogSecurity.builder()
                     .typeLog(LogType.EVENEMENT)
                     .message("EIGRP configuré : Process ID=" + processId + ", Network=" + network)
@@ -129,9 +134,25 @@ public class SimulationService {
                     .dateLog(dateLog)
                     .build());
 
+            // Sauvegarde de la simulation
+/*            SimulationDTO simulation = SimulationDTO.builder()
+                    .description("Configuration EIGRP " + processId)
+                    .commandTest("router eigrp " + processId + " network " + network + " " + wildcard)
+                    .expectedResult(output.toString())
+                    .build();
+            this.simulationRepository.save(this.simulationMapper.fromSimulationDTO(simulation));*/
+
         } catch (Exception e) {
             output.append("Erreur : ").append(e.getMessage());
             log.error("❌ Erreur lors de la simulation EIGRP : {}", e.getMessage());
+
+            // Sauvegarde du log d'erreur
+            logSecurityRepository.save(LogSecurity.builder()
+                    .typeLog(LogType.FAILLE)
+                    .message("Erreur lors de la configuration EIGRP : " + e.getMessage())
+                    .ipSource("localhost")
+                    .dateLog(dateLog)
+                    .build());
         }
 
         return SimulationDTO.builder()

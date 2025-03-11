@@ -1,0 +1,51 @@
+.simulation-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    background: #0e1726;
+    color: white;
+    padding: 20px;
+    min-height: 100vh;
+}
+
+.network {
+    display: flex;
+    align-items: center;
+    gap: 40px;
+    margin: 20px 0;
+}
+
+.device img {
+    width: 70px;
+}
+
+.cable {
+    width: 80px;
+    height: 10px;
+    background: #4facfe;
+    position: relative;
+}
+
+.packet {
+    width: 12px;
+    height: 12px;
+    background: limegreen;
+    border-radius: 50%;
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    animation: movePacket 2s linear infinite;
+}
+
+@keyframes movePacket {
+    0% { left: 0; }
+    100% { left: 100%; }
+}
+
+.status {
+    font-size: 1.2rem;
+    color: limegreen;
+    font-weight: bold;
+}
