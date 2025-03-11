@@ -33,6 +33,10 @@ import { AllLogSecurityComponent } from './components/log-security-package/web-s
 import { IntroEigrpComponent } from './components/simulation-package/network-simulation/eigrp-simulation/intro/intro.component';
 import { EigrpSimulationComponent } from './components/simulation-package/network-simulation/eigrp-simulation/eigrp-simulation.component';
 import { TerminalEigrpComponent } from './components/simulation-package/network-simulation/eigrp-simulation/terminal-eigrp/terminal-eigrp.component';
+import { DhcpComponent } from './components/simulation-package/network-simulation/dhcp/dhcp.component';
+import { IntroDhcpComponent } from './components/simulation-package/network-simulation/dhcp/intro-dhcp/intro-dhcp.component';
+import { RelayComponent } from './components/simulation-package/network-simulation/dhcp/relay/relay.component';
+import { FullComponent } from './components/simulation-package/network-simulation/dhcp/full/full.component';
 
 const routes: Routes = [
   { path: '', loadChildren: () => import('./pages/home/home.module').then(m => m.HomeModule) },
@@ -63,6 +67,7 @@ const routes: Routes = [
   { path: 'network-simulation', component : NetworkSimulationComponent},
   { path: 'vlan-simulation', component : VlanSimulationComponent},
   { path: 'eigrp-simulation', component : EigrpSimulationComponent},
+  { path: 'dhcp-simulation', component : DhcpComponent},
 
 
 
@@ -93,7 +98,13 @@ const routes: Routes = [
 
   // For eigrp
   { path : 'terminal-eigrp-config', component : TerminalEigrpComponent},
-  { path : 'intro-eigrp', component : IntroEigrpComponent}
+  { path : 'intro-eigrp', component : IntroEigrpComponent},
+
+
+  //For DHCP
+  { path : 'intro-dhcp-config', component : IntroDhcpComponent},
+  { path: 'dhcp-relay', component: RelayComponent },
+  { path: 'dhcp-full', component: FullComponent },
   
 ];
 

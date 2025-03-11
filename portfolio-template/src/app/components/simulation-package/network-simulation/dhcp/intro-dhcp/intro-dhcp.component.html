@@ -1,1 +1,42 @@
-<p>intro-dhcp works!</p>
+<div class="intro-container">
+    <!-- Texte en mode diaporama -->
+    <div class="text-slideshow">
+        <p *ngIf="step === 1" class="slide-text">Bienvenue dans la simulation DHCP.</p>
+        <p *ngIf="step === 2" class="slide-text">Dans cette simulation, vous apprendrez à configurer le service DHCP.</p>
+        <p *ngIf="step === 3" class="slide-text">📜 <strong>Deux modes :</strong> DHCP Relay (Serveur + Routeur) ou Full DHCP (100% Routeur).</p>
+        <p *ngIf="step === 4" class="slide-text">🚀 Voici les équipements disponibles :</p>
+    </div>
+
+    <!-- Animation des équipements réseau -->
+    <div class="network-animation">
+        <div class="device" *ngIf="showRouter">
+            <img src="assets/images/router-svgrepo-com.svg" alt="Routeur" class="router">
+            <p class="device-label">🖧 Routeur</p>
+        </div>
+        <div class="device" *ngIf="showServer">
+            <img src="assets/images/server-svgrepo-com.svg" alt="Serveur DHCP" class="server">
+            <p class="device-label">🖥️ Serveur DHCP</p>
+        </div>
+        <div class="device" *ngIf="showPc">
+            <img src="assets/images/pc-svgrepo-com.svg" alt="PC" class="pc">
+            <p class="device-label">💻 Ordinateur</p>
+        </div>
+        <div class="device" *ngIf="showCable">
+            <img src="assets/images/cable-plug-connector-svgrepo-com.svg" alt="Câble" class="cable">
+            <p class="device-label">🔗 Câble réseau</p>
+        </div>
+    </div>
+
+<!-- Apparition finale du bouton de simulation -->
+<div class="start-section" *ngIf="showButton">
+    <button mat-raised-button color="primary" class="start-button" 
+            [routerLink]="getSimulationRoute()" 
+            (click)="onStart()">
+        Commencer la Simulation 🚀
+    </button>
+</div>
+
+
+    <!-- Lien pour revenir au choix de configuration -->
+    <a class="back-link" (click)="goBack()">← Retour au choix de configuration</a>
+</div>

@@ -1,0 +1,123 @@
+.terminal-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background: #0e1726;
+    color: white;
+    padding: 20px;
+    min-height: 100vh;
+}
+
+/* 🔹 Topologie */
+.topology {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+    margin-bottom: 20px;
+}
+
+.device img {
+    width: 70px;
+    opacity: 0.4;
+    transition: 0.3s ease-in-out;
+}
+
+.device img.active {
+    opacity: 1;
+    filter: drop-shadow(0px 0px 10px #4facfe);
+}
+
+/* 🔹 Câbles animés */
+.cable img {
+    width: 60px;
+    opacity: 0.3;
+    transition: 0.5s ease-in-out;
+}
+
+.cable img.stretch {
+    transform: scaleX(1.5); /* Étend le câble progressivement */
+}
+
+.cable img.connected {
+    opacity: 1;
+    filter: drop-shadow(0px 0px 10px limegreen);
+}
+
+/* 🔹 Commande en Progression */
+.command-guide {
+    background: rgba(255, 255, 255, 0.1);
+    padding: 10px;
+    border-radius: 5px;
+    margin-bottom: 20px;
+    width: 50%;
+    text-align: center;
+}
+
+.command-guide p {
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.command-guide .command {
+    font-size: 1.2rem;
+    color: #4facfe;
+    font-weight: bold;
+    animation: fadeIn 1.5s ease-in-out;
+}
+/* 🎨 Terminal de configuration */
+.terminal {
+    width: 60%;
+    padding: 15px;
+    background: #1e1e2e; /* Couleur sombre élégante */
+    border-radius: 8px;
+    box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.3);
+    text-align: center;
+    border: 1px solid #4facfe;
+}
+
+/* 🖥 Zone d'affichage des commandes */
+.terminal p {
+    font-size: 1rem;
+    color: #b8c1ec;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+/* ✍️ Champ de saisie amélioré */
+.terminal input {
+    width: 100%;
+    padding: 12px;
+    font-size: 1.1rem;
+    border: 2px solid transparent;
+    border-radius: 5px;
+    background: #2b3a57;
+    color: white;
+    outline: none;
+    transition: border 0.3s ease-in-out;
+}
+
+/* 🌟 Effet interactif au focus */
+.terminal input:focus {
+    border: 2px solid #4facfe;
+    background: #374151;
+}
+
+/* 🚨 Affichage des erreurs */
+.terminal input.error {
+    border: 2px solid #ff6b6b;
+    background: #552525;
+    color: #ffaaaa;
+}
+
+/* Animation pour les erreurs */
+@keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    25%, 75% { transform: translateX(-5px); }
+    50% { transform: translateX(5px); }
+}
+
+/* 🛑 Effet de vibration en cas d'erreur */
+.terminal input.error {
+    animation: shake 0.3s ease-in-out;
+}

@@ -1,1 +1,19 @@
-<p>dhcp works!</p>
+<div class="dhcp-container">
+    <h1 class="title">💡 Configuration DHCP : {{ selectedConfig === 'relay' ? 'DHCP Relay' : 'Full DHCP' }}</h1>
+
+    <div *ngIf="!selectedConfig" class="config-options">
+        <button mat-raised-button color="primary" (click)="chooseConfig('relay')">
+            🏢 DHCP Relay (Serveur + Routeur)
+        </button>
+
+        <button mat-raised-button color="accent" (click)="chooseConfig('full')">
+            🔌 Full DHCP (100% Routeur)
+        </button>
+    </div>
+
+    <!-- Affichage de l'intro selon le choix avec un événement pour revenir -->
+    <app-intro-dhcp *ngIf="selectedConfig" 
+        [configType]="selectedConfig" 
+        (backToChoice)="resetChoice()">
+    </app-intro-dhcp>
+</div>

@@ -23,6 +23,9 @@ import { TerminalComponent } from '../network-simulation/vlan-simulation/termina
 import { IntroEigrpComponent } from '../network-simulation/eigrp-simulation/intro/intro.component';
 import { EigrpSimulationComponent } from '../network-simulation/eigrp-simulation/eigrp-simulation.component';
 import { TerminalEigrpComponent } from '../network-simulation/eigrp-simulation/terminal-eigrp/terminal-eigrp.component';
+import { DhcpComponent } from '../network-simulation/dhcp/dhcp.component';
+import { IntroDhcpComponent } from '../network-simulation/dhcp/intro-dhcp/intro-dhcp.component';
+import { RelayComponent } from '../network-simulation/dhcp/relay/relay.component';
 
 
 const routes : Routes = [
@@ -33,7 +36,10 @@ const routes : Routes = [
   {path : '', component : TerminalComponent},
   {path : '', component : IntroEigrpComponent},
   {path : '', component : EigrpSimulationComponent},
-  {path : '', component : TerminalEigrpComponent}
+  {path : '', component : TerminalEigrpComponent},
+  {path: '', component : DhcpComponent},
+  {path : '', component : IntroDhcpComponent},
+  {path : '', component : RelayComponent}
 ];
 
 
@@ -52,8 +58,7 @@ const routes : Routes = [
     MatSelectModule,
     MatNativeDateModule,
     MatToolbarModule,
-    ReactiveFormsModule,
-    RouterModule
+    ReactiveFormsModule
   ]
 })
 export class SimulationModule { }

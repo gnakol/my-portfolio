@@ -1,1 +1,39 @@
-<p>full works!</p>
+<div *ngIf="!configCompleted">
+    <div class="terminal-container">
+        <div class="topology">
+            <!-- Routeur -->
+            <div class="device">
+                <img src="assets/images/router-svgrepo-com.svg" class="router" [ngClass]="{'active': router.active}">
+                <p class="device-label">🖧 Routeur</p>
+            </div>
+
+            <!-- PC -->
+            <div class="device">
+                <img src="assets/images/pc-svgrepo-com.svg" class="pc" [ngClass]="{'active': pc.active}">
+                <p class="device-label">💻 PC</p>
+            </div>
+
+            <!-- Câble Réseau -->
+            <div class="cable">
+                <img src="assets/images/cable-plug-connector-svgrepo-com.svg" class="cable" [ngClass]="{'connected': cables[0].connected, 'stretch': cables[0].active}">
+            </div>
+        </div>
+
+        <!-- Affichage Progressif des Commandes -->
+        <div class="command-guide">
+            <p>💡 Tapez la commande :</p>
+            <p class="command" *ngIf="currentCommandIndex < guideCommands.length">
+                {{ guideCommands[currentCommandIndex].command }}
+            </p>        
+        </div>
+
+        <!-- Terminal -->
+        <div class="terminal">
+            <p>👨‍💻 Terminal de configuration DHCP Full :</p>
+            <input type="text" [(ngModel)]="command" (keyup.enter)="executeCommand()" [ngClass]="{'error': commandError}" placeholder="Tapez une commande...">
+        </div>
+    </div>
+</div>
+
+<!-- Simulation finale après configuration -->
+<app-simulation-result *ngIf="configCompleted"></app-simulation-result>
