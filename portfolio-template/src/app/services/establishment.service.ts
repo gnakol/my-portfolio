@@ -22,26 +22,25 @@ export class EstablishmentService {
 
   establishmentById(id: number): Observable<Establishment> {
     
-    const headers = this.genericMethodeService.getHeaders(); // ✅ Ajout des headers
+    //const headers = this.genericMethodeService.getHeaders(); // ✅ Ajout des headers
 
     return this.http.get<Establishment>(
-      `${this.establishmentUrl}/get-by-id-establishment/${id}`,
-      { headers }
+      `${this.establishmentUrl}/get-by-id-establishment/${id}`
     );
   }
 
   getEstablishmentById(id: number): Observable<{ id: number; name: string; city: string }> {
-    const headers = this.genericMethodeService.getHeaders(); // ✅ Ajout des headers
+    //const headers = this.genericMethodeService.getHeaders(); // ✅ Ajout des headers
 
     return this.http.get<{ id: number; name: string; city: string }>(
-        `${this.establishmentUrl}/get-by-id-establishment/${id}`,
-        { headers } // ✅ Utilisation des headers ici
+        `${this.establishmentUrl}/get-by-id-establishment/${id}`
     );
 }
 
 
 
   getAllEstablishments(): Observable<any[]> {
+    
     return this.http.get<any[]>(`${this.establishmentUrl}/all-establishment`);
   }
 

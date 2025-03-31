@@ -15,9 +15,9 @@ export class LanguageService {
 
   allLanguage(page: number = 0, size: number = 10): Observable<{ content: Language[] }> {
 
-    const headers = this.genericMethodeService.getHeaders();
+    //const headers = this.genericMethodeService.getHeaders();
     
-    return this.http.get<{ content: Language[] }>(`${this.languageUrl}/all-language?page=${page}&size=${size}`, { headers });
+    return this.http.get<{ content: Language[] }>(`${this.languageUrl}/all-language?page=${page}&size=${size}`);
   }
 
   languageById(id: number): Observable<Language> {

@@ -13,20 +13,20 @@ export class experienceTypeService {
   constructor(private http: HttpClient, private genericMethodeService : GenericMethodeService) {}
 
   getExperienceTypeById(id: number): Observable<{ idExperienceType: number; name: string }> {
-    const headers = this.genericMethodeService.getHeaders(); // ✅ Ajout du header
+
+    //const headers = this.genericMethodeService.getHeaders(); // ✅ Ajout du header
   
     return this.http.get<{ idExperienceType: number; name: string }>(
-      `${this.experienceTypeUrl}/get-by-id-experience-type/${id}`,
-      { headers } // ✅ Ajout du headers ici
+      `${this.experienceTypeUrl}/get-by-id-experience-type/${id}`
     );
   }
   
 
   getAllExperienceTypes(page: number = 0, size: number = 10): Observable<ExperienceTypeResponse> {
 
-    const headers = this.genericMethodeService.getHeaders();
+    //const headers = this.genericMethodeService.getHeaders();
 
-    return this.http.get<ExperienceTypeResponse>(`${this.experienceTypeUrl}/all-experience-type?page=${page}&size=${size}`, { headers });
+    return this.http.get<ExperienceTypeResponse>(`${this.experienceTypeUrl}/all-experience-type?page=${page}&size=${size}`);
   }
 
   addExperienceType(experienceType: any): Observable<any> {

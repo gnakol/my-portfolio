@@ -1,22 +1,22 @@
 import { Component, OnInit } from '@angular/core';
 import { trigger, transition, style, animate } from '@angular/animations';
-import { Language } from '../../language.model';
-import { CommonModule } from '@angular/common';
-import { MatCardModule } from '@angular/material/card';
-import { MatButtonModule } from '@angular/material/button';
-import { MatIconModule } from '@angular/material/icon';
 import { LanguageService } from '../../../../services/language.service';
-import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatIconModule } from '@angular/material/icon';
+import { MatButtonModule } from '@angular/material/button';
+import { MatCardModule } from '@angular/material/card';
+import { CommonModule } from '@angular/common';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-all-languages',
   standalone: true,
   imports: [
     CommonModule,
-    MatCardModule,
-    MatButtonModule,
+    MatProgressSpinnerModule,
     MatIconModule,
-    MatSnackBarModule
+    MatButtonModule,
+    MatCardModule
   ],
   templateUrl: './all-languages.component.html',
   styleUrls: ['./all-languages.component.scss'],
@@ -30,7 +30,7 @@ import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
   ]
 })
 export class AllLanguagesComponent implements OnInit {
-  languages: Language[] = [];
+  languages: any[] = [];
   loading = true;
 
   constructor(
@@ -45,23 +45,49 @@ export class AllLanguagesComponent implements OnInit {
   loadLanguages(): void {
     this.languageService.allLanguage().subscribe({
       next: (data) => {
-        this.languages = data.content;
+        this.languages = data.content || [];
         this.loading = false;
       },
       error: (err) => {
         console.error('Erreur lors du chargement des langues :', err);
-        this.snackBar.open('Impossible de charger les langues.', 'Fermer', { duration: 3000 });
+        this.snackBar.open('Impossible de charger les langues', 'Fermer', { duration: 3000 });
         this.loading = false;
       }
     });
   }
-  
+
+  getFlagIcon(languageName: string): string {
+    const flags: Record<string, string> = {
+      'Français': '/assets/images/flags/fr.svg',
+      'Anglais': 'assets/images/flags/gb.svg',
+      'Espagnol': 'assets/images/flags/es.svg',
+      'Allemand': 'assets/images/flags/de.svg',
+      'Italien': 'assets/images/flags/it.svg',
+      'Chinois': 'assets/images/flags/cn.svg',
+      'Japonais': 'assets/images/flags/jp.svg',
+      'Arabe': 'assets/images/flags/sa.svg'
+    };
+
+    return flags[languageName] || 'assets/images/flags/unknown.svg';
+  }
+
+  getProficiencyWidth(level: string): number {
+    const levels: Record<string, number> = {
+      'Débutant': 30,
+      'Intermédiaire': 60,
+      'Avancé': 80,
+      'Courant': 95,
+      'Bilingue': 100
+    };
+
+    return levels[level] || 50;
+  }
 
   deleteLanguage(id: number): void {
     this.languageService.deleteLanguage(id).subscribe({
       next: () => {
-        this.languages = this.languages.filter(lang => lang.idLanguage !== id);
         this.snackBar.open('Langue supprimée avec succès !', 'Fermer', { duration: 3000 });
+        this.languages = this.languages.filter(lang => lang.idLanguage !== id);
       },
       error: (error) => {
         console.error('Erreur lors de la suppression :', error);

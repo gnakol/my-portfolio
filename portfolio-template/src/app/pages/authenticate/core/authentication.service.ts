@@ -2,6 +2,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { BehaviorSubject, catchError, map, Observable, of } from 'rxjs';
+import { GenericMethodeService } from '../../../services/generic-methode.service';
 
 @Injectable({
   providedIn: 'root'
@@ -14,11 +15,15 @@ export class AuthenticationService {
 
   private readonly tokenUrl = 'http://localhost:9000/portfolio-api/token';
 
+  private readonly refreshTokenUrl = 'http://localhost:9000/portfolio-api/refresh-token';
+
   private authStatus = new BehaviorSubject<boolean>(this.isAuthenticated());
 
 
 
-  constructor(private http : HttpClient, private router : Router) { }
+  constructor(
+    private http : HttpClient, 
+    private router : Router) { }
 
   getAuthStatus(): Observable<boolean> {
     return this.authStatus.asObservable();
@@ -112,6 +117,7 @@ export class AuthenticationService {
 
 
   validateTokenWithServer(token: string): Observable<{ isValid: boolean }> {
+    
     const headers = new HttpHeaders({
       'Content-Type': 'application/json',
       'Authorization': `Bearer ${token}`
@@ -122,6 +128,31 @@ export class AuthenticationService {
   isAuthenticated() : boolean
   {
     return !!this.getToken();
+  }
+
+  refreshToken() : Observable<string>
+  {
+    const token = this.getToken();
+
+    const headers = new HttpHeaders({
+      'Content-Type' : 'application/json',
+      'Authorization' : `Bearer ${token}`
+    });
+
+    return this.http.post<{ bearer : string }>(`${this.refreshTokenUrl}`, {}, {headers})
+    .pipe(
+      map(response => {
+        if(response && response.bearer)
+        {
+          localStorage.setItem('jwtToken', response.bearer);
+          return response.bearer;
+        }
+        else
+        {
+          throw new Error('Failed to refresh token');
+        }
+      })
+    );
   }
 
 

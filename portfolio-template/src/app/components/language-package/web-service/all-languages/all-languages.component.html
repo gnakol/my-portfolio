@@ -1,25 +1,57 @@
 <div class="languages-page">
-  <div class="animated-background"></div>
-
-  <div *ngIf="loading" class="loading-message">Chargement des langues...</div>
-
-  <div class="language-container" *ngIf="!loading">
-    <mat-card *ngFor="let lang of languages; let i = index" class="language-card" [@fadeIn]="i">
-      <mat-card-title>{{ lang.name }}</mat-card-title>
-      <mat-card-subtitle>
-        Niveau : {{ lang.proficiencyLevel }}
-      </mat-card-subtitle>
-
-      <!-- Icône de suppression -->
-      <mat-card-actions>
-        <button mat-icon-button color="warn" (click)="deleteLanguage(lang.idLanguage)">
-          <mat-icon>delete</mat-icon>
-        </button>
-      </mat-card-actions>
-    </mat-card>
+  <!-- Fond animé amélioré -->
+  <div class="animated-background">
+    <div class="gradient-circle circle-1"></div>
+    <div class="gradient-circle circle-2"></div>
+    <div class="grid-pattern"></div>
   </div>
 
-  <div *ngIf="languages.length === 0 && !loading" class="no-data-message">
-    Aucune langue renseignée.
+  <!-- Contenu principal -->
+  <div class="languages-container">
+    <!-- En-tête -->
+    <div class="page-header">
+      <h1 class="page-title">Mes <span class="text-gradient">Langues</span></h1>
+      <p class="page-subtitle">Compétences linguistiques et niveaux de maîtrise</p>
+      <div class="header-divider"></div>
+    </div>
+
+    <!-- Contenu -->
+    <ng-container *ngIf="loading; else content">
+      <div class="loading-container">
+        <mat-spinner diameter="50" color="accent"></mat-spinner>
+        <p class="loading-message">Chargement des langues...</p>
+      </div>
+    </ng-container>
+
+    <ng-template #content>
+      <div *ngIf="languages.length === 0" class="empty-state">
+        <mat-icon class="empty-icon">translate</mat-icon>
+        <h3>Aucune langue enregistrée</h3>
+        <p>Ajoutez vos compétences linguistiques pour compléter votre profil</p>
+      </div>
+
+      <div class="languages-grid">
+        <mat-card *ngFor="let lang of languages; let i = index" class="language-card" [@fadeIn]="i">
+          <div class="language-flag">
+            <img [src]="getFlagIcon(lang.name)" [alt]="'Drapeau ' + lang.name" class="flag-image">
+          </div>
+          
+          <mat-card-content>
+            <h3 class="language-name">{{ lang.name }}</h3>
+            <div class="proficiency-container">
+              <div class="proficiency-level" [style.width.%]="getProficiencyWidth(lang.proficiencyLevel)">
+                {{ lang.proficiencyLevel }}
+              </div>
+            </div>
+          </mat-card-content>
+          
+          <mat-card-actions>
+            <button mat-icon-button (click)="deleteLanguage(lang.idLanguage)" class="delete-btn">
+              <mat-icon>delete</mat-icon>
+            </button>
+          </mat-card-actions>
+        </mat-card>
+      </div>
+    </ng-template>
   </div>
 </div>

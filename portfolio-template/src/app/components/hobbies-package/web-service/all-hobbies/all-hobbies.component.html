@@ -1,27 +1,51 @@
 <div class="hobbies-page">
-  <div class="animated-background"></div>
+  <!-- Fond animé amélioré -->
+  <div class="animated-background">
+    <div class="gradient-circle circle-1"></div>
+    <div class="gradient-circle circle-2"></div>
+    <div class="grid-pattern"></div>
+  </div>
 
+  <!-- Contenu principal -->
   <div class="hobbies-container">
+    <!-- En-tête -->
+    <div class="page-header">
+      <h1 class="page-title">Mes <span class="text-gradient">Passions</span></h1>
+      <p class="page-subtitle">Centres d'intérêt et activités hors travail</p>
+      <div class="header-divider"></div>
+    </div>
+
+    <!-- Contenu -->
     <ng-container *ngIf="loading; else content">
-      <p class="loading-message">Chargement des hobbies...</p>
+      <div class="loading-container">
+        <mat-spinner diameter="50" color="accent"></mat-spinner>
+        <p class="loading-message">Chargement des centres d'intérêt...</p>
+      </div>
     </ng-container>
 
     <ng-template #content>
-      <mat-card *ngFor="let hobby of hobbies; let i = index" class="hobby-card" [@fadeIn]="i">
-        <mat-card-title>{{ hobby.name }}</mat-card-title>
-        <mat-card-content>
-          <p>{{ hobby.description || 'Pas de description disponible' }}</p>
-        </mat-card-content>
-        <mat-card-actions>
-          <button mat-icon-button color="warn" (click)="deleteHobby(hobby.idHobbies)">
-            <mat-icon>delete</mat-icon>
-          </button>
-        </mat-card-actions>
-      </mat-card>
-    </ng-template>
-  </div>
+      <div *ngIf="hobbies.length === 0" class="empty-state">
+        <mat-icon class="empty-icon">sentiment_very_satisfied</mat-icon>
+        <h3>Aucun hobby enregistré</h3>
+        <p>Ajoutez vos centres d'intérêt pour personnaliser votre profil</p>
+      </div>
 
-  <div *ngIf="hobbies.length === 0 && !loading">
-    Aucun hobby trouvé.
+      <div class="hobbies-grid">
+        <mat-card *ngFor="let hobby of hobbies; let i = index" class="hobby-card" [@fadeIn]="i">
+          <div class="hobby-icon">
+            <mat-icon>{{ getHobbyIcon(hobby.name) }}</mat-icon>
+          </div>
+          <mat-card-content>
+            <h3 class="hobby-name">{{ hobby.name }}</h3>
+            <p class="hobby-description">{{ hobby.description || 'Passion qui me tient à cœur' }}</p>
+          </mat-card-content>
+          <mat-card-actions>
+            <button mat-icon-button (click)="deleteHobby(hobby.idHobbies)" class="delete-btn">
+              <mat-icon>delete</mat-icon>
+            </button>
+          </mat-card-actions>
+        </mat-card>
+      </div>
+    </ng-template>
   </div>
 </div>

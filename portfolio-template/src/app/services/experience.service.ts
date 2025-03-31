@@ -55,9 +55,10 @@ export class ExperienceService {
 
   // ✅ Version propre avec `switchMap()` pour éviter l'imbrication incorrecte des Observables
   getAllExperiences(page: number = 0, size: number = 10): Observable<ExperienceResponse> {
-    const headers = this.genericMethodeService.getHeaders();
 
-    return this.http.get<ExperienceResponse>(`${this.apiUrl}/all-experience?page=${page}&size=${size}`, { headers }).pipe(
+    //const headers = this.genericMethodeService.getHeaders();
+
+    return this.http.get<ExperienceResponse>(`${this.apiUrl}/all-experience?page=${page}&size=${size}`).pipe(
       switchMap(response => {
         const experienceRequests = response.content.map(exp => {
           if (!exp.experienceType && exp.experienceType_id) {

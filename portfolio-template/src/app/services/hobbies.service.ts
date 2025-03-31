@@ -17,8 +17,10 @@ export class HobbiesService {
   ) {}
 
   allHobbies(page: number = 0, size: number = 10): Observable<{ content: Hobbies[] }> {
-    const headers = this.genericMethodeService.getHeaders();
-    return this.http.get<{ content: Hobbies[] }>(`${this.hobbiesUrl}/all-hobbies?page=${page}&size=${size}`, { headers });
+
+    //cdconst headers = this.genericMethodeService.getHeaders();
+
+    return this.http.get<{ content: Hobbies[] }>(`${this.hobbiesUrl}/all-hobbies?page=${page}&size=${size}`);
   }
 
   /**

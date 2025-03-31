@@ -1,20 +1,63 @@
-<div *ngIf="loading">Chargement des projets...</div>
+<div class="project-page">
+  <!-- Fond animé amélioré -->
+  <div class="animated-background">
+    <div class="gradient-circle circle-1"></div>
+    <div class="gradient-circle circle-2"></div>
+    <div class="grid-pattern"></div>
+  </div>
 
-<div class="project-container" *ngIf="!loading">
-  <mat-card *ngFor="let project of projects; let i = index" class="project-card" [@fadeIn]="i">
-    <mat-card-title>{{ project.title }}</mat-card-title>
-    <mat-card-subtitle>
-      {{ project.companyName }} ({{ project.startDate }} - {{ project.endDate || 'Présent' }})
-    </mat-card-subtitle>
-    <mat-card-content>
-      <p>{{ project.description }}</p>
-      <p *ngIf="project.experienceType?.name">
-        Type : {{ project.experienceType.name }}
-      </p>
-    </mat-card-content>
-  </mat-card>
-</div>
+  <!-- Contenu principal -->
+  <div class="project-container">
+    <!-- En-tête -->
+    <div class="page-header">
+      <h1 class="page-title">Mes <span class="text-gradient">Projets</span></h1>
+      <p class="page-subtitle">Réalisations techniques et contributions</p>
+      <div class="header-divider"></div>
+    </div>
 
-<div *ngIf="projects.length === 0 && !loading">
-  Aucun projet trouvé.
+    <!-- Contenu -->
+    <ng-container *ngIf="loading; else content">
+      <div class="loading-container">
+        <mat-spinner diameter="50" color="accent"></mat-spinner>
+        <p class="loading-message">Chargement des projets...</p>
+      </div>
+    </ng-container>
+
+    <ng-template #content>
+      <div *ngIf="projects.length === 0" class="empty-state">
+        <mat-icon class="empty-icon">inbox</mat-icon>
+        <h3>Aucun projet trouvé</h3>
+        <p>Vous n'avez pas encore ajouté de projets à votre portfolio</p>
+      </div>
+
+      <div class="projects-grid">
+        <mat-card *ngFor="let project of projects; let i = index" class="project-card" [@fadeIn]="i">
+          <div class="project-header">
+            <div class="project-dates">
+              {{ project.startDate | date:'MMM y' }} - {{ project.endDate ? (project.endDate | date:'MMM y') : 'Présent' }}
+            </div>
+            <div class="project-type" *ngIf="project.experienceType?.name">
+              {{ project.experienceType.name }}
+            </div>
+          </div>
+          
+          <mat-card-content>
+            <h3 class="project-title">{{ project.title }}</h3>
+            <p class="project-company" *ngIf="project.companyName">
+              <mat-icon>business</mat-icon>
+              {{ project.companyName }}
+            </p>
+            <p class="project-description">{{ project.description }}</p>
+          </mat-card-content>
+          
+          <mat-card-actions>
+            <button mat-stroked-button color="primary">
+              <mat-icon>visibility</mat-icon>
+              Voir les détails
+            </button>
+          </mat-card-actions>
+        </mat-card>
+      </div>
+    </ng-template>
+  </div>
 </div>

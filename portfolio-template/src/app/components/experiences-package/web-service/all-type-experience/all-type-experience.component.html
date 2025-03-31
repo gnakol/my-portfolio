@@ -1,20 +1,43 @@
-<div class="experience-type-page">
-  <!-- Fond animé -->
-  <div class="animated-background"></div>
-
-  <div *ngIf="loading" class="loading-message">
-    Chargement des types d'expériences...
+<div class="dashboard-container">
+  <!-- Fond animé identique -->
+  <div class="animated-background">
+    <div class="gradient-circle circle-1"></div>
+    <div class="gradient-circle circle-2"></div>
+    <div class="grid-pattern"></div>
   </div>
 
-  <div class="experience-type-container" *ngIf="!loading">
+  <!-- En-tête -->
+  <div class="dashboard-header">
+    <h1 class="dashboard-title">Types <span class="text-gradient">d'Expérience</span></h1>
+    <p class="dashboard-subtitle">Gérez les catégories de vos expériences professionnelles</p>
+    <div class="header-divider"></div>
+  </div>
+
+  <!-- Contenu -->
+  <div *ngIf="loading" class="loading-container">
+    <mat-spinner diameter="50" color="accent"></mat-spinner>
+    <p class="loading-message">Chargement en cours...</p>
+  </div>
+
+  <div *ngIf="!loading" class="cards-container">
+    <!-- Carte vide -->
+    <div *ngIf="experienceTypes.length === 0" class="empty-state">
+      <mat-icon class="empty-icon">work_outline</mat-icon>
+      <h3>Aucun type enregistré</h3>
+      <p>Commencez par ajouter vos premiers types d'expérience</p>
+    </div>
+
+    <!-- Cartes des types -->
     <mat-card *ngFor="let type of experienceTypes; let i = index" 
-              class="experience-type-card"
+              class="dashboard-card"
+              [style.--card-color]="getColorForIndex(i)"
               [@fadeIn]="i">
-      <mat-card-header>
-        <mat-card-title>{{ type.name }}</mat-card-title>
-      </mat-card-header>
+      <div class="card-icon">
+        <mat-icon>category</mat-icon>
+      </div>
+      <h2 class="card-title">{{type.name}}</h2>
       <mat-card-actions>
-        <button mat-icon-button color="warn" (click)="deleteExperienceType(type.idExperienceType)">
+        <button mat-icon-button (click)="deleteExperienceType(type.idExperienceType)" class="action-btn">
           <mat-icon>delete</mat-icon>
         </button>
       </mat-card-actions>

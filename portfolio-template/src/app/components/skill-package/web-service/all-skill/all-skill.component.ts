@@ -1,43 +1,26 @@
 import { Component, OnInit } from '@angular/core';
-import { trigger, transition, style, animate, query, stagger } from '@angular/animations';
+import { trigger, transition, style, animate } from '@angular/animations';
 import { SkillService } from '../../../../services/skill.service';
-import { CommonModule } from '@angular/common';
-import { Skill } from '../../skill.model';
-import { SkillCategoryService } from '../../../../services/category_skill.service';
-import { ReactiveFormsModule } from '@angular/forms';
-
-
-// Angular Material Modules
-import { MatToolbarModule } from '@angular/material/toolbar';
+import { Router } from '@angular/router';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
-import { MatIconModule } from '@angular/material/icon';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatInputModule } from '@angular/material/input';
-import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar'; // Ajouté pour MatSnackBar
-import {MatDatepickerModule} from '@angular/material/datepicker';
-import {MatSelectModule} from '@angular/material/select';
-import { MatNativeDateModule } from '@angular/material/core';
-import { Router } from '@angular/router';
-import { AccountService } from '../../../../services/account.service';
+import { CommonModule } from '@angular/common';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 @Component({
   selector: 'app-all-skill',
   standalone: true,
-  imports : [
+  imports: [
     CommonModule,
-    MatToolbarModule,
+    MatProgressSpinnerModule,
+    MatIconModule,
     MatButtonModule,
     MatCardModule,
-    MatIconModule,
-    MatFormFieldModule,
-    MatInputModule,
-    MatSnackBarModule, // Ajouté ici
-    MatDatepickerModule,
-    MatSelectModule,
-    ReactiveFormsModule,
-    MatNativeDateModule
-],
+    MatTooltipModule
+  ],
   templateUrl: './all-skill.component.html',
   styleUrls: ['./all-skill.component.scss'],
   animations: [
@@ -50,24 +33,20 @@ import { AccountService } from '../../../../services/account.service';
   ]
 })
 export class AllSkillComponent implements OnInit {
-
   skills: any[] = [];
-
   loading = true;
 
   constructor(
     private skillService: SkillService,
     private router: Router,
-    private snackBar: MatSnackBar,
-    private skillCategory : SkillCategoryService,
-    private account : AccountService
+    private snackBar: MatSnackBar
   ) {}
 
   ngOnInit(): void {
-    this.loadSkill();
+    this.loadSkills();
   }
 
-  loadSkill(): void {
+  loadSkills(): void {
     this.skillService.getAllSkill().subscribe({
       next: (data) => {
         this.skills = data.content || [];
@@ -81,25 +60,55 @@ export class AllSkillComponent implements OnInit {
     });
   }
 
-  viewSkill(id: number): void {
-    this.router.navigate(['/skill-detail', id]);
+  getCategoryColor(categoryName: string | undefined): string {
+    if (!categoryName) return '#6366f1';
+    
+    const colors: Record<string, string> = {
+      'Développement': '#6366f1',
+      'Réseaux': '#3b82f6',
+      'Cybersécurité': '#ec4899',
+      'Système': '#10b981',
+      'Cloud': '#f59e0b'
+    };
+
+    return colors[categoryName] || '#8b5cf6';
+  }
+
+  getSkillIcon(skillName: string): string {
+    const icons: Record<string, string> = {
+      'Java': 'code',
+      'Spring Boot': 'spring',
+      'Angular': 'angular',
+      'Réseaux': 'settings_ethernet',
+      'Cybersécurité': 'security',
+      'Cisco': 'router',
+      'Linux': 'terminal',
+      'Docker': 'docker',
+      'AWS': 'cloud',
+      'API REST': 'api'
+    };
+
+    // Trouve l'icône correspondante ou utilise une icône par défaut
+    for (const key in icons) {
+      if (skillName.toLowerCase().includes(key.toLowerCase())) {
+        return icons[key];
+      }
+    }
+    return 'star'; // Icône par défaut
   }
 
   deleteSkill(id: number): void {
     this.skillService.deleteSkill(id).subscribe({
       next: () => {
         this.snackBar.open('Compétence supprimée avec succès !', 'Fermer', { duration: 3000 });
-        
-        // ✅ Mettre à jour la liste des compétences localement sans rechargement
-        this.skills = this.skills.filter((skill) => skill.idSkill !== id);
+        this.skills = this.skills.filter(skill => skill.idSkill !== id);
       },
       error: (error) => {
         console.error('Erreur lors de la suppression :', error);
         this.snackBar.open('Erreur lors de la suppression.', 'Fermer', { duration: 3000 });
       }
     });
-}
-
+  }
 
   navigateToTemplate(): void {
     this.router.navigate(['/skill-template']);

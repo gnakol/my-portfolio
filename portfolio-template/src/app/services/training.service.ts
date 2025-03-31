@@ -22,9 +22,9 @@ export class TrainingService {
    * ✅ Récupère toutes les formations avec leur établissement associé
    */
   getAllTraining(page: number = 0, size: number = 10): Observable<TrainingResponse> {
-    const headers = this.genericMethodeService.getHeaders();
+    //const headers = this.genericMethodeService.getHeaders();
 
-    return this.http.get<TrainingResponse>(`${this.apiUrl}/all-training?page=${page}&size=${size}`, { headers }).pipe(
+    return this.http.get<TrainingResponse>(`${this.apiUrl}/all-training?page=${page}&size=${size}`).pipe(
       switchMap(response => {
         const trainingRequests = response.content.map(training => {
           if (!training.establishment && training.establishment_id) {
@@ -59,7 +59,9 @@ export class TrainingService {
    * ✅ Récupère une formation par son ID
    */
   getTrainingById(id: number): Observable<Training> {
+
     const headers = this.genericMethodeService.getHeaders();
+    
     return this.http.get<Training>(`${this.apiUrl}/get-by-id-training/${id}`, { headers });
   }
 

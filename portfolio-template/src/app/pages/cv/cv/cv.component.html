@@ -1,52 +1,94 @@
 <div class="cv-container" id="cv-content">
-  <div class="animated-background"></div>
+  <!-- Fond animé plus subtil -->
+  <div class="animated-background">
+    <div class="gradient-circle circle-1"></div>
+    <div class="gradient-circle circle-2"></div>
+    <div class="grid-pattern"></div>
+  </div>
 
-  <mat-card class="cv-card">
+  <!-- Carte principale -->
+  <mat-card class="cv-card glassmorphism-effect">
     <mat-card-content class="cv-content">
       <div class="cv-photo">
-        <img src="assets/images/profile.jpg" alt="Photo de profil">
+        <img src="assets/images/profile.jpg" alt="Photo de profil" class="profile-image">
+        <div class="status-indicator"></div>
       </div>
 
       <div class="cv-info">
-        <mat-card-title>Mon CV</mat-card-title>
-        <div class="info">
-          <p><strong>Nom :</strong> N'GNA KOLIE</p>
-          <p><strong>Email :</strong> <a [attr.href]="'mailto:' + email">{{ email }}</a></p>
-          <p><strong>LinkedIn :</strong> <a href="https://linkedin.com/" target="_blank">Mon LinkedIn</a></p>
-          <p><strong>GitHub :</strong> <a href="https://github.com/" target="_blank">Mon GitHub</a></p>
-          <p><strong>Adresse :</strong> 10 rue Utrillo, Arras</p>
+        <h1 class="cv-title">KOLIE N'GNA</h1>
+        <p class="cv-subtitle">Développeur FullStack & Futur Expert Cybersécurité</p>
+        
+        <div class="info-grid">
+          <div class="info-item">
+            <mat-icon class="info-icon">email</mat-icon>
+            <a [attr.href]="'mailto:' + email" class="info-text">{{ email }}</a>
+          </div>
+          <div class="info-item">
+            <mat-icon class="info-icon">location_on</mat-icon>
+            <span class="info-text">Arras, France</span>
+          </div>
+          <div class="info-item">
+            <mat-icon class="info-icon">link</mat-icon>
+            <a href="https://linkedin.com/" target="_blank" class="info-text">linkedin.com/in/kolie</a>
+          </div>
+          <div class="info-item">
+            <mat-icon class="info-icon">code</mat-icon>
+            <a href="https://github.com/" target="_blank" class="info-text">github.com/kolie</a>
+          </div>
         </div>
 
         <div class="cv-actions">
-          <button mat-raised-button color="primary" (click)="generatePdf()">📥 Télécharger le CV</button>
+          <button mat-raised-button color="primary" (click)="generatePdf()" class="download-btn">
+            <mat-icon>download</mat-icon>
+            Télécharger le CV
+          </button>
         </div>
       </div>
     </mat-card-content>
   </mat-card>
 
+  <!-- Navigation par sections -->
   <div class="cv-sections">
-    <mat-card class="cv-nav-card" (click)="showSection('experiences')">
-      <mat-card-title>📄 Expériences</mat-card-title>
+    <mat-card class="cv-nav-card" (click)="showSection('experiences')" [style.--card-color]="'#6366f1'">
+      <div class="card-content">
+        <mat-icon class="card-icon">work_outline</mat-icon>
+        <mat-card-title>Expériences Professionnelles</mat-card-title>
+      </div>
     </mat-card>
 
-    <mat-card class="cv-nav-card" (click)="showSection('trainings')">
-      <mat-card-title>🎓 Formations</mat-card-title>
+    <mat-card class="cv-nav-card" (click)="showSection('trainings')" [style.--card-color]="'#8b5cf6'">
+      <div class="card-content">
+        <mat-icon class="card-icon">school</mat-icon>
+        <mat-card-title>Formations & Certifications</mat-card-title>
+      </div>
     </mat-card>
 
-    <mat-card class="cv-nav-card" (click)="showSection('skills')">
-      <mat-card-title>⚡ Compétences</mat-card-title>
+    <mat-card class="cv-nav-card" (click)="showSection('skills')" [style.--card-color]="'#ec4899'">
+      <div class="card-content">
+        <mat-icon class="card-icon">psychology</mat-icon>
+        <mat-card-title>Compétences Techniques</mat-card-title>
+      </div>
     </mat-card>
 
-    <mat-card class="cv-nav-card" (click)="showSection('projects')">
-      <mat-card-title>🚀 Projets</mat-card-title>
+    <mat-card class="cv-nav-card" (click)="showSection('projects')" [style.--card-color]="'#f43f5e'">
+      <div class="card-content">
+        <mat-icon class="card-icon">rocket_launch</mat-icon>
+        <mat-card-title>Projets Réalisés</mat-card-title>
+      </div>
     </mat-card>
 
-    <mat-card class="cv-nav-card" (click)="showSection('hobbies')">
-      <mat-card-title>🎭 Centres d'intérêt</mat-card-title>
+    <mat-card class="cv-nav-card" (click)="showSection('hobbies')" [style.--card-color]="'#14b8a6'">
+      <div class="card-content">
+        <mat-icon class="card-icon">sports_esports</mat-icon>
+        <mat-card-title>Centres d'Intérêt</mat-card-title>
+      </div>
     </mat-card>
 
-    <mat-card class="cv-nav-card" (click)="showSection('languages')">
-      <mat-card-title>🌍 Langues</mat-card-title>
+    <mat-card class="cv-nav-card" (click)="showSection('languages')" [style.--card-color]="'#0ea5e9'">
+      <div class="card-content">
+        <mat-icon class="card-icon">language</mat-icon>
+        <mat-card-title>Langues</mat-card-title>
+      </div>
     </mat-card>
   </div>
 </div>

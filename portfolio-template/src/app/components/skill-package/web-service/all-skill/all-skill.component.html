@@ -1,30 +1,51 @@
 <div class="skill-page">
-  <div class="animated-background"></div>
+  <!-- Fond animé amélioré -->
+  <div class="animated-background">
+    <div class="gradient-circle circle-1"></div>
+    <div class="gradient-circle circle-2"></div>
+    <div class="grid-pattern"></div>
+  </div>
 
-  <div class="skill-container" *ngIf="!loading">
+  <!-- Contenu principal -->
+  <div class="skill-container">
+    <!-- En-tête -->
+    <div class="page-header">
+      <h1 class="page-title">Mes <span class="text-gradient">Compétences</span></h1>
+      <p class="page-subtitle">Un mélange unique de développement, réseaux et cybersécurité</p>
+      <div class="header-divider"></div>
+    </div>
+
+    <!-- Contenu -->
     <ng-container *ngIf="loading; else content">
-      <p class="loading-message">Chargement des compétences...</p>
+      <div class="loading-container">
+        <mat-spinner diameter="50" color="accent"></mat-spinner>
+        <p class="loading-message">Chargement des compétences...</p>
+      </div>
     </ng-container>
 
     <ng-template #content>
-      <mat-card *ngFor="let skill of skills; let i = index" class="skill-card" [@fadeIn]="i">
-        <mat-card-title>{{ skill.name }}</mat-card-title>
-        <mat-card-subtitle class="skill-category">
-          {{ skill.skillCategory?.name || 'Catégorie inconnue' }}
-        </mat-card-subtitle>
-        <mat-card-content>
-          <p>{{ skill.description || 'Pas de description disponible' }}</p>
-        </mat-card-content>
-        <mat-card-actions>
-          <button mat-icon-button class="delete-button" (click)="deleteSkill(skill.idSkill)">
-            <mat-icon>delete</mat-icon>
-          </button>
-        </mat-card-actions>
-      </mat-card>
+      <div class="skills-grid">
+        <mat-card *ngFor="let skill of skills; let i = index" class="skill-card" [@fadeIn]="i" [style.--category-color]="getCategoryColor(skill.skillCategory?.name)">
+          <div class="skill-badge">{{ skill.skillCategory?.name || 'Autre' }}</div>
+          <div class="skill-icon">
+            <mat-icon>{{ getSkillIcon(skill.name) }}</mat-icon>
+          </div>
+          <mat-card-content>
+            <h3 class="skill-name">{{ skill.name }}</h3>
+            <p class="skill-description">{{ skill.description || 'Compétence acquise à travers divers projets' }}</p>
+          </mat-card-content>
+          <mat-card-actions>
+            <button mat-icon-button (click)="deleteSkill(skill.idSkill)" class="delete-btn">
+              <mat-icon>delete</mat-icon>
+            </button>
+          </mat-card-actions>
+        </mat-card>
+      </div>
     </ng-template>
   </div>
 
-  <button mat-raised-button (click)="navigateToTemplate()" class="view-all-button">
-    Voir tous les modèles de compétences
+  <!-- Bouton flottant -->
+  <button mat-fab (click)="navigateToTemplate()" class="floating-btn" color="primary" matTooltip="Voir les modèles">
+    <mat-icon>list_alt</mat-icon>
   </button>
 </div>

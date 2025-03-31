@@ -14,17 +14,17 @@ export class SkillCategoryService {
 
   getSkillCategoryById(id: number): Observable<{ idExperienceType: number; name: string }> {
     
-    const headers = this.genericMethodeService.getHeaders(); // ✅ Ajout du header
+    //const headers = this.genericMethodeService.getHeaders(); // ✅ Ajout du header
   
-    return this.http.get<{ idExperienceType: number; name: string }>(`${this.skillCategoryUrl}/get-by-id-skill-category/${id}`,{ headers });
+    return this.http.get<{ idExperienceType: number; name: string }>(`${this.skillCategoryUrl}/get-by-id-skill-category/${id}`);
   }
   
 
   getAllSkillCategory(page: number = 0, size: number = 10): Observable<SkillCategoryResponse> {
 
-    const headers = this.genericMethodeService.getHeaders();
+    //const headers = this.genericMethodeService.getHeaders();
 
-    return this.http.get<SkillCategoryResponse>(`${this.skillCategoryUrl}/all-skill-category?page=${page}&size=${size}`, { headers });
+    return this.http.get<SkillCategoryResponse>(`${this.skillCategoryUrl}/all-skill-category?page=${page}&size=${size}`);
   }
 
   addSkillCategory(skillCategory: any): Observable<any> {

@@ -1,39 +1,67 @@
 <div class="dashboard-container">
-  <!-- Fond animé -->
-  <div class="animated-background"></div>
+  <!-- Fond animé amélioré -->
+  <div class="animated-background">
+    <div class="gradient-circle circle-1"></div>
+    <div class="gradient-circle circle-2"></div>
+    <div class="grid-pattern"></div>
+  </div>
 
-  <!-- Titre et sous-titre -->
-  <h1 class="dashboard-title">Dashboard des Simulations</h1>
-  <p class="dashboard-subtitle">Explorez et gérez vos simulations en un seul endroit</p>
+  <!-- En-tête -->
+  <div class="dashboard-header">
+    <h1 class="dashboard-title">Lab <span class="text-gradient">Network</span></h1>
+    <p class="dashboard-subtitle">Simulations interactives de mes compétences réseau et sécurité</p>
+    <div class="header-divider"></div>
+  </div>
 
-  <!-- Cartes de navigation -->
+  <!-- Cartes de simulation -->
   <div class="cards-container">
     <!-- Carte Simulations Réseau -->
-    <div class="dashboard-card" (click)="navigateTo('network-simulation')">
-      <div class="card-icon">🛠️</div>
+    <div class="dashboard-card" (click)="navigateTo('network-simulation')" [style.--card-color]="'#6366f1'">
+      <div class="card-icon">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 3v2m6-2v2M9 19v2m6-2v2M5 9H3m2 6H3m18-6h-2m2 6h-2M7 19h10a2 2 0 002-2V7a2 2 0 00-2-2H7a2 2 0 00-2 2v10a2 2 0 002 2z" />
+        </svg>
+      </div>
       <h2 class="card-title">Simulations Réseau</h2>
-      <p class="card-description">Gérez et simulez des configurations réseau</p>
+      <p class="card-description">Configurations VLAN, OSPF, ACL et autres protocoles</p>
+      <div class="card-badge">Lab Physique</div>
     </div>
 
     <!-- Carte Simulations Administration -->
-    <div class="dashboard-card" (click)="navigateTo('/simulation/admin')">
-      <div class="card-icon">🖥️</div>
-      <h2 class="card-title">Simulations Administration</h2>
-      <p class="card-description">Simulez des tâches administratives</p>
+    <div class="dashboard-card" (click)="navigateTo('/simulation/admin')" [style.--card-color]="'#8b5cf6'">
+      <div class="card-icon">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+        </svg>
+      </div>
+      <h2 class="card-title">Administration Système</h2>
+      <p class="card-description">Gestion DHCP, DNS, Active Directory et services</p>
+      <div class="card-badge">Raspberry Pi</div>
     </div>
 
     <!-- Carte Simulations Sécurité -->
-    <div class="dashboard-card" (click)="navigateTo('/simulation/security')">
-      <div class="card-icon">🔐</div>
-      <h2 class="card-title">Simulations Sécurité</h2>
-      <p class="card-description">Testez des scénarios de sécurité</p>
+    <div class="dashboard-card" (click)="navigateTo('/simulation/security')" [style.--card-color]="'#ec4899'">
+      <div class="card-icon">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+        </svg>
+      </div>
+      <h2 class="card-title">Sécurité Réseau</h2>
+      <p class="card-description">Firewall, VPN, Radius et tests de pénétration</p>
+      <div class="card-badge">Cisco ASA</div>
     </div>
 
     <!-- Carte Tester le Ping -->
-    <div class="dashboard-card" (click)="navigateTo('ping-simulation')">
-      <div class="card-icon">🌐</div>
-      <h2 class="card-title">Tester le Ping</h2>
-      <p class="card-description">Vérifiez la connectivité réseau</p>
+    <div class="dashboard-card" (click)="navigateTo('ping-simulation')" [style.--card-color]="'#14b8a6'">
+      <div class="card-icon">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+        </svg>
+      </div>
+      <h2 class="card-title">Diagnostic Réseau</h2>
+      <p class="card-description">Ping, Traceroute et analyse de connectivité</p>
+      <div class="card-badge">Outils CLI</div>
     </div>
   </div>
 </div>

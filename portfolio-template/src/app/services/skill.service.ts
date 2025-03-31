@@ -44,9 +44,9 @@ export class SkillService {
     // ✅ Version propre avec `switchMap()` pour éviter l'imbrication incorrecte des Observables
     getAllSkill(page: number = 0, size: number = 10): Observable<SkillResponse> {
 
-      const headers = this.genericMethodeService.getHeaders();
+     // const headers = this.genericMethodeService.getHeaders();
   
-      return this.http.get<SkillResponse>(`${this.apiUrl}/all-skill?page=${page}&size=${size}`, { headers }).pipe(
+      return this.http.get<SkillResponse>(`${this.apiUrl}/all-skill?page=${page}&size=${size}`).pipe(
         switchMap(response => {
           const skillRequests = response.content.map(exp => {
             if (!exp.skillCategory && exp.skillCategory_id) {

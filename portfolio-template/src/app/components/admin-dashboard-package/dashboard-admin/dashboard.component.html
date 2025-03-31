@@ -1,55 +1,78 @@
 <div class="dashboard-container">
-  <h1 class="dashboard-title">Dashboard Admin</h1>
-  <p class="dashboard-subtitle">Gérez les rubriques de votre CV et les logs de sécurité</p>
+  <!-- Fond animé identique -->
+  <div class="animated-background">
+    <div class="gradient-circle circle-1"></div>
+    <div class="gradient-circle circle-2"></div>
+    <div class="grid-pattern"></div>
+  </div>
+
+  <!-- En-tête -->
+  <div class="dashboard-header">
+    <h1 class="dashboard-title">Dashboard <span class="text-gradient">Admin</span></h1>
+    <p class="dashboard-subtitle">Gérez les rubriques de votre CV et les logs de sécurité</p>
+    <div class="header-divider"></div>
+  </div>
 
   <!-- Cartes des rubriques -->
   <div class="cards-container">
     <!-- Carte Expériences -->
-    <mat-card class="dashboard-card" (click)="showSection('experience-template')">
-      <mat-card-title>📄 Expériences</mat-card-title>
-      <mat-card-content>
-        <p>Gérez vos expériences professionnelles</p>
-      </mat-card-content>
+    <mat-card class="dashboard-card" (click)="showSection('experience-template')" [style.--card-color]="'#6366f1'">
+      <div class="card-icon">
+        <mat-icon>work_outline</mat-icon>
+      </div>
+      <h2 class="card-title">Expériences</h2>
+      <p class="card-description">Gérez vos expériences professionnelles</p>
+      <div class="card-badge">CRUD</div>
     </mat-card>
 
     <!-- Carte Formations -->
-    <mat-card class="dashboard-card" (click)="showSection('training-template')">
-      <mat-card-title>🎓 Formations</mat-card-title>
-      <mat-card-content>
-        <p>Gérez vos formations académiques</p>
-      </mat-card-content>
+    <mat-card class="dashboard-card" (click)="showSection('training-template')" [style.--card-color]="'#8b5cf6'">
+      <div class="card-icon">
+        <mat-icon>school</mat-icon>
+      </div>
+      <h2 class="card-title">Formations</h2>
+      <p class="card-description">Gérez vos formations académiques</p>
+      <div class="card-badge">CRUD</div>
     </mat-card>
 
     <!-- Carte Compétences -->
-    <mat-card class="dashboard-card" (click)="showSection('skill-template')">
-      <mat-card-title>⚡ Compétences</mat-card-title>
-      <mat-card-content>
-        <p>Gérez vos compétences techniques</p>
-      </mat-card-content>
+    <mat-card class="dashboard-card" (click)="showSection('skill-template')" [style.--card-color]="'#ec4899'">
+      <div class="card-icon">
+        <mat-icon>code</mat-icon>
+      </div>
+      <h2 class="card-title">Compétences</h2>
+      <p class="card-description">Gérez vos compétences techniques</p>
+      <div class="card-badge">CRUD</div>
     </mat-card>
 
     <!-- Carte Centres d'intérêt -->
-    <mat-card class="dashboard-card" (click)="showSection('hobbie-template')">
-      <mat-card-title>🎭 Centres d'intérêt</mat-card-title>
-      <mat-card-content>
-        <p>Gérez vos centres d'intérêt</p>
-      </mat-card-content>
+    <mat-card class="dashboard-card" (click)="showSection('hobbie-template')" [style.--card-color]="'#14b8a6'">
+      <div class="card-icon">
+        <mat-icon>palette</mat-icon>
+      </div>
+      <h2 class="card-title">Centres d'intérêt</h2>
+      <p class="card-description">Gérez vos centres d'intérêt</p>
+      <div class="card-badge">CRUD</div>
     </mat-card>
 
     <!-- Carte Langues -->
-    <mat-card class="dashboard-card" (click)="showSection('language-template')">
-      <mat-card-title>🌍 Langues</mat-card-title>
-      <mat-card-content>
-        <p>Gérez vos langues parlées</p>
-      </mat-card-content>
+    <mat-card class="dashboard-card" (click)="showSection('language-template')" [style.--card-color]="'#f59e0b'">
+      <div class="card-icon">
+        <mat-icon>language</mat-icon>
+      </div>
+      <h2 class="card-title">Langues</h2>
+      <p class="card-description">Gérez vos langues parlées</p>
+      <div class="card-badge">CRUD</div>
     </mat-card>
 
     <!-- Carte Logs de Sécurité -->
-    <mat-card class="dashboard-card" (click)="showSection('all-log-security')">
-      <mat-card-title>🔒 Logs de Sécurité</mat-card-title>
-      <mat-card-content>
-        <p>Consultez et gérez les logs de sécurité</p>
-      </mat-card-content>
+    <mat-card class="dashboard-card" (click)="showSection('all-log-security')" [style.--card-color]="'#ef4444'">
+      <div class="card-icon">
+        <mat-icon>security</mat-icon>
+      </div>
+      <h2 class="card-title">Logs de Sécurité</h2>
+      <p class="card-description">Consultez et gérez les logs de sécurité</p>
+      <div class="card-badge">Monitoring</div>
     </mat-card>
   </div>
 </div>

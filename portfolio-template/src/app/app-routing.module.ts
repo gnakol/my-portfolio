@@ -37,6 +37,7 @@ import { DhcpComponent } from './components/simulation-package/network-simulatio
 import { IntroDhcpComponent } from './components/simulation-package/network-simulation/dhcp/intro-dhcp/intro-dhcp.component';
 import { RelayComponent } from './components/simulation-package/network-simulation/dhcp/relay/relay.component';
 import { FullComponent } from './components/simulation-package/network-simulation/dhcp/full/full.component';
+import { AuthGuard } from './pages/authenticate/protec-route/auth.guard';
 
 const routes: Routes = [
   { path: '', loadChildren: () => import('./pages/home/home.module').then(m => m.HomeModule) },
@@ -44,7 +45,7 @@ const routes: Routes = [
   { path: 'simulations', loadChildren: () => import('./pages/simulations/simulations.module').then(m => m.SimulationsModule) },
   { path: 'blog', loadChildren: () => import('./pages/blog/blog.module').then(m => m.BlogModule) },
   { path: 'contact', loadChildren: () => import('./pages/contact/contact.module').then(m => m.ContactModule) },
-  { path: 'admin-dashboard', loadChildren: () => import('./components/admin-dashboard-package/admin/admin.module').then(m => m.AdminModule)},
+  { path: 'admin-dashboard', loadChildren: () => import('./components/admin-dashboard-package/admin/admin.module').then(m => m.AdminModule), canActivate : [AuthGuard]},
 
   // 🔥 Nouvelle route pour afficher les expériences
   { path: 'experiences', component: AllExperienceComponent },
@@ -56,13 +57,13 @@ const routes: Routes = [
   { path: 'languages', component : AllLanguagesComponent},
   { path: 'all-establishment', component : AllEstablishmentComponent},
   { path: 'all-skill-category', component : AllSkillCategoryComponent},
-  { path: 'all-log-security', component : AllLogSecurityComponent},
+  { path: 'all-log-security', component : AllLogSecurityComponent, canActivate : [AuthGuard]},
 
 
 
 
   { path: 'login', component : AuthComponent},
-  { path: 'dashboard-admin', component : DashboardComponent},
+  { path: 'dashboard-admin', component : DashboardComponent, canActivate : [AuthGuard]},
   { path: 'dashboard-simulation', component : SimulationDashboardComponent},
   { path: 'network-simulation', component : NetworkSimulationComponent},
   { path: 'vlan-simulation', component : VlanSimulationComponent},
@@ -71,18 +72,18 @@ const routes: Routes = [
 
 
 
-  { path: 'add-training', component : AddTrainingsComponent},
-  { path: 'add-skill', component : AddSkillComponent},
-  { path: 'add-hobbie', component : AddHobbiesComponent},
-  { path: 'add-language', component : AddLanguagesComponent}, 
-  { path: 'add-establishment', component : AddEstablishmentComponent},
-  { path: 'add-skill-category', component : AddSkillCategoryComponent},
+  { path: 'add-training', component : AddTrainingsComponent, canActivate : [AuthGuard]},
+  { path: 'add-skill', component : AddSkillComponent, canActivate : [AuthGuard]},
+  { path: 'add-hobbie', component : AddHobbiesComponent, canActivate : [AuthGuard]},
+  { path: 'add-language', component : AddLanguagesComponent, canActivate : [AuthGuard]}, 
+  { path: 'add-establishment', component : AddEstablishmentComponent, canActivate : [AuthGuard]},
+  { path: 'add-skill-category', component : AddSkillCategoryComponent, canActivate : [AuthGuard]},
 
-  { path: 'experience-template', component : ExperienceTemplateComponent},
-  { path: 'skill-template', component : SkillTemplateComponent},
-  { path: 'training-template', component : TrainingTemplateComponent},
-  { path: 'hobbie-template', component : HobbieTemplateComponent},
-  { path: 'language-template', component : LanguageTemplateComponent},
+  { path: 'experience-template', component : ExperienceTemplateComponent, canActivate : [AuthGuard]},
+  { path: 'skill-template', component : SkillTemplateComponent, canActivate : [AuthGuard]},
+  { path: 'training-template', component : TrainingTemplateComponent, canActivate : [AuthGuard]},
+  { path: 'hobbie-template', component : HobbieTemplateComponent, canActivate : [AuthGuard]},
+  { path: 'language-template', component : LanguageTemplateComponent, canActivate : [AuthGuard]},
 
   { path: 'pdf-generator', component : PdfGeneratorComponent},
 

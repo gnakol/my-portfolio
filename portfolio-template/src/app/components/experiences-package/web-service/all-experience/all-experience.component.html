@@ -1,33 +1,62 @@
 <div class="experience-page">
-  <div class="animated-background"></div>
+  <!-- Fond animé amélioré -->
+  <div class="animated-background">
+    <div class="gradient-circle circle-1"></div>
+    <div class="gradient-circle circle-2"></div>
+    <div class="grid-pattern"></div>
+  </div>
 
+  <!-- Contenu principal -->
   <div class="experience-container">
+    <!-- En-tête -->
+    <div class="page-header">
+      <h1 class="page-title">Mon <span class="text-gradient">Parcours</span></h1>
+      <p class="page-subtitle">Expériences professionnelles et formations</p>
+      <div class="header-divider"></div>
+    </div>
+
+    <!-- Contenu -->
     <ng-container *ngIf="loading; else content">
-      <p class="loading-message">Chargement des expériences...</p>
+      <div class="loading-container">
+        <mat-spinner diameter="50" color="accent"></mat-spinner>
+        <p class="loading-message">Chargement des expériences...</p>
+      </div>
     </ng-container>
 
     <ng-template #content>
-      <mat-card class="experience-card" *ngFor="let experience of experiences">
-        <mat-card-title>{{ experience.title }}</mat-card-title>
-        <mat-card-subtitle>
-          {{ experience.companyName }} - 
-          {{ experience.startDate | date }} à {{ experience.endDate | date }}
-        </mat-card-subtitle>
-        <mat-card-content>
-          <p>{{ experience.description }}</p>
-        </mat-card-content>
-        <mat-card-actions>
-          <button mat-button (click)="viewExperience(experience.id)">Voir plus</button>
-          <button mat-icon-button (click)="deleteExperience(experience.idExperience)">
-            <mat-icon>delete</mat-icon>
-          </button>
-        </mat-card-actions>
-      </mat-card>
+      <div class="timeline">
+        <div class="timeline-item" *ngFor="let experience of experiences">
+          <div class="timeline-card" [class.active]="experience.isCurrent">
+            <div class="timeline-date">
+              {{ experience.startDate | date:'MMM y' }} - 
+              {{ experience.endDate ? (experience.endDate | date:'MMM y') : 'Présent' }}
+            </div>
+            <mat-card class="experience-card">
+              <div class="card-header">
+                <h3 class="card-title">{{ experience.title }}</h3>
+                <span class="card-company">{{ experience.companyName }}</span>
+              </div>
+              <mat-card-content>
+                <p class="card-description">{{ experience.description }}</p>
+              </mat-card-content>
+              <mat-card-actions>
+                <button mat-stroked-button (click)="viewExperience(experience.id)">
+                  <mat-icon>visibility</mat-icon>
+                  Détails
+                </button>
+                <button mat-icon-button (click)="deleteExperience(experience.idExperience)" class="delete-btn">
+                  <mat-icon>delete</mat-icon>
+                </button>
+              </mat-card-actions>
+            </mat-card>
+          </div>
+        </div>
+      </div>
     </ng-template>
   </div>
 
-  <!-- Bouton pour aller sur experience-template -->
-  <button mat-raised-button (click)="navigateToTemplate()" class="view-all-button">
-    Voir tous les modèles
+  <!-- Bouton flottant -->
+  <button mat-fab (click)="navigateToTemplate()" class="floating-btn" color="primary" matTooltip="Voir les modèles">
+    <mat-icon>list_alt</mat-icon>
   </button>
 </div>

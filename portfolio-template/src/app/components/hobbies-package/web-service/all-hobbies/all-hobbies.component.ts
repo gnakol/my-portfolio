@@ -1,22 +1,22 @@
 import { Component, OnInit } from '@angular/core';
 import { trigger, transition, style, animate } from '@angular/animations';
 import { HobbiesService } from '../../../../services/hobbies.service';
-import { Hobbies } from '../../hobbies.model';
-import { CommonModule } from '@angular/common';
-import { MatCardModule } from '@angular/material/card';
-import { MatButtonModule } from '@angular/material/button';
-import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatIconModule } from '@angular/material/icon';
+import { MatButtonModule } from '@angular/material/button';
+import { MatCardModule } from '@angular/material/card';
+import { CommonModule } from '@angular/common';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-all-hobbies',
   standalone: true,
   imports: [
     CommonModule,
-    MatCardModule,
+    MatProgressSpinnerModule,
+    MatIconModule,
     MatButtonModule,
-    MatSnackBarModule,
-    MatIconModule
+    MatCardModule
   ],
   templateUrl: './all-hobbies.component.html',
   styleUrls: ['./all-hobbies.component.scss'],
@@ -30,10 +30,13 @@ import { MatIconModule } from '@angular/material/icon';
   ]
 })
 export class AllHobbiesComponent implements OnInit {
-  hobbies: Hobbies[] = [];
+  hobbies: any[] = [];
   loading = true;
 
-  constructor(private hobbiesService: HobbiesService, private snackBar: MatSnackBar) {}
+  constructor(
+    private hobbiesService: HobbiesService,
+    private snackBar: MatSnackBar
+  ) {}
 
   ngOnInit(): void {
     this.loadHobbies();
@@ -42,26 +45,49 @@ export class AllHobbiesComponent implements OnInit {
   loadHobbies(): void {
     this.hobbiesService.allHobbies().subscribe({
       next: (data) => {
-        console.log('Données des hobbies:', data);
-        this.hobbies = data.content;
+        this.hobbies = data.content || [];
         this.loading = false;
       },
       error: (err) => {
         console.error('Erreur lors du chargement des hobbies :', err);
+        this.snackBar.open('Impossible de charger les centres d\'intérêt', 'Fermer', { duration: 3000 });
         this.loading = false;
       }
     });
+  }
+
+  getHobbyIcon(hobbyName: string): string {
+    const icons: Record<string, string> = {
+      'Musique': 'music_note',
+      'Sport': 'sports',
+      'Lecture': 'menu_book',
+      'Voyage': 'flight',
+      'Photographie': 'camera_alt',
+      'Cinéma': 'movie',
+      'Jeux vidéo': 'sports_esports',
+      'Cuisine': 'restaurant',
+      'Art': 'palette',
+      'Technologie': 'computer'
+    };
+
+    // Trouve l'icône correspondante ou utilise une icône par défaut
+    for (const key in icons) {
+      if (hobbyName.toLowerCase().includes(key.toLowerCase())) {
+        return icons[key];
+      }
+    }
+    return 'favorite'; // Icône par défaut
   }
 
   deleteHobby(id: number): void {
     this.hobbiesService.deleteHobby(id).subscribe({
       next: () => {
         this.snackBar.open('Centre d\'intérêt supprimé avec succès !', 'Fermer', { duration: 3000 });
-        this.hobbies = this.hobbies.filter((hobby) => hobby.idHobbies !== id);
+        this.hobbies = this.hobbies.filter(hobby => hobby.idHobbies !== id);
       },
       error: (error) => {
         console.error('Erreur lors de la suppression :', error);
-        this.snackBar.open('Erreur lors de la suppression du centre d\'intérêt.', 'Fermer', { duration: 3000 });
+        this.snackBar.open('Erreur lors de la suppression.', 'Fermer', { duration: 3000 });
       }
     });
   }

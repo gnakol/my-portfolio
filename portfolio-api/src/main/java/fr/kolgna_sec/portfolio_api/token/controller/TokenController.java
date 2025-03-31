@@ -40,8 +40,11 @@ public class TokenController {
 
     @PostMapping("validate-token")
     public ResponseEntity<Map<String, Boolean>> validateToken(@RequestBody Map<String, String> request) {
+
         String token = request.get("token");
+
         boolean isValid = tokenService.validateToken(token);
+
         return ResponseEntity.ok(Map.of("isValid", isValid));
     }
 
@@ -68,4 +71,5 @@ public class TokenController {
 
         return ResponseEntity.ok("Token was successfully remove by check id");
     }
+
 }

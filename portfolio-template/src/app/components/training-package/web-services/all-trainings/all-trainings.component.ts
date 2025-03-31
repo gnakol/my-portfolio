@@ -1,24 +1,27 @@
 import { Component, OnInit } from '@angular/core';
 import { trigger, transition, style, animate } from '@angular/animations';
-import { Training } from '../../training.model';
 import { TrainingService } from '../../../../services/training.service';
 import { Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
-
-// Angular Material Modules
-import { CommonModule } from '@angular/common';
-import { MatCardModule } from '@angular/material/card';
-import { MatButtonModule } from '@angular/material/button';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatIconModule } from '@angular/material/icon';
+import { MatButtonModule } from '@angular/material/button';
+import { MatCardModule } from '@angular/material/card';
+import { CommonModule } from '@angular/common';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { DatePipe } from '@angular/common';
 
 @Component({
   selector: 'app-all-trainings',
   standalone: true,
   imports: [
     CommonModule,
-    MatCardModule,
+    MatProgressSpinnerModule,
+    MatIconModule,
     MatButtonModule,
-    MatIconModule
+    MatCardModule,
+    MatTooltipModule,
+    DatePipe
   ],
   templateUrl: './all-trainings.component.html',
   styleUrls: ['./all-trainings.component.scss'],
@@ -32,7 +35,7 @@ import { MatIconModule } from '@angular/material/icon';
   ]
 })
 export class AllTrainingsComponent implements OnInit {
-  trainings: Training[] = [];
+  trainings: any[] = [];
   loading = true;
 
   constructor(
@@ -48,7 +51,9 @@ export class AllTrainingsComponent implements OnInit {
   loadTrainings(): void {
     this.trainingService.getAllTraining().subscribe({
       next: (data) => {
-        this.trainings = data.content || [];
+        this.trainings = (data.content || []).sort((a, b) => 
+          new Date(b.yearOfObtaining).getTime() - new Date(a.yearOfObtaining).getTime()
+        );
         this.loading = false;
       },
       error: (err) => {
@@ -60,7 +65,6 @@ export class AllTrainingsComponent implements OnInit {
   }
 
   deleteTraining(id: number): void {
-    
     this.trainingService.deleteTraining(id).subscribe({
       next: () => {
         this.snackBar.open('Formation supprimée avec succès !', 'Fermer', { duration: 3000 });

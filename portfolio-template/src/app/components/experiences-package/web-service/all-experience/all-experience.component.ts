@@ -2,45 +2,29 @@ import { Component, OnInit } from '@angular/core';
 import { ExperienceService } from '../../../../services/experience.service';
 import { Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { ReactiveFormsModule } from '@angular/forms';
-
-
-// Angular Material Modules
-import { MatToolbarModule } from '@angular/material/toolbar';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
-import { MatIconModule } from '@angular/material/icon';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatInputModule } from '@angular/material/input';
-import { MatSnackBarModule } from '@angular/material/snack-bar'; // Ajouté pour MatSnackBar
-import {MatDatepickerModule} from '@angular/material/datepicker';
-import {MatSelectModule} from '@angular/material/select';
-import { MatNativeDateModule } from '@angular/material/core';
 import { CommonModule } from '@angular/common';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 @Component({
   selector: 'app-all-experience',
-  imports : [
-        CommonModule,
-        MatToolbarModule,
-        MatButtonModule,
-        MatCardModule,
-        MatIconModule,
-        MatFormFieldModule,
-        MatInputModule,
-        MatSnackBarModule, // Ajouté ici
-        MatDatepickerModule,
-        MatSelectModule,
-        ReactiveFormsModule,
-        MatNativeDateModule
+  standalone: true,
+  imports: [
+    CommonModule,
+    MatProgressSpinnerModule,
+    MatIconModule,
+    MatButtonModule,
+    MatCardModule,
+    MatTooltipModule
   ],
   templateUrl: './all-experience.component.html',
   styleUrls: ['./all-experience.component.scss']
 })
 export class AllExperienceComponent implements OnInit {
-
   experiences: any[] = [];
-
   loading = true;
 
   constructor(
@@ -56,7 +40,10 @@ export class AllExperienceComponent implements OnInit {
   loadExperiences(): void {
     this.experienceService.getAllExperiences().subscribe({
       next: (data) => {
-        this.experiences = data.content || [];
+        this.experiences = (data.content || []).map(exp => ({
+          ...exp,
+          isCurrent: !exp.endDate
+        }));
         this.loading = false;
       },
       error: (error) => {
@@ -72,11 +59,10 @@ export class AllExperienceComponent implements OnInit {
   }
 
   deleteExperience(id: number): void {
-    
     this.experienceService.deleteExperience(id).subscribe({
       next: () => {
         this.snackBar.open('Expérience supprimée avec succès !', 'Fermer', { duration: 3000 });
-        this.experiences = this.experiences.filter(experience => experience.idExperience !== id);
+        this.experiences = this.experiences.filter(exp => exp.idExperience !== id);
       },
       error: (error) => {
         console.error('Erreur lors de la suppression :', error);

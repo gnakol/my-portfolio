@@ -1,11 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { trigger, transition, style, animate } from '@angular/animations';
-import { CommonModule } from '@angular/common';
-import { MatCardModule } from '@angular/material/card';
-import { MatButtonModule } from '@angular/material/button';
-import { MatIconModule } from '@angular/material/icon';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { ExperienceType, ExperienceTypeResponse } from '../../experience-type.model';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatIconModule } from '@angular/material/icon';
+import { MatButtonModule } from '@angular/material/button';
+import { MatCardModule } from '@angular/material/card';
+import { CommonModule } from '@angular/common';
 import { experienceTypeService } from '../../../../services/experience_type.service';
 
 @Component({
@@ -13,9 +13,10 @@ import { experienceTypeService } from '../../../../services/experience_type.serv
   standalone: true,
   imports: [
     CommonModule,
-    MatCardModule,
+    MatProgressSpinnerModule,
+    MatIconModule,
     MatButtonModule,
-    MatIconModule
+    MatCardModule
   ],
   templateUrl: './all-type-experience.component.html',
   styleUrls: ['./all-type-experience.component.scss'],
@@ -29,11 +30,13 @@ import { experienceTypeService } from '../../../../services/experience_type.serv
   ]
 })
 export class AllTypeExperienceComponent implements OnInit {
-
-  experienceTypes: ExperienceType[] = [];
+  experienceTypes: any[] = [];
   loading = true;
 
-  constructor(private experienceTypeService: experienceTypeService, private snackBar: MatSnackBar) {}
+  constructor(
+    private experienceTypeService: experienceTypeService,
+    private snackBar: MatSnackBar
+  ) {}
 
   ngOnInit(): void {
     this.loadExperienceTypes();
@@ -41,30 +44,35 @@ export class AllTypeExperienceComponent implements OnInit {
 
   loadExperienceTypes(): void {
     this.experienceTypeService.getAllExperienceTypes().subscribe({
-      next: (data: ExperienceTypeResponse) => {
-        this.experienceTypes = data.content || []; 
+      next: (data) => {
+        this.experienceTypes = data.content || [];
         this.loading = false;
       },
       error: (err) => {
-        console.error('Erreur lors du chargement des types d’expériences :', err);
+        console.error('Erreur lors du chargement des types d\'expérience :', err);
+        this.snackBar.open('Impossible de charger les types d\'expérience', 'Fermer', { duration: 3000 });
         this.loading = false;
       }
     });
   }
 
   deleteExperienceType(id: number): void {
-    this.experienceTypeService.deleteExperienceType(id).subscribe({
-      next: (response: string) => {
-        console.log('Réponse du backend :', response); // Afficher la réponse pour le débogage
-        this.snackBar.open('Type d\'expérience supprimé avec succès !', 'Fermer', { duration: 3000 });
-  
-        // 🔥 Retirer l'élément supprimé de la liste
-        this.experienceTypes = this.experienceTypes.filter(type => type.idExperienceType !== id);
-      },
-      error: (err) => {
-        console.error('Erreur lors de la suppression :', err); // Afficher l'erreur pour le débogage
-        this.snackBar.open('Erreur lors de la suppression.', 'Fermer', { duration: 3000 });
-      }
-    });
+    if(confirm('Êtes-vous sûr de vouloir supprimer ce type d\'expérience ?')) {
+      this.experienceTypeService.deleteExperienceType(id).subscribe({
+        next: () => {
+          this.snackBar.open('Type d\'expérience supprimé avec succès !', 'Fermer', { duration: 3000 });
+          this.experienceTypes = this.experienceTypes.filter(type => type.idExperienceType !== id);
+        },
+        error: (error) => {
+          console.error('Erreur lors de la suppression :', error);
+          this.snackBar.open('Erreur lors de la suppression.', 'Fermer', { duration: 3000 });
+        }
+      });
+    }
+  }
+
+  getColorForIndex(index: number): string {
+    const colors = ['#6366f1', '#8b5cf6', '#ec4899', '#14b8a6', '#f59e0b'];
+    return colors[index % colors.length];
   }
 }

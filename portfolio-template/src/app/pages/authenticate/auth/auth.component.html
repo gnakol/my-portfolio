@@ -1,40 +1,45 @@
-<div class="login-container">
-    <!-- Fond animé -->
-    <div class="animated-background"></div>
-  
-    <!-- Carte de connexion -->
-    <mat-card class="login-card">
-      <mat-card-header>
-        <mat-card-title>Connexion Admin</mat-card-title>
-        <mat-card-subtitle>Accès réservé à l'administrateur</mat-card-subtitle>
-      </mat-card-header>
-  
-      <mat-card-content>
-        <!-- Formulaire de connexion -->
-        <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
-          <mat-form-field appearance="fill">
-            <mat-label>Email</mat-label>
-            <input matInput formControlName="email" type="email" required>
-            <mat-icon matSuffix>email</mat-icon>
-          </mat-form-field>
-  
-          <mat-form-field appearance="fill">
-            <mat-label>Mot de passe</mat-label>
-            <input matInput formControlName="password" type="password" required>
-            <mat-icon matSuffix>lock</mat-icon>
-          </mat-form-field>
-  
-          <button mat-raised-button color="primary" type="submit" class="login-button">
-            Se connecter
-          </button>
-        </form>
-      </mat-card-content>
-  
-      <!-- Message d'information -->
-      <mat-card-footer>
-        <p class="info-text">
-          Cette page est réservée à l'administrateur du portfolio. Les visiteurs et recruteurs n'ont pas besoin de s'authentifier.
-        </p>
-      </mat-card-footer>
-    </mat-card>
+<div class="dashboard-container">
+  <!-- Fond animé identique -->
+  <div class="animated-background">
+    <div class="gradient-circle circle-1"></div>
+    <div class="gradient-circle circle-2"></div>
+    <div class="grid-pattern"></div>
   </div>
+
+  <!-- Carte de connexion -->
+  <mat-card class="login-card">
+    <mat-card-header class="login-header">
+      <mat-card-title class="dashboard-title">Connexion <span class="text-gradient">Admin</span></mat-card-title>
+      <mat-card-subtitle class="dashboard-subtitle">Accès réservé à l'administrateur</mat-card-subtitle>
+      <div class="header-divider"></div>
+    </mat-card-header>
+
+    <mat-card-content>
+      <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+        <mat-form-field appearance="fill" class="login-field">
+          <mat-label>Email</mat-label>
+          <input matInput formControlName="email" type="email" required>
+          <mat-icon matSuffix>email</mat-icon>
+          <mat-error *ngIf="loginForm.get('email')?.invalid">Email invalide</mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="fill" class="login-field">
+          <mat-label>Mot de passe</mat-label>
+          <input matInput formControlName="password" type="password" required>
+          <mat-icon matSuffix>lock</mat-icon>
+          <mat-error *ngIf="loginForm.get('password')?.invalid">Minimum 3 caractères</mat-error>
+        </mat-form-field>
+
+        <button mat-raised-button type="submit" class="login-button">
+          Se connecter
+        </button>
+      </form>
+    </mat-card-content>
+
+    <mat-card-footer class="login-footer">
+      <p class="info-text">
+        Cette page est réservée à l'administrateur du portfolio. Les visiteurs et recruteurs n'ont pas besoin de s'authentifier.
+      </p>
+    </mat-card-footer>
+  </mat-card>
+</div>

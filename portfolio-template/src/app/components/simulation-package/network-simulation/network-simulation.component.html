@@ -1,39 +1,68 @@
-<div class="network-container">
-    <div class="animated-background"></div>
-  
-    <h1 class="network-title">Simulations Réseau</h1>
-    <p class="network-subtitle">Explorez différentes configurations réseau en toute simplicité</p>
-  
-    <div class="cards-container">
-      <div class="network-card" (click)="navigateTo('vlan-simulation')">
-        <div class="card-icon">🔗</div>
-        <h2 class="card-title">Configurer un VLAN</h2>
-        <p class="card-description">Créez et gérez vos VLANs de manière interactive</p>
+<div class="dashboard-container">
+  <!-- Fond animé identique -->
+  <div class="animated-background">
+    <div class="gradient-circle circle-1"></div>
+    <div class="gradient-circle circle-2"></div>
+    <div class="grid-pattern"></div>
+  </div>
+
+  <!-- En-tête -->
+  <div class="dashboard-header">
+    <h1 class="dashboard-title">Network <span class="text-gradient">Simulation</span></h1>
+    <p class="dashboard-subtitle">Simulations interactives de configurations réseau avancées</p>
+    <div class="header-divider"></div>
+  </div>
+
+  <!-- Cartes de simulation -->
+  <div class="cards-container">
+    <!-- Carte VLAN -->
+    <div class="dashboard-card" (click)="navigateTo('vlan-simulation')" [style.--card-color]="'#6366f1'">
+      <div class="card-icon">
+        <mat-icon svgIcon="device_hub"></mat-icon>
       </div>
-  
-      <div class="network-card" (click)="navigateTo('eigrp-simulation')">
-        <div class="card-icon">📡</div>
-        <h2 class="card-title">Routage EIGRP</h2>
-        <p class="card-description">Simulez des configurations de routage dynamiques</p>
+      <h2 class="card-title">Configurer un VLAN</h2>
+      <p class="card-description">Créez et gérez vos VLANs de manière interactive</p>
+      <div class="card-badge">IEEE 802.1Q</div>
+    </div>
+
+    <!-- Carte EIGRP -->
+    <div class="dashboard-card" (click)="navigateTo('eigrp-simulation')" [style.--card-color]="'#8b5cf6'">
+      <div class="card-icon">
+        <mat-icon svgIcon="router"></mat-icon>
       </div>
-  
-      <div class="network-card" (click)="navigateTo('/simulation/ospf')">
-        <div class="card-icon">🌐</div>
-        <h2 class="card-title">Routage OSPF</h2>
-        <p class="card-description">Apprenez à configurer OSPF efficacement</p>
+      <h2 class="card-title">Routage EIGRP</h2>
+      <p class="card-description">Simulez des configurations de routage dynamiques</p>
+      <div class="card-badge">Cisco</div>
+    </div>
+
+    <!-- Carte OSPF -->
+    <div class="dashboard-card" (click)="navigateTo('/simulation/ospf')" [style.--card-color]="'#ec4899'">
+      <div class="card-icon">
+        <mat-icon svgIcon="network_check"></mat-icon>
       </div>
-  
-      <div class="network-card" (click)="navigateTo('/dhcp-simulation')">
-        <div class="card-icon">📶</div>
-        <h2 class="card-title">DHCP (Relay/Full)</h2>
-        <p class="card-description">Configurez un serveur DHCP avec facilité</p>
+      <h2 class="card-title">Routage OSPF</h2>
+      <p class="card-description">Apprenez à configurer OSPF efficacement</p>
+      <div class="card-badge">Link-state</div>
+    </div>
+
+    <!-- Carte DHCP -->
+    <div class="dashboard-card" (click)="navigateTo('/dhcp-simulation')" [style.--card-color]="'#14b8a6'">
+      <div class="card-icon">
+        <mat-icon svgIcon="settings_ethernet"></mat-icon>
       </div>
-  
-      <div class="network-card" (click)="navigateTo('/simulation/nat')">
-        <div class="card-icon">🚦</div>
-        <h2 class="card-title">NAT/PAT</h2>
-        <p class="card-description">Découvrez la traduction d'adresses réseau</p>
+      <h2 class="card-title">DHCP (Relay/Full)</h2>
+      <p class="card-description">Configurez un serveur DHCP avec facilité</p>
+      <div class="card-badge">RFC 2131</div>
+    </div>
+
+    <!-- Carte NAT/PAT -->
+    <div class="dashboard-card" (click)="navigateTo('/simulation/nat')" [style.--card-color]="'#f59e0b'">
+      <div class="card-icon">
+        <mat-icon svgIcon="swap_horiz"></mat-icon>
       </div>
+      <h2 class="card-title">NAT/PAT</h2>
+      <p class="card-description">Découvrez la traduction d'adresses réseau</p>
+      <div class="card-badge">RFC 3022</div>
     </div>
   </div>
-  
+</div>

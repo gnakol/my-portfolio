@@ -1,31 +1,61 @@
 <div class="training-page">
-  <div class="animated-background"></div>
+  <!-- Fond animé amélioré -->
+  <div class="animated-background">
+    <div class="gradient-circle circle-1"></div>
+    <div class="gradient-circle circle-2"></div>
+    <div class="grid-pattern"></div>
+  </div>
 
+  <!-- Contenu principal -->
   <div class="training-container">
+    <!-- En-tête -->
+    <div class="page-header">
+      <h1 class="page-title">Mes <span class="text-gradient">Formations</span></h1>
+      <p class="page-subtitle">Parcours académique et certifications</p>
+      <div class="header-divider"></div>
+    </div>
+
+    <!-- Contenu -->
     <ng-container *ngIf="loading; else content">
-      <p class="loading-message">Chargement des formations...</p>
+      <div class="loading-container">
+        <mat-spinner diameter="50" color="accent"></mat-spinner>
+        <p class="loading-message">Chargement des formations...</p>
+      </div>
     </ng-container>
 
     <ng-template #content>
-      <mat-card class="training-card" *ngFor="let training of trainings" [@fadeIn]>
-        <mat-card-title>{{ training.label }}</mat-card-title>
-        <mat-card-subtitle>
-          {{ training.diploma || 'Diplôme non précisé' }} - 
-          Obtenu en {{ training.yearOfObtaining | date:'yyyy' }}
-        </mat-card-subtitle>
-        <mat-card-content>
-          <p>Établissement : {{ training.establishment?.name }} ({{ training.establishment?.city }})</p>
-        </mat-card-content>
-        <mat-card-actions>
-          <button mat-icon-button color="warn" (click)="deleteTraining(training.idTraining)">
-            <mat-icon>delete</mat-icon>
-          </button>
-        </mat-card-actions>
-      </mat-card>
+      <div class="education-timeline">
+        <div class="education-item" *ngFor="let training of trainings" [@fadeIn]>
+          <div class="education-year">{{ training.yearOfObtaining | date:'yyyy' }}</div>
+          <div class="education-card">
+            <mat-card class="training-card">
+              <div class="card-header">
+                <h3 class="card-title">{{ training.label }}</h3>
+                <span class="card-diploma">{{ training.diploma || 'Certification' }}</span>
+              </div>
+              <mat-card-content>
+                <div class="card-establishment">
+                  <mat-icon>school</mat-icon>
+                  <span>{{ training.establishment?.name }}</span>
+                  <span class="card-location" *ngIf="training.establishment?.city">
+                    ({{ training.establishment.city }})
+                  </span>
+                </div>
+              </mat-card-content>
+              <mat-card-actions>
+                <button mat-icon-button (click)="deleteTraining(training.idTraining)" class="delete-btn">
+                  <mat-icon>delete</mat-icon>
+                </button>
+              </mat-card-actions>
+            </mat-card>
+          </div>
+        </div>
+      </div>
     </ng-template>
   </div>
 
-  <button mat-raised-button (click)="navigateToTemplate()" class="view-all-button">
-    Voir tous les modèles de formations
+  <!-- Bouton flottant -->
+  <button mat-fab (click)="navigateToTemplate()" class="floating-btn" color="primary" matTooltip="Voir les modèles">
+    <mat-icon>list_alt</mat-icon>
   </button>
 </div>
