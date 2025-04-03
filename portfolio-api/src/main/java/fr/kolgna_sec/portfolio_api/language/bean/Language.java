@@ -1,5 +1,6 @@
 package fr.kolgna_sec.portfolio_api.language.bean;
 
+import fr.kolgna_sec.portfolio_api.account.bean.Account;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -27,4 +28,8 @@ public class Language {
 
     @Column(name = "proficiency_level")
     private String proficiencyLevel;
+
+    @ManyToOne
+    @JoinColumn(name = "id_account", nullable = true)
+    private Account account;
 }

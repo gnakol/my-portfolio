@@ -16,15 +16,17 @@ export interface Experience {
 
     experienceType_id : number;
     
-    experienceType: { id: number; name: string }; // Object au lieu d’un ID
+    experienceType: { id: number; name: string }; 
+
+    skillsAcquired : string;
 
   }
 
   export interface ExperienceResponse {
 
-    content: Experience[]; // 🔥 Liste des expériences
+    content: Experience[];
 
-    pageable: any; // Infos de pagination
+    pageable: any;
 
     totalElements: number;
 

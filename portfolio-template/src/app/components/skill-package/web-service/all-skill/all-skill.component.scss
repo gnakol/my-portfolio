@@ -123,6 +123,9 @@
   transition: all 0.3s ease;
   position: relative;
   padding-top: 2.5rem;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
 
   &:hover {
     transform: translateY(-5px);
@@ -168,14 +171,26 @@
   line-height: 1.6;
   margin: 0;
   text-align: center;
+  flex-grow: 1;
 }
 
-mat-card-actions {
+.card-actions {
   display: flex;
-  justify-content: flex-end;
+  justify-content: space-between;
+  align-items: center;
   padding: 0 1rem 1rem !important;
   border-top: 1px solid rgba(255, 255, 255, 0.05);
   margin-top: 1rem;
+
+  .details-btn {
+    border-color: rgba(99, 102, 241, 0.5);
+    color: #818cf8;
+    transition: all 0.3s ease;
+
+    &:hover {
+      background: rgba(99, 102, 241, 0.2);
+    }
+  }
 }
 
 .delete-btn {

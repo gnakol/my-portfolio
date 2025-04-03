@@ -80,36 +80,25 @@ public class ExperienceService implements Webservices<ExperienceDTO> {
 
     @Override
     public ExperienceDTO update(Long id, ExperienceDTO e) {
-        return this.experienceMapper.fromExperience(this.experienceRepository.findById(id)
-                .map(experience -> {
-                    if (experience.getRefExperience() == null)
-                        experience.setRefExperience(this.uuidService.generateUuid());
-                    if (experience.getTitle() != null)
-                        experience.setTitle(e.getTitle());
-                    if (experience.getDescription() != null)
-                        experience.setDescription(e.getDescription());
-                    if (experience.getStartDate() != null)
-                        experience.setStartDate(e.getStartDate());
-                    if (experience.getEndDate() != null)
-                        experience.setEndDate(e.getEndDate());
-                    if (experience.getCompanyName() != null)
-                        experience.setCompanyName(e.getCompanyName());
-                    if (experience.getAccount() != null)
-                    {
-                        Optional<Account> account = this.accountRepository.findById(e.getAccount_id());
 
-                        experience.setAccount(account.get());
-                    }
-                    if (experience.getExperienceType() != null)
-                    {
-                        Optional<ExperienceType> experienceType = this.experienceTypeRepository.findById(e.getExperienceType_id());
+        Optional<ExperienceType> experienceType = this.experienceTypeRepository.findById(e.getExperienceType_id());
+        Optional<Account> account = this.accountRepository.findById(e.getAccount_id());
 
-                        experience.setExperienceType(experienceType.get());
-                    }
+        return this.experienceRepository.findById(id)
+                .map(existingExperience -> {
+                    Optional.ofNullable(e.getTitle()).ifPresent(existingExperience::setTitle);
+                    Optional.ofNullable(e.getDescription()).ifPresent(existingExperience::setDescription);
+                    Optional.ofNullable(e.getStartDate()).ifPresent(existingExperience::setStartDate);
+                    Optional.ofNullable(e.getEndDate()).ifPresent(existingExperience::setEndDate);
+                    Optional.ofNullable(e.getCompanyName()).ifPresent(existingExperience::setCompanyName);
+                    Optional.of(experienceType.get()).ifPresent(existingExperience::setExperienceType);
+                    Optional.of(account.get()).ifPresent(existingExperience::setAccount);
+                    Optional.ofNullable(e.getSkillsAcquired()).ifPresent(existingExperience::setSkillsAcquired);
 
-                    return this.experienceRepository.save(experience);
+                    return this.experienceMapper.fromExperience(this.experienceRepository.save(existingExperience));
+
                 })
-                .orElseThrow(() -> new RuntimeException("Experience with ID : " +id+ " was not found")));
+                .orElseThrow(() -> new RuntimeException("Experience with ID : " +id+ " was not found"));
     }
 
     @Override

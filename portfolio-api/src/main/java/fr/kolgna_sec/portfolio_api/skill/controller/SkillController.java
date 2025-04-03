@@ -8,6 +8,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -34,18 +35,21 @@ public class SkillController {
     }
 
 
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     @PostMapping("/add-skill")
     public ResponseEntity<SkillDTO> addSkill(@Validated @RequestBody SkillDTO skillDTO)
     {
         return ResponseEntity.status(HttpStatus.CREATED).body(this.skillService.add(skillDTO));
     }
 
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     @PutMapping("/update-skill/{idSkill}")
     public ResponseEntity<SkillDTO> updateSkill(@Validated @PathVariable Long idSkill, @RequestBody SkillDTO skillDTO)
     {
         return ResponseEntity.status(202).body(this.skillService.update(idSkill, skillDTO));
     }
 
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     @DeleteMapping("/remove-skill/{idSkill}")
     public ResponseEntity<String> removeSkill(@Validated @PathVariable Long idSkill)
     {

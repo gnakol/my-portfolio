@@ -11,6 +11,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -60,5 +62,14 @@ public class RoleService implements Webservices<RoleDTO> {
     @Override
     public Optional<RoleDTO> getById(Long id) {
         return this.roleRepository.findById(id).map(this.roleMapper::fromRole);
+    }
+
+    public List<RoleDTO> getDefaultRoles()
+    {
+        Role role = this.roleRepository.findByName("VISITOR")
+                .orElseThrow(() -> new IllegalStateException("Default role 'customer' is not defined in database "));
+
+        RoleDTO roleDTO = this.roleMapper.fromRole(role);
+        return Collections.singletonList(roleDTO);
     }
 }

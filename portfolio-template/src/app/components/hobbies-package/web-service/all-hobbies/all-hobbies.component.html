@@ -40,7 +40,10 @@
             <p class="hobby-description">{{ hobby.description || 'Passion qui me tient à cœur' }}</p>
           </mat-card-content>
           <mat-card-actions>
-            <button mat-icon-button (click)="deleteHobby(hobby.idHobbies)" class="delete-btn">
+            <button mat-icon-button
+            *ngIf="isAdmin()" 
+            (click)="deleteHobby(hobby.idHobbies)" 
+            class="delete-btn">
               <mat-icon>delete</mat-icon>
             </button>
           </mat-card-actions>

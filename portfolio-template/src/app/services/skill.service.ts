@@ -36,7 +36,6 @@ export class SkillService {
     }
   
   
-      // Récupérer une expérience par ID
     getSkillById(id: number): Observable<any> {
       return this.http.get(`${this.apiUrl}/get-by-id-skill/${id}`);
     }

@@ -1,5 +1,7 @@
 package fr.kolgna_sec.portfolio_api.language.service;
 
+import fr.kolgna_sec.portfolio_api.account.bean.Account;
+import fr.kolgna_sec.portfolio_api.account.repositories.AccountRepository;
 import fr.kolgna_sec.portfolio_api.language.bean.Language;
 import fr.kolgna_sec.portfolio_api.language.dto.LanguageDTO;
 import fr.kolgna_sec.portfolio_api.language.mappers.LanguageMapper;
@@ -24,6 +26,8 @@ public class LanguageService implements Webservices<LanguageDTO> {
 
     private final UuidService uuidService;
 
+    private final AccountRepository accountRepository;
+
     @Override
     public Page<LanguageDTO> all(Pageable pageable) {
         return this.languageRepository.findAll(pageable)
@@ -42,24 +46,35 @@ public class LanguageService implements Webservices<LanguageDTO> {
     @Override
     public LanguageDTO add(LanguageDTO e) {
 
-        e.setRefLanguage(this.uuidService.generateUuid());
-        return this.languageMapper.fromLanguage(this.languageRepository.save(this.languageMapper.fromLanguageDTO(e)));
+        Language language = this.languageMapper.fromLanguageDTO(e);
+
+        Optional<Account> account = this.accountRepository.findById(e.getAccountId());
+
+        if (account.isPresent())
+        {
+            language.setRefLanguage(this.uuidService.generateUuid());
+            language.setAccount(account.get());
+
+            return this.languageMapper.fromLanguage(this.languageRepository.save(language));
+        }
+
+        throw new RuntimeException("Unable to retrieve Account. Please check the provider ID");
     }
 
     @Override
     public LanguageDTO update(Long id, LanguageDTO e) {
-        return this.languageMapper.fromLanguage(this.languageRepository.findById(id)
-                .map(language -> {
-                    if (language.getRefLanguage() == null)
-                        language.setRefLanguage(this.uuidService.generateUuid());
-                    if (language.getName() != null)
-                        language.setName(e.getName());
-                    if (language.getProficiencyLevel() != null)
-                        language.setProficiencyLevel(e.getProficiencyLevel());
 
-                    return this.languageRepository.save(language);
+        Optional<Account> account = this.accountRepository.findById(e.getAccountId());
+
+        return this.languageRepository.findById(id)
+                .map(existingLanguage -> {
+                    Optional.ofNullable(e.getName()).ifPresent(existingLanguage::setName);
+                    Optional.ofNullable(e.getProficiencyLevel()).ifPresent(existingLanguage::setProficiencyLevel);
+                    Optional.of(account.get()).ifPresent(existingLanguage::setAccount);
+
+                    return this.languageMapper.fromLanguage(this.languageRepository.save(existingLanguage));
                 })
-                .orElseThrow(() -> new RuntimeException("Language with ID : " +id+ " was not found")));
+                .orElseThrow(() -> new RuntimeException("Language with ID : " +id+ " was not found"));
     }
 
     @Override
@@ -76,6 +91,7 @@ public class LanguageService implements Webservices<LanguageDTO> {
 
     @Override
     public Optional<LanguageDTO> getById(Long id) {
+
         return this.languageRepository.findById(id)
                 .map(this.languageMapper::fromLanguage);
     }

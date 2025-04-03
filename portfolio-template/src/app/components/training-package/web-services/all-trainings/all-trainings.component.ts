@@ -10,6 +10,7 @@ import { MatCardModule } from '@angular/material/card';
 import { CommonModule } from '@angular/common';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { DatePipe } from '@angular/common';
+import { AuthenticationService } from '../../../../pages/authenticate/core/authentication.service';
 
 @Component({
   selector: 'app-all-trainings',
@@ -41,7 +42,9 @@ export class AllTrainingsComponent implements OnInit {
   constructor(
     private trainingService: TrainingService,
     private router: Router,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private authService : AuthenticationService
+
   ) {}
 
   ngOnInit(): void {
@@ -79,5 +82,10 @@ export class AllTrainingsComponent implements OnInit {
 
   navigateToTemplate(): void {
     this.router.navigate(['/training-template']);
+  }
+
+  isAdmin() : boolean
+  {
+    return this.authService.isAdmin();
   }
 }

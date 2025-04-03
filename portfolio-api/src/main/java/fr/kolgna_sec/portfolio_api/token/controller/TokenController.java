@@ -8,6 +8,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -30,6 +31,7 @@ public class TokenController {
         return ResponseEntity.ok(this.tokenBeanService.allToken(pageable));
     }
 
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     @DeleteMapping("remove-all-token")
     public ResponseEntity<String> removeAllToken()
     {
@@ -48,6 +50,7 @@ public class TokenController {
         return ResponseEntity.ok(Map.of("isValid", isValid));
     }
 
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     @DeleteMapping("remove-token-by-id/{idToken}")
     public ResponseEntity<String> removeTokenById(@Validated @PathVariable Long idToken)
     {
@@ -56,6 +59,7 @@ public class TokenController {
         return ResponseEntity.ok("Token was successfully remove");
     }
 
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     @DeleteMapping("remove-token-by-range/{idToken}")
     public ResponseEntity<String> removeTokenByRange(@Validated @PathVariable Long startId, @PathVariable Long endId)
     {
@@ -64,6 +68,7 @@ public class TokenController {
         return ResponseEntity.ok("Token was successfully remove by range");
     }
 
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     @DeleteMapping("remove-token-by-choose-id")
     public ResponseEntity<String> removeTokenById(@Validated @RequestBody List<Long> ids)
     {

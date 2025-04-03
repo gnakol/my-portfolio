@@ -51,4 +51,7 @@ public class Experience {
     @JsonIgnoreProperties({"experiences", "trainings", "skills"})
     @JoinColumn(name = "id_account", nullable = true)
     private Account account;
+
+    @Column(name = "skills_acquired")
+    private String skillsAcquired;
 }

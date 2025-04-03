@@ -51,3 +51,36 @@ main {
 .smooth-transition {
   transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 }
+
+//experience
+.experience-modal {
+  border-radius: 16px !important;
+  overflow: hidden;
+
+  .mat-dialog-container {
+    padding: 0;
+    background: transparent;
+    overflow: hidden;
+  }
+}
+
+/* Effet lorsque la modal est ouverte */
+.modal-backdrop-blur {
+  .skill-page {
+    filter: blur(2px) brightness(0.7);
+    transition: filter 0.3s ease;
+    pointer-events: none; /* Empêche les interactions avec le fond */
+  }
+}
+
+/* Style spécifique pour la modal de compétence */
+.skill-modal {
+  border-radius: 16px !important;
+  overflow: hidden;
+
+  .mat-dialog-container {
+    padding: 0;
+    background: transparent;
+    box-shadow: 0 0 30px rgba(0, 0, 0, 0.5);
+  }
+}

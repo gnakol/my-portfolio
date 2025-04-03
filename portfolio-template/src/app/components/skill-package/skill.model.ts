@@ -10,9 +10,9 @@ export interface Skill {
 
     levelSkill : number;
 
-    skillCategory_id: number; // 🔥 L'API envoie ça
+    skillCategory_id: number;
     
-    skillCategory?: { id: number; name: string }; // 🔥 On le récupère après si absent
+    skillCategory?: { id: number; name: string };
   }
   
   export interface SkillResponse {

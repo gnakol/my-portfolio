@@ -64,6 +64,14 @@
           <mat-error *ngIf="experienceForm.get('experienceType')?.invalid">Sélection requise</mat-error>
         </mat-form-field>
 
+        <!-- Nouveau champ pour les compétences acquises -->
+        <mat-form-field appearance="fill" class="form-field">
+          <mat-label>Compétences acquises</mat-label>
+          <input matInput formControlName="skillsAcquired" placeholder="Ex: Gestion de projet, Communication, Leadership" required>
+          <mat-icon matSuffix>school</mat-icon>
+          <mat-error *ngIf="experienceForm.get('skillsAcquired')?.invalid">Ce champ est requis</mat-error>
+        </mat-form-field>
+
         <button mat-raised-button type="submit" class="submit-button" [disabled]="!experienceForm.valid">
           <mat-icon>save</mat-icon>
           Enregistrer

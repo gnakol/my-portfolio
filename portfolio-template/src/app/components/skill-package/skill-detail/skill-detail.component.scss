@@ -1,0 +1,241 @@
+.skill-modal-container {
+    position: relative;
+    height: 100%;
+    overflow-y: auto;
+    color: #e2e8f0;
+  }
+  
+  /* Fond animé */
+  .animated-background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+    overflow: hidden;
+  
+    .gradient-circle {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(80px);
+      opacity: 0.15;
+      
+      &.circle-1 {
+        width: 600px;
+        height: 600px;
+        background: radial-gradient(circle at center, #4f46e5 0%, transparent 70%);
+        top: -200px;
+        right: -200px;
+        animation: float 12s ease-in-out infinite;
+      }
+      
+      &.circle-2 {
+        width: 800px;
+        height: 800px;
+        background: radial-gradient(circle at center, #ec4899 0%, transparent 70%);
+        bottom: -300px;
+        left: -200px;
+        animation: float 15s ease-in-out infinite reverse;
+      }
+    }
+  
+    .grid-pattern {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      background-image: 
+        linear-gradient(to right, rgba(255,255,255,0.03) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(255,255,255,0.03) 1px, transparent 1px);
+      background-size: 40px 40px;
+    }
+  }
+  
+  /* Bouton fermer */
+  .close-button {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    z-index: 10;
+    color: #e2e8f0;
+    background: rgba(30, 41, 59, 0.7);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    transition: all 0.3s ease;
+  
+    &:hover {
+      transform: scale(1.1);
+      background: rgba(239, 68, 68, 0.3);
+    }
+  }
+  
+  /* Carte principale */
+  .skill-card {
+    position: relative;
+    background: linear-gradient(180deg, #1e293b 0%, #0f172a 100%);
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+  }
+  
+  /* Header avec vague */
+  .wave-header {
+    height: 120px;
+    position: relative;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    padding-top: 1rem;
+  
+    &::before {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(to bottom, rgba(0,0,0,0.2) 0%, transparent 100%);
+    }
+  
+    .category-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: rgba(255, 255, 255, 0.2);
+      backdrop-filter: blur(10px);
+      padding: 0.5rem 1rem;
+      border-radius: 999px;
+      font-weight: 600;
+      z-index: 2;
+  
+      mat-icon {
+        font-size: 1.2rem;
+      }
+    }
+  }
+  
+  /* Contenu de la carte */
+  .card-content {
+    padding: 2rem;
+  }
+  
+  .skill-header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 2rem;
+  
+    .skill-icon {
+      width: 80px;
+      height: 80px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 50%;
+      margin-bottom: 1rem;
+  
+      mat-icon {
+        font-size: 2.5rem;
+        width: 2.5rem;
+        height: 2.5rem;
+      }
+    }
+  
+    .skill-name {
+      font-size: 2rem;
+      font-weight: 700;
+      margin: 0;
+      text-align: center;
+      background: linear-gradient(90deg, #e2e8f0 0%, #94a3b8 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+  }
+  
+  .skill-level {
+    margin-bottom: 2rem;
+  
+    h3 {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 1.2rem;
+      margin-bottom: 1rem;
+      color: #e2e8f0;
+  
+      mat-icon {
+        color: #818cf8;
+      }
+    }
+  
+    .level-bar {
+      height: 10px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 999px;
+      position: relative;
+      overflow: hidden;
+      margin-bottom: 0.5rem;
+  
+      .level-fill {
+        height: 100%;
+        background: linear-gradient(90deg, #6366f1, #8b5cf6);
+        border-radius: 999px;
+        transition: width 0.5s ease;
+      }
+    }
+  
+    .level-text {
+      font-size: 0.9rem;
+      color: #94a3b8;
+      display: block;
+      text-align: right;
+    }
+  }
+  
+  .skill-description, .skill-reference {
+    margin-bottom: 2rem;
+  
+    h3 {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 1.2rem;
+      color: #e2e8f0;
+      margin-bottom: 1rem;
+  
+      mat-icon {
+        color: #818cf8;
+      }
+    }
+  
+    p, code {
+      color: #e2e8f0;
+      line-height: 1.7;
+      margin: 0;
+    }
+  
+    code {
+      background: rgba(255, 255, 255, 0.05);
+      padding: 0.25rem 0.5rem;
+      border-radius: 4px;
+      font-family: monospace;
+    }
+  }
+  
+  /* Animations */
+  @keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-20px); }
+  }
+  
+  /* Responsive */
+  @media (max-width: 768px) {
+    .card-content {
+      padding: 1.5rem;
+    }
+  
+    .skill-header .skill-name {
+      font-size: 1.6rem;
+    }
+  }

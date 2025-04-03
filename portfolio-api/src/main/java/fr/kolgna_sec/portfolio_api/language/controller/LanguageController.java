@@ -8,6 +8,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -27,25 +28,27 @@ public class LanguageController {
         return ResponseEntity.ok(this.languageService.all(pageable));
     }
 
-    // Endpoint dans LanguageController
     @GetMapping("/all-languages-for-cv")
     public ResponseEntity<List<LanguageDTO>> getAllLanguagesForCv() {
         return ResponseEntity.ok(this.languageService.getAllLanguages());
     }
 
 
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     @PostMapping("/add-language")
     public ResponseEntity<LanguageDTO> addLanguage(@Validated @RequestBody LanguageDTO languageDTO)
     {
         return ResponseEntity.status(HttpStatus.CREATED).body(this.languageService.add(languageDTO));
     }
 
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     @PutMapping("/update-language/{idLanguage}")
     public ResponseEntity<LanguageDTO> updateLanguage(@Validated @PathVariable Long idLanguage, @RequestBody LanguageDTO languageDTO)
     {
         return ResponseEntity.status(202).body(this.languageService.update(idLanguage, languageDTO));
     }
 
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     @DeleteMapping("/remove-language/{idLanguage}")
     public ResponseEntity<String> removeLanguage(@Validated @PathVariable Long idLanguage)
     {
@@ -54,17 +57,17 @@ public class LanguageController {
         return ResponseEntity.status(202).body("Langage with ID : " +idLanguage+ " has been successfully remove");
     }
 
-    @GetMapping("/get-by-id-language/{idLanguage}")
-    public ResponseEntity<LanguageDTO> getByIdLanguage(@Validated @PathVariable Long idLanguage)
+    @GetMapping("get-language-by-id/{idLanguage}")
+    public ResponseEntity<LanguageDTO> getLanguageById(@Validated @PathVariable Long idLanguage)
     {
         return this.languageService.getById(idLanguage)
-                .map(languageDTO -> {
+                .map(existingLanguage -> {
                     log.info("Language with ID : " +idLanguage+ " has been found");
-                    return new ResponseEntity<>(languageDTO, HttpStatus.OK);
+                    return new ResponseEntity<>(existingLanguage, HttpStatus.OK);
                 })
                 .orElseThrow(() -> {
                     log.error("Language with ID : " +idLanguage+ " was not found");
-                    throw new RuntimeException("Unable retrieve Language. Please check the provide ID");
+                    throw new RuntimeException("Unable to retrieve Language. Please check the provider ID");
                 });
     }
 }

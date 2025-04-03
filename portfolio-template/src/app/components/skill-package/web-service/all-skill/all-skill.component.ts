@@ -9,6 +9,9 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { CommonModule } from '@angular/common';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { AuthenticationService } from '../../../../pages/authenticate/core/authentication.service';
+import { MatDialog } from '@angular/material/dialog';
+import { SkillDetailComponent } from '../../skill-detail/skill-detail.component';
 
 @Component({
   selector: 'app-all-skill',
@@ -39,7 +42,9 @@ export class AllSkillComponent implements OnInit {
   constructor(
     private skillService: SkillService,
     private router: Router,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private authService : AuthenticationService,
+    private dialog : MatDialog
   ) {}
 
   ngOnInit(): void {
@@ -112,5 +117,27 @@ export class AllSkillComponent implements OnInit {
 
   navigateToTemplate(): void {
     this.router.navigate(['/skill-template']);
+  }
+
+  isAdmin() : boolean
+  {
+    return this.authService.isAdmin();
+  }
+
+  viewSkill(skill: any): void {
+    // Ajoute la classe au body
+    document.body.classList.add('modal-backdrop-blur');
+    
+    const dialogRef = this.dialog.open(SkillDetailComponent, {
+      width: '800px',
+      maxWidth: '90vw',
+      panelClass: 'skill-modal',
+      data: { skill }
+    });
+  
+    // Retire la classe quand la modal se ferme
+    dialogRef.afterClosed().subscribe(() => {
+      document.body.classList.remove('modal-backdrop-blur');
+    });
   }
 }

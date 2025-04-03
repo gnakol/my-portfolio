@@ -1,24 +1,40 @@
-<div class="establishment-page">
-    <!-- Fond animé -->
-    <div class="animated-background"></div>
-  
-    <div *ngIf="loading" class="loading-message">
-      Chargement des Etablissement...
-    </div>
-  
-    <div class="establishment-container" *ngIf="!loading">
-      <mat-card *ngFor="let type of establishment; let i = index" 
-                class="establishment-card"
-                [@fadeIn]="i">
-        <mat-card-header>
-          <mat-card-title>{{ type.name }}</mat-card-title>
-          <mat-card-title>{{ type.city }}</mat-card-title>
-        </mat-card-header>
-        <mat-card-actions>
-          <button mat-icon-button color="warn" (click)="deleteEstablishment(type.idEstablishment)">
-            <mat-icon>delete</mat-icon>
-          </button>
-        </mat-card-actions>
-      </mat-card>
-    </div>
+<div class="dashboard-container">
+  <!-- Fond animé identique -->
+  <div class="animated-background">
+    <div class="gradient-circle circle-1"></div>
+    <div class="gradient-circle circle-2"></div>
+    <div class="grid-pattern"></div>
   </div>
+
+  <!-- En-tête -->
+  <div class="dashboard-header">
+    <h1 class="dashboard-title">Liste des <span class="text-gradient">Établissements</span></h1>
+    <p class="dashboard-subtitle">Gérez vos établissements académiques enregistrés</p>
+    <div class="header-divider"></div>
+  </div>
+
+  <!-- Contenu -->
+  <div *ngIf="loading" class="loading-container">
+    <mat-spinner diameter="50" color="accent"></mat-spinner>
+    <p>Chargement des établissements...</p>
+  </div>
+
+  <div class="cards-container" *ngIf="!loading">
+    <mat-card *ngFor="let type of establishment; let i = index" 
+              class="establishment-card"
+              [@fadeIn]="i">
+      <div class="card-content">
+        <div class="card-icon">
+          <mat-icon>location_city</mat-icon>
+        </div>
+        <h2 class="card-title">{{ type.name }}</h2>
+        <p class="card-description">{{ type.city }}</p>
+      </div>
+      <div class="card-actions">
+        <button mat-icon-button (click)="deleteEstablishment(type.idEstablishment)" class="delete-button">
+          <mat-icon>delete</mat-icon>
+        </button>
+      </div>
+    </mat-card>
+  </div>
+</div>

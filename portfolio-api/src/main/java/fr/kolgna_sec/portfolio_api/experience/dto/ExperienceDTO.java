@@ -26,4 +26,6 @@ public class ExperienceDTO {
     private Long experienceType_id;
 
     private Long account_id;
+
+    private String skillsAcquired;
 }

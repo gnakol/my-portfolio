@@ -43,7 +43,10 @@
                 </div>
               </mat-card-content>
               <mat-card-actions>
-                <button mat-icon-button (click)="deleteTraining(training.idTraining)" class="delete-btn">
+                <button mat-icon-button
+                *ngIf="isAdmin()"
+                (click)="deleteTraining(training.idTraining)"
+                class="delete-btn">
                   <mat-icon>delete</mat-icon>
                 </button>
               </mat-card-actions>

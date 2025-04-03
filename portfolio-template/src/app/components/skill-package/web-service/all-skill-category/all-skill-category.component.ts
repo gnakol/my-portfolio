@@ -7,15 +7,17 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { SkillCategory, SkillCategoryResponse } from '../../skill-category.model';
 import { SkillCategoryService } from '../../../../services/category_skill.service';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 @Component({
   selector: 'app-all-skill-category',
   standalone: true,
   imports: [
     CommonModule,
-    MatCardModule,
+    MatProgressSpinnerModule,
+    MatIconModule,
     MatButtonModule,
-    MatIconModule
+    MatCardModule
   ],
   templateUrl: './all-skill-category.component.html',
   styleUrl: './all-skill-category.component.scss',

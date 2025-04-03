@@ -32,19 +32,37 @@
               {{ experience.endDate ? (experience.endDate | date:'MMM y') : 'Présent' }}
             </div>
             <mat-card class="experience-card">
-              <div class="card-header">
-                <h3 class="card-title">{{ experience.title }}</h3>
-                <span class="card-company">{{ experience.companyName }}</span>
+              <!-- Contenu centré avec icônes -->
+              <div class="centered-content">
+                <!-- Titre avec icône -->
+                <h3 class="card-title">
+                  <mat-icon class="title-icon">work_outline</mat-icon>
+                  {{ experience.title }}
+                </h3>
+
+                <!-- Entreprise avec icône -->
+                <div class="card-company">
+                  <mat-icon class="company-icon">business</mat-icon>
+                  <span>chez {{ experience.companyName }}</span>
+                </div>
+
+                <!-- Type avec icône -->
+                <div class="card-type" *ngIf="experience.experienceType">
+                  <mat-icon class="type-icon">label_important</mat-icon>
+                  <span>{{ experience.experienceType.name }}</span>
+                </div>
               </div>
-              <mat-card-content>
-                <p class="card-description">{{ experience.description }}</p>
-              </mat-card-content>
-              <mat-card-actions>
-                <button mat-stroked-button (click)="viewExperience(experience.id)">
+
+              <!-- Boutons centrés -->
+              <mat-card-actions class="actions-center">
+                <button mat-stroked-button (click)="viewExperience(experience)" class="details-btn">
                   <mat-icon>visibility</mat-icon>
                   Détails
                 </button>
-                <button mat-icon-button (click)="deleteExperience(experience.idExperience)" class="delete-btn">
+                <button mat-icon-button 
+                        *ngIf="isAdmin()" 
+                        (click)="deleteExperience(experience.idExperience)" 
+                        class="delete-btn">
                   <mat-icon>delete</mat-icon>
                 </button>
               </mat-card-actions>

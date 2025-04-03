@@ -7,6 +7,9 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { CommonModule, DatePipe } from '@angular/common';
+import { AuthenticationService } from '../../../../pages/authenticate/core/authentication.service';
+import { MatDialog } from '@angular/material/dialog';
+import { ProjectDetailComponent } from '../../project-detail/project-detail.component';
 
 @Component({
   selector: 'app-all-projects',
@@ -36,7 +39,10 @@ export class AllProjectsComponent implements OnInit {
 
   constructor(
     private experienceService: ExperienceService,
-    private experienceTypeService: experienceTypeService
+    private experienceTypeService: experienceTypeService,
+    private authService : AuthenticationService,
+    private dialog : MatDialog
+
   ) {}
 
   ngOnInit(): void {
@@ -83,6 +89,20 @@ export class AllProjectsComponent implements OnInit {
           }
         });
       }
+    });
+  }
+
+  isAdmin() : boolean
+  {
+    return this.authService.isAdmin();
+  }
+
+  viewProjectDetails(project: any): void {
+    this.dialog.open(ProjectDetailComponent, {
+      width: '800px',
+      maxWidth: '90vw',
+      panelClass: 'project-modal',
+      data: { project }
     });
   }
 }

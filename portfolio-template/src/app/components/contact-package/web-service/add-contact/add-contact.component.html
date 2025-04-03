@@ -1,0 +1,72 @@
+<div class="contact-modal-container">
+  <!-- Fond animé -->
+  <div class="animated-background">
+    <div class="gradient-circle circle-1"></div>
+    <div class="gradient-circle circle-2"></div>
+    <div class="particles"></div>
+  </div>
+
+  <!-- Carte modale -->
+  <mat-card class="contact-modal-card">
+    <!-- En-tête dynamique -->
+    <header class="modal-header">
+      <h2 class="modal-title">
+        <span class="title-word title-word-1">Contactez</span>
+        <span class="title-word title-word-2">-</span>
+        <span class="title-word title-word-3">moi</span>
+      </h2>
+      <p class="modal-subtitle">Votre message sera directement transmis à mon équipe.</p>
+      <div class="header-divider"></div>
+    </header>
+
+    <!-- Formulaire -->
+    <form [formGroup]="contactForm" (ngSubmit)="onSubmit()" class="contact-form">
+      <!-- Champ Nom -->
+      <div class="input-group">
+        <label class="input-label">Nom complet</label>
+        <input matInput formControlName="name" type="text" placeholder="Entrez votre nom" />
+        <mat-icon class="input-icon">person</mat-icon>
+        <mat-error *ngIf="contactForm.get('name')?.hasError('required')">Nom requis</mat-error>
+      </div>
+
+      <!-- Champ Email -->
+      <div class="input-group">
+        <label class="input-label">Email</label>
+        <input matInput formControlName="email" type="email" placeholder="Entrez votre email" />
+        <mat-icon class="input-icon">alternate_email</mat-icon>
+        <mat-error *ngIf="contactForm.get('email')?.hasError('required')">Email requis</mat-error>
+        <mat-error *ngIf="contactForm.get('email')?.hasError('email')">Format invalide</mat-error>
+      </div>
+
+      <!-- Champ Téléphone -->
+      <div class="input-group">
+        <label class="input-label">Téléphone (optionnel)</label>
+        <input matInput formControlName="telephone" type="tel" placeholder="Entrez votre téléphone" />
+        <mat-icon class="input-icon">phone</mat-icon>
+        <mat-error *ngIf="contactForm.get('telephone')?.hasError('pattern')">Format invalide</mat-error>
+      </div>
+
+      <!-- Champ Message -->
+      <div class="input-group">
+        <label class="input-label">Message</label>
+        <textarea matInput formControlName="message" rows="4" placeholder="Écrivez votre message"></textarea>
+        <mat-icon class="input-icon">message</mat-icon>
+        <mat-error *ngIf="contactForm.get('message')?.hasError('required')">Message requis</mat-error>
+        <mat-error *ngIf="contactForm.get('message')?.hasError('minlength')">Minimum 10 caractères</mat-error>
+      </div>
+
+      <!-- Actions du formulaire -->
+      <footer class="form-actions">
+        <button mat-stroked-button type="button" (click)="closeDialog()" class="cancel-button">
+          <mat-icon>close</mat-icon> Annuler
+        </button>
+        <button mat-flat-button type="submit" color="primary" [disabled]="!contactForm.valid || isSubmitting" class="submit-button">
+          <mat-spinner *ngIf="isSubmitting" diameter="20" strokeWidth="3"></mat-spinner>
+          <span *ngIf="!isSubmitting">
+            <mat-icon>send</mat-icon> Envoyer
+          </span>
+        </button>
+      </footer>
+    </form>
+  </mat-card>
+</div>

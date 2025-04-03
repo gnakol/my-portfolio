@@ -1,0 +1,46 @@
+<div class="skill-modal-container">
+    <!-- Fond animé -->
+    <div class="animated-background">
+      <div class="gradient-circle circle-1"></div>
+      <div class="gradient-circle circle-2"></div>
+      <div class="grid-pattern"></div>
+    </div>
+  
+    <!-- Bouton fermer -->
+    <button mat-icon-button class="close-button" (click)="close()" matTooltip="Fermer">
+      <mat-icon>close</mat-icon>
+    </button>
+  
+    <!-- Contenu principal -->
+    <div class="skill-card" *ngIf="skill">
+      <!-- Header avec vague -->
+      <div class="wave-header" [style.background]="getCategoryColor(skill.skillCategory?.name)">
+        <div class="category-badge">
+          <mat-icon>category</mat-icon>
+          <span>{{ skill.skillCategory?.name || 'Compétence' }}</span>
+        </div>
+      </div>
+  
+      <div class="card-content">
+        <!-- Icone et nom -->
+        <div class="skill-header">
+          <div class="skill-icon">
+            <mat-icon>{{ getSkillIcon(skill.name) }}</mat-icon>
+          </div>
+          <h1 class="skill-name">{{ skill.name }}</h1>
+        </div>
+  
+        <!-- Niveau de compétence -->
+
+  
+        <!-- Description -->
+        <div class="skill-description">
+          <h3>
+            <mat-icon>description</mat-icon>
+            Description
+          </h3>
+          <p>{{ skill.description || 'Aucune description disponible' }}</p>
+        </div>
+      </div>
+    </div>
+  </div>

@@ -1,0 +1,58 @@
+<div class="dashboard-container">
+  <!-- Fond animé identique -->
+  <div class="animated-background">
+    <div class="gradient-circle circle-1"></div>
+    <div class="gradient-circle circle-2"></div>
+    <div class="grid-pattern"></div>
+  </div>
+
+  <!-- En-tête -->
+  <div class="dashboard-header">
+    <h1 class="dashboard-title">Gestion des <span class="text-gradient">Contacts</span></h1>
+    <p class="dashboard-subtitle">Gérez vos canaux de contact et coordonnées</p>
+    <div class="header-divider"></div>
+  </div>
+
+  <!-- Cartes de navigation -->
+  <div class="cards-container">
+    <!-- Carte Ajouter un contact -->
+    <mat-card class="dashboard-card" (click)="navigateTo('add-contact')" [style.--card-color]="'#6366f1'">
+      <div class="card-icon">
+        <mat-icon>add_circle_outline</mat-icon>
+      </div>
+      <h2 class="card-title">Ajouter un Contact</h2>
+      <p class="card-description">Formulaire pour les recruteurs/visiteurs</p>
+      <div class="card-badge">Nouveau</div>
+    </mat-card>
+
+    <!-- Carte Voir la liste des contacts -->
+    <mat-card class="dashboard-card" (click)="navigateTo('contacts')" [style.--card-color]="'#8b5cf6'">
+      <div class="card-icon">
+        <mat-icon>list_alt</mat-icon>
+      </div>
+      <h2 class="card-title">Liste des Contacts</h2>
+      <p class="card-description">Consultez les messages reçus</p>
+      <div class="card-badge">{{ contactCount }}</div> <!-- Tu peux ajouter un compteur -->
+    </mat-card>
+
+    <!-- Carte Mettre à jour un contact -->
+    <mat-card class="dashboard-card" (click)="navigateTo('update-contact')" [style.--card-color]="'#14b8a6'">
+      <div class="card-icon">
+        <mat-icon>edit</mat-icon>
+      </div>
+      <h2 class="card-title">Mettre à Jour</h2>
+      <p class="card-description">Modifiez vos coordonnées</p>
+      <div class="card-badge">CRUD</div>
+    </mat-card>
+
+    <!-- Carte Paramètres -->
+    <mat-card class="dashboard-card" (click)="navigateTo('contact-settings')" [style.--card-color]="'#f59e0b'">
+      <div class="card-icon">
+        <mat-icon>settings</mat-icon>
+      </div>
+      <h2 class="card-title">Paramètres</h2>
+      <p class="card-description">Configurez les options de contact</p>
+      <div class="card-badge">Config</div>
+    </mat-card>
+  </div>
+</div>

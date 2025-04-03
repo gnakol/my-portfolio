@@ -29,7 +29,7 @@ public class Token {
     @Column(name = "expiration_token")
     private Boolean expirationToken;
 
-    @ManyToOne(cascade = {CascadeType.DETACH, CascadeType.REMOVE})
-    @JoinColumn(name = "id_account")
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "id_account", nullable = false)
     private Account account;
 }

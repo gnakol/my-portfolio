@@ -7,6 +7,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { CommonModule } from '@angular/common';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { AuthenticationService } from '../../../../pages/authenticate/core/authentication.service';
 
 @Component({
   selector: 'app-all-hobbies',
@@ -35,7 +36,8 @@ export class AllHobbiesComponent implements OnInit {
 
   constructor(
     private hobbiesService: HobbiesService,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private authService : AuthenticationService
   ) {}
 
   ngOnInit(): void {
@@ -90,5 +92,10 @@ export class AllHobbiesComponent implements OnInit {
         this.snackBar.open('Erreur lors de la suppression.', 'Fermer', { duration: 3000 });
       }
     });
+  }
+
+  isAdmin() : boolean
+  {
+    return this.authService.isAdmin();
   }
 }

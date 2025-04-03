@@ -34,7 +34,8 @@ export class AddExperienceComponent implements OnInit {
       startDate: ['', Validators.required],
       endDate: [''],
       companyName: ['', Validators.required],
-      experienceType: ['', Validators.required] // Sélection de l'ID
+      experienceType: ['', Validators.required],
+      skillsAcquired: ['', Validators.required]
     });
   }
 

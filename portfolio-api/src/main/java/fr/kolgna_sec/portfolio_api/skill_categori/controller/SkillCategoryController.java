@@ -8,6 +8,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -25,18 +26,21 @@ public class SkillCategoryController {
         return ResponseEntity.ok(this.skillCategoryService.all(pageable));
     }
 
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     @PostMapping("/add-skill-category")
     public ResponseEntity<SkillCategoryDTO> addSkillCategory(@Validated @RequestBody SkillCategoryDTO skillCategoryDTO)
     {
         return ResponseEntity.status(HttpStatus.CREATED).body(this.skillCategoryService.add(skillCategoryDTO));
     }
 
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     @PutMapping("/update-skill-category/{idSkillCategory}")
     public ResponseEntity<SkillCategoryDTO> updateSkillCategory(@Validated @PathVariable Long idSkillCategory, @RequestBody SkillCategoryDTO skillCategoryDTO)
     {
         return ResponseEntity.status(202).body(this.skillCategoryService.update(idSkillCategory, skillCategoryDTO));
     }
 
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     @DeleteMapping("/remove-skill-category/{idSkillCategory}")
     public ResponseEntity<String> removeSkillCategory(@Validated @PathVariable Long idSkillCategory)
     {

@@ -7,15 +7,18 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Establishment, EstablishmentResponse } from '../../establishment.model';
 import { EstablishmentService } from '../../../../services/establishment.service';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 @Component({
   selector: 'app-all-establishment',
   standalone: true,
   imports: [
     CommonModule,
-    MatCardModule,
+    MatProgressSpinnerModule,
+    MatIconModule,
     MatButtonModule,
-    MatIconModule
+    MatCardModule,
+    
   ],
   templateUrl: './all-establishment.component.html',
   styleUrl: './all-establishment.component.scss',

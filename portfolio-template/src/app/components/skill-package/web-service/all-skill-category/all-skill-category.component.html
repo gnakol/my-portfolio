@@ -1,23 +1,39 @@
-<div class="skill-category-page">
-    <!-- Fond animé -->
-    <div class="animated-background"></div>
-  
-    <div *ngIf="loading" class="loading-message">
-      Chargement des categories de compétence...
-    </div>
-  
-    <div class="skill-category-container" *ngIf="!loading">
-      <mat-card *ngFor="let type of skillCategory; let i = index" 
-                class="skill-category-card"
-                [@fadeIn]="i">
-        <mat-card-header>
-          <mat-card-title>{{ type.name }}</mat-card-title>
-        </mat-card-header>
-        <mat-card-actions>
-          <button mat-icon-button color="warn" (click)="deleteSkillDelete(type.idSkillCategory)">
-            <mat-icon>delete</mat-icon>
-          </button>
-        </mat-card-actions>
-      </mat-card>
-    </div>
+<div class="dashboard-container">
+  <!-- Fond animé identique -->
+  <div class="animated-background">
+    <div class="gradient-circle circle-1"></div>
+    <div class="gradient-circle circle-2"></div>
+    <div class="grid-pattern"></div>
   </div>
+
+  <!-- En-tête -->
+  <div class="dashboard-header">
+    <h1 class="dashboard-title">Liste des <span class="text-gradient">Catégories</span></h1>
+    <p class="dashboard-subtitle">Gérez vos catégories de compétences enregistrées</p>
+    <div class="header-divider"></div>
+  </div>
+
+  <!-- Contenu -->
+  <div *ngIf="loading" class="loading-container">
+    <mat-spinner diameter="50" color="accent"></mat-spinner>
+    <p>Chargement des catégories...</p>
+  </div>
+
+  <div class="cards-container" *ngIf="!loading">
+    <mat-card *ngFor="let type of skillCategory; let i = index" 
+              class="skill-category-card"
+              [@fadeIn]="i">
+      <div class="card-content">
+        <div class="card-icon">
+          <mat-icon>category</mat-icon>
+        </div>
+        <h2 class="card-title">{{ type.name }}</h2>
+      </div>
+      <div class="card-actions">
+        <button mat-icon-button (click)="deleteSkillDelete(type.idSkillCategory)" class="delete-button">
+          <mat-icon>delete</mat-icon>
+        </button>
+      </div>
+    </mat-card>
+  </div>
+</div>

@@ -22,14 +22,16 @@ import { ExperienceTemplateComponent } from './experience-template/experience-te
 import { AllTypeExperienceComponent } from './web-service/all-type-experience/all-type-experience.component';
 import { RemoveTypeExperienceComponent } from './web-service/remove-type-experience/remove-type-experience.component';
 import { RemoveExperienceComponent } from './web-service/remove-experience/remove-experience.component';
-import { AddTypeExperienceComponent } from './web-service/add-type-experience/add-type-experience.component'; // ✅ Ajouté ici
+import { AddTypeExperienceComponent } from './web-service/add-type-experience/add-type-experience.component';
+import { ExperienceDetailComponent } from './experience-detail/experience-detail.component'; // ✅ Ajouté ici
 
 const routes: Routes = [
   { path: '', component: AllExperienceComponent },
   { path: 'add', component: AddExperienceComponent},
   { path: '', component : ExperienceTemplateComponent},
   { path: 'all-experiences-type', component : AllTypeExperienceComponent },
-  { path: 'add-experiences-type', component : AddTypeExperienceComponent}
+  { path: 'add-experiences-type', component : AddTypeExperienceComponent},
+  { path: '', component : ExperienceDetailComponent}
 ];
 
 @NgModule({

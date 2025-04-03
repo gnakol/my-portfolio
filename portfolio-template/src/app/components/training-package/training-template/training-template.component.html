@@ -1,77 +1,98 @@
 <div class="dashboard-container">
-    <!-- Fond animé -->
-    <div class="animated-background"></div>
-  
-    <!-- Titre et sous-titre -->
-    <h1 class="dashboard-title">Gestion des Formations</h1>
-    <p class="dashboard-subtitle">Ajoutez, modifiez ou supprimez vos formations et leurs établissements</p>
-  
-    <!-- Cartes de navigation -->
-    <div class="cards-container">
-      <!-- Carte Ajouter une formation -->
-      <mat-card class="dashboard-card" (click)="navigateTo('add-training')">
-        <mat-card-title>➕ Ajouter une Formation</mat-card-title>
-        <mat-card-content>
-          <p>Ajoutez une nouvelle formation</p>
-        </mat-card-content>
-      </mat-card>
-  
-      <!-- Carte Voir la liste des formations -->
-      <mat-card class="dashboard-card" (click)="navigateTo('trainings')">
-        <mat-card-title>📋 Liste des Formations</mat-card-title>
-        <mat-card-content>
-          <p>Consultez la liste de vos formations</p>
-        </mat-card-content>
-      </mat-card>
-  
-      <!-- Carte Mettre à jour une formation -->
-      <mat-card class="dashboard-card" (click)="navigateTo('update-training')">
-        <mat-card-title>📝 Mettre à Jour une Formation</mat-card-title>
-        <mat-card-content>
-          <p>Modifiez les informations d'une formation existante</p>
-        </mat-card-content>
-      </mat-card>
-  
-      <!-- Carte Supprimer une formation -->
-      <mat-card class="dashboard-card" (click)="navigateTo('delete-training')">
-        <mat-card-title>🗑 Supprimer une Formation</mat-card-title>
-        <mat-card-content>
-          <p>Supprimez une formation inutilisée</p>
-        </mat-card-content>
-      </mat-card>
-  
-      <!-- Nouvelles cartes pour gérer les établissements -->
-  
-      <!-- Carte Ajouter un établissement -->
-      <mat-card class="dashboard-card" (click)="navigateTo('add-establishment')">
-        <mat-card-title>➕ Ajouter un Établissement</mat-card-title>
-        <mat-card-content>
-          <p>Ajoutez un nouvel établissement (ex. : Université, École...)</p>
-        </mat-card-content>
-      </mat-card>
-  
-      <!-- Carte Voir la liste des établissements -->
-      <mat-card class="dashboard-card" (click)="navigateTo('all-establishment')">
-        <mat-card-title>📋 Liste des Établissements</mat-card-title>
-        <mat-card-content>
-          <p>Consultez la liste des établissements disponibles</p>
-        </mat-card-content>
-      </mat-card>
-  
-      <!-- Carte Mettre à jour un établissement -->
-      <mat-card class="dashboard-card" (click)="navigateTo('update-establishment')">
-        <mat-card-title>📝 Mettre à Jour un Établissement</mat-card-title>
-        <mat-card-content>
-          <p>Modifiez les informations d'un établissement existant</p>
-        </mat-card-content>
-      </mat-card>
-  
-      <!-- Carte Supprimer un établissement -->
-      <mat-card class="dashboard-card" (click)="navigateTo('delete-establishment')">
-        <mat-card-title>🗑 Supprimer un Établissement</mat-card-title>
-        <mat-card-content>
-          <p>Supprimez un établissement inutilisé</p>
-        </mat-card-content>
-      </mat-card>
-    </div>
+  <!-- Fond animé identique -->
+  <div class="animated-background">
+    <div class="gradient-circle circle-1"></div>
+    <div class="gradient-circle circle-2"></div>
+    <div class="grid-pattern"></div>
   </div>
+
+  <!-- En-tête -->
+  <div class="dashboard-header">
+    <h1 class="dashboard-title">Gestion des <span class="text-gradient">Formations</span></h1>
+    <p class="dashboard-subtitle">Ajoutez, modifiez ou supprimez vos formations et leurs établissements</p>
+    <div class="header-divider"></div>
+  </div>
+
+  <!-- Cartes de navigation -->
+  <div class="cards-container">
+    <!-- Carte Ajouter une formation -->
+    <mat-card class="dashboard-card" (click)="navigateTo('add-training')" [style.--card-color]="'#6366f1'">
+      <div class="card-icon">
+        <mat-icon>add_circle_outline</mat-icon>
+      </div>
+      <h2 class="card-title">Ajouter une Formation</h2>
+      <p class="card-description">Ajoutez une nouvelle formation professionnelle</p>
+      <div class="card-badge">CRUD</div>
+    </mat-card>
+
+    <!-- Carte Voir la liste des formations -->
+    <mat-card class="dashboard-card" (click)="navigateTo('trainings')" [style.--card-color]="'#8b5cf6'">
+      <div class="card-icon">
+        <mat-icon>list_alt</mat-icon>
+      </div>
+      <h2 class="card-title">Liste des Formations</h2>
+      <p class="card-description">Consultez la liste de vos formations professionnelles</p>
+      <div class="card-badge">Lecture</div>
+    </mat-card>
+
+    <!-- Carte Mettre à jour une formation -->
+    <mat-card class="dashboard-card" (click)="navigateTo('update-training')" [style.--card-color]="'#14b8a6'">
+      <div class="card-icon">
+        <mat-icon>edit</mat-icon>
+      </div>
+      <h2 class="card-title">Mettre à Jour</h2>
+      <p class="card-description">Modifiez une formation existante</p>
+      <div class="card-badge">CRUD</div>
+    </mat-card>
+
+    <!-- Carte Supprimer une formation -->
+    <mat-card class="dashboard-card" (click)="navigateTo('delete-training')" [style.--card-color]="'#ef4444'">
+      <div class="card-icon">
+        <mat-icon>delete_forever</mat-icon>
+      </div>
+      <h2 class="card-title">Supprimer</h2>
+      <p class="card-description">Supprimez une formation professionnelle</p>
+      <div class="card-badge">Danger</div>
+    </mat-card>
+
+    <!-- Carte Ajouter un établissement -->
+    <mat-card class="dashboard-card" (click)="navigateTo('add-establishment')" [style.--card-color]="'#ec4899'">
+      <div class="card-icon">
+        <mat-icon>business</mat-icon>
+      </div>
+      <h2 class="card-title">Ajouter un Établissement</h2>
+      <p class="card-description">Ajoutez un nouvel établissement</p>
+      <div class="card-badge">CRUD</div>
+    </mat-card>
+
+    <!-- Carte Voir la liste des établissements -->
+    <mat-card class="dashboard-card" (click)="navigateTo('all-establishment')" [style.--card-color]="'#f59e0b'">
+      <div class="card-icon">
+        <mat-icon>format_list_bulleted</mat-icon>
+      </div>
+      <h2 class="card-title">Liste des Établissements</h2>
+      <p class="card-description">Consultez les établissements disponibles</p>
+      <div class="card-badge">Lecture</div>
+    </mat-card>
+
+    <!-- Carte Mettre à jour un établissement -->
+    <mat-card class="dashboard-card" (click)="navigateTo('update-establishment')" [style.--card-color]="'#10b981'">
+      <div class="card-icon">
+        <mat-icon>edit_note</mat-icon>
+      </div>
+      <h2 class="card-title">Mettre à Jour</h2>
+      <p class="card-description">Modifiez un établissement existant</p>
+      <div class="card-badge">CRUD</div>
+    </mat-card>
+
+    <!-- Carte Supprimer un établissement -->
+    <mat-card class="dashboard-card" (click)="navigateTo('delete-establishment')" [style.--card-color]="'#f43f5e'">
+      <div class="card-icon">
+        <mat-icon>remove_circle_outline</mat-icon>
+      </div>
+      <h2 class="card-title">Supprimer</h2>
+      <p class="card-description">Supprimez un établissement inutilisé</p>
+      <div class="card-badge">Danger</div>
+    </mat-card>
+  </div>
+</div>

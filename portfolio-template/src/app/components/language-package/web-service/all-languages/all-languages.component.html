@@ -46,7 +46,10 @@
           </mat-card-content>
           
           <mat-card-actions>
-            <button mat-icon-button (click)="deleteLanguage(lang.idLanguage)" class="delete-btn">
+            <button mat-icon-button
+            *ngIf="isAdmin()" 
+            (click)="deleteLanguage(lang.idLanguage)" 
+            class="delete-btn">
               <mat-icon>delete</mat-icon>
             </button>
           </mat-card-actions>

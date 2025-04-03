@@ -8,6 +8,9 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { CommonModule } from '@angular/common';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { AuthenticationService } from '../../../../pages/authenticate/core/authentication.service';
+import { ExperienceDetailComponent } from '../../experience-detail/experience-detail.component';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-all-experience',
@@ -30,7 +33,9 @@ export class AllExperienceComponent implements OnInit {
   constructor(
     private experienceService: ExperienceService,
     private router: Router,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private authService : AuthenticationService,
+    private dialog : MatDialog
   ) {}
 
   ngOnInit(): void {
@@ -40,10 +45,13 @@ export class AllExperienceComponent implements OnInit {
   loadExperiences(): void {
     this.experienceService.getAllExperiences().subscribe({
       next: (data) => {
-        this.experiences = (data.content || []).map(exp => ({
-          ...exp,
-          isCurrent: !exp.endDate
-        }));
+        // Filtrer les expériences pour exclure celles de type "Projet"
+        this.experiences = (data.content || [])
+          .filter(exp => !exp.experienceType || exp.experienceType.name.toLowerCase() !== 'projet')
+          .map(exp => ({
+            ...exp,
+            isCurrent: !exp.endDate
+          }));
         this.loading = false;
       },
       error: (error) => {
@@ -54,8 +62,14 @@ export class AllExperienceComponent implements OnInit {
     });
   }
 
-  viewExperience(id: number): void {
-    this.router.navigate(['/experience-detail', id]);
+  viewExperience(experience: any): void {
+    this.dialog.open(ExperienceDetailComponent, {
+      width: '800px',
+      maxWidth: '90vw',
+      maxHeight: '90vh',
+      panelClass: 'experience-modal',
+      data: { experience }
+    });
   }
 
   deleteExperience(id: number): void {
@@ -73,5 +87,10 @@ export class AllExperienceComponent implements OnInit {
 
   navigateToTemplate(): void {
     this.router.navigate(['/experience-template']);
+  }
+
+  isAdmin() : boolean
+  {
+    return this.authService.isAdmin();
   }
 }

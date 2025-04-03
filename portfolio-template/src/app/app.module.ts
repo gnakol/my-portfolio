@@ -14,13 +14,15 @@ import { AccountTemplateComponent } from './components/account-package/account-t
 import { AdminSimulationsComponent } from './components/simulation-package/admin-simulations/admin-simulations.component';
 import { SecuritySimulationsComponent } from './components/simulation-package/security-simulations/security-simulations.component';
 import { AuthInterceptor } from './pages/authenticate/auth/interceptor/auth.interceptor';
+import { SkillDetailComponent } from './components/skill-package/skill-detail/skill-detail.component';
+import { ProjectDetailComponent } from './components/project-package/project-detail/project-detail.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     AccountTemplateComponent,
     AdminSimulationsComponent,
-    SecuritySimulationsComponent,
+    SecuritySimulationsComponent
   ],
   imports: [
     BrowserModule,

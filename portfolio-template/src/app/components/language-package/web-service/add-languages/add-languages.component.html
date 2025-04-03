@@ -1,39 +1,47 @@
-<div class="form-container">
-    <!-- Fond animé -->
-    <div class="animated-background"></div>
-  
-    <!-- Carte du formulaire -->
-    <mat-card class="form-card">
-      <mat-card-header>
-        <mat-card-title>Ajouter une Langue</mat-card-title>
-        <mat-card-subtitle>Remplissez les détails de la langue</mat-card-subtitle>
-      </mat-card-header>
-  
-      <mat-card-content>
-        <!-- Formulaire de saisie -->
-        <form [formGroup]="languageForm" (ngSubmit)="onSubmit()">
-          <!-- Nom -->
-          <mat-form-field appearance="fill">
-            <mat-label>Nom</mat-label>
-            <input matInput formControlName="name" required>
-          </mat-form-field>
-  
-          <!-- Niveau de maîtrise -->
-          <mat-form-field appearance="fill">
-            <mat-label>Niveau de maîtrise</mat-label>
-            <mat-select formControlName="proficiencyLevel" required>
-              <mat-option value="Débutant">Débutant</mat-option>
-              <mat-option value="Intermédiaire">Intermédiaire</mat-option>
-              <mat-option value="Courant">Courant</mat-option>
-              <mat-option value="Bilingue">Bilingue</mat-option>
-            </mat-select>
-          </mat-form-field>
-  
-          <!-- Bouton de soumission -->
-          <button mat-raised-button color="primary" type="submit" class="submit-button">
-            Enregistrer
-          </button>
-        </form>
-      </mat-card-content>
-    </mat-card>
+<div class="dashboard-container">
+  <!-- Fond animé identique -->
+  <div class="animated-background">
+    <div class="gradient-circle circle-1"></div>
+    <div class="gradient-circle circle-2"></div>
+    <div class="grid-pattern"></div>
   </div>
+
+  <!-- Carte du formulaire -->
+  <mat-card class="form-card">
+    <div class="form-header">
+      <h1 class="form-title">Ajouter une <span class="text-gradient">Langue</span></h1>
+      <p class="form-subtitle">Déclarez une langue que vous maîtrisez</p>
+      <div class="header-divider"></div>
+    </div>
+
+    <mat-card-content>
+      <!-- Formulaire de saisie -->
+      <form [formGroup]="languageForm" (ngSubmit)="onSubmit()" class="form-content">
+        <!-- Nom -->
+        <mat-form-field appearance="fill" class="form-field">
+          <mat-label>Nom de la langue</mat-label>
+          <input matInput formControlName="name" required>
+          <mat-icon matSuffix>translate</mat-icon>
+        </mat-form-field>
+
+        <!-- Niveau de maîtrise -->
+        <mat-form-field appearance="fill" class="form-field">
+          <mat-label>Niveau de maîtrise</mat-label>
+          <mat-select formControlName="proficiencyLevel" required>
+            <mat-option value="Débutant">Débutant</mat-option>
+            <mat-option value="Intermédiaire">Intermédiaire</mat-option>
+            <mat-option value="Courant">Courant</mat-option>
+            <mat-option value="Bilingue">Bilingue</mat-option>
+          </mat-select>
+          <mat-icon matSuffix>school</mat-icon>
+        </mat-form-field>
+
+        <!-- Bouton de soumission -->
+        <button mat-raised-button type="submit" class="submit-button">
+          <mat-icon>save</mat-icon>
+          Enregistrer
+        </button>
+      </form>
+    </mat-card-content>
+  </mat-card>
+</div>

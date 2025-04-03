@@ -77,10 +77,10 @@ export class AuthenticationService {
       const jsonPayload = decodeURIComponent(atob(base64).split('').map(function (c) {
         return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
       }).join(''));
-      console.log('Parsed JWT Payload:', JSON.parse(jsonPayload));
+      //console.log('Parsed JWT Payload:', JSON.parse(jsonPayload));
       return JSON.parse(jsonPayload);
     } catch (e) {
-      console.error('Error parsing JWT:', e);
+      //console.error('Error parsing JWT:', e);
       return null;
     }
   }
@@ -153,6 +153,21 @@ export class AuthenticationService {
         }
       })
     );
+  }
+
+  // Admin
+  isAdmin(): boolean {
+    const token = this.getToken();
+    if (!token) return false;
+  
+    const parsedToken = this.parseJwt(token);
+    console.log('Parsed Token:', parsedToken); // Debugging : affiche le contenu du token
+  
+    if (!parsedToken || !parsedToken.roles) return false;
+  
+    const isAdmin = parsedToken.roles.some((role: any) => role.name === 'ADMIN');
+    console.log('Is Admin:', isAdmin); // Debugging : affiche si l'utilisateur est admin
+    return isAdmin;
   }
 
 

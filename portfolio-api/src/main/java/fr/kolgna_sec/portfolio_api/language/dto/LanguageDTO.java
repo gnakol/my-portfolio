@@ -14,4 +14,6 @@ public class LanguageDTO {
     private String name;
 
     private String proficiencyLevel;
+
+    private Long accountId;
 }

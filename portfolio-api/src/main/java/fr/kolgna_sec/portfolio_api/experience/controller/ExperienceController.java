@@ -8,6 +8,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -41,19 +42,21 @@ public class ExperienceController {
     }
 
 
-
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     @PostMapping("/add-experience")
     public ResponseEntity<ExperienceDTO> addExperience(@Validated @RequestBody ExperienceDTO experienceDTO)
     {
         return ResponseEntity.status(HttpStatus.CREATED).body(this.experienceService.add(experienceDTO));
     }
 
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     @PutMapping("/update-experience/{idExperience}")
     public ResponseEntity<ExperienceDTO> updateExperience(@Validated @PathVariable Long idExperience, @RequestBody ExperienceDTO experienceDTO)
     {
         return ResponseEntity.status(202).body(this.experienceService.update(idExperience, experienceDTO));
     }
 
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     @DeleteMapping("/remove-experience/{idExperience}")
     public ResponseEntity<String> removeExperience(@Validated @PathVariable Long idExperience)
     {

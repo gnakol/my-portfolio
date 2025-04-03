@@ -6,6 +6,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { NavbarComponent } from '../navbar/navbar.component';
 import { FooterComponent } from '../footer/footer.component';
+import { MatCardModule } from '@angular/material/card';
 
 
 
@@ -16,7 +17,9 @@ import { FooterComponent } from '../footer/footer.component';
     RouterModule, // Pour que les liens dans le menu fonctionnent
     MatToolbarModule,
     MatButtonModule,
-    MatIconModule
+    MatIconModule,
+    MatCardModule
+    
   ],
   exports: [NavbarComponent, FooterComponent] // On exporte pour les utiliser partout
 })

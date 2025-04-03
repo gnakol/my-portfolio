@@ -8,6 +8,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -33,19 +34,21 @@ public class HobbiesController {
         return ResponseEntity.ok(this.hobbiesService.getAllHobbies());
     }
 
-
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     @PostMapping("/add-hobbies")
     public ResponseEntity<HobbiesDTO> addHobby(@Validated @RequestBody HobbiesDTO hobbiesDTO)
     {
         return ResponseEntity.status(HttpStatus.CREATED).body(this.hobbiesService.add(hobbiesDTO));
     }
 
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     @PutMapping("/update-hobbies/{idHobbies}")
     public ResponseEntity<HobbiesDTO> updateHobbies(@Validated @PathVariable Long idHobbies, @RequestBody HobbiesDTO hobbiesDTO)
     {
         return ResponseEntity.status(202).body(this.hobbiesService.update(idHobbies, hobbiesDTO));
     }
 
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     @DeleteMapping("/remove-hobbies/{idHobbies}")
     public ResponseEntity<String> removeHobbies(@Validated @PathVariable Long idHobbies)
     {

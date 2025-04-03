@@ -1,44 +1,53 @@
-<div class="form-container">
-    <!-- Fond animé -->
-    <div class="animated-background"></div>
-  
-    <!-- Carte du formulaire -->
-    <mat-card class="form-card">
-      <mat-card-header>
-        <mat-card-title>Ajouter une Compétence</mat-card-title>
-        <mat-card-subtitle>Remplissez les détails de votre compétence</mat-card-subtitle>
-      </mat-card-header>
-  
-      <mat-card-content>
-        <!-- Formulaire de saisie -->
-        <form [formGroup]="skillForm" (ngSubmit)="onSubmit()">
-          <!-- Nom -->
-          <mat-form-field appearance="fill">
-            <mat-label>Nom</mat-label>
-            <input matInput formControlName="name" required>
-          </mat-form-field>
-  
-          <!-- Description -->
-          <mat-form-field appearance="fill">
-            <mat-label>Description</mat-label>
-            <textarea matInput formControlName="description" rows="4"></textarea>
-          </mat-form-field>
-  
-          <!-- Catégorie de compétence -->
-          <mat-form-field appearance="fill">
-            <mat-label>Catégorie</mat-label>
-            <mat-select formControlName="skillCategory_id" required>
-              <mat-option *ngFor="let category of skillCategories" [value]="category.idSkillCategory">
-                {{ category.name }}
-              </mat-option>
-            </mat-select>
-          </mat-form-field>
-  
-          <!-- Bouton de soumission -->
-          <button mat-raised-button color="primary" type="submit" class="submit-button">
-            Enregistrer
-          </button>
-        </form>
-      </mat-card-content>
-    </mat-card>
+<div class="dashboard-container">
+  <!-- Fond animé identique -->
+  <div class="animated-background">
+    <div class="gradient-circle circle-1"></div>
+    <div class="gradient-circle circle-2"></div>
+    <div class="grid-pattern"></div>
   </div>
+
+  <!-- Carte du formulaire -->
+  <mat-card class="form-card">
+    <div class="form-header">
+      <h1 class="form-title">Ajouter une <span class="text-gradient">Compétence</span></h1>
+      <p class="form-subtitle">Remplissez les détails de votre compétence professionnelle</p>
+      <div class="header-divider"></div>
+    </div>
+
+    <mat-card-content>
+      <!-- Formulaire de saisie -->
+      <form [formGroup]="skillForm" (ngSubmit)="onSubmit()" class="form-content">
+        <!-- Nom -->
+        <mat-form-field appearance="fill" class="form-field">
+          <mat-label>Nom</mat-label>
+          <input matInput formControlName="name" required>
+          <mat-icon matSuffix>badge</mat-icon>
+        </mat-form-field>
+
+        <!-- Description -->
+        <mat-form-field appearance="fill" class="form-field">
+          <mat-label>Description</mat-label>
+          <textarea matInput formControlName="description" rows="4"></textarea>
+          <mat-icon matSuffix>description</mat-icon>
+        </mat-form-field>
+
+        <!-- Catégorie -->
+        <mat-form-field appearance="fill" class="form-field">
+          <mat-label>Catégorie</mat-label>
+          <mat-select formControlName="skillCategory_id" required>
+            <mat-option *ngFor="let category of skillCategories" [value]="category.idSkillCategory">
+              {{ category.name }}
+            </mat-option>
+          </mat-select>
+          <mat-icon matSuffix>category</mat-icon>
+        </mat-form-field>
+
+        <!-- Bouton de soumission -->
+        <button mat-raised-button type="submit" class="submit-button">
+          <mat-icon>save</mat-icon>
+          Enregistrer
+        </button>
+      </form>
+    </mat-card-content>
+  </mat-card>
+</div>

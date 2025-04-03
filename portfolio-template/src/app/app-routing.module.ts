@@ -38,6 +38,9 @@ import { IntroDhcpComponent } from './components/simulation-package/network-simu
 import { RelayComponent } from './components/simulation-package/network-simulation/dhcp/relay/relay.component';
 import { FullComponent } from './components/simulation-package/network-simulation/dhcp/full/full.component';
 import { AuthGuard } from './pages/authenticate/protec-route/auth.guard';
+import { ContactTemplateComponent } from './components/contact-package/contact-template/contact-template.component';
+import { AllContactComponent } from './components/contact-package/web-service/all-contact/all-contact.component';
+import { ExperienceDetailComponent } from './components/experiences-package/experience-detail/experience-detail.component';
 
 const routes: Routes = [
   { path: '', loadChildren: () => import('./pages/home/home.module').then(m => m.HomeModule) },
@@ -58,6 +61,11 @@ const routes: Routes = [
   { path: 'all-establishment', component : AllEstablishmentComponent},
   { path: 'all-skill-category', component : AllSkillCategoryComponent},
   { path: 'all-log-security', component : AllLogSecurityComponent, canActivate : [AuthGuard]},
+  { path: 'contacts', component : AllContactComponent, canActivate : [AuthGuard]},
+
+  // Deatil
+
+  { path: 'experience-detail/:id', component : ExperienceDetailComponent},
 
 
 
@@ -84,6 +92,7 @@ const routes: Routes = [
   { path: 'training-template', component : TrainingTemplateComponent, canActivate : [AuthGuard]},
   { path: 'hobbie-template', component : HobbieTemplateComponent, canActivate : [AuthGuard]},
   { path: 'language-template', component : LanguageTemplateComponent, canActivate : [AuthGuard]},
+  { path: 'contact-template', component : ContactTemplateComponent, canActivate : [AuthGuard]},
 
   { path: 'pdf-generator', component : PdfGeneratorComponent},
 

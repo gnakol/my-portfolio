@@ -1,43 +1,58 @@
 <div class="dashboard-container">
-    <!-- Fond animé -->
-    <div class="animated-background"></div>
-  
-    <!-- Titre et sous-titre -->
-    <h1 class="dashboard-title">Gestion des Langues</h1>
-    <p class="dashboard-subtitle">Ajoutez, modifiez ou supprimez les langues que vous maîtrisez</p>
-  
-    <!-- Cartes de navigation -->
-    <div class="cards-container">
-      <!-- Carte Ajouter une langue -->
-      <mat-card class="dashboard-card" (click)="navigateTo('add-language')">
-        <mat-card-title>➕ Ajouter une Langue</mat-card-title>
-        <mat-card-content>
-          <p>Ajoutez une nouvelle langue</p>
-        </mat-card-content>
-      </mat-card>
-  
-      <!-- Carte Voir la liste des langues -->
-      <mat-card class="dashboard-card" (click)="navigateTo('languages')">
-        <mat-card-title>📋 Liste des Langues</mat-card-title>
-        <mat-card-content>
-          <p>Consultez la liste des langues que vous maîtrisez</p>
-        </mat-card-content>
-      </mat-card>
-  
-      <!-- Carte Mettre à jour une langue -->
-      <mat-card class="dashboard-card" (click)="navigateTo('update-language')">
-        <mat-card-title>📝 Mettre à Jour une Langue</mat-card-title>
-        <mat-card-content>
-          <p>Modifiez les informations d'une langue existante</p>
-        </mat-card-content>
-      </mat-card>
-  
-      <!-- Carte Supprimer une langue -->
-      <mat-card class="dashboard-card" (click)="navigateTo('delete-language')">
-        <mat-card-title>🗑 Supprimer une Langue</mat-card-title>
-        <mat-card-content>
-          <p>Supprimez une langue inutilisée</p>
-        </mat-card-content>
-      </mat-card>
-    </div>
+  <!-- Fond animé identique -->
+  <div class="animated-background">
+    <div class="gradient-circle circle-1"></div>
+    <div class="gradient-circle circle-2"></div>
+    <div class="grid-pattern"></div>
   </div>
+
+  <!-- En-tête -->
+  <div class="dashboard-header">
+    <h1 class="dashboard-title">Gestion des <span class="text-gradient">Langues</span></h1>
+    <p class="dashboard-subtitle">Ajoutez, modifiez ou supprimez les langues que vous maîtrisez</p>
+    <div class="header-divider"></div>
+  </div>
+
+  <!-- Cartes de navigation -->
+  <div class="cards-container">
+    <!-- Carte Ajouter une langue -->
+    <mat-card class="dashboard-card" (click)="navigateTo('add-language')" [style.--card-color]="'#6366f1'">
+      <div class="card-icon">
+        <mat-icon>add_circle_outline</mat-icon>
+      </div>
+      <h2 class="card-title">Ajouter</h2>
+      <p class="card-description">Ajoutez une nouvelle langue</p>
+      <div class="card-badge">CRUD</div>
+    </mat-card>
+
+    <!-- Carte Voir la liste des langues -->
+    <mat-card class="dashboard-card" (click)="navigateTo('languages')" [style.--card-color]="'#8b5cf6'">
+      <div class="card-icon">
+        <mat-icon>list_alt</mat-icon>
+      </div>
+      <h2 class="card-title">Liste</h2>
+      <p class="card-description">Consultez vos langues</p>
+      <div class="card-badge">Lecture</div>
+    </mat-card>
+
+    <!-- Carte Mettre à jour une langue -->
+    <mat-card class="dashboard-card" (click)="navigateTo('update-language')" [style.--card-color]="'#14b8a6'">
+      <div class="card-icon">
+        <mat-icon>edit</mat-icon>
+      </div>
+      <h2 class="card-title">Mettre à Jour</h2>
+      <p class="card-description">Modifiez une langue</p>
+      <div class="card-badge">CRUD</div>
+    </mat-card>
+
+    <!-- Carte Supprimer une langue -->
+    <mat-card class="dashboard-card" (click)="navigateTo('delete-language')" [style.--card-color]="'#ef4444'">
+      <div class="card-icon">
+        <mat-icon>delete_forever</mat-icon>
+      </div>
+      <h2 class="card-title">Supprimer</h2>
+      <p class="card-description">Supprimez une langue</p>
+      <div class="card-badge">Danger</div>
+    </mat-card>
+  </div>
+</div>
