@@ -1,15 +1,111 @@
+/* Footer */
 footer {
-  background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
-  color: white;
-  padding: 2rem 0; /* Augmentez le padding pour un meilleur espacement */
-  text-align: center;
-  width: 100%;
+  position: relative;
+  overflow: hidden;
 
-  a {
-    color: white;
-    text-decoration: none;
+  /* Fond animé */
+  .gradient-circle {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(80px);
+    opacity: 0.2;
+
+    &.circle-1 {
+      width: 600px;
+      height: 600px;
+      background: radial-gradient(circle at center, #4f46e5 0%, transparent 70%);
+      top: -200px;
+      right: -200px;
+      animation: float 12s ease-in-out infinite;
+    }
+
+    &.circle-2 {
+      width: 800px;
+      height: 800px;
+      background: radial-gradient(circle at center, #ec4899 0%, transparent 70%);
+      bottom: -300px;
+      left: -200px;
+      animation: float 15s ease-in-out infinite reverse;
+    }
+  }
+
+  /* Titres et texte */
+  h3, h4 {
+    font-weight: 600;
+    margin-bottom: 1rem;
+    color: #e0e7ff;
+  }
+
+  p {
+    font-size: 0.875rem;
+    color: #94a3b8;
+  }
+
+  /* Liens */
+  .footer-link {
+    display: inline-block;
+    color: #d1d5db;
+    transition: all 0.3s ease;
+
     &:hover {
+      color: white;
+      transform: translateY(-2px);
       text-decoration: underline;
+    }
+  }
+
+  /* Icônes sociales */
+  .social-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.1);
+    transition: all 0.3s ease;
+
+    svg {
+      width: 1.5rem;
+      height: 1.5rem;
+      color: white;
+    }
+
+    &:hover {
+      background: rgba(255, 255, 255, 0.2);
+      transform: scale(1.1) translateY(-5px);
+      box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
+    }
+
+    &.github:hover svg {
+      color: #171515;
+    }
+
+    &.linkedin:hover svg {
+      color: #0077b5;
+    }
+
+    &.discord:hover svg {
+      color: #5865f2;
+    }
+
+    &.facebook:hover svg {
+      color: #1877f2;
+    }
+  }
+
+  /* Bordure de séparation */
+  .border-t {
+    border-color: #6366f1;
+  }
+
+  /* Animations */
+  @keyframes float {
+    0%, 100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-20px);
     }
   }
 }

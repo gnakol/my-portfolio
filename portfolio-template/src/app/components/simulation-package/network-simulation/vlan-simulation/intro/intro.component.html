@@ -1,21 +1,59 @@
-<div class="intro-container">
-    <div class="animated-background"></div>
-
-    <div class="intro-content">
-        <h1 class="intro-title">Bienvenue dans la simulation de configuration VLAN !</h1>
-        <p class="intro-subtitle">
-            Dans cette simulation, vous allez apprendre à créer un VLAN, attribuer des ports et tester la connectivité.
-        </p>
-
-        <div class="intro-instructions">
-            <p>👨‍💻 <strong>Objectif :</strong> Configurer un VLAN en ligne de commande et voir l'effet en temps réel.</p>
-            <p>⚙️ <strong>Étapes :</strong> Créez un VLAN, assignez des ports, testez la connexion et validez votre configuration.</p>
-            <p>🚦 <strong>Conseil :</strong> Suivez les instructions et n'hésitez pas à explorer chaque commande.</p>
-        </div>
-
-        <button mat-raised-button color="primary" class="start-button" [routerLink]="'/terminal-vlan-config'">
-            Commencer la Simulation 🚀
-        </button>
-        
+<div class="dashboard-container">
+    <!-- Fond animé identique -->
+    <div class="animated-background">
+      <div class="gradient-circle circle-1"></div>
+      <div class="gradient-circle circle-2"></div>
+      <div class="grid-pattern"></div>
     </div>
-</div>
+  
+    <!-- Carte d'introduction -->
+    <mat-card class="intro-card">
+      <mat-card-header class="intro-header">
+        <mat-card-title class="dashboard-title">
+          Simulation de configuration <span class="text-gradient">VLAN</span>
+        </mat-card-title>
+        <mat-card-subtitle class="dashboard-subtitle">
+          Apprenez à créer et configurer des VLANs en environnement simulé
+        </mat-card-subtitle>
+        <div class="header-divider"></div>
+      </mat-card-header>
+  
+      <mat-card-content>
+        <div class="intro-features">
+          <div class="feature-item">
+            <mat-icon class="feature-icon">code</mat-icon>
+            <div>
+              <h3>Objectif</h3>
+              <p>Configurer un VLAN en ligne de commande et observer les effets en temps réel</p>
+            </div>
+          </div>
+  
+          <div class="feature-item">
+            <mat-icon class="feature-icon">build</mat-icon>
+            <div>
+              <h3>Étapes</h3>
+              <p>Création du VLAN, assignation des ports, tests de connexion et validation</p>
+            </div>
+          </div>
+  
+          <div class="feature-item">
+            <mat-icon class="feature-icon">lightbulb</mat-icon>
+            <div>
+              <h3>Conseil</h3>
+              <p>Suivez les instructions et explorez chaque commande réseau disponible</p>
+            </div>
+          </div>
+        </div>
+  
+        <button 
+          mat-raised-button 
+          class="start-button"
+          [routerLink]="'/terminal-vlan-config'"
+          color="primary"
+        >
+          <mat-icon>rocket_launch</mat-icon>
+          Commencer la Simulation
+        </button>
+      </mat-card-content>
+    </mat-card>
+  </div>

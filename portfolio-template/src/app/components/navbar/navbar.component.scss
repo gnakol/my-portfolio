@@ -52,3 +52,17 @@
       transform: translateX(100%);
     }
   }
+  /* Style pour les boutons qui ressemblent à des liens */
+button.nav-link {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: inherit;
+  color: inherit;
+  text-decoration: none;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}

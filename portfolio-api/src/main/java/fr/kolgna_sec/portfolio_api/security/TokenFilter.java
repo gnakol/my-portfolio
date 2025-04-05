@@ -35,7 +35,7 @@ public class TokenFilter extends OncePerRequestFilter {
                 "/connexion", "/account/add-new-account", "/activation", "/reset-password", "/forgot-password", "/refresh-token",
                 "/experience/all-experience", "/training/all-training",
                 "/skill/all-skill", "/language/all-language", "/hobbies/all-hobbies",
-                "/cv/download"
+                "/cv/download", "/contact/add-new-contact"
         );
 
 // Liste des chemins avec un paramètre dynamique {id}

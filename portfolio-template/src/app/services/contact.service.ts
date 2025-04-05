@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { GenericMethodeService } from './generic-methode.service';
 import { Contact, ContactResponse } from '../components/contact-package/contact.model';
@@ -33,11 +33,13 @@ export class ContactService {
    * ✅ Ajouter un nouveau contact
    */
   createContact(contactData: any): Observable<any> {
-
-    const headers = this.genericMethodeService.getHeaders();
-    
-    return this.http.post(`${this.contactUrl}/add-new-contact`, contactData, { headers });
-  }
+    return this.http.post(`${this.contactUrl}/add-new-contact`, contactData, {
+        headers: new HttpHeaders({
+            'Content-Type': 'application/json',
+            // Ne pas inclure d'Authorization header
+        })
+    });
+}
 
   deleteContact(id: number): Observable<any> {
     const headers = this.genericMethodeService.getHeaders();

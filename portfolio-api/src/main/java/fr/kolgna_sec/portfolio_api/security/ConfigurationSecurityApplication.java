@@ -47,6 +47,7 @@ public class ConfigurationSecurityApplication {
                         .requestMatchers(HttpMethod.POST, "/forgot-password").permitAll()
                         .requestMatchers(HttpMethod.POST, "/reset-password").permitAll()
                         .requestMatchers(HttpMethod.POST, "/refresh-token").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/contact/add-new-contact").permitAll()
                         .requestMatchers(HttpMethod.GET, "/experience/all-experience").permitAll()
                         .requestMatchers(HttpMethod.GET, "/experience-type/get-by-id-experience-type/{idExperienceType}").permitAll()
                         .requestMatchers(HttpMethod.GET, "/skill/all-skill").permitAll()

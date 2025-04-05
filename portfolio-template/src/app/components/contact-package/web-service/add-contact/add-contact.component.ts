@@ -9,7 +9,6 @@ import { MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { MatCardModule } from '@angular/material/card';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatError } from '@angular/material/form-field';
 import { ContactService } from '../../../../services/contact.service';
 
 @Component({

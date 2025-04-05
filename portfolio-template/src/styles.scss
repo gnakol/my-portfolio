@@ -84,3 +84,22 @@ main {
     box-shadow: 0 0 30px rgba(0, 0, 0, 0.5);
   }
 }
+
+.project-modal {
+  border-radius: 16px !important;
+  overflow: hidden;
+
+  .mat-dialog-container {
+    padding: 0;
+    background: transparent;
+    overflow: hidden;
+  }
+}
+
+.modal-backdrop-blur {
+  .project-page {
+    filter: blur(2px) brightness(0.8);
+    transition: filter 0.3s ease;
+    pointer-events: none;
+  }
+}

@@ -1,6 +1,8 @@
 import { Component } from '@angular/core';
 import { AuthenticationService } from '../../pages/authenticate/core/authentication.service';
 import { Router } from '@angular/router';
+import { MatDialog } from '@angular/material/dialog';
+import { AddContactComponent } from '../contact-package/web-service/add-contact/add-contact.component';
 
 @Component({
   selector: 'app-navbar',
@@ -24,7 +26,9 @@ export class NavbarComponent {
 
   constructor(
     public authService: AuthenticationService,
-    private router : Router
+    private router : Router,
+    private dialog : MatDialog,
+
 
   ) {}
 
@@ -32,6 +36,21 @@ export class NavbarComponent {
     this.authService.getAuthStatus().subscribe(status => {
       this.isAuthenticated = status;
     });
+  }
+
+  onNavLinkClick(link: any): void {
+    if (link.label === 'Contact') {
+      // Ouvrir la modale "Contact"
+      this.dialog.open(AddContactComponent, {
+        width: '100%',
+        maxWidth: '500px',
+        panelClass: 'contact-modal-container',
+        backdropClass: 'custom-backdrop'
+      });
+    } else {
+      // Naviguer vers la route spécifiée
+      this.router.navigate([link.path]);
+    }
   }
 
   updateActiveLinks(): void {
