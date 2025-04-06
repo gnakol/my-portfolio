@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { FeedbackDTO, PingRequest, PingResponse, SimulationRequest, SimulationResponse, VlanRequest, VlanResponse } from '../interface/simulation.model';
@@ -36,7 +36,10 @@ export class SimulationService {
     // ✅ Nouvelle méthode pour exécuter les commandes VLAN dans le terminal
     executeVlanCommand(command: string): Observable<PingResponse> {
 
-      const headers = this.genericMethodeService.getHeaders();
+      const headers = new HttpHeaders({
+                  'Content-Type': 'application/json',
+                  // Ne pas inclure d'Authorization header
+              })
 
       const requestBody = { command };
   

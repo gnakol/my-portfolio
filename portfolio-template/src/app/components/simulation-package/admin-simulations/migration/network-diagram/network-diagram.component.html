@@ -1,0 +1,44 @@
+<div class="network-diagram">
+    <!-- Metrics Panel -->
+    <div class="metrics-panel">
+      <h3>Migration Dashboard</h3>
+      <div class="gauge-container">
+        <div class="gauge" [style.background-color]="getGaugeColor()" 
+             [style.width.%]="downtimeScore"></div>
+      </div>
+      <div>Score: <strong>{{ downtimeScore }}/100</strong></div>
+      
+      <h4>Logs:</h4>
+      <div class="logs-container">
+        <div *ngFor="let log of migrationLogs" 
+             class="log-entry" 
+             [class.log-error]="log.startsWith('❌')">
+          {{ log }}
+        </div>
+      </div>
+    </div>
+  
+    <!-- Nodes -->
+    <div 
+      *ngFor="let node of nodes" 
+      class="node" 
+      [class.node-success]="node.state === 'success'"
+      [class.node-error]="node.state === 'error'"
+      cdkDrag
+      [cdkDragFreeDragPosition]="{x: node.x, y: node.y}"
+      (cdkDragEnded)="onDragEnded($event, node)"
+      (click)="showNodeDetails(node)">
+      {{ node.label }}
+    </div>
+  
+    <!-- Connections -->
+    <svg class="connections">
+      <line 
+        *ngFor="let conn of connections" 
+        [attr.x1]="conn.x1" [attr.y1]="conn.y1"
+        [attr.x2]="conn.x2" [attr.y2]="conn.y2"
+        [class.connection-valid]="conn.status === 'valid'"
+        [class.connection-invalid]="conn.status === 'invalid'">
+      </line>
+    </svg>
+  </div>

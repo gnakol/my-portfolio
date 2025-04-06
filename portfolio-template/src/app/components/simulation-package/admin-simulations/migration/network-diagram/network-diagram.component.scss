@@ -1,0 +1,148 @@
+.network-diagram {
+    position: relative;
+    width: 100%;
+    height: 600px;
+    background: radial-gradient(ellipse at bottom, #1B2735 0%, #090A0F 100%);
+    overflow: hidden;
+    font-family: 'Courier New', monospace;
+  }
+  
+  .node {
+    position: absolute;
+    width: 100px;
+    height: 60px;
+    background: linear-gradient(145deg, #1a2a3a, #2a3a4a);
+    border: 2px solid #00ff41;
+    border-radius: 8px;
+    box-shadow: 0 0 15px rgba(0, 255, 65, 0.3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #00ff41;
+    font-size: 0.8rem;
+    cursor: move;
+    transition: all 0.3s ease;
+    z-index: 10;
+  
+    &:hover {
+      transform: scale(1.05);
+      box-shadow: 0 0 25px rgba(0, 255, 65, 0.5);
+    }
+  }
+  
+  .connections {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    pointer-events: none;
+  }
+  
+  .connection-valid {
+    stroke: rgba(0, 255, 65, 0.6);
+    stroke-width: 3;
+    stroke-dasharray: 5;
+    animation: connectionFlow 2s linear infinite;
+  }
+  
+  .connection-invalid {
+    stroke: rgba(255, 0, 0, 0.6);
+    stroke-width: 4;
+    stroke-dasharray: 5, 2;
+    animation: connectionError 1s linear infinite;
+  }
+  
+  @keyframes connectionFlow {
+    0% { stroke-dashoffset: 10; }
+    100% { stroke-dashoffset: 0; }
+  }
+  
+  @keyframes connectionError {
+    0% { stroke-opacity: 0.5; }
+    50% { stroke-opacity: 1; }
+    100% { stroke-opacity: 0.5; }
+  }
+  
+  /* Animations */
+  .node-success {
+    animation: pulse-green 1.5s infinite;
+    &::after {
+      content: '';
+      position: absolute;
+      inset: -5px;
+      border: 2px solid rgba(0, 255, 255, 0.5);
+      border-radius: 12px;
+      animation: hologramPulse 2s infinite;
+      z-index: -1;
+    }
+  }
+  
+  .node-error {
+    animation: pulse-red 1s infinite;
+  }
+  
+  @keyframes pulse-green {
+    0% { box-shadow: 0 0 10px rgba(0, 255, 65, 0.5); }
+    50% { box-shadow: 0 0 25px rgba(0, 255, 65, 0.9); }
+    100% { box-shadow: 0 0 10px rgba(0, 255, 65, 0.5); }
+  }
+  
+  @keyframes pulse-red {
+    0% { box-shadow: 0 0 10px rgba(255, 0, 0, 0.5); }
+    50% { box-shadow: 0 0 25px rgba(255, 0, 0, 0.9); }
+    100% { box-shadow: 0 0 10px rgba(255, 0, 0, 0.5); }
+  }
+  
+  @keyframes hologramPulse {
+    0% { opacity: 0.5; transform: scale(1); }
+    50% { opacity: 0.2; transform: scale(1.05); }
+    100% { opacity: 0.5; transform: scale(1); }
+  }
+  
+  /* Metrics Panel */
+  .metrics-panel {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    background: rgba(10, 30, 40, 0.9);
+    border: 1px solid #00ff41;
+    padding: 15px;
+    border-radius: 8px;
+    color: white;
+    max-width: 300px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+  }
+  
+  .gauge-container {
+    height: 10px;
+    background: #333;
+    border-radius: 5px;
+    margin: 10px 0;
+    overflow: hidden;
+  }
+  
+  .gauge {
+    height: 100%;
+    transition: width 0.5s ease, background-color 0.5s ease;
+  }
+  
+  .logs-container {
+    max-height: 200px;
+    overflow-y: auto;
+    margin-top: 10px;
+  }
+  
+  .log-entry {
+    font-size: 0.75rem;
+    margin: 5px 0;
+    padding: 5px;
+    border-left: 2px solid #00ff41;
+    background: rgba(0, 255, 65, 0.1);
+  }
+  
+  .log-error {
+    border-left-color: #ff0000;
+    background: rgba(255, 0, 0, 0.1);
+    color: #ff9999;
+  }

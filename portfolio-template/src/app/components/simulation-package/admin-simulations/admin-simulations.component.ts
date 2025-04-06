@@ -1,11 +1,19 @@
 import { Component } from '@angular/core';
+import { Router } from '@angular/router';
+import { CommonModule } from '@angular/common';
+import { MatIconModule } from '@angular/material/icon';
 
 @Component({
   selector: 'app-admin-simulations',
-  standalone: false,
+  standalone: true,
+  imports: [CommonModule, MatIconModule],
   templateUrl: './admin-simulations.component.html',
-  styleUrl: './admin-simulations.component.scss'
+  styleUrls: ['./admin-simulations.component.scss']
 })
 export class AdminSimulationsComponent {
+  constructor(private router: Router) {}
 
+  navigateTo(route: string): void {
+    this.router.navigate([route]);
+  }
 }

@@ -1,0 +1,110 @@
+<div class="war-room">
+  <!-- Terminal Principal -->
+  <div class="terminal" [class.glitch]="cpuCritical">
+    <!-- Guide Contextuel -->
+    @if (showTutorial && !incidentResolved) {
+    <div class="tutorial-box">
+      @if (currentStep === 0) {
+      <div class="tutorial-step">
+        <h3>🚨 ALERTE CRITIQUE DETECTEE</h3>
+        <p>Connectez-vous au serveur en urgence :</p>
+        <code class="hint">ssh admin&#64;prod-app-01</code>
+        <button (click)="autoFill('ssh admin@prod-app-01')">Copier la commande</button>
+      </div>
+      }
+      @if (currentStep === 1) {
+      <div class="tutorial-step">
+        <h3>🔍 ANALYSE DU SERVEUR</h3>
+        <p>Vérifiez les processus consommateurs :</p>
+        <code class="hint">htop</code>
+        <button (click)="autoFill('htop')">Exécuter</button>
+      </div>
+      }
+      @if (currentStep === 2) {
+      <div class="tutorial-step">
+        <h3>💉 SOLUTION REQUISE</h3>
+        <p>Terminez le processus problématique :</p>
+        <code class="hint">kill -9 123</code>
+        <button (click)="autoFill('kill -9 123')">Forcer l'arrêt</button>
+      </div>
+      }
+    </div>
+    }
+
+    <!-- Timeline Interactive -->
+    <div class="timeline">
+      <div class="time-elapsed">{{ elapsedTime }}</div>
+      <div class="time-bar" [style.width.%]="timePercentage"></div>
+      @for (marker of timelineMarkers; track marker) {
+      <div class="time-marker" 
+           [style.left.%]="marker.position"
+           [class.active]="currentStep >= marker.step"
+           (click)="jumpToStep(marker.step)"></div>
+      }
+    </div>
+
+    <!-- Command History -->
+    @for (cmd of commandHistory; track cmd) {
+    <div class="command-line">
+      <span class="prompt">admin&#64;prod-app-01:~$</span> {{ cmd.text }}
+      <div class="output" [innerHTML]="cmd.output"></div>
+    </div>
+    }
+
+    <!-- Terminal Input -->
+    <div class="input-line">
+      <span class="prompt">admin&#64;prod-app-01:~$</span>
+      <input [(ngModel)]="currentCommand" 
+             (keyup.enter)="executeCommand()"
+             [placeholder]="getPlaceholder()"
+             [disabled]="incidentResolved">
+      <button class="hint-button" (click)="showHint()">?</button>
+    </div>
+
+    <!-- Résolution -->
+    @if (incidentResolved) {
+    <div class="resolution-box">
+      <h3>🎉 INCIDENT RESOLU EN {{ elapsedTime }}</h3>
+      <p>Temps moyen en entreprise : 2m30s</p>
+      <button (click)="resetSimulation()">Recommencer</button>
+    </div>
+    }
+  </div>
+
+  <!-- Panneau d'Aide -->
+  <div class="help-panel">
+    <div class="panel-header">
+      <h3>📋 OBJECTIFS</h3>
+      <button (click)="toggleTutorial()">
+        {{ showTutorial ? 'Cacher aide' : 'Afficher aide' }}
+      </button>
+    </div>
+    
+    <ol class="mission-steps">
+      <li [class.completed]="currentStep >= 1">Connexion SSH au serveur</li>
+      <li [class.completed]="currentStep >= 2">Diagnostic (htop)</li>
+      <li [class.completed]="currentStep >= 3">Terminaison du processus</li>
+      <li [class.completed]="incidentResolved">Restauration du service</li>
+    </ol>
+    
+    <div class="quick-commands">
+      <h4>🛠️ COMMANDES RAPIDES</h4>
+      @for (cmd of quickCommands; track cmd) {
+      <button (click)="autoFill(cmd.command)"
+              [disabled]="currentStep < cmd.minStep || incidentResolved">
+        {{ cmd.label }}
+      </button>
+      }
+    </div>
+
+    <!-- CCTV Feeds -->
+    <div class="cctv-container">
+      @for (feed of cctvFeeds; track feed) {
+      <div class="cctv-feed">
+        <div class="cctv-label">{{ feed.label }}</div>
+        <div class="cctv-content" [innerHTML]="feed.content"></div>
+      </div>
+      }
+    </div>
+  </div>
+</div>

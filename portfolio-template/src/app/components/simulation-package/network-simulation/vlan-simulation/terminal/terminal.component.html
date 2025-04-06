@@ -1,28 +1,93 @@
 <div class="terminal-page">
+    <!-- Fond holographique futuriste -->
+    <div class="holographic-background"></div>
+    
+    <!-- Réseau de nodes connectés en arrière-plan -->
+    <div class="network-nodes">
+        <div *ngFor="let node of networkNodes" class="node" [style.left]="node.x + 'px'" [style.top]="node.y + 'px'"></div>
+        <svg class="connections">
+            <line *ngFor="let connection of nodeConnections" 
+                  [attr.x1]="connection.x1" [attr.y1]="connection.y1"
+                  [attr.x2]="connection.x2" [attr.y2]="connection.y2"
+                  class="connection-line"/>
+        </svg>
+    </div>
+
     <div class="terminal-section">
-        <div class="terminal-container">
+        <!-- Terminal avec effet CRT rétro-futuriste -->
+        <div class="terminal-container" [class.glowing]="isProcessing">
+            <div class="terminal-header">
+                <div class="led-indicators">
+                    <div class="led red" [class.active]="currentStep >= 0"></div>
+                    <div class="led yellow" [class.active]="currentStep >= 1"></div>
+                    <div class="led green" [class.active]="currentStep >= 2"></div>
+                </div>
+                <h3>VLAN CONFIGURATION TERMINAL v3.7</h3>
+                <div class="signal-strength">
+                    <span>CONNECTION:</span>
+                    <div class="signal-bars">
+                        <div class="bar" *ngFor="let bar of [1,2,3,4,5]" 
+                             [class.active]="bar <= connectionQuality"></div>
+                    </div>
+                </div>
+            </div>
+            
             <div class="terminal-output">
                 <pre>{{ terminalOutput }}</pre>
+                <div class="scanlines"></div>
             </div>
 
             <div class="terminal-input">
+                <div class="input-prefix">root&#64;switch#</div>
                 <input 
                     type="text" 
                     [(ngModel)]="command" 
                     (keydown.enter)="sendCommand()" 
-                    placeholder="Entrez votre commande..." 
+                    (keydown)="playKeySound()"
+                    placeholder="Enter VLAN command..." 
                     class="terminal-input-field"
                     autofocus
                 />
-                <button mat-raised-button color="primary" (click)="sendCommand()" class="animated-button">
-                    Envoyer
+                <button mat-raised-button (click)="sendCommand()" class="animated-button">
+                    <span class="button-text">EXECUTE</span>
+                    <div class="button-lights">
+                        <div class="light"></div>
+                        <div class="light"></div>
+                    </div>
                 </button>
             </div>
         </div>
     </div>
 
-    <div class="animation-section">
-        <!-- Déplacer l'AnimationComponent à côté du terminal -->
-        <app-animation [animationType]="currentAnimation"></app-animation>
+    <div class="hardware-section">
+        <!-- Rack de serveurs animé -->
+        <div class="server-rack" [class.active]="currentStep > 0">
+            <div class="server" *ngFor="let server of servers">
+                <div class="led" [style.backgroundColor]="server.ledColor"></div>
+                <div class="drive-lights">
+                    <div class="light" *ngFor="let light of server.lights" 
+                         [class.active]="light.active"></div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Animation 3D du switch réseau -->
+        <div class="network-switch">
+            <div class="switch-body">
+                <div class="port" *ngFor="let port of switchPorts" 
+                     [class.active]="port.active"
+                     [class.vlan10]="port.vlan === 10"
+                     [class.vlan20]="port.vlan === 20"
+                     (mouseenter)="highlightPort(port.id)">
+                    <div class="port-light"></div>
+                    <span class="port-label">Fa0/{{port.id}}</span>
+                </div>
+            </div>
+            <div class="switch-screen">
+                <div class="screen-content">
+                    <pre>{{ switchStatus }}</pre>
+                </div>
+            </div>
+        </div>
     </div>
 </div>

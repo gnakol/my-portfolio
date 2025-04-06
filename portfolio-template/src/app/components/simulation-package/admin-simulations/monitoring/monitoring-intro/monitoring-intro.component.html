@@ -1,0 +1,60 @@
+<div class="dashboard-container">
+    <!-- Fond animé identique -->
+    <div class="animated-background">
+      <div class="gradient-circle circle-1"></div>
+      <div class="gradient-circle circle-2"></div>
+      <div class="grid-pattern"></div>
+    </div>
+  
+    <!-- Carte d'introduction -->
+    <mat-card class="intro-card">
+      <mat-card-header class="intro-header">
+        <mat-card-title class="dashboard-title">
+          Dashboard <span class="text-gradient">Monitoring Réseau</span>
+        </mat-card-title>
+        <mat-card-subtitle class="dashboard-subtitle">
+          Visualisez en temps réel l’activité des services et la santé de votre infrastructure
+        </mat-card-subtitle>
+        <div class="header-divider"></div>
+      </mat-card-header>
+  
+      <mat-card-content>
+        <div class="intro-features">
+          <div class="feature-item">
+            <mat-icon class="feature-icon">monitor_heart</mat-icon>
+            <div>
+              <h3>Surveillance</h3>
+              <p>Gardez un œil sur les performances de vos serveurs et composants critiques</p>
+            </div>
+          </div>
+  
+          <div class="feature-item">
+            <mat-icon class="feature-icon">analytics</mat-icon>
+            <div>
+              <h3>Analyse</h3>
+              <p>Identifiez rapidement les goulets d’étranglement et les incidents potentiels</p>
+            </div>
+          </div>
+  
+          <div class="feature-item">
+            <mat-icon class="feature-icon">warning</mat-icon>
+            <div>
+              <h3>Alertes</h3>
+              <p>Recevez des notifications en cas de comportement anormal ou de seuil critique</p>
+            </div>
+          </div>
+        </div>
+  
+        <button 
+          mat-raised-button 
+          class="start-button"
+          [routerLink]="'/monitoring-start'"
+          color="primary"
+        >
+          <mat-icon>play_circle</mat-icon>
+          Lancer le Monitoring
+        </button>
+      </mat-card-content>
+    </mat-card>
+  </div>
+  

@@ -15,54 +15,54 @@
 
   <!-- Cartes de simulation -->
   <div class="cards-container">
-    <!-- Carte VLAN -->
-    <div class="dashboard-card" (click)="navigateTo('vlan-simulation')" [style.--card-color]="'#6366f1'">
-      <div class="card-icon">
-        <mat-icon svgIcon="device_hub"></mat-icon>
-      </div>
-      <h2 class="card-title">Configurer un VLAN</h2>
-      <p class="card-description">Créez et gérez vos VLANs de manière interactive</p>
-      <div class="card-badge">IEEE 802.1Q</div>
-    </div>
+<!-- Carte VLAN -->
+<div class="dashboard-card" (click)="navigateTo('vlan-simulation')" [style.--card-color]="'#6366f1'">
+  <div class="card-icon">
+    <mat-icon>device_hub</mat-icon>
+  </div>
+  <h2 class="card-title">Configurer un VLAN</h2>
+  <p class="card-description">Créez et gérez vos VLANs de manière interactive</p>
+  <div class="card-badge">IEEE 802.1Q</div>
+</div>
 
-    <!-- Carte EIGRP -->
-    <div class="dashboard-card" (click)="navigateTo('eigrp-simulation')" [style.--card-color]="'#8b5cf6'">
-      <div class="card-icon">
-        <mat-icon svgIcon="router"></mat-icon>
-      </div>
-      <h2 class="card-title">Routage EIGRP</h2>
-      <p class="card-description">Simulez des configurations de routage dynamiques</p>
-      <div class="card-badge">Cisco</div>
-    </div>
+<!-- Carte EIGRP -->
+<div class="dashboard-card" (click)="navigateTo('eigrp-simulation')" [style.--card-color]="'#8b5cf6'">
+  <div class="card-icon">
+    <mat-icon>router</mat-icon>
+  </div>
+  <h2 class="card-title">Routage EIGRP</h2>
+  <p class="card-description">Simulez des configurations de routage dynamiques</p>
+  <div class="card-badge">Cisco</div>
+</div>
 
-    <!-- Carte OSPF -->
-    <div class="dashboard-card" (click)="navigateTo('/simulation/ospf')" [style.--card-color]="'#ec4899'">
-      <div class="card-icon">
-        <mat-icon svgIcon="network_check"></mat-icon>
-      </div>
-      <h2 class="card-title">Routage OSPF</h2>
-      <p class="card-description">Apprenez à configurer OSPF efficacement</p>
-      <div class="card-badge">Link-state</div>
-    </div>
+<!-- Carte OSPF -->
+<div class="dashboard-card" (click)="navigateTo('/simulation/ospf')" [style.--card-color]="'#ec4899'">
+  <div class="card-icon">
+    <mat-icon>network_check</mat-icon>
+  </div>
+  <h2 class="card-title">Routage OSPF</h2>
+  <p class="card-description">Apprenez à configurer OSPF efficacement</p>
+  <div class="card-badge">Link-state</div>
+</div>
 
-    <!-- Carte DHCP -->
-    <div class="dashboard-card" (click)="navigateTo('/dhcp-simulation')" [style.--card-color]="'#14b8a6'">
-      <div class="card-icon">
-        <mat-icon svgIcon="settings_ethernet"></mat-icon>
-      </div>
-      <h2 class="card-title">DHCP (Relay/Full)</h2>
-      <p class="card-description">Configurez un serveur DHCP avec facilité</p>
-      <div class="card-badge">RFC 2131</div>
-    </div>
+<!-- Carte DHCP -->
+<div class="dashboard-card" (click)="navigateTo('/dhcp-simulation')" [style.--card-color]="'#14b8a6'">
+  <div class="card-icon">
+    <mat-icon>settings_ethernet</mat-icon>
+  </div>
+  <h2 class="card-title">DHCP (Relay/Full)</h2>
+  <p class="card-description">Configurez un serveur DHCP avec facilité</p>
+  <div class="card-badge">RFC 2131</div>
+</div>
 
-    <!-- Carte NAT/PAT -->
-    <div class="dashboard-card" (click)="navigateTo('/simulation/nat')" [style.--card-color]="'#f59e0b'">
-      <div class="card-icon">
-        <mat-icon svgIcon="swap_horiz"></mat-icon>
-      </div>
-      <h2 class="card-title">NAT/PAT</h2>
-      <p class="card-description">Découvrez la traduction d'adresses réseau</p>
-      <div class="card-badge">RFC 3022</div>
-    </div>
+<!-- Carte NAT/PAT -->
+<div class="dashboard-card" (click)="navigateTo('/simulation/nat')" [style.--card-color]="'#f59e0b'">
+  <div class="card-icon">
+    <mat-icon>swap_horiz</mat-icon>
+  </div>
+  <h2 class="card-title">NAT/PAT</h2>
+  <p class="card-description">Découvrez la traduction d'adresses réseau</p>
+  <div class="card-badge">RFC 3022</div>
+</div>
   </div>
 </div>

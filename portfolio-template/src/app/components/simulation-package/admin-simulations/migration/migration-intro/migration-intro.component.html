@@ -1,0 +1,60 @@
+<div class="dashboard-container">
+    <!-- Fond animé identique -->
+    <div class="animated-background">
+      <div class="gradient-circle circle-1"></div>
+      <div class="gradient-circle circle-2"></div>
+      <div class="grid-pattern"></div>
+    </div>
+  
+    <!-- Carte d'introduction -->
+    <mat-card class="intro-card">
+      <mat-card-header class="intro-header">
+        <mat-card-title class="dashboard-title">
+          Simulation <span class="text-gradient">Migration de Serveur</span>
+        </mat-card-title>
+        <mat-card-subtitle class="dashboard-subtitle">
+          Relevez le défi de réorganiser une infrastructure critique avec logique et stratégie
+        </mat-card-subtitle>
+        <div class="header-divider"></div>
+      </mat-card-header>
+  
+      <mat-card-content>
+        <div class="intro-features">
+          <div class="feature-item">
+            <mat-icon class="feature-icon">extension</mat-icon>
+            <div>
+              <h3>Objectif</h3>
+              <p>Réassembler des éléments de l’architecture pour restaurer les services clés du système</p>
+            </div>
+          </div>
+  
+          <div class="feature-item">
+            <mat-icon class="feature-icon">layers</mat-icon>
+            <div>
+              <h3>Déroulement</h3>
+              <p>Positionnez correctement serveurs, bases de données et pare-feux dans un environnement puzzle 2D</p>
+            </div>
+          </div>
+  
+          <div class="feature-item">
+            <mat-icon class="feature-icon">tips_and_updates</mat-icon>
+            <div>
+              <h3>Conseil</h3>
+              <p>Chaque action compte : analysez les dépendances système avant de valider un déplacement</p>
+            </div>
+          </div>
+        </div>
+  
+        <button 
+          mat-raised-button 
+          class="start-button"
+          [routerLink]="'/migration-network-diagram'"
+          color="primary"
+        >
+          <mat-icon>rocket_launch</mat-icon>
+          Lancer la Simulation
+        </button>
+      </mat-card-content>
+    </mat-card>
+  </div>
+  

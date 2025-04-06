@@ -41,6 +41,12 @@ import { AuthGuard } from './pages/authenticate/protec-route/auth.guard';
 import { ContactTemplateComponent } from './components/contact-package/contact-template/contact-template.component';
 import { AllContactComponent } from './components/contact-package/web-service/all-contact/all-contact.component';
 import { ExperienceDetailComponent } from './components/experiences-package/experience-detail/experience-detail.component';
+import { AdminSimulationsComponent } from './components/simulation-package/admin-simulations/admin-simulations.component';
+import { MigrationIntroComponent } from './components/simulation-package/admin-simulations/migration/migration-intro/migration-intro.component';
+import { MigrationComponent } from './components/simulation-package/admin-simulations/migration/migration.component';
+import { NetworkDiagramComponent } from './components/simulation-package/admin-simulations/migration/network-diagram/network-diagram.component';
+import { MonitoringComponent } from './components/simulation-package/admin-simulations/monitoring/monitoring.component';
+import { MonitoringCyberWarComponent } from './components/simulation-package/admin-simulations/monitoring/monitoring-cyber-war/monitoring-cyber-war.component';
 
 const routes: Routes = [
   { path: '', loadChildren: () => import('./pages/home/home.module').then(m => m.HomeModule) },
@@ -77,6 +83,9 @@ const routes: Routes = [
   { path: 'vlan-simulation', component : VlanSimulationComponent},
   { path: 'eigrp-simulation', component : EigrpSimulationComponent},
   { path: 'dhcp-simulation', component : DhcpComponent},
+  { path: 'admin-simulation', component : AdminSimulationsComponent},
+  { path: 'migration-simulation', component : MigrationComponent},
+  { path: 'monitoring-simulation', component : MonitoringComponent},
 
 
 
@@ -104,6 +113,7 @@ const routes: Routes = [
 
   // For vlan
   { path : 'intro-vlan', component : IntroComponent},
+  { path : 'intro-migration', component : MigrationIntroComponent},
   { path : 'terminal-vlan-config', component : TerminalComponent},
 
   // For eigrp
@@ -115,6 +125,9 @@ const routes: Routes = [
   { path : 'intro-dhcp-config', component : IntroDhcpComponent},
   { path: 'dhcp-relay', component: RelayComponent },
   { path: 'dhcp-full', component: FullComponent },
+
+  { path: 'migration-network-diagram', component : NetworkDiagramComponent},
+  { path: 'monitoring-start', component : MonitoringCyberWarComponent}
   
 ];
 

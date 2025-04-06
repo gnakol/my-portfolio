@@ -26,6 +26,8 @@ import { TerminalEigrpComponent } from '../network-simulation/eigrp-simulation/t
 import { DhcpComponent } from '../network-simulation/dhcp/dhcp.component';
 import { IntroDhcpComponent } from '../network-simulation/dhcp/intro-dhcp/intro-dhcp.component';
 import { RelayComponent } from '../network-simulation/dhcp/relay/relay.component';
+import { MigrationIntroComponent } from '../admin-simulations/migration/migration-intro/migration-intro.component';
+import { MigrationComponent } from '../admin-simulations/migration/migration.component';
 
 
 const routes : Routes = [
@@ -39,7 +41,9 @@ const routes : Routes = [
   {path : '', component : TerminalEigrpComponent},
   {path: '', component : DhcpComponent},
   {path : '', component : IntroDhcpComponent},
-  {path : '', component : RelayComponent}
+  {path : '', component : RelayComponent},
+  {path : '', component : MigrationIntroComponent},
+  {path : '', component : MigrationComponent}
 ];
 
 

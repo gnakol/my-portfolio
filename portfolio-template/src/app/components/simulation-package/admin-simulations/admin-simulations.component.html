@@ -1,1 +1,43 @@
-<p>admin-simulations works!</p>
+<div class="dashboard-container">
+    <!-- Fond animé -->
+    <div class="animated-background">
+      <div class="gradient-circle circle-1"></div>
+      <div class="gradient-circle circle-2"></div>
+      <div class="grid-pattern"></div>
+    </div>
+  
+    <!-- En-tête -->
+    <div class="dashboard-header">
+      <h1 class="dashboard-title">Admin <span class="text-gradient">Simulations</span></h1>
+      <p class="dashboard-subtitle">Accès aux scénarios de simulation avancée pour l'administration</p>
+      <div class="header-divider"></div>
+    </div>
+  
+    <!-- Cartes -->
+    <div class="cards-container">
+<!-- Carte Monitoring -->
+<div class="dashboard-card" (click)="navigateTo('monitoring-simulation')" [style.--card-color]="'#3b82f6'">
+    <div class="card-icon">
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+          d="M3 12h3l3 8 4-16 3 8h4" />
+      </svg>
+    </div>
+    <h2 class="card-title">Incident de Monitoring</h2>
+    <p class="card-description">Résolution en Temps Réel d'un problème réseau critique</p>
+    <div class="card-badge">Monitoring</div>
+  </div>
+  
+<!-- Carte Migration -->
+<div class="dashboard-card" (click)="navigateTo('migration-simulation')" [style.--card-color]="'#10b981'">
+  <div class="card-icon">
+    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+        d="M3 7h6v6H3zM15 3h6v6h-6zM15 15h6v6h-6zM3 15h6v6H3z" />
+    </svg>
+  </div>
+  <h2 class="card-title">Migration de Serveur</h2>
+  <p class="card-description">Un jeu de puzzle interactif pour réorganiser l’infrastructure</p>
+  <div class="card-badge">Infrastructure</div>
+</div>
+  
