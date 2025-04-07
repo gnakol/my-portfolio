@@ -1,1 +1,78 @@
-<p>security-simulations works!</p>
+<div class="dashboard-container">
+    <!-- Fond animé -->
+    <div class="animated-background">
+      <div class="gradient-circle circle-1"></div>
+      <div class="gradient-circle circle-2"></div>
+      <div class="grid-pattern"></div>
+    </div>
+  
+    <!-- En-tête -->
+    <div class="dashboard-header">
+      <h1 class="dashboard-title">Cyber <span class="text-gradient">Defense</span></h1>
+      <p class="dashboard-subtitle">Simulations interactives de sécurité réseau avancée</p>
+      <div class="header-divider"></div>
+    </div>
+  
+    <!-- Cartes -->
+    <div class="cards-container">
+      <!-- Firewall Attack Blocker -->
+      <div class="dashboard-card" [style.--card-color]="'#ef4444'" (click)="navigateTo('firewall-blocked-simulation')">
+        <div class="card-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/>
+          </svg>
+        </div>
+        <h2 class="card-title">Pare-feu Intelligent</h2>
+        <p class="card-description">Bloquez les attaques DDoS en temps réel</p>
+        <div class="card-badge">Firewall</div>
+      </div>
+  
+      <!-- Network Intrusion -->
+      <div class="dashboard-card" [style.--card-color]="'#f59e0b'">
+        <div class="card-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
+          </svg>
+        </div>
+        <h2 class="card-title">Détection d'Intrusion</h2>
+        <p class="card-description">Identifiez et neutralisez les intrus</p>
+        <div class="card-badge">IDS/IPS</div>
+      </div>
+  
+      <!-- System Protection -->
+      <div class="dashboard-card" [style.--card-color]="'#10b981'">
+        <div class="card-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
+          </svg>
+        </div>
+        <h2 class="card-title">Bouclier Système</h2>
+        <p class="card-description">Protégez vos serveurs contre les exploits</p>
+        <div class="card-badge">Hardenning</div>
+      </div>
+  
+      <!-- Radius Server -->
+      <div class="dashboard-card" [style.--card-color]="'#3b82f6'">
+        <div class="card-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
+          </svg>
+        </div>
+        <h2 class="card-title">Authentification Centralisée</h2>
+        <p class="card-description">Gérez les accès via serveur RADIUS</p>
+        <div class="card-badge">AAA</div>
+      </div>
+  
+      <!-- VPN Configuration -->
+      <div class="dashboard-card" [style.--card-color]="'#8b5cf6'">
+        <div class="card-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
+          </svg>
+        </div>
+        <h2 class="card-title">Tunnel Sécurisé</h2>
+        <p class="card-description">Configurez des VPNs ultra-sécurisés</p>
+        <div class="card-badge">VPN</div>
+      </div>
+    </div>
+  </div>

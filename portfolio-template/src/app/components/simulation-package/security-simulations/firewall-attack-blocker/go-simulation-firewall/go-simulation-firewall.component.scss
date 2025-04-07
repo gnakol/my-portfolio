@@ -1,0 +1,377 @@
+.firewall-simulator {
+    height: 100vh;
+    background: #0a0a0a;
+    color: #00ff41;
+    font-family: 'Courier New', monospace;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    overflow: hidden;
+  
+    .hud {
+      display: flex;
+      justify-content: space-around;
+      padding: 10px;
+      background: rgba(0, 20, 10, 0.5);
+      border-bottom: 1px solid #00ff41;
+  
+      .hud-item {
+        text-align: center;
+  
+        .hud-label {
+          font-size: 0.8rem;
+          opacity: 0.8;
+        }
+  
+        .hud-value {
+          font-size: 1.5rem;
+          font-weight: bold;
+          font-family: 'Digital', monospace;
+        }
+      }
+    }
+  
+    .terminal {
+      flex: 1;
+      margin: 20px;
+      background: rgba(0, 10, 20, 0.8);
+      border: 1px solid #00ff41;
+      border-radius: 5px;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      transition: all 0.3s;
+  
+      &.danger {
+        border-color: #ff0000;
+        box-shadow: 0 0 20px rgba(255, 0, 0, 0.5);
+      }
+  
+      .terminal-header {
+        display: flex;
+        align-items: center;
+        padding: 10px;
+        background: rgba(0, 20, 30, 0.8);
+        border-bottom: 1px solid #00ff41;
+  
+        .leds {
+          display: flex;
+          gap: 5px;
+  
+          .led {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            opacity: 0.3;
+  
+            &.active {
+              opacity: 1;
+              box-shadow: 0 0 5px currentColor;
+            }
+  
+            &.red { background: #ff0000; }
+            &.yellow { background: #ffff00; }
+            &.green { background: #00ff00; }
+          }
+        }
+  
+        h3 {
+          margin: 0 auto;
+          font-size: 1rem;
+        }
+  
+        .alert-level {
+          color: #ff5555;
+          font-weight: bold;
+        }
+      }
+  
+      .terminal-output {
+        flex: 1;
+        padding: 10px;
+        overflow-y: auto;
+        font-family: 'Courier New', monospace;
+        position: relative;
+  
+        pre {
+          margin: 0;
+          white-space: pre-wrap;
+          line-height: 1.4;
+        }
+  
+        .scanlines {
+          position: absolute;
+          top: 0;
+          left: 0;
+          right: 0;
+          bottom: 0;
+          background: linear-gradient(
+            rgba(0, 255, 65, 0.05) 0%,
+            rgba(0, 255, 65, 0.05) 50%,
+            transparent 50%,
+            transparent 100%
+          );
+          background-size: 100% 4px;
+          pointer-events: none;
+        }
+      }
+  
+      .terminal-input {
+        display: flex;
+        align-items: center;
+        padding: 10px;
+        border-top: 1px solid rgba(0, 255, 65, 0.3);
+  
+        .prompt {
+          color: #00ff41;
+          margin-right: 5px;
+        }
+  
+        input {
+          flex: 1;
+          background: transparent;
+          border: none;
+          color: #00ff41;
+          font-family: 'Courier New', monospace;
+          outline: none;
+  
+          &::placeholder {
+            color: rgba(0, 255, 65, 0.5);
+          }
+        }
+      }
+    }
+  
+    .network-visualization {
+      display: flex;
+      height: 200px;
+      margin: 0 20px 20px;
+      position: relative;
+  
+      .internet, .firewall, .internal-network {
+        flex: 1;
+        border: 1px solid #333;
+        margin: 0 5px;
+        position: relative;
+        overflow: hidden;
+  
+        .label {
+          position: absolute;
+          top: 5px;
+          left: 0;
+          right: 0;
+          text-align: center;
+          font-weight: bold;
+        }
+      }
+  
+      .internet {
+        background: rgba(255, 0, 0, 0.1);
+  
+        .attack-wave {
+          position: absolute;
+          bottom: 30px;
+          width: 20px;
+          height: 20px;
+          border-radius: 50%;
+          transform: translateX(-50%);
+          animation: pulse 1s infinite alternate;
+  
+          &.ddos {
+            background: rgba(255, 0, 0, 0.7);
+            box-shadow: 0 0 10px red;
+          }
+  
+          &.bruteforce {
+            background: rgba(255, 165, 0, 0.7);
+            box-shadow: 0 0 10px orange;
+          }
+  
+          &.sql-injection {
+            background: rgba(0, 255, 255, 0.7);
+            box-shadow: 0 0 10px cyan;
+          }
+  
+          &.dns-amplification {
+            background: rgba(255, 0, 255, 0.7);
+            box-shadow: 0 0 10px purple;
+          }
+  
+          &.blocked {
+            animation: blocked 0.5s forwards;
+          }
+  
+          .attack-tooltip {
+            position: absolute;
+            bottom: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #111;
+            padding: 2px 5px;
+            border-radius: 3px;
+            font-size: 0.7rem;
+            white-space: nowrap;
+            opacity: 0;
+            transition: opacity 0.3s;
+          }
+  
+          &:hover .attack-tooltip {
+            opacity: 1;
+          }
+        }
+      }
+  
+      .firewall {
+        background: rgba(0, 255, 65, 0.05);
+        display: flex;
+        flex-direction: column;
+  
+        .rules {
+          margin-top: 30px;
+          overflow-y: auto;
+          flex: 1;
+  
+          .rule {
+            display: flex;
+            justify-content: space-between;
+            padding: 5px;
+            margin: 3px;
+            background: rgba(0, 20, 30, 0.8);
+            font-size: 0.8rem;
+  
+            button {
+              background: transparent;
+              border: none;
+              color: #ff5555;
+              cursor: pointer;
+            }
+          }
+        }
+      }
+  
+      .internal-network {
+        background: rgba(0, 0, 255, 0.1);
+  
+        .server {
+          position: absolute;
+          width: 80%;
+          left: 10%;
+          padding: 5px;
+          text-align: center;
+          background: rgba(0, 255, 65, 0.1);
+          border: 1px solid #00ff41;
+          transition: all 0.3s;
+  
+          &:nth-child(1) { top: 20%; }
+          &:nth-child(2) { top: 50%; transform: translateY(-50%); }
+          &:nth-child(3) { bottom: 20%; }
+  
+          &.infected {
+            background: rgba(255, 0, 0, 0.3);
+            border-color: #ff0000;
+            animation: infected-pulse 1s infinite;
+          }
+  
+          .server-name {
+            font-weight: bold;
+            display: block;
+          }
+  
+          .server-status {
+            font-size: 0.7rem;
+            opacity: 0.8;
+          }
+        }
+      }
+    }
+  
+    .tutorial, .results {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 10, 20, 0.95);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      z-index: 10;
+      text-align: center;
+  
+      h2, h3 {
+        color: #00ff41;
+        margin-bottom: 20px;
+      }
+  
+      .example-rule {
+        display: block;
+        background: #111;
+        padding: 10px;
+        margin: 10px auto;
+        border-left: 3px solid #00ff41;
+        max-width: 300px;
+      }
+  
+      button {
+        background: #00ff41;
+        color: #000;
+        border: none;
+        padding: 10px 20px;
+        margin-top: 20px;
+        font-weight: bold;
+        cursor: pointer;
+        transition: all 0.3s;
+  
+        &:hover {
+          background: #00cc33;
+        }
+      }
+  
+      .stats {
+        display: flex;
+        justify-content: space-around;
+        width: 100%;
+        max-width: 500px;
+        margin: 20px 0;
+  
+        .stat {
+          text-align: center;
+  
+          .stat-value {
+            display: block;
+            font-size: 2rem;
+            font-weight: bold;
+            font-family: 'Digital', monospace;
+          }
+  
+          .stat-label {
+            font-size: 0.8rem;
+            opacity: 0.8;
+          }
+        }
+      }
+  
+      .grade {
+        font-size: 2rem;
+        margin: 20px 0;
+        font-weight: bold;
+      }
+    }
+  }
+  
+  @keyframes pulse {
+    0% { transform: translateX(-50%) scale(1); }
+    100% { transform: translateX(-50%) scale(1.1); }
+  }
+  
+  @keyframes blocked {
+    0% { transform: translateX(-50%) scale(1); }
+    50% { transform: translateX(-50%) scale(1.5); opacity: 1; }
+    100% { transform: translateX(-50%) scale(0.5); opacity: 0; }
+  }
+  
+  @keyframes infected-pulse {
+    0%, 100% { box-shadow: 0 0 5px rgba(255, 0, 0, 0.5); }
+    50% { box-shadow: 0 0 20px rgba(255, 0, 0, 0.8); }
+  }

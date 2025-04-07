@@ -11,14 +11,20 @@ import { MatCardModule } from '@angular/material/card';
 import { LoginModule } from './pages/authenticate/login/login.module';
 import { ExperienceModule } from './components/experiences-package/experience.module';
 import { AccountTemplateComponent } from './components/account-package/account-template/account-template.component';
-import { SecuritySimulationsComponent } from './components/simulation-package/security-simulations/security-simulations.component';
 import { AuthInterceptor } from './pages/authenticate/auth/interceptor/auth.interceptor';
+import { VpnConfigurationComponent } from './components/simulation-package/security-simulations/vpn-configuration/vpn-configuration.component';
+import { NetworkIntrusionComponent } from './components/simulation-package/security-simulations/network-intrusion/network-intrusion.component';
+import { RadiusComponent } from './components/simulation-package/security-simulations/radius/radius.component';
+import { ProtectSystemComponent } from './components/simulation-package/security-simulations/protect-system/protect-system.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     AccountTemplateComponent,
-    SecuritySimulationsComponent
+    VpnConfigurationComponent,
+    NetworkIntrusionComponent,
+    RadiusComponent,
+    ProtectSystemComponent
   ],
   imports: [
     BrowserModule,

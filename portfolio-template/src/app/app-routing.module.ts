@@ -47,6 +47,10 @@ import { MigrationComponent } from './components/simulation-package/admin-simula
 import { NetworkDiagramComponent } from './components/simulation-package/admin-simulations/migration/network-diagram/network-diagram.component';
 import { MonitoringComponent } from './components/simulation-package/admin-simulations/monitoring/monitoring.component';
 import { MonitoringCyberWarComponent } from './components/simulation-package/admin-simulations/monitoring/monitoring-cyber-war/monitoring-cyber-war.component';
+import { SecuritySimulationsComponent } from './components/simulation-package/security-simulations/security-simulations.component';
+import { IntroFirewallComponent } from './components/simulation-package/security-simulations/firewall-attack-blocker/intro-firewall/intro-firewall.component';
+import { GoSimulationFirewallComponent } from './components/simulation-package/security-simulations/firewall-attack-blocker/go-simulation-firewall/go-simulation-firewall.component';
+import { FirewallAttackBlockerComponent } from './components/simulation-package/security-simulations/firewall-attack-blocker/firewall-attack-blocker.component';
 
 const routes: Routes = [
   { path: '', loadChildren: () => import('./pages/home/home.module').then(m => m.HomeModule) },
@@ -86,6 +90,7 @@ const routes: Routes = [
   { path: 'admin-simulation', component : AdminSimulationsComponent},
   { path: 'migration-simulation', component : MigrationComponent},
   { path: 'monitoring-simulation', component : MonitoringComponent},
+  { path: 'firewall-blocked-simulation', component : FirewallAttackBlockerComponent},
 
 
 
@@ -127,7 +132,13 @@ const routes: Routes = [
   { path: 'dhcp-full', component: FullComponent },
 
   { path: 'migration-network-diagram', component : NetworkDiagramComponent},
-  { path: 'monitoring-start', component : MonitoringCyberWarComponent}
+  { path: 'monitoring-start', component : MonitoringCyberWarComponent}, 
+
+  //For Security
+
+  { path : 'security-template', component : SecuritySimulationsComponent},
+  { path : 'intro-firewall', component : IntroFirewallComponent},
+  { path : 'go-firewal-simulation', component : GoSimulationFirewallComponent}
   
 ];
 

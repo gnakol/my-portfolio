@@ -1,0 +1,106 @@
+<div class="firewall-simulator">
+    <!-- HUD de Statut -->
+    <div class="hud">
+      <div class="hud-item">
+        <span class="hud-label">🚀 Attaques Bloquées</span>
+        <div class="hud-value">{{ blockedAttacks }}/{{ totalAttacks }}</div>
+      </div>
+      <div class="hud-item">
+        <span class="hud-label">⏱️ Temps</span>
+        <div class="hud-value">{{ elapsedTime }}</div>
+      </div>
+      <div class="hud-item">
+        <span class="hud-label">🔥 Score</span>
+        <div class="hud-value">{{ score }}</div>
+      </div>
+    </div>
+  
+    <!-- Terminal de Configuration -->
+    <div class="terminal" [class.danger]="alertLevel > 5">
+      <div class="terminal-header">
+        <div class="leds">
+          <div class="led red" [class.active]="alertLevel > 0"></div>
+          <div class="led yellow" [class.active]="alertLevel > 3"></div>
+          <div class="led green" [class.active]="alertLevel === 0"></div>
+        </div>
+        <h3>FIREWALL CONSOLE v4.2</h3>
+        <div class="alert-level">ALERT LEVEL: {{ alertLevel }}/10</div>
+      </div>
+  
+      <div class="terminal-output">
+        <pre *ngFor="let log of logs">{{ log }}</pre>
+        <div class="scanlines"></div>
+      </div>
+  
+      <div class="terminal-input">
+        <span class="prompt">root&#64;firewall#</span>
+        <input 
+          [(ngModel)]="currentCommand" 
+          (keyup.enter)="executeCommand()" 
+          [placeholder]="getPlaceholder()"
+          [disabled]="gameOver">
+      </div>
+    </div>
+  
+    <!-- Visualisation Réseau -->
+    <div class="network-visualization">
+      <div class="internet" (click)="autoFill('show attacks')">
+        <div class="label">INTERNET</div>
+        <div class="attack-wave" *ngFor="let attack of currentAttacks" 
+             [style.left.px]="attack.position"
+             [class]="attack.type"
+             [class.blocked]="attack.blocked">
+          <div class="attack-tooltip">{{ attack.type | uppercase }}</div>
+        </div>
+      </div>
+  
+      <div class="firewall">
+        <div class="label">FIREWALL</div>
+        <div class="rules">
+          <div *ngFor="let rule of firewallRules" class="rule">
+            <span class="rule-text">{{ rule }}</span>
+            <button (click)="removeRule(rule)">✕</button>
+          </div>
+        </div>
+      </div>
+  
+      <div class="internal-network">
+        <div class="label">RÉSEAU INTERNE</div>
+        <div class="server" *ngFor="let server of servers" 
+             [class.infected]="server.compromised">
+          <span class="server-name">{{ server.name }}</span>
+          <span class="server-status">{{ server.compromised ? 'COMPROMIS' : 'SAFE' }}</span>
+        </div>
+      </div>
+    </div>
+  
+    <!-- Guide Interactif -->
+    <div class="tutorial" *ngIf="showTutorial">
+      <h3>🎯 OBJECTIF</h3>
+      <p>Bloquez les attaques en configurant le firewall avec des règles comme :</p>
+      <code class="example-rule">block proto=tcp port=80</code>
+      <code class="example-rule">allow proto=udp port=53</code>
+      <button (click)="startGame()">COMMENCER</button>
+    </div>
+  
+    <!-- Écran de Résultats -->
+    <div class="results" *ngIf="gameOver">
+      <h2>RAPPORT DE DÉFENSE</h2>
+      <div class="stats">
+        <div class="stat">
+          <span class="stat-value">{{ (blockedAttacks / totalAttacks * 100).toFixed(0) }}%</span>
+          <span class="stat-label">Attaques Bloquées</span>
+        </div>
+        <div class="stat">
+          <span class="stat-value">{{ score }}</span>
+          <span class="stat-label">Score Final</span>
+        </div>
+        <div class="stat">
+          <span class="stat-value">{{ elapsedTime }}</span>
+          <span class="stat-label">Temps</span>
+        </div>
+      </div>
+      <div class="grade">{{ getGrade() }}</div>
+      <button (click)="resetGame()">REJOUER</button>
+    </div>
+  </div>

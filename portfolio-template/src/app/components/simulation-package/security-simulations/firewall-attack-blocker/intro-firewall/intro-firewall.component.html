@@ -1,0 +1,70 @@
+<div class="cyber-container">
+  <!-- Background dynamique cyber -->
+  <div class="cyber-bg">
+    <div class="cyber-circle neon-blue"></div>
+    <div class="cyber-circle neon-pink"></div>
+    <div class="cyber-grid"></div>
+    <div class="cyber-connector" *ngFor="let c of connectors"></div>
+  </div>
+
+  <!-- Carte principale -->
+  <mat-card class="cyber-main-card">
+    <!-- En-tête -->
+    <div class="cyber-header">
+      <h1 class="cyber-main-title">
+        <span class="cyber-flicker">FIREWALL</span> 
+        <span class="neon-gradient">DEFENSE SIM</span>
+      </h1>
+      <div class="cyber-divider"></div>
+      <p class="cyber-subtitle">
+        <span class="cyber-glitch">CONFIGUREZ</span> LES RÈGLES EN TEMPS RÉEL
+      </p>
+    </div>
+
+    <!-- Visualisation réseau -->
+    <div class="network-visual">
+      <div class="network-node server-node">
+        <mat-icon>dns</mat-icon>
+        <span>SERVEUR</span>
+        <div class="node-pulse"></div>
+      </div>
+      
+      <div class="traffic-container">
+        <div class="traffic-line"></div>
+        <div class="data-packets">
+          <div class="packet legit" *ngFor="let p of legitPackets" [style.animation-delay]="p.delay">
+            <mat-icon>data_usage</mat-icon>
+          </div>
+          <div class="packet threat" *ngFor="let p of threatPackets" [style.animation-delay]="p.delay">
+            <mat-icon>warning</mat-icon>
+          </div>
+        </div>
+      </div>
+
+      <div class="network-node firewall-node">
+        <mat-icon>security</mat-icon>
+        <span>FIREWALL</span>
+        <div class="node-pulse danger"></div>
+      </div>
+    </div>
+
+    <!-- Features -->
+    <div class="cyber-features">
+      <div class="cyber-card feature-card" *ngFor="let feature of features">
+        <mat-icon class="feature-icon">{{feature.icon}}</mat-icon>
+        <h3>{{feature.title}}</h3>
+        <p>{{feature.description}}</p>
+      </div>
+    </div>
+
+    <!-- Bouton d'action -->
+    <button 
+    mat-raised-button 
+    class="cyber-button"
+    [routerLink]="'/go-firewal-simulation'" 
+    >
+      <mat-icon>power_settings_new</mat-icon>
+      INITIER LA SÉQUENCE
+    </button>
+  </mat-card>
+</div>
