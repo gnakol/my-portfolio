@@ -51,6 +51,7 @@ import { SecuritySimulationsComponent } from './components/simulation-package/se
 import { IntroFirewallComponent } from './components/simulation-package/security-simulations/firewall-attack-blocker/intro-firewall/intro-firewall.component';
 import { GoSimulationFirewallComponent } from './components/simulation-package/security-simulations/firewall-attack-blocker/go-simulation-firewall/go-simulation-firewall.component';
 import { FirewallAttackBlockerComponent } from './components/simulation-package/security-simulations/firewall-attack-blocker/firewall-attack-blocker.component';
+import { MonitoringIntroComponent } from './components/simulation-package/admin-simulations/monitoring/monitoring-intro/monitoring-intro.component';
 
 const routes: Routes = [
   { path: '', loadChildren: () => import('./pages/home/home.module').then(m => m.HomeModule) },
@@ -119,6 +120,7 @@ const routes: Routes = [
   // For vlan
   { path : 'intro-vlan', component : IntroComponent},
   { path : 'intro-migration', component : MigrationIntroComponent},
+  { path : 'intro-monitoring', component : MonitoringIntroComponent},
   { path : 'terminal-vlan-config', component : TerminalComponent},
 
   // For eigrp

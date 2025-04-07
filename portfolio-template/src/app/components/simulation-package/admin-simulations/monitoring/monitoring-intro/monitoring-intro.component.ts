@@ -2,7 +2,7 @@ import { Component, EventEmitter, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
-import { RouterModule } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-monitoring-intro',
@@ -18,6 +18,12 @@ import { RouterModule } from '@angular/router';
 })
 export class MonitoringIntroComponent {
   @Output() startMonitoring = new EventEmitter<void>();
+
+  constructor(private router : Router){}
+
+  navigateTo(route: string): void {
+    this.router.navigate([route]);
+  }
 
   onStart() {
     this.startMonitoring.emit();

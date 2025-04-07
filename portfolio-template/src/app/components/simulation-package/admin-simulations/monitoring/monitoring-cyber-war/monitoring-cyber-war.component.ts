@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { Router } from '@angular/router';
 
 interface Command {
   text: string;
@@ -66,6 +67,12 @@ export class MonitoringCyberWarComponent implements OnInit {
     { command: 'kill -9 123', label: 'Tuer processus', minStep: 2 },
     { command: 'systemctl restart payment_api', label: 'Redémarrer service', minStep: 3 }
   ];
+
+  constructor(private router : Router){}
+
+  navigateTo(route: string): void {
+    this.router.navigate([route]);
+  }
 
   ngOnInit(): void {
     this.startTime = new Date();

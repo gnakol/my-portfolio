@@ -114,3 +114,57 @@
     25%, 75% { transform: translateX(-5px); }
     50% { transform: translateX(5px); }
 }
+.back-button {
+    position: absolute;
+    top: 7rem;
+    left: 2rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1.5rem;
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 9999px;
+    color: #f8fafc;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    z-index: 10;
+    
+    svg {
+      width: 1.25rem;
+      height: 1.25rem;
+      transition: transform 0.3s ease;
+    }
+  
+    &:hover {
+      background: rgba(255, 255, 255, 0.2);
+      border-color: rgba(255, 255, 255, 0.2);
+      transform: translateX(-5px);
+      
+      svg {
+        transform: translateX(-3px);
+      }
+    }
+  
+    &:active {
+      transform: scale(0.98);
+    }
+  }
+  
+  /* Ajustement pour mobile */
+  @media (max-width: 768px) {
+    .back-button {
+      top: 1rem;
+      left: 1rem;
+      padding: 0.5rem 1rem;
+      font-size: 0.875rem;
+      
+      svg {
+        width: 1rem;
+        height: 1rem;
+      }
+    }
+  }

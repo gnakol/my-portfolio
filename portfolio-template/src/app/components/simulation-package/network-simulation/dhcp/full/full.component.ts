@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { SimulationResultComponent } from '../../simulation-result/simulation-result.component';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-full',
@@ -38,6 +39,12 @@ export class FullComponent {
 
   currentCommandIndex = 0;
   commandError = false;
+
+  constructor(private route : Router){}
+
+  navigateTo(route: string): void {
+    this.route.navigate([route]);
+  }
 
   executeCommand() {
     if (!this.command.trim()) return;

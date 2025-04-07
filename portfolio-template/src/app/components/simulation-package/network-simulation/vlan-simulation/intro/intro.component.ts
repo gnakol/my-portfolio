@@ -2,7 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, Output } from '@angular/core';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
-import { RouterModule } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-intro',
@@ -21,8 +21,14 @@ export class IntroComponent {
 
   @Output() startSimulation = new EventEmitter<void>();
 
+  constructor(private router : Router){}
+
   onStart() {
     this.startSimulation.emit();
+  }
+
+  navigateTo(route: string): void {
+    this.router.navigate([route]);
   }
 
 }

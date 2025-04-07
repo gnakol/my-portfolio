@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { SimulationService } from '../../../services/simulation.service';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 import { FeedBackComponent } from '../feed-back/feed-back.component';
 import { Howl } from 'howler';
@@ -103,7 +103,13 @@ export class TerminalComponent implements OnInit {
 
   constructor(
     private simulationService: SimulationService, 
-    private dialog: MatDialog) {}
+    private dialog: MatDialog,
+    private router : Router
+  ) {}
+
+  navigateTo(route: string): void {
+    this.router.navigate([route]);
+  }
 
   ngOnInit() {
     this.typeWelcomeMessage();

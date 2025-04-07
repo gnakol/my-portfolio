@@ -3,6 +3,7 @@ import { SimulationService } from '../../../services/simulation.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { SimulationResultComponent } from '../../simulation-result/simulation-result.component';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-terminal-eigrp',
@@ -35,7 +36,15 @@ export class TerminalEigrpComponent {
   
   currentCommandIndex = 0;
 
-  constructor(private simulationService: SimulationService) {}
+  constructor(
+    private simulationService: SimulationService,
+    private route : Router
+
+  ) {}
+
+  navigateTo(route: string): void {
+    this.route.navigate([route]);
+  }
 
   executeCommand() {
     if (!this.command.trim()) return;

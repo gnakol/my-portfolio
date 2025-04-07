@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, Output } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { RouterModule } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-intro-eigrp',
@@ -23,8 +23,12 @@ export class IntroEigrpComponent {
   showCable: boolean = false;
   showButton: boolean = false;
 
-  constructor() {
+  constructor(private router : Router) {
     this.runSlideshow();
+  }
+
+  navigateTo(route: string): void {
+    this.router.navigate([route]);
   }
 
   runSlideshow() {
