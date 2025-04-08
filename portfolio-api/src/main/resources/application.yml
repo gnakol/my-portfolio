@@ -1,24 +1,38 @@
-#spring.application.name=portfolio-api
+# Nom de l'application
 spring:
   application:
-  name: portfolio-api
+    name: portfolio-api
 
+  # Configuration de la base de données
   datasource:
     url: jdbc:mysql://localhost:3306/portfolio_db
     username: kol_sec_admin
     password: noumko009
 
+  # Configuration JPA
   jpa:
     hibernate:
       ddl-auto: none
 
+  # Configuration SMTP (exemple pour Gmail)
+  mail:
+    host: smtp.mail.yahoo.com
+    port: 587
+    username: gna.kolie@yahoo.fr
+    password: ${YAHOO_APP_PASSWORD}
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
 
-
+# Configuration du serveur
 server:
   port: 9000
-
   servlet:
     context-path: /portfolio-api
 
+  # Configuration Liquibase
   liquibase:
     change-log: classpath:db/changelog/db.changelog-master.yaml

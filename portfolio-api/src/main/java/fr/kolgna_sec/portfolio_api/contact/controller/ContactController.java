@@ -1,5 +1,6 @@
 package fr.kolgna_sec.portfolio_api.contact.controller;
 
+import fr.kolgna_sec.portfolio_api.config.EmailService;
 import fr.kolgna_sec.portfolio_api.contact.dto.ContactDTO;
 import fr.kolgna_sec.portfolio_api.contact.service.ContactService;
 import lombok.RequiredArgsConstructor;
@@ -17,6 +18,8 @@ import org.springframework.web.bind.annotation.*;
 @Slf4j
 public class ContactController {
 
+    private final EmailService emailService;
+
     private final ContactService contactService;
 
     @GetMapping("/all-contact")
@@ -28,6 +31,14 @@ public class ContactController {
     @PostMapping("/add-new-contact")
     public ResponseEntity<ContactDTO> addContact(@Validated @RequestBody ContactDTO contactDTO)
     {
+        try
+        {
+            this.emailService.sendNewContactNotification("gna.kolie@yahoo.fr", this.contactService.add(contactDTO));
+        }catch (Exception e)
+        {
+            System.err.println("Erreur lors de l'envoi du mail: " +e.getMessage());
+        }
+
         return ResponseEntity.status(HttpStatus.CREATED).body(this.contactService.add(contactDTO));
     }
 
