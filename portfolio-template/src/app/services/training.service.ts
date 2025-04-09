@@ -4,13 +4,14 @@ import { forkJoin, map, Observable, switchMap } from 'rxjs';
 import { Training, TrainingResponse } from '../components/training-package/training.model';
 import { GenericMethodeService } from './generic-methode.service';
 import { EstablishmentService } from './establishment.service';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class TrainingService {
   
-  private apiUrl = 'http://localhost:9000/portfolio-api/training';
+  private apiUrl = `${environment.apiBaseUrl}/training`;
 
   constructor(
     private http: HttpClient, 

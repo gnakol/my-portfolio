@@ -3,12 +3,13 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { GenericMethodeService } from './generic-methode.service';
 import { Account } from '../components/account-package/account.model';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AccountService {
-  private accountUrl = 'http://localhost:9000/portfolio-api/account';
+  private accountUrl = `${environment.apiBaseUrl}/account`;
 
   constructor(private http: HttpClient, private genericMethode: GenericMethodeService) {}
 

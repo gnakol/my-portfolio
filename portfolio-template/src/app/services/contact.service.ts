@@ -3,13 +3,14 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { GenericMethodeService } from './generic-methode.service';
 import { Contact, ContactResponse } from '../components/contact-package/contact.model';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ContactService {
 
-  private contactUrl = 'http://localhost:9000/portfolio-api/contact';
+  private contactUrl = `${environment.apiBaseUrl}/contact`;
 
   constructor(
     private http: HttpClient,

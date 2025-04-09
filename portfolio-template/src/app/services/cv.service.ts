@@ -4,13 +4,14 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { CvDTO } from '../pages/cv/cv-dto.model';
 import { GenericMethodeService } from './generic-methode.service';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class CvService {
 
-  private cvUrl = 'http://localhost:9000/portfolio-api/cv';
+  private cvUrl = `${environment.apiBaseUrl}/cv`;
 
   constructor(private http: HttpClient, private genericMethodeService : GenericMethodeService) {}
 

@@ -3,12 +3,13 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { GenericMethodeService } from './generic-methode.service';
 import { SkillCategoryResponse } from '../components/skill-package/skill-category.model';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class SkillCategoryService {
-  private skillCategoryUrl = 'http://localhost:9000/portfolio-api/skill-category';
+  private skillCategoryUrl = `${environment.apiBaseUrl}/skill-category`;
 
   constructor(private http: HttpClient, private genericMethodeService : GenericMethodeService) {}
 

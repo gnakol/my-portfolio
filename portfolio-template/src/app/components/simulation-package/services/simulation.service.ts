@@ -3,15 +3,16 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { FeedbackDTO, PingRequest, PingResponse, SimulationRequest, SimulationResponse, VlanRequest, VlanResponse } from '../interface/simulation.model';
 import { GenericMethodeService } from '../../../services/generic-methode.service';
+import { environment } from '../../../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class SimulationService {
 
-  private readonly apiUrl = 'http://localhost:9000/portfolio-api/simulation';
+  private readonly apiUrl = `${environment.apiBaseUrl}/simulation`;
 
-  private readonly feedbackUrl = 'http://localhost:9000/portfolio-api/feedback';
+  private readonly feedbackUrl = `${environment.apiBaseUrl}/feedback`;
 
   constructor(private http : HttpClient, private genericMethodeService : GenericMethodeService) { }
 

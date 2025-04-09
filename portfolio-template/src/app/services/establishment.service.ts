@@ -3,13 +3,14 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Establishment, EstablishmentResponse } from '../components/establishment-package/establishment.model';
 import { GenericMethodeService } from './generic-methode.service';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class EstablishmentService {
 
-  private establishmentUrl = 'http://localhost:9000/portfolio-api/establishment'; // 🔥 Nouveau
+  private establishmentUrl = `${environment.apiBaseUrl}/establishment`; // 🔥 Nouveau
 
   constructor(private http: HttpClient, private genericMethodeService : GenericMethodeService) {}
 

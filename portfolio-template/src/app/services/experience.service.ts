@@ -5,12 +5,13 @@ import { Experience, ExperienceResponse } from '../components/experiences-packag
 import { GenericMethodeService } from './generic-methode.service';
 import { AuthenticationService } from '../pages/authenticate/core/authentication.service';
 import { experienceTypeService } from './experience_type.service';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ExperienceService {
-  private apiUrl = 'http://localhost:9000/portfolio-api/experience'; // URL de ton backend
+  private apiUrl = `${environment.apiBaseUrl}/experience`;
 
   constructor(
     private http: HttpClient, 

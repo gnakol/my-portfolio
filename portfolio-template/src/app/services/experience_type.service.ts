@@ -3,12 +3,13 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { GenericMethodeService } from './generic-methode.service';
 import { ExperienceTypeResponse } from '../components/experiences-package/experience-type.model';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class experienceTypeService {
-  private experienceTypeUrl = 'http://localhost:9000/portfolio-api/experience-type';
+  private experienceTypeUrl = `${environment.apiBaseUrl}/experience-type`;
 
   constructor(private http: HttpClient, private genericMethodeService : GenericMethodeService) {}
 

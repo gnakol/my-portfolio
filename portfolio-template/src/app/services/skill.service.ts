@@ -4,12 +4,13 @@ import { forkJoin, map, Observable, switchMap } from 'rxjs';
 import { Skill, SkillResponse } from '../components/skill-package/skill.model';
 import { GenericMethodeService } from './generic-methode.service';
 import { SkillCategoryService } from './category_skill.service';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class SkillService {
-  private apiUrl = 'http://localhost:9000/portfolio-api/skill';
+  private apiUrl = `${environment.apiBaseUrl}/skill`;
 
   constructor(private http: HttpClient, private genericMethodeService : GenericMethodeService, private skillCategoryService : SkillCategoryService) {}
 

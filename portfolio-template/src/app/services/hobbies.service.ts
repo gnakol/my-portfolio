@@ -3,13 +3,14 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Hobbies } from '../components/hobbies-package/hobbies.model';
 import { GenericMethodeService } from './generic-methode.service';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class HobbiesService {
 
-  private hobbiesUrl = 'http://localhost:9000/portfolio-api/hobbies';
+  private hobbiesUrl = `${environment.apiBaseUrl}/hobbies`;
 
   constructor(
     private http: HttpClient,
