@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Hobbies } from '../components/hobbies-package/hobbies.model';
 import { GenericMethodeService } from './generic-methode.service';
@@ -21,7 +21,12 @@ export class HobbiesService {
 
     //cdconst headers = this.genericMethodeService.getHeaders();
 
-    return this.http.get<{ content: Hobbies[] }>(`${this.hobbiesUrl}/all-hobbies?page=${page}&size=${size}`);
+    return this.http.get<{ content: Hobbies[] }>(`${this.hobbiesUrl}/all-hobbies?page=${page}&size=${size}`, {
+      headers: new HttpHeaders({
+          'Content-Type': 'application/json',
+          // Ne pas inclure d'Authorization header
+      })
+  });
   }
 
   /**

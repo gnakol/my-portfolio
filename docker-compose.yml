@@ -5,29 +5,21 @@ services:
     image: mysql:latest
     container_name: mysql-container
     environment:
-      MYSQL_ROOT_PASSWORD: noumko009@  # Remplace par un mot de passe sécurisé
-      MYSQL_DATABASE: portfolio_db     # Crée une base de données par défaut
-      MYSQL_USER: kol_sec_admin        # Crée un utilisateur
-      MYSQL_PASSWORD: noumko009        # Mot de passe de l'utilisateur
+      MYSQL_ROOT_PASSWORD: noumko009@
+      MYSQL_DATABASE: portfolio_db
+      MYSQL_USER: kol_sec_admin
+      MYSQL_PASSWORD: noumko009
     ports:
       - "3306:3306"
     volumes:
-      - mysql_data:/var/lib/mysql      # Persiste les données de MySQL
-    restart: always                    # Redémarre automatiquement le conteneur
+      - mysql_data:/var/lib/mysql
+    restart: always
 
   adminer:
     image: adminer:latest
     container_name: adminer-container
     ports:
-      - "8081:8080"                   # Accès Adminer via http://localhost:8080
-    restart: always
-
-  mailhog:
-    image: mailhog/mailhog:latest
-    container_name: mailhog-container
-    ports:
-      - "8025:8025"                   # Interface web MailHog pour tester les emails
-      - "1025:1025"                   # Port SMTP pour envoyer des emails
+      - "8081:8080"
     restart: always
 
 volumes:

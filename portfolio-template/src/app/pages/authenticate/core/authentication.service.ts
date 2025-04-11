@@ -3,21 +3,24 @@ import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { BehaviorSubject, catchError, map, Observable, of } from 'rxjs';
 import { GenericMethodeService } from '../../../services/generic-methode.service';
+import { environment } from '../../../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthenticationService {
 
-  private readonly authUrl = 'http://localhost:9000/portfolio-api/connexion';
+  private readonly authUrl = `${environment.apiBaseUrl}/connexion`;
 
-  private readonly disconnectUrl = 'http://localhost:9000/portfolio-api/disconnect';
+  private readonly disconnectUrl = `${environment.apiBaseUrl}/disconnect`;
 
-  private readonly tokenUrl = 'http://localhost:9000/portfolio-api/token';
+  private readonly tokenUrl = `${environment.apiBaseUrl}/token`;
 
-  private readonly refreshTokenUrl = 'http://localhost:9000/portfolio-api/refresh-token';
+  private readonly refreshTokenUrl = `${environment.apiBaseUrl}/refresh-token`;
 
   private authStatus = new BehaviorSubject<boolean>(this.isAuthenticated());
+
+  private readonly accountUrl = `${environment.apiBaseUrl}/account`;
 
 
 
@@ -31,7 +34,7 @@ export class AuthenticationService {
 
 
   login(username: string, password: string): Observable<string> {
-    return this.http.post<{ bearer: string }>('http://localhost:9000/portfolio-api/connexion', { username, password })
+    return this.http.post<{ bearer: string }>(this.authUrl, { username, password })
       .pipe(
         map(response => {
           if (response?.bearer) {
@@ -55,7 +58,7 @@ export class AuthenticationService {
       'Authorization': `Bearer ${token}`
     });
 
-    this.http.post<{ message: string }>('http://localhost:9000/portfolio-api/disconnect', {}, { headers }).subscribe(() => {
+    this.http.post<{ message: string }>(this.disconnectUrl, {}, { headers }).subscribe(() => {
       localStorage.removeItem('jwtToken');
       this.authStatus.next(false);  // 🔥 Met à jour l’état d’authentification
       this.router.navigate(['/login']);
@@ -103,7 +106,7 @@ export class AuthenticationService {
 
         console.log('🔍 Je suis la méthode getUserIdFromToken : Email extrait du token :', email);
 
-        return this.http.get<any>(`http://localhost:9000/portfolio-api/account/get-account-id-by-email?email=${email}`, { headers })
+        return this.http.get<any>(`${this.accountUrl}/get-account-id-by-email?email=${email}`, { headers })
             .pipe(
                 map(response => {
                     console.log('Je suis la méthode getUserIdFromToken ✅ ID utilisateur récupéré :', response);
