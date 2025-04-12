@@ -36,17 +36,14 @@ public class EstablishmentService implements Webservices<EstablishmentDTO> {
 
     @Override
     public EstablishmentDTO update(Long id, EstablishmentDTO e) {
-        return this.establishmentMapper.fromEstablishment(this.establishmentRepository.findById(id)
-                .map(establishment -> {
-                    if (establishment.getRefEstablishment() == null)
-                        establishment.setRefEstablishment(e.getRefEstablishment());
-                    establishment.setName(e.getName());
-                    if (establishment.getCity() != null)
-                        establishment.setCity(e.getCity());
+        return this.establishmentRepository.findById(id)
+                .map(existingEstablishment -> {
+                    Optional.ofNullable(e.getName()).ifPresent(existingEstablishment::setName);
+                    Optional.ofNullable(e.getCity()).ifPresent(existingEstablishment::setCity);
 
-                    return this.establishmentRepository.save(establishment);
+                    return this.establishmentMapper.fromEstablishment(this.establishmentRepository.save(existingEstablishment));
                 })
-                .orElseThrow(() -> new RuntimeException("Unable to retrieve Establishment. Please check the provide ID")));
+                .orElseThrow(() -> new RuntimeException("Establishment with ID : " +id+ " was not found"));
     }
 
     @Override
