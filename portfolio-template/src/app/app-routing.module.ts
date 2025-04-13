@@ -52,6 +52,7 @@ import { IntroFirewallComponent } from './components/simulation-package/security
 import { GoSimulationFirewallComponent } from './components/simulation-package/security-simulations/firewall-attack-blocker/go-simulation-firewall/go-simulation-firewall.component';
 import { FirewallAttackBlockerComponent } from './components/simulation-package/security-simulations/firewall-attack-blocker/firewall-attack-blocker.component';
 import { MonitoringIntroComponent } from './components/simulation-package/admin-simulations/monitoring/monitoring-intro/monitoring-intro.component';
+import { SkillCategoriesComponent } from './components/skill-package/web-service/skill-categories/skill-categories.component';
 
 const routes: Routes = [
   { path: '', loadChildren: () => import('./pages/home/home.module').then(m => m.HomeModule) },
@@ -66,6 +67,8 @@ const routes: Routes = [
 
   { path: 'trainings', component: AllTrainingsComponent },
   { path: 'skills', component: AllSkillComponent},
+  { path: 'skills/category/:id', component: AllSkillComponent },
+  { path: 'skills-categories', component : SkillCategoriesComponent},
   { path: 'projects', component: AllProjectsComponent},
   { path: 'hobbies', component: AllHobbiesComponent},
   { path: 'languages', component : AllLanguagesComponent},

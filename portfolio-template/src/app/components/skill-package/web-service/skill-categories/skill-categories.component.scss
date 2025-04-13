@@ -1,4 +1,4 @@
-// all-skill.component.scss
+// skill-categories.component.scss
 .skill-page {
   position: relative;
   min-height: 100vh;
@@ -148,14 +148,14 @@
   animation: text-flicker 1.5s ease-in-out infinite alternate;
 }
 
-.skills-grid {
+.categories-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
   gap: 2rem;
   perspective: 1000px;
 }
 
-.skill-card {
+.category-card {
   background: rgba(30, 41, 59, 0.7);
   backdrop-filter: blur(10px);
   border: 1px solid rgba(255, 255, 255, 0.1);
@@ -171,7 +171,7 @@
   cursor: pointer;
   transform-style: preserve-3d;
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-  min-height: 250px;
+  min-height: 200px;
 
   &::before {
     content: '';
@@ -194,12 +194,12 @@
       opacity: 1;
     }
 
-    .skill-icon {
+    .category-icon {
       transform: translateY(-10px) scale(1.1);
       box-shadow: 0 10px 20px rgba(0,0,0,0.2);
     }
 
-    .skill-name {
+    .category-name {
       text-shadow: 0 0 10px var(--category-color);
     }
   }
@@ -209,21 +209,7 @@
   }
 }
 
-.skill-badge {
-  position: absolute;
-  top: 0;
-  left: 0;
-  padding: 0.5rem 1rem;
-  background: var(--category-color);
-  color: white;
-  font-size: 0.8rem;
-  font-weight: 600;
-  border-radius: 0 0 12px 0;
-  z-index: 3;
-  box-shadow: 0 2px 10px rgba(0,0,0,0.2);
-}
-
-.skill-icon {
+.category-icon {
   width: 80px;
   height: 80px;
   display: flex;
@@ -258,80 +244,32 @@
   }
 }
 
-.skill-name {
+.category-name {
   font-size: 1.5rem;
   font-weight: 700;
   color: #f8fafc;
-  margin: 0 0 1rem;
+  margin: 0;
   text-align: center;
   transition: all 0.3s ease;
   position: relative;
   z-index: 2;
 }
 
-.skill-description {
-  color: #e2e8f0;
-  line-height: 1.6;
-  margin: 0;
-  text-align: center;
-  flex-grow: 1;
+/* Effets spécifiques par catégorie */
+.category-card[style*="--category-color: #6366f1"]:hover { /* Développement */
+  animation: pulse-blue 2s infinite;
 }
 
-.card-actions {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 1rem;
-  padding: 1rem 0 0 !important;
-  margin-top: 1rem;
-  width: 100%;
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
-
-  .details-btn {
-    background: rgba(var(--category-rgb), 0.1);
-    border: 1px solid var(--category-color);
-    color: var(--category-color);
-    transition: all 0.3s ease;
-    border-radius: 8px;
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-
-    &:hover {
-      background: rgba(var(--category-rgb), 0.2);
-      transform: translateY(-2px);
-    }
-  }
+.category-card[style*="--category-color: #3b82f6"]:hover { /* Réseau */
+  animation: pulse-network 2s infinite;
 }
 
-.delete-btn {
-  color: #f87171 !important;
-  transition: all 0.3s ease;
-  background: rgba(248, 113, 113, 0.1) !important;
-  border-radius: 50%;
-
-  &:hover {
-    color: #ef4444 !important;
-    background: rgba(239, 68, 68, 0.2) !important;
-    transform: scale(1.1);
-  }
+.category-card[style*="--category-color: #ec4899"]:hover { /* Sécurité */
+  animation: pulse-security 0.5s infinite alternate;
 }
 
-.floating-btn {
-  position: fixed;
-  bottom: 2rem;
-  right: 2rem;
-  z-index: 10;
-  transition: all 0.3s ease;
-  backdrop-filter: blur(10px);
-  background: rgba(30, 41, 59, 0.8) !important;
-  border: 1px solid rgba(255, 255, 255, 0.1) !important;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3) !important;
-
-  &:hover {
-    transform: scale(1.1) translateY(-5px);
-    box-shadow: 0 15px 30px rgba(99, 102, 241, 0.4) !important;
-  }
+.category-card[style*="--category-color: #10b981"]:hover { /* Systèmes */
+  animation: pulse-terminal 1.5s infinite;
 }
 
 /* Animations */
@@ -360,49 +298,6 @@
   100% { opacity: 1; }
 }
 
-/* Effets spécifiques par catégorie */
-.skill-card[style*="--category-color: #6366f1"] { /* Développement */
-  --category-rgb: 99, 102, 241;
-  &:hover {
-    animation: pulse-blue 2s infinite;
-  }
-}
-
-.skill-card[style*="--category-color: #3b82f6"] { /* Réseau */
-  --category-rgb: 59, 130, 246;
-  &:hover {
-    animation: pulse-network 2s infinite;
-  }
-}
-
-.skill-card[style*="--category-color: #ec4899"] { /* Sécurité */
-  --category-rgb: 236, 72, 153;
-  &:hover {
-    animation: pulse-security 0.5s infinite alternate;
-  }
-}
-
-.skill-card[style*="--category-color: #10b981"] { /* Systèmes */
-  --category-rgb: 16, 185, 129;
-  &:hover {
-    animation: pulse-terminal 1.5s infinite;
-  }
-}
-
-.skill-card[style*="--category-color: #f59e0b"] { /* Virtualisation */
-  --category-rgb: 245, 158, 11;
-  &:hover {
-    animation: pulse-cloud 2s infinite;
-  }
-}
-
-.skill-card[style*="--category-color: #8b5cf6"] { /* DevOps */
-  --category-rgb: 139, 92, 246;
-  &:hover {
-    animation: pulse-devops 2s infinite;
-  }
-}
-
 @keyframes pulse-blue {
   0% { box-shadow: 0 0 0 0 rgba(99, 102, 241, 0.4); }
   70% { box-shadow: 0 0 0 15px rgba(99, 102, 241, 0); }
@@ -425,18 +320,6 @@
   50% { transform: translateY(-10px) rotateX(5deg) rotateY(5deg) scale(1.03) skewX(-2deg); }
 }
 
-@keyframes pulse-cloud {
-  0% { transform: translateY(-10px) scale(1.03); }
-  50% { transform: translateY(-10px) scale(1.05) rotate(1deg); }
-  100% { transform: translateY(-10px) scale(1.03); }
-}
-
-@keyframes pulse-devops {
-  0% { box-shadow: 0 0 0 0 rgba(139, 92, 246, 0.4); }
-  70% { box-shadow: 0 0 0 15px rgba(139, 92, 246, 0); }
-  100% { box-shadow: 0 0 0 0 rgba(139, 92, 246, 0); }
-}
-
 /* Responsive */
 @media (max-width: 768px) {
   .page-title {
@@ -447,11 +330,11 @@
     font-size: 1rem;
   }
 
-  .skills-grid {
+  .categories-grid {
     grid-template-columns: 1fr;
   }
   
-  .skill-card {
+  .category-card {
     padding: 1.5rem;
   }
 }

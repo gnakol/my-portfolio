@@ -1,7 +1,8 @@
+// all-skill.component.ts
 import { Component, OnInit } from '@angular/core';
 import { trigger, transition, style, animate } from '@angular/animations';
 import { SkillService } from '../../../../services/skill.service';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatIconModule } from '@angular/material/icon';
@@ -32,29 +33,48 @@ import { SkillDetailComponent } from '../../skill-detail/skill-detail.component'
         style({ opacity: 0, transform: 'translateY(20px)' }),
         animate('500ms ease-in-out', style({ opacity: 1, transform: 'translateY(0)' }))
       ])
+    ]),
+    trigger('categoryPulse', [
+      transition('* => *', [
+        animate('3s', style({ 'box-shadow': '0 0 0 0 rgba(var(--category-rgb), 0.7)' })),
+        animate('3s', style({ 'box-shadow': '0 0 0 20px rgba(var(--category-rgb), 0)' }))
+      ])
     ])
   ]
 })
 export class AllSkillComponent implements OnInit {
   skills: any[] = [];
   loading = true;
+  currentCategoryId?: number;
+  currentCategoryName?: string;
 
   constructor(
     private skillService: SkillService,
     private router: Router,
     private snackBar: MatSnackBar,
-    private authService : AuthenticationService,
-    private dialog : MatDialog
+    private authService: AuthenticationService,
+    private dialog: MatDialog,
+    private activatedRoute: ActivatedRoute
   ) {}
 
   ngOnInit(): void {
-    this.loadSkills();
+    this.activatedRoute.paramMap.subscribe(params => {
+      this.currentCategoryId = params.get('id') ? Number(params.get('id')) : undefined;
+      this.loadSkills();
+    });
   }
 
   loadSkills(): void {
-    this.skillService.getAllSkill().subscribe({
+    const observable = this.currentCategoryId 
+      ? this.skillService.getSkillsByCategory(this.currentCategoryId)
+      : this.skillService.getAllSkill();
+
+    observable.subscribe({
       next: (data) => {
         this.skills = data.content || [];
+        if (this.currentCategoryId && this.skills.length > 0) {
+          this.currentCategoryName = this.skills[0]?.skillCategory?.name;
+        }
         this.loading = false;
       },
       error: (error) => {
@@ -70,36 +90,56 @@ export class AllSkillComponent implements OnInit {
     
     const colors: Record<string, string> = {
       'Développement': '#6366f1',
-      'Réseaux': '#3b82f6',
-      'Cybersécurité': '#ec4899',
-      'Système': '#10b981',
-      'Cloud': '#f59e0b'
+      'Réseau': '#3b82f6',
+      'SECURITE': '#ec4899',
+      'Systèmes Linux': '#10b981',
+      'Virtualisation': '#f59e0b',
+      'DevOps': '#8b5cf6',
+      'Bases de données': '#14b8a6',
+      'ADMINISTRATION SYSTEMES': '#64748b',
+      'LOGISTIQUE': '#f97316'
     };
 
     return colors[categoryName] || '#8b5cf6';
   }
 
+  getCategoryRgb(color: string): string {
+    const hex = color.replace('#', '');
+    const r = parseInt(hex.substring(0, 2), 16);
+    const g = parseInt(hex.substring(2, 4), 16);
+    const b = parseInt(hex.substring(4, 6), 16);
+    return `${r}, ${g}, ${b}`;
+  }
+
   getSkillIcon(skillName: string): string {
     const icons: Record<string, string> = {
       'Java': 'code',
-      'Spring Boot': 'spring',
+      'Spring': 'spring',
       'Angular': 'angular',
-      'Réseaux': 'settings_ethernet',
-      'Cybersécurité': 'security',
+      'Réseau': 'settings_ethernet',
+      'SECURITE': 'security',
       'Cisco': 'router',
       'Linux': 'terminal',
       'Docker': 'docker',
-      'AWS': 'cloud',
-      'API REST': 'api'
+      'Cloud': 'cloud',
+      'API': 'api',
+      'SQL': 'storage',
+      'Python': 'data_object',
+      'JavaScript': 'javascript',
+      'React': 'react',
+      'Node.js': 'nodejs',
+      'Git': 'git',
+      'Kubernetes': 'kubernetes',
+      'Azure': 'azure',
+      'AWS': 'aws'
     };
 
-    // Trouve l'icône correspondante ou utilise une icône par défaut
     for (const key in icons) {
       if (skillName.toLowerCase().includes(key.toLowerCase())) {
         return icons[key];
       }
     }
-    return 'star'; // Icône par défaut
+    return 'star';
   }
 
   deleteSkill(id: number): void {
@@ -119,23 +159,21 @@ export class AllSkillComponent implements OnInit {
     this.router.navigate(['/skill-template']);
   }
 
-  isAdmin() : boolean
-  {
+  isAdmin(): boolean {
     return this.authService.isAdmin();
   }
 
   viewSkill(skill: any): void {
-    // Ajoute la classe au body
     document.body.classList.add('modal-backdrop-blur');
     
     const dialogRef = this.dialog.open(SkillDetailComponent, {
       width: '800px',
       maxWidth: '90vw',
       panelClass: 'skill-modal',
+      backdropClass: 'skill-modal-backdrop',
       data: { skill }
     });
   
-    // Retire la classe quand la modal se ferme
     dialogRef.afterClosed().subscribe(() => {
       document.body.classList.remove('modal-backdrop-blur');
     });

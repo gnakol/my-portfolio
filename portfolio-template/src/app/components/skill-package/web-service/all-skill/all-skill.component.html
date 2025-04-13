@@ -1,3 +1,4 @@
+<!-- all-skill.component.html -->
 <div class="skill-page">
   <!-- Fond animé amélioré -->
   <div class="animated-background">
@@ -11,7 +12,12 @@
     <!-- En-tête -->
     <div class="page-header">
       <h1 class="page-title">Mes <span class="text-gradient">Compétences</span></h1>
-      <p class="page-subtitle">Un mélange unique de développement, réseaux et cybersécurité</p>
+      <p class="page-subtitle" *ngIf="!currentCategoryId">
+        Un mélange unique de développement, réseaux et cybersécurité
+      </p>
+      <p class="page-subtitle" *ngIf="currentCategoryId">
+        Compétences dans la catégorie: <strong>{{ currentCategoryName }}</strong>
+      </p>
       <div class="header-divider"></div>
     </div>
 
@@ -25,7 +31,12 @@
 
     <ng-template #content>
       <div class="skills-grid">
-        <mat-card *ngFor="let skill of skills; let i = index" class="skill-card" [@fadeIn]="i" [style.--category-color]="getCategoryColor(skill.skillCategory?.name)">
+        <mat-card 
+          *ngFor="let skill of skills; let i = index" 
+          class="skill-card" 
+          [@fadeIn]="i"
+          [style.--category-color]="getCategoryColor(skill.skillCategory?.name)"
+          [style.--category-rgb]="getCategoryRgb(getCategoryColor(skill.skillCategory?.name))">
           <div class="skill-badge">{{ skill.skillCategory?.name || 'Autre' }}</div>
           <div class="skill-icon">
             <mat-icon>{{ getSkillIcon(skill.name) }}</mat-icon>
