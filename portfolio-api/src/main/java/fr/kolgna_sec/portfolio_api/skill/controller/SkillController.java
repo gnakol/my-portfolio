@@ -70,4 +70,10 @@ public class SkillController {
                     throw new RuntimeException("Unable to retrieve Skill. Please check the provide ID");
                 });
     }
+
+    @GetMapping("/by-category/{categoryId}")
+    public ResponseEntity<Page<SkillDTO>> getSkillsByCategory(@Validated @PathVariable Long categoryId, Pageable pageable)
+    {
+        return ResponseEntity.ok().body(this.skillService.getSkillsByCategory(categoryId, pageable));
+    }
 }

@@ -113,4 +113,10 @@ public class SkillService implements Webservices<SkillDTO> {
         return this.skillRepository.findById(id)
                 .map(this.skillMapper::fromSkill);
     }
+
+    public Page<SkillDTO> getSkillsByCategory(Long categoryId, Pageable pageable)
+    {
+        return this.skillRepository.findSkillsByCategoryId(categoryId, pageable)
+                .map(this.skillMapper::fromSkill);
+    }
 }

@@ -1,0 +1,42 @@
+<!-- skill-categories.component.html -->
+<div class="skill-page">
+    <!-- Même fond animé que pour all-skill -->
+    <div class="animated-background">
+      <div class="gradient-circle circle-1"></div>
+      <div class="gradient-circle circle-2"></div>
+      <div class="grid-pattern"></div>
+    </div>
+  
+    <div class="skill-container">
+      <div class="page-header">
+        <h1 class="page-title">Catégories de <span class="text-gradient">Compétences</span></h1>
+        <p class="page-subtitle">Sélectionnez une catégorie pour voir les compétences associées</p>
+        <div class="header-divider"></div>
+      </div>
+  
+      <ng-container *ngIf="loading; else content">
+        <div class="loading-container">
+          <mat-spinner diameter="50" color="accent"></mat-spinner>
+          <p class="loading-message">Chargement des catégories...</p>
+        </div>
+      </ng-container>
+  
+      <ng-template #content>
+        <div class="categories-grid">
+          <mat-card 
+            *ngFor="let category of categories; let i = index" 
+            class="category-card" 
+            [@fadeIn]="i"
+            [style.--category-color]="getCategoryColor(category.name)"
+            (click)="navigateToSkills(category.idSkillCategory)">
+            <div class="category-icon">
+              <mat-icon>{{ getCategoryIcon(category.name) }}</mat-icon>
+            </div>
+            <mat-card-content>
+              <h3 class="category-name">{{ category.name }}</h3>
+            </mat-card-content>
+          </mat-card>
+        </div>
+      </ng-template>
+    </div>
+  </div>

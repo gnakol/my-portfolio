@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { forkJoin, map, Observable, switchMap } from 'rxjs';
 import { Skill, SkillResponse } from '../components/skill-package/skill.model';
 import { GenericMethodeService } from './generic-methode.service';
@@ -84,5 +84,41 @@ export class SkillService {
         });
   
       }
+
+      // Dans skill.service.ts
+getSkillsByCategory(categoryId: number, page: number = 0, size: number = 10): Observable<SkillResponse> {
+  
+  return this.http.get<SkillResponse>(`${this.apiUrl}/by-category/${categoryId}?page=${page}&size=${size}`,
+    {
+      headers: new HttpHeaders({
+          'Content-Type': 'application/json',
+      })
+  }
+  ).pipe(
+    switchMap(response => {
+      const skillRequests = response.content.map(exp => {
+        if (!exp.skillCategory && exp.skillCategory_id) {
+          return this.skillCategoryService.getSkillCategoryById(exp.skillCategory_id).pipe(
+            map(typeData => ({
+              ...exp,
+              skillCategory: { id: exp.skillCategory_id, name: typeData.name }
+            }))
+          );
+        }
+        return new Observable<Skill>(observer => {
+          observer.next(exp);
+          observer.complete();
+        });
+      });
+
+      return forkJoin(skillRequests).pipe(
+        map(updatedExperiences => ({
+          ...response,
+          content: updatedExperiences
+        }))
+      );
+    }), 
+  );
+}
   
 }

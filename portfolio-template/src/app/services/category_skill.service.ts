@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { GenericMethodeService } from './generic-methode.service';
 import { SkillCategoryResponse } from '../components/skill-package/skill-category.model';
@@ -25,7 +25,13 @@ export class SkillCategoryService {
 
     //const headers = this.genericMethodeService.getHeaders();
 
-    return this.http.get<SkillCategoryResponse>(`${this.skillCategoryUrl}/all-skill-category?page=${page}&size=${size}`);
+    return this.http.get<SkillCategoryResponse>(`${this.skillCategoryUrl}/all-skill-category?page=${page}&size=${size}`,
+      {
+        headers: new HttpHeaders({
+            'Content-Type': 'application/json',
+        })
+    }
+    );
   }
 
   addSkillCategory(skillCategory: any): Observable<any> {

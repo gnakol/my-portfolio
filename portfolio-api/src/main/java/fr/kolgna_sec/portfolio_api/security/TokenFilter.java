@@ -35,14 +35,15 @@ public class TokenFilter extends OncePerRequestFilter {
                 "/connexion", "/account/add-new-account", "/activation", "/reset-password", "/forgot-password", "/refresh-token",
                 "/experience/all-experience", "/training/all-training",
                 "/skill/all-skill", "/language/all-language", "/hobbies/all-hobbies",
-                "/cv/download", "/contact/add-new-contact"
+                "/cv/download", "/contact/add-new-contact", "/skill-category/all-skill-category"
         );
 
 // Liste des chemins avec un paramètre dynamique {id}
         List<String> skipPathsWithId = List.of(
                 "/experience-type/get-by-id-experience-type/\\d+",
                 "/establishment/get-by-id-establishment/\\d+",
-                "/skill-category/get-by-id-skill-category/\\d+"
+                "/skill-category/get-by-id-skill-category/\\d+",
+                "/skill/by-category/\\d+"
         );
 
 // Vérification des chemins sans paramètres dynamiques

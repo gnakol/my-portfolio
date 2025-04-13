@@ -24,7 +24,7 @@ import { ProtectSystemComponent } from './components/simulation-package/security
     VpnConfigurationComponent,
     NetworkIntrusionComponent,
     RadiusComponent,
-    ProtectSystemComponent
+    ProtectSystemComponent,
   ],
   imports: [
     BrowserModule,
