@@ -53,6 +53,9 @@ public class Account implements UserDetails {
     @Column(name = "address")
     private String address;
 
+    @Column(name = "profile_image_url")
+    private String profileImageUrl;
+
     @ManyToMany(fetch = FetchType.EAGER)
     @Column(name = "id_role", nullable = false)
     @JoinTable(name = "role_account",

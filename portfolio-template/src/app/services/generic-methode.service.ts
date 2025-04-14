@@ -10,17 +10,20 @@ export class GenericMethodeService{
 
     constructor(private authService : AuthenticationService){}
 
-    public getHeaders(): HttpHeaders {
-
-        const token = this.authService.getToken();
-
-        if (!token) {
-          throw new Error('No token found');
-        }
-        return new HttpHeaders({
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`
-        });
+    public getHeaders(contentType: 'json' | 'none' = 'json'): HttpHeaders {
+      const token = this.authService.getToken();
+    
+      const headersConfig: Record<string, string> = {
+        'Authorization': `Bearer ${token}`
+      };
+    
+      if (contentType === 'json') {
+        headersConfig['Content-Type'] = 'application/json';
       }
+    
+      return new HttpHeaders(headersConfig);
+    }
+    
+    
 
 }

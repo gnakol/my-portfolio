@@ -1,0 +1,92 @@
+<!-- profile.component.html -->
+<div class="profile-page">
+    <!-- Fond animé -->
+    <div class="animated-background">
+      <div class="gradient-circle circle-1"></div>
+      <div class="gradient-circle circle-2"></div>
+      <div class="grid-pattern"></div>
+    </div>
+  
+    <div class="profile-container">
+      <!-- En-tête -->
+      <div class="page-header">
+        <h1 class="page-title">Mon <span class="text-gradient">Profil</span></h1>
+        <p class="page-subtitle">Espace personnel administrateur</p>
+        <div class="header-divider"></div>
+      </div>
+  
+      <!-- Contenu principal -->
+      <div class="profile-content" @cardAnimation>
+        <!-- Colonne de gauche - Profil -->
+        <div class="profile-card" @fadeIn>
+            <div class="avatar-container" (click)="triggerFileInput()" style="cursor: pointer;">
+                <div class="avatar-wrapper">
+                  <img [src]="user.avatar || 'assets/images/default-avatar.png'" alt="Avatar">
+                  <div class="avatar-overlay">
+                    <mat-icon>edit</mat-icon>
+                  </div>
+                </div>
+                <h2 class="user-name">{{ user.username }}</h2>
+                <p class="user-email">{{ user.email }}</p>
+              </div>
+              
+  
+          <div class="stats-grid">
+            <div class="stat-card" *ngFor="let stat of stats" [style.border-bottom]="'3px solid ' + stat.color">
+              <mat-icon [style.color]="stat.color">{{ stat.icon }}</mat-icon>
+              <p class="stat-label">{{ stat.label }}</p>
+              <p class="stat-value">{{ stat.value }}</p>
+            </div>
+          </div>
+        </div>
+  
+        <!-- Colonne de droite - Actions -->
+        <div @fadeIn>
+          <div class="action-card">
+            <mat-icon>account_circle</mat-icon>
+            <div class="action-content">
+              <h3>Photo de profil</h3>
+              <p>Modifier votre avatar personnel</p>
+            </div>
+            <mat-icon>chevron_right</mat-icon>
+          </div>
+  
+          <div class="action-card">
+            <mat-icon>lock</mat-icon>
+            <div class="action-content">
+              <h3>Sécurité du compte</h3>
+              <p>Changer mot de passe et 2FA</p>
+            </div>
+            <mat-icon>chevron_right</mat-icon>
+          </div>
+  
+          <div class="action-card">
+            <mat-icon>email</mat-icon>
+            <div class="action-content">
+              <h3>Adresse email</h3>
+              <p>Mettre à jour votre email</p>
+            </div>
+            <mat-icon>chevron_right</mat-icon>
+          </div>
+  
+          <div class="action-card">
+            <mat-icon>notifications</mat-icon>
+            <div class="action-content">
+              <h3>Notifications</h3>
+              <p>Gérer les préférences</p>
+            </div>
+            <mat-icon>chevron_right</mat-icon>
+          </div>
+  
+          <div class="action-card">
+            <mat-icon>dashboard</mat-icon>
+            <div class="action-content">
+              <h3>Tableau de bord</h3>
+              <p>Accès rapide aux stats</p>
+            </div>
+            <mat-icon>chevron_right</mat-icon>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>

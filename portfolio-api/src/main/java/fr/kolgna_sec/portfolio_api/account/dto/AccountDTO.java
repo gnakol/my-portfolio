@@ -2,11 +2,13 @@ package fr.kolgna_sec.portfolio_api.account.dto;
 
 import fr.kolgna_sec.portfolio_api.role.dto.RoleDTO;
 import jakarta.persistence.Column;
+import lombok.Builder;
 import lombok.Data;
 
 import java.util.List;
 
 @Data
+@Builder
 public class AccountDTO {
 
     private Long idAccount;
@@ -30,6 +32,8 @@ public class AccountDTO {
     private String linkedin;
 
     private String address;
+
+    private String profileImageUrl;
 
     private List<RoleDTO> roleDTOS;
 }

@@ -33,7 +33,7 @@ export class AuthComponent {
       this.authService.login(email, password).subscribe(
         token => {
           console.log('Connexion réussie, token reçu:', token);
-          this.router.navigate(['/dashboard-admin']); // 🔥 Redirige après succès
+          this.router.navigate(['/dashboard-admin']);
         },
         error => {
           console.error('Erreur de connexion:', error);

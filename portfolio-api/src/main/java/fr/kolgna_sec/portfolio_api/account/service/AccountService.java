@@ -1,5 +1,9 @@
 package fr.kolgna_sec.portfolio_api.account.service;
 
+import com.amazonaws.services.s3.AmazonS3;
+import com.amazonaws.services.s3.model.CannedAccessControlList;
+import com.amazonaws.services.s3.model.ObjectMetadata;
+import com.amazonaws.services.s3.model.PutObjectRequest;
 import fr.kolgna_sec.portfolio_api.account.bean.Account;
 import fr.kolgna_sec.portfolio_api.account.dto.AccountDTO;
 import fr.kolgna_sec.portfolio_api.account.mappers.AccountMapper;
@@ -11,6 +15,7 @@ import fr.kolgna_sec.portfolio_api.role.service.RoleService;
 import fr.kolgna_sec.portfolio_api.uuid.service.UuidService;
 import fr.kolgna_sec.portfolio_api.webservices.Webservices;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -18,10 +23,13 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
@@ -41,6 +49,8 @@ public class AccountService implements Webservices<AccountDTO>, UserDetailsServi
     private final RoleRepository roleRepository;
 
     private final RoleMapper roleMapper;
+
+    private final AmazonS3 amazonS3;
 
     @Override
     public Page<AccountDTO> all(Pageable pageable) {
@@ -93,6 +103,7 @@ public class AccountService implements Webservices<AccountDTO>, UserDetailsServi
                                 .collect(Collectors.toList());
                         account.setRoles(roles);
                     }
+                    Optional.ofNullable(e.getProfileImageUrl()).ifPresent(account::setProfileImageUrl);
 
                     return this.accountRepository.save(account);
                 })
@@ -143,4 +154,33 @@ public class AccountService implements Webservices<AccountDTO>, UserDetailsServi
         account.setPassword(this.passwordEncoder.encode(newPassword));
         this.accountRepository.save(account);
     }
+
+    public String uploadProfileImage(Long id, MultipartFile file) throws IOException {
+        Account account = accountRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Account not found"));
+
+        String key = "avatars/" + UUID.randomUUID() + "-" + file.getOriginalFilename();
+
+        ObjectMetadata metadata = new ObjectMetadata();
+        metadata.setContentType(file.getContentType());
+        metadata.setContentLength(file.getSize());
+
+        // ✅ Suppression de la ligne avec .withCannedAcl(...)
+        PutObjectRequest putRequest = new PutObjectRequest(
+                "kolie-portfolio-profile",
+                key,
+                file.getInputStream(),
+                metadata
+        );
+
+        amazonS3.putObject(putRequest);
+
+        String publicUrl = amazonS3.getUrl("kolie-portfolio-profile", key).toString();
+
+        account.setProfileImageUrl(publicUrl);
+        accountRepository.save(account);
+
+        return publicUrl;
+    }
+
 }

@@ -13,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequiredArgsConstructor
@@ -79,4 +80,16 @@ public class AccountController {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
+
+    @PostMapping("/upload-profile-image/{id}")
+    public ResponseEntity<String> uploadProfileImage(@PathVariable Long id,
+                                                     @RequestParam("file") MultipartFile file) {
+        try {
+            String imageUrl = accountService.uploadProfileImage(id, file);
+            return ResponseEntity.ok(imageUrl);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Erreur lors de l’upload de l’image.");
+        }
+    }
+
 }

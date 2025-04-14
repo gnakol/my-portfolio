@@ -60,7 +60,7 @@ export class AuthenticationService {
 
     this.http.post<{ message: string }>(this.disconnectUrl, {}, { headers }).subscribe(() => {
       localStorage.removeItem('jwtToken');
-      this.authStatus.next(false);  // 🔥 Met à jour l’état d’authentification
+      this.authStatus.next(false);
       this.router.navigate(['/login']);
     }, () => {
       localStorage.removeItem('jwtToken');

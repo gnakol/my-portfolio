@@ -53,6 +53,7 @@ import { GoSimulationFirewallComponent } from './components/simulation-package/s
 import { FirewallAttackBlockerComponent } from './components/simulation-package/security-simulations/firewall-attack-blocker/firewall-attack-blocker.component';
 import { MonitoringIntroComponent } from './components/simulation-package/admin-simulations/monitoring/monitoring-intro/monitoring-intro.component';
 import { SkillCategoriesComponent } from './components/skill-package/web-service/skill-categories/skill-categories.component';
+import { ProfileComponent } from './components/admin-dashboard-package/profle-template/profile/profile.component';
 
 const routes: Routes = [
   { path: '', loadChildren: () => import('./pages/home/home.module').then(m => m.HomeModule) },
@@ -86,6 +87,7 @@ const routes: Routes = [
 
   { path: 'login', component : AuthComponent},
   { path: 'dashboard-admin', component : DashboardComponent, canActivate : [AuthGuard]},
+  { path: 'profile', component : ProfileComponent, canActivate : [AuthGuard]},
   { path: 'dashboard-simulation', component : SimulationDashboardComponent},
   { path: 'network-simulation', component : NetworkSimulationComponent},
   { path: 'vlan-simulation', component : VlanSimulationComponent},

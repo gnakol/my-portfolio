@@ -10,5 +10,6 @@ export interface Account {
     github?: string;
     linkedin?: string;
     address?: string;
+    profileImageUrl? : string;
   }
   
