@@ -21,3 +21,17 @@ server:
   port: 9000
   servlet:
     context-path: /portfolio-api
+  multipart:
+    max-file-size: 20MB
+    max-request-size: 20MB
+    enabled: true
+
+cloud:
+  aws:
+    credentials:
+      accessKey: ${AWS_ACCESS_KEY}
+      secretKey: ${AWS_SECRET_KEY}
+    region:
+      static: eu-west-1
+    stack:
+      auto: false
