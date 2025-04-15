@@ -86,4 +86,8 @@ export class SkillCategoriesComponent implements OnInit {
 navigateToSkills(categoryId: number): void {
   this.router.navigate(['/skills/category', categoryId]); // '/category' pour correspondre à ton endpoint
 }
+
+navigateTo(route: string): void {
+  this.router.navigate([route]);
+}
 }

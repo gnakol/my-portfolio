@@ -1,5 +1,12 @@
 <!-- all-skill.component.html -->
 <div class="skill-page">
+      <!-- Bouton Retour -->
+      <button class="back-button" (click)="navigateTo('skills-categories')">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+          <path fill-rule="evenodd" d="M9.707 16.707a1 1 0 01-1.414 0l-6-6a1 1 0 010-1.414l6-6a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l4.293 4.293a1 1 0 010 1.414z" clip-rule="evenodd" />
+        </svg>
+        <span>Retour</span>
+      </button>
   <!-- Fond animé amélioré -->
   <div class="animated-background">
     <div class="gradient-circle circle-1"></div>
@@ -43,7 +50,7 @@
           </div>
           <mat-card-content>
             <h3 class="skill-name">{{ skill.name }}</h3>
-            <p class="skill-description">{{ skill.description || 'Compétence acquise à travers divers projets' }}</p>
+            <!-- <p class="skill-description">{{ skill.description || 'Compétence acquise à travers divers projets' }}</p> -->
           </mat-card-content>
           <mat-card-actions class="card-actions">
             <button mat-stroked-button (click)="viewSkill(skill)" class="details-btn">
