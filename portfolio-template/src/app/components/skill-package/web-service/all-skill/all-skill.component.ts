@@ -178,4 +178,8 @@ export class AllSkillComponent implements OnInit {
       document.body.classList.remove('modal-backdrop-blur');
     });
   }
+
+  navigateTo(route: string): void {
+    this.router.navigate([route]);
+  }
 }

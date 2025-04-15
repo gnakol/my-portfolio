@@ -6,16 +6,25 @@ import { SkillCategoryService } from '../../../services/category_skill.service';
 import { CommonModule } from '@angular/common';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
+import { trigger, transition, style, animate } from '@angular/animations';
 
 @Component({
   selector: 'app-skill-detail',
   templateUrl: './skill-detail.component.html',
   styleUrls: ['./skill-detail.component.scss'],
-  imports : [
+  imports: [
     CommonModule,
     MatCardModule,
     MatIconModule,
-
+  ],
+  animations: [
+    trigger('fadeInUp', [
+      transition(':enter', [
+        style({ opacity: 0, transform: 'translateY(20px)' }),
+        animate('0.5s cubic-bezier(0.35, 0, 0.25, 1)', 
+          style({ opacity: 1, transform: 'translateY(0)' }))
+      ])
+    ])
   ]
 })
 export class SkillDetailComponent implements OnInit {

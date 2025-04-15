@@ -52,6 +52,22 @@ uploadProfileImage(userId: number, file: File): Observable<string> {
     map((event: HttpResponse<any>) => event.body)
   );
 }
-  
-  
+
+// Ajoute cette méthode à AccountService
+changePassword(oldPassword: string, newPassword: string): Observable<string> {
+  const changePasswordDto = {
+    olPassword: oldPassword,
+    newPassword: newPassword
+  };
+
+  return this.http.put(
+    `${this.accountUrl}/change-password`,
+    changePasswordDto,
+    {
+      headers: this.genericMethode.getHeaders(),
+      responseType: 'text'
+    }
+  );
+}
+
 }

@@ -5,6 +5,10 @@ import { CommonModule } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
 import { AccountService } from '../../../../services/account.service';
 import { AuthenticationService } from '../../../../pages/authenticate/core/authentication.service';
+import { MatDialog } from '@angular/material/dialog';
+import { ChangePasswordModalComponent } from '../../../account-package/web-service/change-password-modal/change-password-modal.component';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-profile',
@@ -13,6 +17,7 @@ import { AuthenticationService } from '../../../../pages/authenticate/core/authe
   imports : [
     CommonModule,
     MatIconModule,
+
     
   ],
   animations: [
@@ -47,7 +52,8 @@ export class ProfileComponent implements OnInit {
 
   constructor(
     private accountService: AccountService,
-    private authService: AuthenticationService
+    private authService: AuthenticationService,
+    private dialog : MatDialog
   ) {}
 
   ngOnInit(): void {
@@ -113,5 +119,20 @@ export class ProfileComponent implements OnInit {
     input.onchange = (event: any) => this.onAvatarChange(event);
 
     input.click();
+  }
+
+  openChangePasswordModal() {
+    const dialogRef = this.dialog.open(ChangePasswordModalComponent, {
+      width: '450px',
+      disableClose: true,
+      panelClass: 'custom-dialog-container'
+    });
+  
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        // Optionnel: faire quelque chose si le mot de passe a été changé
+        console.log('Mot de passe changé avec succès');
+      }
+    });
   }
 }
