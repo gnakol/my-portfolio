@@ -1,4 +1,11 @@
 <div class="experience-page">
+      <!-- Bouton Retour -->
+      <button class="retour-button" (click)="navigateTo('cv')">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+          <path fill-rule="evenodd" d="M9.707 16.707a1 1 0 01-1.414 0l-6-6a1 1 0 010-1.414l6-6a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l4.293 4.293a1 1 0 010 1.414z" clip-rule="evenodd" />
+        </svg>
+        <span>Retour</span>
+      </button>
   <!-- Fond animé amélioré -->
   <div class="animated-background">
     <div class="gradient-circle circle-1"></div>
@@ -24,57 +31,95 @@
     </ng-container>
 
     <ng-template #content>
-      <div class="timeline">
-        <div class="timeline-item" *ngFor="let experience of experiences">
-          <div class="timeline-card" [class.active]="experience.isCurrent">
-            <div class="timeline-date">
-              {{ experience.startDate | date:'MMM y' }} - 
-              {{ experience.endDate ? (experience.endDate | date:'MMM y') : 'Présent' }}
+      <div class="categories-container">
+        <!-- Cartes catégories -->
+        <ng-container *ngFor="let category of experienceCategories">
+          <div class="category-card" 
+               *ngIf="expandedCategory !== category.name"
+               [style.background]="getCategoryBackground(category.name)"
+               [class.active]="hasCurrentExperience(category.experiences)"
+               (click)="toggleCategory(category.name)"
+               @categoryFade>
+            <div class="category-content">
+              <div class="category-icon">
+                <mat-icon>{{ category.icon }}</mat-icon>
+              </div>
+              <div class="category-info">
+                <h3>{{ category.name }}</h3>
+                <p>{{ category.count }} expérience{{ category.count > 1 ? 's' : '' }}</p>
+              </div>
+              <div class="category-badge" [style.background]="category.color">
+                {{ category.count }}
+              </div>
             </div>
-            <mat-card class="experience-card">
-              <!-- Contenu centré avec icônes -->
-              <div class="centered-content">
-                <!-- Titre avec icône -->
-                <h3 class="card-title">
-                  <mat-icon class="title-icon">work_outline</mat-icon>
-                  {{ experience.title }}
-                </h3>
+          </div>
 
-                <!-- Entreprise avec icône -->
-                <div class="card-company">
-                  <mat-icon class="company-icon">business</mat-icon>
-                  <span>chez {{ experience.companyName }}</span>
-                </div>
+          <!-- Expériences de la catégorie -->
+          <div class="category-experiences" *ngIf="expandedCategory === category.name" @categoryExpand>
+            <div class="timeline">
+              <div class="timeline-item" *ngFor="let experience of category.experiences">
+                <div class="timeline-card" [class.active]="experience.isCurrent">
+                  <div class="timeline-date">
+                    {{ experience.startDate | date:'MMM y' }} - 
+                    {{ experience.endDate ? (experience.endDate | date:'MMM y') : 'Présent' }}
+                  </div>
+                  <mat-card class="experience-card"
+                            [class.cdi]="category.name === 'CDI'"
+                            [class.stage]="category.name === 'Stage'"
+                            [class.alternance]="category.name === 'Alternance'"
+                            [class.cdd]="category.name === 'CDD'">
+                    
+                    <!-- Badge de type -->
+                    <div class="type-badge" [style.background]="category.color">
+                      {{ category.name }}
+                    </div>
 
-                <!-- Type avec icône -->
-                <div class="card-type" *ngIf="experience.experienceType">
-                  <mat-icon class="type-icon">label_important</mat-icon>
-                  <span>{{ experience.experienceType.name }}</span>
+                    <!-- Contenu centré avec icônes -->
+                    <div class="centered-content">
+                      <!-- Titre avec icône -->
+                      <h3 class="card-title">
+                        <mat-icon class="title-icon">work_outline</mat-icon>
+                        {{ experience.title }}
+                      </h3>
+
+                      <!-- Entreprise avec icône -->
+                      <div class="card-company">
+                        <mat-icon class="company-icon">business</mat-icon>
+                        <span>chez {{ experience.companyName }}</span>
+                      </div>
+
+                      <!-- Compétences acquises -->
+                      <div class="card-skills" *ngIf="experience.skillsAcquired">
+                        <mat-icon>star</mat-icon>
+                        <span>{{ experience.skillsAcquired }}</span>
+                      </div>
+                    </div>
+
+                    <!-- Boutons centrés -->
+                    <mat-card-actions class="actions-center">
+                      <button mat-stroked-button (click)="viewExperience(experience); $event.stopPropagation()" class="details-btn">
+                        <mat-icon>visibility</mat-icon>
+                        Détails
+                      </button>
+                      <button mat-icon-button 
+                              *ngIf="isAdmin()" 
+                              (click)="deleteExperience(experience.idExperience); $event.stopPropagation()" 
+                              class="delete-btn">
+                        <mat-icon>delete</mat-icon>
+                      </button>
+                    </mat-card-actions>
+                  </mat-card>
                 </div>
               </div>
+            </div>
 
-              <!-- Boutons centrés -->
-              <mat-card-actions class="actions-center">
-                <button mat-stroked-button (click)="viewExperience(experience)" class="details-btn">
-                  <mat-icon>visibility</mat-icon>
-                  Détails
-                </button>
-                <button mat-icon-button 
-                        *ngIf="isAdmin()" 
-                        (click)="deleteExperience(experience.idExperience)" 
-                        class="delete-btn">
-                  <mat-icon>delete</mat-icon>
-                </button>
-              </mat-card-actions>
-            </mat-card>
+            <button mat-stroked-button class="back-button" (click)="toggleCategory(category.name)">
+              <mat-icon>arrow_back</mat-icon>
+              Retour aux catégories
+            </button>
           </div>
-        </div>
+        </ng-container>
       </div>
     </ng-template>
   </div>
-
-  <!-- Bouton flottant -->
-  <button mat-fab (click)="navigateToTemplate()" class="floating-btn" color="primary" matTooltip="Voir les modèles">
-    <mat-icon>list_alt</mat-icon>
-  </button>
 </div>

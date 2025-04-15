@@ -1,3 +1,4 @@
+// experience-detail.component.ts
 import { Component, Inject, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -10,15 +11,17 @@ import { MatIconModule } from '@angular/material/icon';
   selector: 'app-experience-detail',
   templateUrl: './experience-detail.component.html',
   styleUrls: ['./experience-detail.component.scss'],
-  imports : [
+  standalone: true,
+  imports: [
     CommonModule,
     MatIconModule,
-    
   ]
 })
 export class ExperienceDetailComponent implements OnInit {
   experience: any;
   skillsList: string[] = [];
+  experienceType: string = '';
+  cardColor: string = '#6366f1'; // Couleur par défaut
 
   constructor(
     public dialogRef: MatDialogRef<ExperienceDetailComponent>,
@@ -30,14 +33,45 @@ export class ExperienceDetailComponent implements OnInit {
 
   ngOnInit(): void {
     this.experience = this.data.experience;
-    //console.log("voici le contenu de experience via data : ", this.experience);
+    this.experienceType = this.experience.experienceType?.name || '';
+    this.setCardStyle(this.experienceType);
     
-    // Si l'expérience n'est pas complète, charge les détails
     if (this.experience && !this.experience.experienceType && this.experience.experienceType_id) {
       this.loadExperienceDetails(this.experience.idExperience);
     } else {
       this.processSkills();
     }
+  }
+
+  setCardStyle(typeName: string): void {
+    const styles: {[key: string]: {color: string, gradient: string[]}} = {
+      'CDI': {
+        color: '#4f46e5',
+        gradient: ['#4f46e5', '#3730a3']
+      },
+      'Stage': {
+        color: '#10b981',
+        gradient: ['#10b981', '#059669']
+      },
+      'Alternance': {
+        color: '#3b82f6',
+        gradient: ['#3b82f6', '#2563eb']
+      },
+      'CDD': {
+        color: '#ec4899',
+        gradient: ['#ec4899', '#db2777']
+      },
+      'default': {
+        color: '#6366f1',
+        gradient: ['#6366f1', '#4f46e5']
+      }
+    };
+
+    const style = styles[typeName] || styles['default'];
+    this.cardColor = style.color;
+    document.documentElement.style.setProperty('--card-color', style.color);
+    document.documentElement.style.setProperty('--gradient-start', style.gradient[0]);
+    document.documentElement.style.setProperty('--gradient-end', style.gradient[1]);
   }
 
   loadExperienceDetails(id: number): void {
@@ -49,6 +83,8 @@ export class ExperienceDetailComponent implements OnInit {
               ...data,
               experienceType: type
             };
+            this.experienceType = type.name;
+            this.setCardStyle(type.name);
             this.processSkills();
           });
         }

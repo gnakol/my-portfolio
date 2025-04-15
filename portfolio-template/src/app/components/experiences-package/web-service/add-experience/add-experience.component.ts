@@ -20,6 +20,16 @@ export class AddExperienceComponent implements OnInit {
 
   accountId: number | null = null; // ✅ Stocker l'ID utilisateur
 
+  showProjectCategory = false;
+
+  projectCategories = [
+    { name: 'Développement', value: 'development' },
+    { name: 'Administration système et réseau', value: 'sysadmin' },
+    { name: 'Projet en cours', value: 'current' },
+    { name: 'Projet court terme', value: 'short-term' },
+    { name: 'Projet long terme', value: 'long-term' }
+  ];
+
   constructor(
     private fb: FormBuilder,
     private snackBar: MatSnackBar,
@@ -35,14 +45,27 @@ export class AddExperienceComponent implements OnInit {
       endDate: [''],
       companyName: ['', Validators.required],
       experienceType: ['', Validators.required],
+      projectCategory: [''],
       skillsAcquired: ['', Validators.required]
     });
   }
 
   ngOnInit(): void {
     this.loadExperienceTypes();
+    this.loadUserId();
 
-    this.loadUserId(); // ✅ Charger l'ID utilisateur dès le début
+    // Surveiller les changements de type d'expérience
+    this.experienceForm.get('experienceType')?.valueChanges.subscribe(val => {
+      const selectedType = this.experienceTypes.find(t => t.idExperienceType === val);
+      this.showProjectCategory = selectedType?.name === 'Projet';
+      
+      if (this.showProjectCategory) {
+        this.experienceForm.get('projectCategory')?.setValidators([Validators.required]);
+      } else {
+        this.experienceForm.get('projectCategory')?.clearValidators();
+      }
+      this.experienceForm.get('projectCategory')?.updateValueAndValidity();
+    });
   }
 
   // ✅ Charger la liste des types d'expérience
@@ -81,23 +104,30 @@ export class AddExperienceComponent implements OnInit {
   // ✅ Soumettre le formulaire
   onSubmit(): void {
     if (this.experienceForm.valid && this.accountId) {
+      const formValue = this.experienceForm.value;
+      
+      // Préparer les données avec le tag caché dans skillsAcquired si c'est un projet
+      let skills = formValue.skillsAcquired;
+      if (this.showProjectCategory && formValue.projectCategory) {
+        skills = `[${formValue.projectCategory}] ${skills}`;
+      }
+
       const experienceData = {
-        ...this.experienceForm.value,
-        experienceType_id: this.experienceForm.value.experienceType, // ✅ On envoie l'ID du type d'expérience
-        account_id: this.accountId // ✅ On ajoute l'ID utilisateur
+        ...formValue,
+        skillsAcquired: skills,
+        experienceType_id: formValue.experienceType,
+        account_id: this.accountId
       };
 
       this.experienceService.addExperience(experienceData).subscribe({
         next: () => {
           this.snackBar.open('Expérience enregistrée avec succès !', 'Fermer', { duration: 3000 });
-          this.router.navigate(['/experiences']); // ✅ Redirection après ajout
+          this.router.navigate(['/experiences']);
         },
         error: () => {
-          this.snackBar.open('Erreur lors de l\'enregistrement de l\'expérience.', 'Fermer', { duration: 3000 });
+          this.snackBar.open('Erreur lors de l\'enregistrement.', 'Fermer', { duration: 3000 });
         }
       });
-    } else {
-      this.snackBar.open('Veuillez remplir correctement le formulaire.', 'Fermer', { duration: 3000 });
     }
   }
 }

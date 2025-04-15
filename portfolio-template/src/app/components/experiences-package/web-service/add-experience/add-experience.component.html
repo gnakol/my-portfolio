@@ -64,6 +64,18 @@
           <mat-error *ngIf="experienceForm.get('experienceType')?.invalid">Sélection requise</mat-error>
         </mat-form-field>
 
+        <!-- Ajouter ce bloc après le select du type d'expérience -->
+<mat-form-field appearance="fill" class="form-field" *ngIf="showProjectCategory">
+  <mat-label>Catégorie de projet</mat-label>
+  <mat-select formControlName="projectCategory">
+    <mat-option *ngFor="let category of projectCategories" [value]="category.value">
+      {{ category.name }}
+    </mat-option>
+  </mat-select>
+  <mat-icon matSuffix>label</mat-icon>
+  <mat-error *ngIf="experienceForm.get('projectCategory')?.invalid">Sélection requise</mat-error>
+</mat-form-field>
+
         <!-- Nouveau champ pour les compétences acquises -->
         <mat-form-field appearance="fill" class="form-field">
           <mat-label>Compétences acquises</mat-label>
