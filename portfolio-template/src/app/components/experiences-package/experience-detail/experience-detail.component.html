@@ -1,4 +1,8 @@
-<div class="modal-container">
+<!-- experience-detail.component.html -->
+<div class="modal-container" [class.cdi]="experienceType === 'CDI'" 
+                           [class.stage]="experienceType === 'Stage'" 
+                           [class.alternance]="experienceType === 'Alternance'" 
+                           [class.cdd]="experienceType === 'CDD'">
   <!-- Fond animé -->
   <div class="animated-background">
     <div class="gradient-circle circle-1"></div>

@@ -24,39 +24,73 @@
     </ng-container>
 
     <ng-template #content>
-      <div *ngIf="projects.length === 0" class="empty-state">
+      <div *ngIf="projectCategories.length === 0" class="empty-state">
         <mat-icon class="empty-icon">inbox</mat-icon>
         <h3>Aucun projet trouvé</h3>
         <p>Vous n'avez pas encore ajouté de projets à votre portfolio</p>
       </div>
 
-      <div class="projects-grid">
-        <mat-card *ngFor="let project of projects; let i = index" class="project-card" [@fadeIn]="i">
-          <div class="project-header">
-            <div class="project-dates">
-              {{ project.startDate | date:'MMM y' }} - {{ project.endDate ? (project.endDate | date:'MMM y') : 'Présent' }}
-            </div>
-            <div class="project-type" *ngIf="project.experienceType?.name">
-              {{ project.experienceType.name }}
+      <div class="categories-container">
+        <!-- Cartes catégories -->
+        <ng-container *ngFor="let category of projectCategories">
+          <div class="category-card" 
+               *ngIf="expandedCategory !== category.name"
+               [style.background]="getTypeColor(category.name)"
+               (click)="toggleCategory(category.name)"
+               @categoryFade>
+            <div class="category-content">
+              <div class="category-icon">
+                <mat-icon>{{ category.icon }}</mat-icon>
+              </div>
+              <div class="category-info">
+                <h3>{{ category.name }}</h3>
+                <p>{{ category.count }} projet{{ category.count > 1 ? 's' : '' }}</p>
+              </div>
+              <div class="category-badge" [style.background]="category.color">
+                {{ category.count }}
+              </div>
             </div>
           </div>
-          
-          <mat-card-content>
-            <h3 class="project-title">{{ project.title }}</h3>
-            <p class="project-company" *ngIf="project.companyName">
-              <mat-icon>business</mat-icon>
-              {{ project.companyName }}
-            </p>
-            <p class="project-description">{{ project.description }}</p>
-          </mat-card-content>
-          
-          <mat-card-actions>
-            <button mat-stroked-button (click)="viewProjectDetails(project)" color="primary">
-              <mat-icon>visibility</mat-icon>
-              Voir les détails
+
+          <!-- Projets de la catégorie -->
+          <div class="category-projects" *ngIf="expandedCategory === category.name" @categoryExpand>
+            <div class="projects-grid">
+              <mat-card *ngFor="let project of category.projects" class="project-card"
+                        [style.border-left-color]="category.color">
+                <div class="project-header">
+                  <div class="project-dates">
+                    {{ project.startDate | date:'MMM y' }} - {{ project.endDate ? (project.endDate | date:'MMM y') : 'Présent' }}
+                  </div>
+                  <div class="project-type" [style.background]="category.color">
+                    {{ category.name }}
+                  </div>
+                </div>
+                
+                <mat-card-content>
+                  <h3 class="project-title">{{ project.title }}</h3>
+                  <p class="project-company" *ngIf="project.companyName">
+                    <mat-icon>business</mat-icon>
+                    {{ project.companyName }}
+                  </p>
+                  <p class="project-description">{{ project.description }}</p>
+                </mat-card-content>
+                
+                <mat-card-actions>
+                  <button mat-stroked-button (click)="viewProjectDetails(project); $event.stopPropagation()" 
+                          [color]="category.color">
+                    <mat-icon>visibility</mat-icon>
+                    Voir les détails
+                  </button>
+                </mat-card-actions>
+              </mat-card>
+            </div>
+
+            <button mat-stroked-button class="back-button" (click)="toggleCategory(category.name)">
+              <mat-icon>arrow_back</mat-icon>
+              Retour aux catégories
             </button>
-          </mat-card-actions>
-        </mat-card>
+          </div>
+        </ng-container>
       </div>
     </ng-template>
   </div>

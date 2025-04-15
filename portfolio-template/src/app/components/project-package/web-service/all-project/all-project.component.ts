@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { trigger, transition, style, animate } from '@angular/animations';
+import { trigger, state, style, transition, animate } from '@angular/animations';
 import { ExperienceService } from '../../../../services/experience.service';
 import { experienceTypeService } from '../../../../services/experience_type.service';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
@@ -10,6 +10,7 @@ import { CommonModule, DatePipe } from '@angular/common';
 import { AuthenticationService } from '../../../../pages/authenticate/core/authentication.service';
 import { MatDialog } from '@angular/material/dialog';
 import { ProjectDetailComponent } from '../../project-detail/project-detail.component';
+import { ProjectCategoryService } from '../../../../services/project-category.service';
 
 @Component({
   selector: 'app-all-projects',
@@ -25,10 +26,16 @@ import { ProjectDetailComponent } from '../../project-detail/project-detail.comp
   templateUrl: './all-project.component.html',
   styleUrls: ['./all-project.component.scss'],
   animations: [
-    trigger('fadeIn', [
-      transition(':enter', [
-        style({ opacity: 0, transform: 'translateY(20px)' }),
-        animate('500ms ease-in-out', style({ opacity: 1, transform: 'translateY(0)' }))
+    trigger('categoryExpand', [
+      state('collapsed', style({ height: '0px', opacity: 0 })),
+      state('expanded', style({ height: '*', opacity: 1 })),
+      transition('expanded <=> collapsed', [
+        animate('300ms cubic-bezier(0.4, 0.0, 0.2, 1)')
+      ]),
+    ]),
+    trigger('categoryFade', [
+      transition(':leave', [
+        animate('200ms ease-in', style({ opacity: 0, height: 0 }))
       ])
     ])
   ]
@@ -36,13 +43,14 @@ import { ProjectDetailComponent } from '../../project-detail/project-detail.comp
 export class AllProjectsComponent implements OnInit {
   projects: any[] = [];
   loading = true;
+  projectCategories: any[] = [];
+  expandedCategory: string | null = null;
 
   constructor(
     private experienceService: ExperienceService,
-    private experienceTypeService: experienceTypeService,
-    private authService : AuthenticationService,
-    private dialog : MatDialog
-
+    private authService: AuthenticationService,
+    private dialog: MatDialog,
+    private projectCategoryService: ProjectCategoryService
   ) {}
 
   ngOnInit(): void {
@@ -54,15 +62,13 @@ export class AllProjectsComponent implements OnInit {
       next: (data) => {
         const allExperiences = data.content || [];
         
-        // Filtrer les projets
+        // Filtrer les projets (type_id = 9 pour 'Projet' dans votre DB)
         this.projects = allExperiences.filter(exp => 
-          exp.experienceType?.name === 'Projet' || 
-          (exp.experienceType_id && this.getExperienceTypeName(exp.experienceType_id) === 'Projet')
+          (exp.experienceType?.name === 'Projet') || 
+          (exp.experienceType_id === 9)
         );
 
-        // Charger les types manquants si nécessaire
-        this.loadMissingExperienceTypes();
-        
+        this.createProjectCategories();
         this.loading = false;
       },
       error: (err) => {
@@ -72,28 +78,39 @@ export class AllProjectsComponent implements OnInit {
     });
   }
 
-  private getExperienceTypeName(typeId: number): string {
-    // Implémentez cette méthode selon votre structure de données
-    return '';
+  createProjectCategories(): void {
+    // Récupérer les catégories depuis le service
+    const categories = this.projectCategoryService.getCategories();
+    
+    // Préparer les catégories avec leurs projets
+    this.projectCategories = categories.map(category => {
+      const projects = this.filterProjectsByCategory(category.type);
+      return {
+        ...category,
+        projects: projects,
+        count: projects.length
+      };
+    }).filter(cat => cat.count > 0); // Ne garder que les catégories avec des projets
   }
 
-  private loadMissingExperienceTypes(): void {
-    this.projects.forEach(project => {
-      if (!project.experienceType && project.experienceType_id) {
-        this.experienceTypeService.getExperienceTypeById(project.experienceType_id).subscribe({
-          next: (type) => {
-            project.experienceType = type;
-          },
-          error: (err) => {
-            console.error('Erreur lors du chargement du type d\'expérience :', err);
-          }
-        });
-      }
+  filterProjectsByCategory(categoryType: string): any[] {
+    return this.projects.filter(project => {
+      // Récupérer la catégorie du projet via le service
+      const projectCategory = this.projectCategoryService.getProjectCategory(project);
+      return projectCategory.type === categoryType;
     });
   }
 
-  isAdmin() : boolean
-  {
+  toggleCategory(categoryName: string): void {
+    this.expandedCategory = this.expandedCategory === categoryName ? null : categoryName;
+  }
+
+  getTypeColor(typeName: string): string {
+    const category = this.projectCategoryService.getCategories().find(c => c.name === typeName);
+    return category ? category.color : '#64748b';
+  }
+
+  isAdmin(): boolean {
     return this.authService.isAdmin();
   }
 
