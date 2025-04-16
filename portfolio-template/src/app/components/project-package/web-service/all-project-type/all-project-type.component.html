@@ -1,0 +1,46 @@
+<div class="dashboard-container">
+    <!-- Fond animé identique -->
+    <div class="animated-background">
+      <div class="gradient-circle circle-1"></div>
+      <div class="gradient-circle circle-2"></div>
+      <div class="grid-pattern"></div>
+    </div>
+  
+    <!-- En-tête -->
+    <div class="dashboard-header">
+      <h1 class="dashboard-title">Types <span class="text-gradient">de Projet</span></h1>
+      <p class="dashboard-subtitle">Gérez les catégories de vos projets personnels ou professionnels</p>
+      <div class="header-divider"></div>
+    </div>
+  
+    <!-- Contenu -->
+    <div *ngIf="loading" class="loading-container">
+      <mat-spinner diameter="50" color="accent"></mat-spinner>
+      <p class="loading-message">Chargement en cours...</p>
+    </div>
+  
+    <div *ngIf="!loading" class="cards-container">
+      <!-- Carte vide -->
+      <div *ngIf="projectTypes.length === 0" class="empty-state">
+        <mat-icon class="empty-icon">folder_open</mat-icon>
+        <h3>Aucun type enregistré</h3>
+        <p>Commencez par ajouter vos premiers types de projet</p>
+      </div>
+  
+      <!-- Cartes des types -->
+      <mat-card *ngFor="let type of projectTypes; let i = index" 
+                class="dashboard-card"
+                [style.--card-color]="getColorForIndex(i)"
+                [@fadeIn]="i">
+        <div class="card-icon">
+          <mat-icon>category</mat-icon>
+        </div>
+        <h2 class="card-title">{{type.name}}</h2>
+        <mat-card-actions>
+          <button mat-icon-button (click)="deleteProjectType(type.idProjectType)" class="action-btn">
+            <mat-icon>delete</mat-icon>
+          </button>
+        </mat-card-actions>
+      </mat-card>
+    </div>
+  </div>

@@ -24,6 +24,7 @@ import { RemoveTypeExperienceComponent } from './web-service/remove-type-experie
 import { RemoveExperienceComponent } from './web-service/remove-experience/remove-experience.component';
 import { AddTypeExperienceComponent } from './web-service/add-type-experience/add-type-experience.component';
 import { ExperienceDetailComponent } from './experience-detail/experience-detail.component'; // ✅ Ajouté ici
+import { AddProjectComponent } from '../project-package/web-service/add-project/add-project.component';
 
 const routes: Routes = [
   { path: '', component: AllExperienceComponent },
@@ -38,7 +39,9 @@ const routes: Routes = [
   declarations: [
     AddExperienceComponent,
     RemoveTypeExperienceComponent,
-    RemoveExperienceComponent
+    RemoveExperienceComponent,
+    AddProjectComponent,
+    
   ],
   imports: [
     CommonModule,

@@ -35,7 +35,8 @@ public class TokenFilter extends OncePerRequestFilter {
                 "/connexion", "/account/add-new-account", "/activation", "/reset-password", "/forgot-password", "/refresh-token",
                 "/experience/all-experience", "/training/all-training",
                 "/skill/all-skill", "/language/all-language", "/hobbies/all-hobbies",
-                "/cv/download", "/contact/add-new-contact", "/skill-category/all-skill-category"
+                "/cv/download", "/contact/add-new-contact", "/skill-category/all-skill-category",
+                "/project/all-project"
         );
 
 // Liste des chemins avec un paramètre dynamique {id}
@@ -43,7 +44,9 @@ public class TokenFilter extends OncePerRequestFilter {
                 "/experience-type/get-by-id-experience-type/\\d+",
                 "/establishment/get-by-id-establishment/\\d+",
                 "/skill-category/get-by-id-skill-category/\\d+",
-                "/skill/by-category/\\d+"
+                "/skill/by-category/\\d+",
+                "/project-type/get-project-type-by-id/\\d+",
+                "/project/get-project-by-id/\\d+"
         );
 
 // Vérification des chemins sans paramètres dynamiques

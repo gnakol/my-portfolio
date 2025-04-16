@@ -1,19 +1,20 @@
 import { Component, OnInit } from '@angular/core';
-import { trigger, state, style, transition, animate } from '@angular/animations';
-import { ExperienceService } from '../../../../services/experience.service';
-import { experienceTypeService } from '../../../../services/experience_type.service';
+import { ProjectService } from '../../../../services/project.service';
+import { Router } from '@angular/router';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
-import { CommonModule, DatePipe } from '@angular/common';
+import { CommonModule } from '@angular/common';
+import { MatTooltipModule } from '@angular/material/tooltip';
 import { AuthenticationService } from '../../../../pages/authenticate/core/authentication.service';
-import { MatDialog } from '@angular/material/dialog';
 import { ProjectDetailComponent } from '../../project-detail/project-detail.component';
-import { ProjectCategoryService } from '../../../../services/project-category.service';
+import { MatDialog } from '@angular/material/dialog';
+import { animate, state, style, transition, trigger } from '@angular/animations';
 
 @Component({
-  selector: 'app-all-projects',
+  selector: 'app-all-project',
   standalone: true,
   imports: [
     CommonModule,
@@ -21,7 +22,7 @@ import { ProjectCategoryService } from '../../../../services/project-category.se
     MatIconModule,
     MatButtonModule,
     MatCardModule,
-    DatePipe
+    MatTooltipModule
   ],
   templateUrl: './all-project.component.html',
   styleUrls: ['./all-project.component.scss'],
@@ -40,86 +41,129 @@ import { ProjectCategoryService } from '../../../../services/project-category.se
     ])
   ]
 })
-export class AllProjectsComponent implements OnInit {
+export class AllProjectComponent implements OnInit {
   projects: any[] = [];
   loading = true;
   projectCategories: any[] = [];
   expandedCategory: string | null = null;
 
   constructor(
-    private experienceService: ExperienceService,
+    private projectService: ProjectService,
+    private router: Router,
+    private snackBar: MatSnackBar,
     private authService: AuthenticationService,
-    private dialog: MatDialog,
-    private projectCategoryService: ProjectCategoryService
+    private dialog: MatDialog
   ) {}
 
   ngOnInit(): void {
     this.loadProjects();
   }
 
+  navigateTo(route: string): void {
+    this.router.navigate([route]);
+  }
+
   loadProjects(): void {
-    this.experienceService.getAllExperiences().subscribe({
+    this.projectService.getAllProject().subscribe({
       next: (data) => {
-        const allExperiences = data.content || [];
-        
-        // Filtrer les projets (type_id = 9 pour 'Projet' dans votre DB)
-        this.projects = allExperiences.filter(exp => 
-          (exp.experienceType?.name === 'Projet') || 
-          (exp.experienceType_id === 9)
-        );
+        this.projects = (data.content || [])
+          .map(project => ({
+            ...project,
+            isCurrent: !project.endDate
+          }));
 
         this.createProjectCategories();
         this.loading = false;
       },
-      error: (err) => {
-        console.error('Erreur lors du chargement des projets :', err);
+      error: (error) => {
+        console.error('Erreur lors du chargement des projets :', error);
+        this.snackBar.open('Impossible de charger les projets.', 'Fermer', { duration: 3000 });
         this.loading = false;
       }
     });
   }
 
   createProjectCategories(): void {
-    // Récupérer les catégories depuis le service
-    const categories = this.projectCategoryService.getCategories();
-    
-    // Préparer les catégories avec leurs projets
-    this.projectCategories = categories.map(category => {
-      const projects = this.filterProjectsByCategory(category.type);
-      return {
-        ...category,
-        projects: projects,
-        count: projects.length
-      };
-    }).filter(cat => cat.count > 0); // Ne garder que les catégories avec des projets
-  }
+    const categories = [
+      { name: 'Développement Fullstack', icon: 'code', color: '#4f46e5' },
+      { name: 'Infrastructure & Réseaux', icon: 'settings_ethernet', color: '#10b981' },
+      { name: 'Administration Système Linux', icon: 'terminal', color: '#3b82f6' },
+      { name: 'Projet de reconversion & montée en compétences', icon: 'school', color: '#ec4899' },
+      { name: 'Projet en cours & longue durée', icon: 'hourglass_full', color: '#f59e0b' },
+      { name: 'Portfolio personnel & démonstratif', icon: 'collections', color: '#8b5cf6' }
+    ];
 
-  filterProjectsByCategory(categoryType: string): any[] {
-    return this.projects.filter(project => {
-      // Récupérer la catégorie du projet via le service
-      const projectCategory = this.projectCategoryService.getProjectCategory(project);
-      return projectCategory.type === categoryType;
-    });
+    this.projectCategories = categories.map(category => ({
+      ...category,
+      projects: this.projects.filter(project => project.projectType?.name === category.name),
+      count: this.projects.filter(project => project.projectType?.name === category.name).length
+    })).filter(cat => cat.count > 0);
   }
 
   toggleCategory(categoryName: string): void {
-    this.expandedCategory = this.expandedCategory === categoryName ? null : categoryName;
+    if (this.expandedCategory === categoryName) {
+      this.expandedCategory = null;
+    } else {
+      this.expandedCategory = categoryName;
+    }
   }
 
   getTypeColor(typeName: string): string {
-    const category = this.projectCategoryService.getCategories().find(c => c.name === typeName);
-    return category ? category.color : '#64748b';
+    const colors: {[key: string]: string} = {
+      'Développement Fullstack': '#4f46e5',
+      'Infrastructure & Réseaux': '#10b981',
+      'Administration Système Linux': '#3b82f6',
+      'Projet de reconversion & montée en compétences': '#ec4899',
+      'Projet en cours & longue durée': '#f59e0b',
+      'Portfolio personnel & démonstratif': '#8b5cf6'
+    };
+    return colors[typeName] || '#64748b';
+  }
+
+  viewProject(project: any): void {
+    this.dialog.open(ProjectDetailComponent, {
+      width: '800px',
+      maxWidth: '90vw',
+      maxHeight: '90vh',
+      panelClass: 'project-modal',
+      data: { project }
+    });
+  }
+
+  deleteProject(id: number): void {
+    if (confirm('Êtes-vous sûr de vouloir supprimer ce projet ?')) {
+      this.projectService.deleteProject(id).subscribe({
+        next: () => {
+          this.snackBar.open('Projet supprimé avec succès !', 'Fermer', { duration: 3000 });
+          this.projects = this.projects.filter(proj => proj.idProject !== id);
+          this.createProjectCategories();
+        },
+        error: (error) => {
+          console.error('Erreur lors de la suppression :', error);
+          this.snackBar.open('Erreur lors de la suppression.', 'Fermer', { duration: 3000 });
+        }
+      });
+    }
   }
 
   isAdmin(): boolean {
     return this.authService.isAdmin();
   }
 
-  viewProjectDetails(project: any): void {
-    this.dialog.open(ProjectDetailComponent, {
-      width: '800px',
-      maxWidth: '90vw',
-      panelClass: 'project-modal',
-      data: { project }
-    });
+  getCategoryBackground(typeName: string): string {
+    const gradients: {[key: string]: string} = {
+      'Développement Fullstack': 'linear-gradient(135deg, rgba(79, 70, 229, 0.2) 0%, rgba(79, 70, 229, 0.4) 100%)',
+      'Infrastructure & Réseaux': 'linear-gradient(135deg, rgba(16, 185, 129, 0.2) 0%, rgba(16, 185, 129, 0.4) 100%)',
+      'Administration Système Linux': 'linear-gradient(135deg, rgba(59, 130, 246, 0.2) 0%, rgba(59, 130, 246, 0.4) 100%)',
+      'Projet de reconversion & montée en compétences': 'linear-gradient(135deg, rgba(236, 72, 153, 0.2) 0%, rgba(236, 72, 153, 0.4) 100%)',
+      'Projet en cours & longue durée': 'linear-gradient(135deg, rgba(245, 158, 11, 0.2) 0%, rgba(245, 158, 11, 0.4) 100%)',
+      'Portfolio personnel & démonstratif': 'linear-gradient(135deg, rgba(139, 92, 246, 0.2) 0%, rgba(139, 92, 246, 0.4) 100%)'
+    };
+    return gradients[typeName] || 'linear-gradient(135deg, rgba(99, 102, 241, 0.2) 0%, rgba(99, 102, 241, 0.4) 100%)';
   }
+  
+  hasCurrentProject(projects: any[]): boolean {
+    return projects.some(proj => !proj.endDate);
+  }
+  
 }
