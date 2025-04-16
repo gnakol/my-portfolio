@@ -75,6 +75,16 @@
       <div class="card-badge">CRUD</div>
     </mat-card>
 
+    <!-- Carte Projets -->
+<mat-card class="dashboard-card" (click)="showSection('project-template')" [style.--card-color]="'#f97316'">
+  <div class="card-icon">
+    <mat-icon>folder_open</mat-icon>
+  </div>
+  <h2 class="card-title">Projets</h2>
+  <p class="card-description">Gérez vos projets personnels ou professionnels</p>
+  <div class="card-badge">CRUD</div>
+</mat-card>
+
     <!-- Carte Logs de Sécurité -->
     <mat-card class="dashboard-card" (click)="showSection('all-log-security')" [style.--card-color]="'#ef4444'">
       <div class="card-icon">

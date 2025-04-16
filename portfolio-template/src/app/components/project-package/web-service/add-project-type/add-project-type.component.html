@@ -1,0 +1,35 @@
+<div class="dashboard-container">
+    <!-- Fond animé identique -->
+    <div class="animated-background">
+      <div class="gradient-circle circle-1"></div>
+      <div class="gradient-circle circle-2"></div>
+      <div class="grid-pattern"></div>
+    </div>
+  
+    <!-- Carte de formulaire -->
+    <mat-card class="form-card">
+      <mat-card-header class="form-header">
+        <mat-card-title class="dashboard-title">Ajouter un <span class="text-gradient">Type de Projet</span></mat-card-title>
+        <mat-card-subtitle class="dashboard-subtitle">Créez une nouvelle catégorie de projet personnel ou professionnel</mat-card-subtitle>
+        <div class="header-divider"></div>
+      </mat-card-header>
+  
+      <mat-card-content>
+        <form [formGroup]="projectTypeForm" (ngSubmit)="onSubmit()">
+          <!-- Champ Nom -->
+          <mat-form-field appearance="fill" class="form-field">
+            <mat-label>Nom du type de projet</mat-label>
+            <input matInput formControlName="name" required>
+            <mat-icon matSuffix>category</mat-icon>
+            <mat-error *ngIf="projectTypeForm.get('name')?.invalid">Ce champ est requis</mat-error>
+          </mat-form-field>
+  
+          <!-- Bouton de soumission -->
+          <button mat-raised-button type="submit" class="submit-button" [disabled]="!projectTypeForm.valid">
+            <mat-icon>save</mat-icon>
+            Enregistrer
+          </button>
+        </form>
+      </mat-card-content>
+    </mat-card>
+  </div>

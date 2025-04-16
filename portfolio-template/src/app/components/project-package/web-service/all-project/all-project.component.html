@@ -1,4 +1,12 @@
 <div class="project-page">
+  <!-- Bouton Retour -->
+  <button class="retour-button" (click)="navigateTo('cv')">
+    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+      <path fill-rule="evenodd" d="M9.707 16.707a1 1 0 01-1.414 0l-6-6a1 1 0 010-1.414l6-6a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l4.293 4.293a1 1 0 010 1.414z" clip-rule="evenodd" />
+    </svg>
+    <span>Retour</span>
+  </button>
+
   <!-- Fond animé amélioré -->
   <div class="animated-background">
     <div class="gradient-circle circle-1"></div>
@@ -11,7 +19,7 @@
     <!-- En-tête -->
     <div class="page-header">
       <h1 class="page-title">Mes <span class="text-gradient">Projets</span></h1>
-      <p class="page-subtitle">Réalisations techniques et contributions</p>
+      <p class="page-subtitle">Réalisations et travaux personnels</p>
       <div class="header-divider"></div>
     </div>
 
@@ -24,18 +32,13 @@
     </ng-container>
 
     <ng-template #content>
-      <div *ngIf="projectCategories.length === 0" class="empty-state">
-        <mat-icon class="empty-icon">inbox</mat-icon>
-        <h3>Aucun projet trouvé</h3>
-        <p>Vous n'avez pas encore ajouté de projets à votre portfolio</p>
-      </div>
-
       <div class="categories-container">
         <!-- Cartes catégories -->
         <ng-container *ngFor="let category of projectCategories">
           <div class="category-card" 
                *ngIf="expandedCategory !== category.name"
-               [style.background]="getTypeColor(category.name)"
+               [style.background]="getCategoryBackground(category.name)"
+               [class.active]="hasCurrentProject(category.projects)"
                (click)="toggleCategory(category.name)"
                @categoryFade>
             <div class="category-content">
@@ -54,35 +57,63 @@
 
           <!-- Projets de la catégorie -->
           <div class="category-projects" *ngIf="expandedCategory === category.name" @categoryExpand>
-            <div class="projects-grid">
-              <mat-card *ngFor="let project of category.projects" class="project-card"
-                        [style.border-left-color]="category.color">
-                <div class="project-header">
-                  <div class="project-dates">
-                    {{ project.startDate | date:'MMM y' }} - {{ project.endDate ? (project.endDate | date:'MMM y') : 'Présent' }}
+            <div class="timeline">
+              <div class="timeline-item" *ngFor="let project of category.projects">
+                <div class="timeline-card" [class.active]="project.isCurrent">
+                  <div class="timeline-date">
+                    {{ project.startDate | date:'MMM y' }} - 
+                    {{ project.endDate ? (project.endDate | date:'MMM y') : 'En cours' }}
                   </div>
-                  <div class="project-type" [style.background]="category.color">
-                    {{ category.name }}
-                  </div>
+                  <mat-card class="project-card"
+                            [class.fullstack]="category.name === 'Développement Fullstack'"
+                            [class.infrastructure]="category.name === 'Infrastructure & Réseaux'"
+                            [class.linux]="category.name === 'Administration Système Linux'"
+                            [class.reconversion]="category.name === 'Projet de reconversion & montée en compétences'"
+                            [class.longterm]="category.name === 'Projet en cours & longue durée'"
+                            [class.portfolio]="category.name === 'Portfolio personnel & démonstratif'">
+                    
+                    <!-- Badge de type -->
+                    <div class="type-badge" [style.background]="category.color">
+                      {{ category.name }}
+                    </div>
+
+                    <!-- Contenu centré avec icônes -->
+                    <div class="centered-content">
+                      <!-- Titre avec icône -->
+                      <h3 class="card-title">
+                        <mat-icon class="title-icon">folder</mat-icon>
+                        {{ project.title }}
+                      </h3>
+
+                      <!-- Description -->
+                      <div class="card-description">
+                        <mat-icon class="description-icon">description</mat-icon>
+                        <span>{{ project.description }}</span>
+                      </div>
+
+                      <!-- Compétences développées -->
+                      <div class="card-skills" *ngIf="project.skillsDevelopment">
+                        <mat-icon>star</mat-icon>
+                        <span>{{ project.skillsDevelopment }}</span>
+                      </div>
+                    </div>
+
+                    <!-- Boutons centrés -->
+                    <mat-card-actions class="actions-center">
+                      <button mat-stroked-button (click)="viewProject(project); $event.stopPropagation()" class="details-btn">
+                        <mat-icon>visibility</mat-icon>
+                        Détails
+                      </button>
+                      <button mat-icon-button 
+                              *ngIf="isAdmin()" 
+                              (click)="deleteProject(project.idProject); $event.stopPropagation()" 
+                              class="delete-btn">
+                        <mat-icon>delete</mat-icon>
+                      </button>
+                    </mat-card-actions>
+                  </mat-card>
                 </div>
-                
-                <mat-card-content>
-                  <h3 class="project-title">{{ project.title }}</h3>
-                  <p class="project-company" *ngIf="project.companyName">
-                    <mat-icon>business</mat-icon>
-                    {{ project.companyName }}
-                  </p>
-                  <p class="project-description">{{ project.description }}</p>
-                </mat-card-content>
-                
-                <mat-card-actions>
-                  <button mat-stroked-button (click)="viewProjectDetails(project); $event.stopPropagation()" 
-                          [color]="category.color">
-                    <mat-icon>visibility</mat-icon>
-                    Voir les détails
-                  </button>
-                </mat-card-actions>
-              </mat-card>
+              </div>
             </div>
 
             <button mat-stroked-button class="back-button" (click)="toggleCategory(category.name)">

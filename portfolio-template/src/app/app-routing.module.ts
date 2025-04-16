@@ -3,11 +3,9 @@ import { RouterModule, Routes } from '@angular/router';
 import { AllExperienceComponent } from './components/experiences-package/web-service/all-experience/all-experience.component';
 import { AllTrainingsComponent } from './components/training-package/web-services/all-trainings/all-trainings.component';
 import { AllSkillComponent } from './components/skill-package/web-service/all-skill/all-skill.component';
-import { AllProjectsComponent } from './components/project-package/web-service/all-project/all-project.component';
 import { AllHobbiesComponent } from './components/hobbies-package/web-service/all-hobbies/all-hobbies.component';
 import { AllLanguagesComponent } from './components/language-package/web-service/all-languages/all-languages.component';
 import { AuthComponent } from './pages/authenticate/auth/auth.component';
-import { AddExperienceComponent } from './components/experiences-package/web-service/add-experience/add-experience.component';
 import { AddTrainingsComponent } from './components/training-package/web-services/add-trainings/add-trainings.component';
 import { AddSkillComponent } from './components/skill-package/web-service/add-skill/add-skill.component';
 import { AddHobbiesComponent } from './components/hobbies-package/web-service/add-hobbies/add-hobbies.component';
@@ -54,6 +52,11 @@ import { FirewallAttackBlockerComponent } from './components/simulation-package/
 import { MonitoringIntroComponent } from './components/simulation-package/admin-simulations/monitoring/monitoring-intro/monitoring-intro.component';
 import { SkillCategoriesComponent } from './components/skill-package/web-service/skill-categories/skill-categories.component';
 import { ProfileComponent } from './components/admin-dashboard-package/profle-template/profile/profile.component';
+import { ProjectTemplateComponent } from './components/project-package/project-template/project-template.component';
+import { AddProjectTypeComponent } from './components/project-package/web-service/add-project-type/add-project-type.component';
+import { AllProjectTypeComponent } from './components/project-package/web-service/all-project-type/all-project-type.component';
+import { AllProjectComponent } from './components/project-package/web-service/all-project/all-project.component';
+import { AddProjectComponent } from './components/project-package/web-service/add-project/add-project.component';
 
 const routes: Routes = [
   { path: '', loadChildren: () => import('./pages/home/home.module').then(m => m.HomeModule) },
@@ -70,13 +73,14 @@ const routes: Routes = [
   { path: 'skills', component: AllSkillComponent},
   { path: 'skills/category/:id', component: AllSkillComponent },
   { path: 'skills-categories', component : SkillCategoriesComponent},
-  { path: 'projects', component: AllProjectsComponent},
+  { path: 'projects', component: AllProjectComponent},
   { path: 'hobbies', component: AllHobbiesComponent},
   { path: 'languages', component : AllLanguagesComponent},
   { path: 'all-establishment', component : AllEstablishmentComponent},
   { path: 'all-skill-category', component : AllSkillCategoryComponent},
   { path: 'all-log-security', component : AllLogSecurityComponent, canActivate : [AuthGuard]},
   { path: 'contacts', component : AllContactComponent, canActivate : [AuthGuard]},
+  { path: 'all-project-types', component : AllProjectTypeComponent},
 
   // Deatil
 
@@ -106,6 +110,8 @@ const routes: Routes = [
   { path: 'add-language', component : AddLanguagesComponent, canActivate : [AuthGuard]}, 
   { path: 'add-establishment', component : AddEstablishmentComponent, canActivate : [AuthGuard]},
   { path: 'add-skill-category', component : AddSkillCategoryComponent, canActivate : [AuthGuard]},
+  { path: 'add-project-type', component : AddProjectTypeComponent, canActivate : [AuthGuard]},
+  { path: 'add-project', component : AddProjectComponent, canActivate : [AuthGuard]},
 
   { path: 'experience-template', component : ExperienceTemplateComponent, canActivate : [AuthGuard]},
   { path: 'skill-template', component : SkillTemplateComponent, canActivate : [AuthGuard]},
@@ -113,6 +119,7 @@ const routes: Routes = [
   { path: 'hobbie-template', component : HobbieTemplateComponent, canActivate : [AuthGuard]},
   { path: 'language-template', component : LanguageTemplateComponent, canActivate : [AuthGuard]},
   { path: 'contact-template', component : ContactTemplateComponent, canActivate : [AuthGuard]},
+  { path: 'project-template', component : ProjectTemplateComponent, canActivate : [AuthGuard]},
 
   { path: 'pdf-generator', component : PdfGeneratorComponent},
 

@@ -37,7 +37,6 @@ export class ContactService {
     return this.http.post(`${this.contactUrl}/add-new-contact`, contactData, {
         headers: new HttpHeaders({
             'Content-Type': 'application/json',
-            // Ne pas inclure d'Authorization header
         })
     });
 }
