@@ -1,25 +1,32 @@
 <div class="dashboard-container">
-  <!-- Fond animé identique -->
+  <!-- Fond animé amélioré -->
   <div class="animated-background">
     <div class="gradient-circle circle-1"></div>
     <div class="gradient-circle circle-2"></div>
+    <div class="gradient-circle circle-3"></div>
     <div class="grid-pattern"></div>
+    <div class="binary-animation"></div>
   </div>
 
   <!-- Section Hero -->
   <section class="hero-section">
     <div class="hero-content">
       <div class="hero-text">
+        <div class="badge-coming-soon">
+          <span>PROCHAINEMENT</span>
+          <div class="pulse-dot"></div>
+        </div>
+        
         <h1 class="hero-title">
-          <span>Bonjour, je suis</span>
-          <span class="text-gradient">KOLIE N'gna</span>
+          <span>Ancien développeur, futur</span>
+          <span class="text-gradient">Expert Cybersécurité</span>
         </h1>
         
         <p class="hero-subtitle">
-          Expert en <span class="highlight-security">Cybersécurité</span>, 
-          <span class="highlight-network">Réseaux</span> et 
-          <span class="highlight-dev">Développement</span>.
-          Je conçois des architectures sécurisées pour protéger vos systèmes et données.
+          En <span class="highlight-dev">reconversion intensive</span> vers la cybersécurité.  
+          <br>
+          Actuellement en <span class="highlight-network">préparation CCNA</span> avec lab physique Cisco,  
+          <span class="highlight-security">formation pentest dès Septembre</span>.
         </p>
         
         <div class="hero-actions">
@@ -45,12 +52,80 @@
         <mat-card class="profile-card">
           <mat-card-content>
             <div class="profile-content">
-              <mat-icon class="profile-icon">security</mat-icon>
+              <div class="cyber-icon-container">
+                <mat-icon class="profile-icon">security</mat-icon>
+                <div class="cyber-pulse"></div>
+              </div>
               <h3 class="profile-title">Protection Numérique</h3>
               <p class="profile-description">Vos systèmes en sécurité</p>
             </div>
           </mat-card-content>
         </mat-card>
+      </div>
+    </div>
+  </section>
+
+  <!-- CCNA Countdown Section -->
+  <section class="countdown-section">
+    <div class="countdown-container">
+      <div class="countdown-content">
+        <div class="countdown-header">
+          <div class="countdown-badge">
+            <mat-icon>bolt</mat-icon>
+            <span>CERTIFICATION À VENIR</span>
+          </div>
+          <h2 class="countdown-title">Préparation intensive <span>CCNA</span></h2>
+          <p class="countdown-subtitle">Objectif certification pour cet été avec lab Cisco physique</p>
+        </div>
+        
+        <div class="countdown-timer">
+          <div class="timer-item">
+            <div class="timer-value">{{ days }}</div>
+            <div class="timer-label">Jours</div>
+          </div>
+          <div class="timer-separator">:</div>
+          <div class="timer-item">
+            <div class="timer-value">{{ hours }}</div>
+            <div class="timer-label">Heures</div>
+          </div>
+          <div class="timer-separator">:</div>
+          <div class="timer-item">
+            <div class="timer-value">{{ minutes }}</div>
+            <div class="timer-label">Minutes</div>
+          </div>
+        </div>
+        
+        <div class="progress-container">
+          <div class="progress-label">
+            <span>Progression CCNA</span>
+            <span>{{ progress }}%</span>
+          </div>
+          <mat-progress-bar 
+            mode="determinate" 
+            [value]="progress"
+            class="ccna-progress">
+          </mat-progress-bar>
+        </div>
+        
+        <button 
+          mat-stroked-button 
+          class="ccna-button"
+          (click)="openCCNADialog()">
+          <mat-icon>visibility</mat-icon>
+          Voir mon parcours CCNA
+        </button>
+      </div>
+      
+      <div class="countdown-visual">
+        <div class="cisco-logo"></div>
+        <div class="network-animation">
+          <div class="node" style="--delay: 0s"></div>
+          <div class="node" style="--delay: 0.2s"></div>
+          <div class="node" style="--delay: 0.4s"></div>
+          <div class="node" style="--delay: 0.6s"></div>
+          <div class="node" style="--delay: 0.8s"></div>
+          <div class="connection-line"></div>
+        </div>
       </div>
     </div>
   </section>
@@ -72,7 +147,7 @@
         </div>
         <h3 class="skill-title">Cybersécurité</h3>
         <p class="skill-description">
-          Formation intensive à venir chez Jedha pour transformer ma passion en expertise professionnelle.
+          Formation intensive à venir pour transformer ma passion en expertise professionnelle.
         </p>
         <ul class="skill-list">
           <li>
@@ -85,7 +160,7 @@
           </li>
           <li>
             <mat-icon>check_circle</mat-icon>
-            Certifications prévues
+            Certifications prévues (CEH, Pentest+)
           </li>
         </ul>
       </mat-card>

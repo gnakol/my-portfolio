@@ -5,6 +5,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatCardModule } from '@angular/material/card';
+import {MatProgressBarModule} from '@angular/material/progress-bar';
 
 const routes: Routes = [
   { path: '', component: HomeComponent }
@@ -19,7 +20,8 @@ const routes: Routes = [
     RouterModule.forChild(routes),
     MatButtonModule, 
     MatIconModule,
-    MatCardModule
+    MatCardModule,
+    MatProgressBarModule
     
     
   ]
