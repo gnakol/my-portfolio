@@ -60,8 +60,8 @@
               <div class="timeline-item" *ngFor="let experience of category.experiences">
                 <div class="timeline-card" [class.active]="experience.isCurrent">
                   <div class="timeline-date">
-                    {{ experience.startDate | date:'MMM y' }} - 
-                    {{ experience.endDate ? (experience.endDate | date:'MMM y') : 'Présent' }}
+                    {{ experience.startDate | date:'MMMM yyyy' }} - 
+                    {{ experience.endDate ? (experience.endDate | date:'MMMM yyyy') : 'Présent' }}
                   </div>
                   <mat-card class="experience-card"
                             [class.cdi]="category.name === 'CDI'"

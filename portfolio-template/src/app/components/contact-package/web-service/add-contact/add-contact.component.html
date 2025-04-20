@@ -38,13 +38,29 @@
         <mat-error *ngIf="contactForm.get('email')?.hasError('email')">Format invalide</mat-error>
       </div>
 
-      <!-- Champ Téléphone -->
-      <div class="input-group">
-        <label class="input-label">Téléphone (optionnel)</label>
-        <input matInput formControlName="telephone" type="tel" placeholder="Entrez votre téléphone" />
-        <mat-icon class="input-icon">phone</mat-icon>
-        <mat-error *ngIf="contactForm.get('telephone')?.hasError('pattern')">Format invalide</mat-error>
-      </div>
+<!-- Champ Téléphone avec indicatif -->
+<div class="input-group">
+  <label class="input-label">Téléphone (optionnel)</label>
+  <div class="phone-composite">
+    <!-- Sélecteur d'indicatif pays -->
+    <mat-form-field appearance="outline" class="prefix-select" floatLabel="auto">
+      <mat-select formControlName="countryCode" disableRipple>
+        <mat-option *ngFor="let country of countries" [value]="country.dialCode">
+          {{ country.flag }} {{ country.name }} ({{ country.dialCode }})
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <!-- Numéro local -->
+    <mat-form-field appearance="outline" class="number-input" floatLabel="auto">
+      <input matInput formControlName="localPhone" placeholder="Numéro" />
+    </mat-form-field>
+  </div>
+  <mat-error *ngIf="contactForm.get('localPhone')?.hasError('pattern')">
+    Numéro incorrect. Entrez uniquement des chiffres (6 à 14).
+  </mat-error>
+</div>
+
 
       <!-- Champ Message -->
       <div class="input-group">

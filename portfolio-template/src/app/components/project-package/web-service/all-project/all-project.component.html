@@ -61,8 +61,8 @@
               <div class="timeline-item" *ngFor="let project of category.projects">
                 <div class="timeline-card" [class.active]="project.isCurrent">
                   <div class="timeline-date">
-                    {{ project.startDate | date:'MMM y' }} - 
-                    {{ project.endDate ? (project.endDate | date:'MMM y') : 'En cours' }}
+                    {{ project.startDate | date:'MMMM yyyy' }} - 
+                    {{ project.endDate ? (project.endDate | date:'MMMM yyyy') : 'En cours' }}
                   </div>
                   <mat-card class="project-card"
                             [class.fullstack]="category.name === 'Développement Fullstack'"
