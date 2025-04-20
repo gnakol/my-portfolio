@@ -51,6 +51,8 @@ export class NavbarComponent {
       // Naviguer vers la route spécifiée
       this.router.navigate([link.path]);
     }
+
+    this.mobileMenuOpen = false;
   }
 
   updateActiveLinks(): void {

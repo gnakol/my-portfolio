@@ -238,3 +238,16 @@
     transform: translateY(0);
   }
 }
+
+.phone-composite {
+  display: flex;
+  gap: 10px;
+
+  .prefix-select {
+    width: 150px;
+  }
+
+  .number-input {
+    flex: 1;
+  }
+}
