@@ -46,7 +46,8 @@ public class TokenFilter extends OncePerRequestFilter {
                 "/skill-category/get-by-id-skill-category/\\d+",
                 "/skill/by-category/\\d+",
                 "/project-type/get-project-type-by-id/\\d+",
-                "/project/get-project-by-id/\\d+"
+                "/project/get-project-by-id/\\d+",
+                "/account/get-cv-url/\\d+"
         );
 
 // Vérification des chemins sans paramètres dynamiques

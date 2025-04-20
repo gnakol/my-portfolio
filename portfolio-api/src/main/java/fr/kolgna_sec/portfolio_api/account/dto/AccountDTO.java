@@ -36,4 +36,6 @@ public class AccountDTO {
     private String profileImageUrl;
 
     private List<RoleDTO> roleDTOS;
+
+    private String cvUrl;
 }

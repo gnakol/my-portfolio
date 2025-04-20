@@ -183,4 +183,38 @@ public class AccountService implements Webservices<AccountDTO>, UserDetailsServi
         return publicUrl;
     }
 
+    public String uploadCv(Long id, MultipartFile file) throws IOException {
+        Account account = accountRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Account not found"));
+
+        String key = "cv/" + UUID.randomUUID() + "-" + file.getOriginalFilename();
+
+        ObjectMetadata metadata = new ObjectMetadata();
+        metadata.setContentType(file.getContentType());
+        metadata.setContentLength(file.getSize());
+
+        PutObjectRequest putRequest = new PutObjectRequest(
+                "kolie-portfolio-profile",
+                key,
+                file.getInputStream(),
+                metadata
+        );
+
+        amazonS3.putObject(putRequest);
+
+        String publicUrl = amazonS3.getUrl("kolie-portfolio-profile", key).toString();
+
+        account.setCvUrl(publicUrl);
+        accountRepository.save(account);
+
+        return publicUrl;
+    }
+
+    public String getCvUrl(Long id) {
+        Account account = accountRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Account not found"));
+        return account.getCvUrl();
+    }
+
+
 }

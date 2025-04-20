@@ -92,4 +92,27 @@ public class AccountController {
         }
     }
 
+    @PostMapping("/upload-cv/{id}")
+    public ResponseEntity<String> uploadCv(@PathVariable Long id,
+                                           @RequestParam("file") MultipartFile file) {
+        try {
+            String cvUrl = accountService.uploadCv(id, file);
+            return ResponseEntity.ok(cvUrl);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Erreur lors de l’upload du CV.");
+        }
+    }
+
+    @GetMapping("/get-cv-url/{id}")
+    public ResponseEntity<String> getCvUrl(@PathVariable Long id) {
+        try {
+            String cvUrl = accountService.getCvUrl(id);
+            return ResponseEntity.ok(cvUrl);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("CV non trouvé.");
+        }
+    }
+
+
+
 }
