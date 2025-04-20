@@ -63,7 +63,7 @@ export class ProjectService {
         headers: new HttpHeaders({
             'Content-Type': 'application/json',
         })
-    }
+      }
     ).pipe(
       switchMap(response => {
         const projectRequests = response.content.map(exp => {

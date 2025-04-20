@@ -70,4 +70,38 @@ changePassword(oldPassword: string, newPassword: string): Observable<string> {
   );
 }
 
+uploadCv(userId: number, file: File): Observable<string> {
+  const formData = new FormData();
+  formData.append('file', file);
+
+  const req = new HttpRequest(
+    'POST',
+    `${this.accountUrl}/upload-cv/${userId}`,
+    formData,
+    {
+      reportProgress: true,
+      responseType: 'text',
+      headers: new HttpHeaders({
+        'Authorization': `Bearer ${this.authService.getToken()}`
+      })
+    }
+  );
+
+  return this.http.request(req).pipe(
+    filter(event => event instanceof HttpResponse),
+    map((event: HttpResponse<any>) => event.body)
+  );
+}
+
+getCvUrl(userId: number): Observable<string> {
+  const headers = this.genericMethode.getHeaders();
+  return this.http.get(`${this.accountUrl}/get-cv-url/${userId}`, {
+    headers: new HttpHeaders({
+      'Content-Type': 'application/json',
+  }),
+    responseType: 'text'  // important pour récupérer un simple string
+  });
+}
+
+
 }

@@ -135,4 +135,38 @@ export class ProfileComponent implements OnInit {
       }
     });
   }
+
+  onCvUpload(event: any) {
+    const file = event.target.files[0];
+    if (!file) return;
+  
+    // Vérifie la taille du fichier (max 10 Mo ici par exemple)
+    if (file.size > 10 * 1024 * 1024) {
+      alert('CV trop volumineux (max 10MB)');
+      return;
+    }
+  
+    this.accountService.uploadCv(this.userId, file).subscribe({
+      next: (url) => {
+        console.log('✅ CV uploaded successfully:', url);
+        alert('Ton CV a été mis à jour avec succès !');
+      },
+      error: (err) => {
+        console.error('🔥 Erreur upload CV:', err);
+        alert('Une erreur est survenue pendant l’upload du CV.');
+      }
+    });
+  }
+
+  triggerCvInput() {
+    const input = document.createElement('input');
+    input.type = 'file';
+    input.accept = 'application/pdf';
+  
+    input.onchange = (event: any) => this.onCvUpload(event);
+  
+    input.click();
+  }
+  
+  
 }

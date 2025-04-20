@@ -41,6 +41,7 @@ public class ConfigurationSecurityApplication {
                 .cors(Customizer.withDefaults()) // ✅ Ajoute cette ligne pour dire à Spring Security d'activer CORS
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(HttpMethod.POST, "/account/add-new-account").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/account/get-cv-url/{id}").permitAll()
                         //.requestMatchers(HttpMethod.DELETE, "/account/remove-account/{idAccount}").permitAll()
                         .requestMatchers(HttpMethod.POST, "/activation").permitAll()
                         .requestMatchers(HttpMethod.POST, "/connexion").permitAll()
