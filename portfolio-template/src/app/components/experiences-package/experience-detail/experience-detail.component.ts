@@ -90,7 +90,7 @@ export class ExperienceDetailComponent implements OnInit {
         }
       },
       error: (error) => {
-        console.error('Error loading experience details:', error);
+        //console.error('Error loading experience details:', error);
         this.snackBar.open('Erreur lors du chargement des détails', 'Fermer', { duration: 3000 });
       }
     });

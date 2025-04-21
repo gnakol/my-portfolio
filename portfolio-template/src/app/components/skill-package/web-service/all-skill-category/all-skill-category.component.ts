@@ -49,7 +49,7 @@ export class AllSkillCategoryComponent implements OnInit{
         this.loading = false;
       },
       error: (err) => {
-        console.error('Erreur lors du chargement des types d’expériences :', err);
+        //console.error('Erreur lors du chargement des types d’expériences :', err);
         this.loading = false;
       }
     });
@@ -58,14 +58,14 @@ export class AllSkillCategoryComponent implements OnInit{
   deleteSkillDelete(id: number): void {
     this.skillCategoryService.deleteSkillCategory(id).subscribe({
       next: (response: string) => {
-        console.log('Réponse du backend :', response); // Afficher la réponse pour le débogage
+        //console.log('Réponse du backend :', response); // Afficher la réponse pour le débogage
         this.snackBar.open('La catégorie de compétence à été supprimé avec succès !', 'Fermer', { duration: 3000 });
   
         // 🔥 Retirer l'élément supprimé de la liste
         this.skillCategory = this.skillCategory.filter(type => type.idSkillCategory !== id);
       },
       error: (err) => {
-        console.error('Erreur lors de la suppression :', err); // Afficher l'erreur pour le débogage
+        //console.error('Erreur lors de la suppression :', err); // Afficher l'erreur pour le débogage
         this.snackBar.open('Erreur lors de la suppression.', 'Fermer', { duration: 3000 });
       }
     });

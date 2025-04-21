@@ -57,49 +57,49 @@ export class TerminalComponent implements OnInit {
   steps = [
     {
       command: 'vlan 10 VLAN-IT',
-      message: 'VLAN 10 "VLAN-IT" created successfully.\nStatus: Active\nMTU: 1500 bytes',
-      suggestion: 'Next: Create VLAN 20 for Finance with "vlan 20 VLAN-Finance"',
+      message: 'VLAN 10 "VLAN-IT" créé avec succès.\nStatut : Actif\nMTU : 1500 octets',
+      suggestion: 'Suivant : Créez le VLAN 20 pour la finance avec "vlan 20 VLAN-Finance"',
       action: () => {
-        this.updateSwitchStatus('VLAN 10 created\nPorts: None assigned');
+        this.updateSwitchStatus('VLAN 10 créé\nPorts : Aucun assigné');
         this.animateServer(1, '#4caf50');
       }
     },
     {
       command: 'vlan 20 VLAN-Finance',
-      message: 'VLAN 20 "VLAN-Finance" created successfully.\nStatus: Active\nMTU: 1500 bytes',
-      suggestion: 'Next: Configure interface FastEthernet0/1 with "interface fa0/1"',
+      message: 'VLAN 20 "VLAN-Finance" créé avec succès.\nStatut : Actif\nMTU : 1500 octets',
+      suggestion: 'Suivant : Configurez l\'interface FastEthernet0/1 avec "interface fa0/1"',
       action: () => {
-        this.updateSwitchStatus('VLANs: 10, 20\nPorts: None assigned');
+        this.updateSwitchStatus('VLANs : 10, 20\nPorts : Aucun assigné');
         this.animateServer(2, '#4caf50');
       }
     },
     {
       command: 'interface fa0/1',
-      message: 'Entering interface configuration mode for FastEthernet0/1\nCurrent status: Down\nAvailable commands:\n  switchport mode access\n  switchport access vlan X\n  no shutdown',
-      suggestion: 'Next: Set port to access mode with "switchport mode access"',
+      message: 'Entrée en mode configuration d\'interface pour FastEthernet0/1\nStatut actuel : Inactif\nCommandes disponibles :\n  switchport mode access\n  switchport access vlan X\n  no shutdown',
+      suggestion: 'Suivant : Définissez le port en mode accès avec "switchport mode access"',
       action: () => {
         this.highlightPort(1);
       }
     },
     {
       command: 'switchport mode access',
-      message: 'Port FastEthernet0/1 set to ACCESS mode.\nVLAN assignment required.',
-      suggestion: 'Next: Assign VLAN 10 with "switchport access vlan 10"',
+      message: 'Le port FastEthernet0/1 est défini en mode ACCÈS.\nAssignation VLAN requise.',
+      suggestion: 'Suivant : Assignez le VLAN 10 avec "switchport access vlan 10"',
       action: () => {
-        this.updateSwitchStatus('Port Fa0/1: Access mode\nWaiting for VLAN assignment');
+        this.updateSwitchStatus('Port Fa0/1 : Mode accès\nEn attente d\'assignation VLAN');
       }
     },
     {
       command: 'switchport access vlan 10',
-      message: 'Port FastEthernet0/1 assigned to VLAN 10.\nConfiguration complete.\nUse "no shutdown" to activate port.',
-      suggestion: 'Congratulations! You have completed basic VLAN configuration.',
+      message: 'Le port FastEthernet0/1 est assigné au VLAN 10.\nConfiguration terminée.\nUtilisez "no shutdown" pour activer le port.',
+      suggestion: 'Félicitations ! Vous avez terminé la configuration de base du VLAN.',
       action: () => {
         this.activatePort(1, 10);
-        this.updateSwitchStatus('Port Fa0/1: VLAN 10\nStatus: Active');
+        this.updateSwitchStatus('Port Fa0/1 : VLAN 10\nStatut : Actif');
         this.animateAllServers();
       }
     }
-  ];
+];
 
   constructor(
     private simulationService: SimulationService, 
@@ -118,10 +118,10 @@ export class TerminalComponent implements OnInit {
 
   typeWelcomeMessage() {
     const welcomeMessage = `Cisco IOS Software, C2960 Software (C2960-LANBASEK9-M), Version 12.2(55)SE\n
-Switch uptime is 2 days, 3 hours, 22 minutes\n
-System image file is "flash:c2960-lanbasek9-mz.122-55.SE.bin"\n
-Initializing VLAN configuration terminal... Ready.\n
-💡 Type "vlan 10 VLAN-IT" to create your first VLAN.\n\n> `;
+Le temps de fonctionnement du switch est de 2 jours, 3 heures, 22 minutes\n
+Le fichier d'image système est "flash:c2960-lanbasek9-mz.122-55.SE.bin"\n
+Initialisation de la configuration VLAN du terminal... Prêt.\n
+💡 Tapez "vlan 10 VLAN-IT" pour créer votre premier VLAN.\n\n> `;
     
     let i = 0;
     const typing = setInterval(() => {

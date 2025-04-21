@@ -104,12 +104,12 @@ export class AuthenticationService {
             'Authorization': `Bearer ${token}`
         });
 
-        console.log('🔍 Je suis la méthode getUserIdFromToken : Email extrait du token :', email);
+        //console.log('🔍 Je suis la méthode getUserIdFromToken : Email extrait du token :', email);
 
         return this.http.get<any>(`${this.accountUrl}/get-account-id-by-email?email=${email}`, { headers })
             .pipe(
                 map(response => {
-                    console.log('Je suis la méthode getUserIdFromToken ✅ ID utilisateur récupéré :', response);
+                    //console.log('Je suis la méthode getUserIdFromToken ✅ ID utilisateur récupéré :', response);
                     return response.userId; // Vérifie que `userId` est bien renvoyé
                 })
             );
@@ -164,12 +164,12 @@ export class AuthenticationService {
     if (!token) return false;
   
     const parsedToken = this.parseJwt(token);
-    console.log('Parsed Token:', parsedToken); // Debugging : affiche le contenu du token
+    //console.log('Parsed Token:', parsedToken); 
   
     if (!parsedToken || !parsedToken.roles) return false;
   
     const isAdmin = parsedToken.roles.some((role: any) => role.name === 'ADMIN');
-    console.log('Is Admin:', isAdmin); // Debugging : affiche si l'utilisateur est admin
+    //console.log('Is Admin:', isAdmin); // Debugging : affiche si l'utilisateur est admin
     return isAdmin;
   }
 

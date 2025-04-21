@@ -32,11 +32,11 @@ export class AuthComponent {
 
       this.authService.login(email, password).subscribe(
         token => {
-          console.log('Connexion réussie, token reçu:', token);
+          //console.log('Connexion réussie, token reçu:', token);
           this.router.navigate(['/dashboard-admin']);
         },
         error => {
-          console.error('Erreur de connexion:', error);
+          //console.error('Erreur de connexion:', error);
           this.snackBar.open('Identifiants incorrects', 'Fermer', { duration: 3000 });
         }
       );

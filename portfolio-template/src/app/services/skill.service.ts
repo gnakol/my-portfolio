@@ -31,7 +31,7 @@ export class SkillService {
       
       const headers = this.genericMethodeService.getHeaders();
     
-      console.log("🚀 Données envoyées au backend :", experience);
+      //console.log("🚀 Données envoyées au backend :", experience);
     
       return this.http.post<Skill>(`${this.apiUrl}/add-skill`, experience, { headers });
     }
