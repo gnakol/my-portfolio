@@ -41,7 +41,7 @@ export class CvComponent {
         link.click();
       },
       error: (err) => {
-        console.error('Erreur téléchargement CV :', err);
+        //console.error('Erreur téléchargement CV :', err);
         alert('Impossible de télécharger le CV pour le moment.');
       }
     });

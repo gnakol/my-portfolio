@@ -77,7 +77,7 @@ export class AllExperienceComponent implements OnInit {
         this.loading = false;
       },
       error: (error) => {
-        console.error('Erreur lors du chargement des expériences :', error);
+        //console.error('Erreur lors du chargement des expériences :', error);
         this.snackBar.open('Impossible de charger les expériences.', 'Fermer', { duration: 3000 });
         this.loading = false;
       }
@@ -136,7 +136,7 @@ export class AllExperienceComponent implements OnInit {
           this.createExperienceCategories();
         },
         error: (error) => {
-          console.error('Erreur lors de la suppression :', error);
+          //console.error('Erreur lors de la suppression :', error);
           this.snackBar.open('Erreur lors de la suppression.', 'Fermer', { duration: 3000 });
         }
       });

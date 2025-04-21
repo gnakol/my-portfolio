@@ -71,7 +71,7 @@ export class TrainingService {
    */
   addTraining(training: Training): Observable<Training> {
     const headers = this.genericMethodeService.getHeaders();
-    console.log("🚀 Données envoyées au backend :", training);
+    //console.log("🚀 Données envoyées au backend :", training);
     return this.http.post<Training>(`${this.apiUrl}/add-training`, training, { headers });
   }
 

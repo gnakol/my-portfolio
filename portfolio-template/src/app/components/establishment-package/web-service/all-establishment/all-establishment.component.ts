@@ -51,7 +51,7 @@ export class AllEstablishmentComponent implements OnInit {
             this.loading = false;
           },
           error: (err) => {
-            console.error('Erreur lors du chargement des Etablissements :', err);
+            //console.error('Erreur lors du chargement des Etablissements :', err);
             this.loading = false;
           }
         });
@@ -61,14 +61,14 @@ export class AllEstablishmentComponent implements OnInit {
 
         this.establishmentService.deleteEstablishment(id).subscribe({
           next: (response: string) => {
-            console.log('Réponse du backend :', response); // Afficher la réponse pour le débogage
+            //console.log('Réponse du backend :', response); // Afficher la réponse pour le débogage
             this.snackBar.open('Etablissement supprimé avec succès !', 'Fermer', { duration: 3000 });
       
             // 🔥 Retirer l'élément supprimé de la liste
             this.establishment = this.establishment.filter(type => type.idEstablishment !== id);
           },
           error: (err) => {
-            console.error('Erreur lors de la suppression :', err); // Afficher l'erreur pour le débogage
+            //console.error('Erreur lors de la suppression :', err); // Afficher l'erreur pour le débogage
             this.snackBar.open('Erreur lors de la suppression.', 'Fermer', { duration: 3000 });
           }
         });

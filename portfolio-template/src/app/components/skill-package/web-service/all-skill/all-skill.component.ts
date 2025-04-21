@@ -78,7 +78,7 @@ export class AllSkillComponent implements OnInit {
         this.loading = false;
       },
       error: (error) => {
-        console.error('Erreur lors du chargement des compétences :', error);
+        //console.error('Erreur lors du chargement des compétences :', error);
         this.snackBar.open('Impossible de charger les compétences.', 'Fermer', { duration: 3000 });
         this.loading = false;
       }
@@ -149,7 +149,7 @@ export class AllSkillComponent implements OnInit {
         this.skills = this.skills.filter(skill => skill.idSkill !== id);
       },
       error: (error) => {
-        console.error('Erreur lors de la suppression :', error);
+        //console.error('Erreur lors de la suppression :', error);
         this.snackBar.open('Erreur lors de la suppression.', 'Fermer', { duration: 3000 });
       }
     });

@@ -43,7 +43,7 @@ export class ExperienceService {
     
     const headers = this.genericMethodeService.getHeaders();
   
-    console.log("🚀 Données envoyées au backend :", experience);
+    //console.log("🚀 Données envoyées au backend :", experience);
   
     return this.http.post<Experience>(`${this.apiUrl}/add-experience`, experience, { headers });
   }

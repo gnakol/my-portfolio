@@ -74,7 +74,7 @@ export class HomeComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        console.log('Contact ajouté:', result);
+        //console.log('Contact ajouté:', result);
       }
     });
   }

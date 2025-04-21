@@ -76,7 +76,7 @@ export class AllProjectComponent implements OnInit {
         this.loading = false;
       },
       error: (error) => {
-        console.error('Erreur lors du chargement des projets :', error);
+        //console.error('Erreur lors du chargement des projets :', error);
         this.snackBar.open('Impossible de charger les projets.', 'Fermer', { duration: 3000 });
         this.loading = false;
       }
@@ -139,7 +139,7 @@ export class AllProjectComponent implements OnInit {
           this.createProjectCategories();
         },
         error: (error) => {
-          console.error('Erreur lors de la suppression :', error);
+          //console.error('Erreur lors de la suppression :', error);
           this.snackBar.open('Erreur lors de la suppression.', 'Fermer', { duration: 3000 });
         }
       });

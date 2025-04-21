@@ -42,7 +42,7 @@ export class ProjectService {
     
     const headers = this.genericMethodeService.getHeaders();
   
-    console.log("🚀 Données envoyées au backend :", project);
+    //console.log("🚀 Données envoyées au backend :", project);
   
     return this.http.post<Project>(`${this.apiUrl}/add-project`, project, { headers });
   }

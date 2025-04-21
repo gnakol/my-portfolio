@@ -8,6 +8,7 @@ import { MatCardModule } from '@angular/material/card';
 import { CommonModule } from '@angular/common';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { AuthenticationService } from '../../../../pages/authenticate/core/authentication.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-all-languages',
@@ -37,11 +38,16 @@ export class AllLanguagesComponent implements OnInit {
   constructor(
     private languageService: LanguageService,
     private snackBar: MatSnackBar,
-    private authService : AuthenticationService
+    private authService : AuthenticationService,
+    private router : Router
   ) {}
 
   ngOnInit(): void {
     this.loadLanguages();
+  }
+
+  navigateTo(route: string): void {
+    this.router.navigate([route]);
   }
 
   loadLanguages(): void {
@@ -51,7 +57,7 @@ export class AllLanguagesComponent implements OnInit {
         this.loading = false;
       },
       error: (err) => {
-        console.error('Erreur lors du chargement des langues :', err);
+        //console.error('Erreur lors du chargement des langues :', err);
         this.snackBar.open('Impossible de charger les langues', 'Fermer', { duration: 3000 });
         this.loading = false;
       }
@@ -92,7 +98,7 @@ export class AllLanguagesComponent implements OnInit {
         this.languages = this.languages.filter(lang => lang.idLanguage !== id);
       },
       error: (error) => {
-        console.error('Erreur lors de la suppression :', error);
+        //console.error('Erreur lors de la suppression :', error);
         this.snackBar.open('Erreur lors de la suppression.', 'Fermer', { duration: 3000 });
       }
     });

@@ -51,6 +51,10 @@ export class AllTrainingsComponent implements OnInit {
     this.loadTrainings();
   }
 
+  navigateTo(route: string): void {
+    this.router.navigate([route]);
+  }
+
   loadTrainings(): void {
     this.trainingService.getAllTraining().subscribe({
       next: (data) => {
@@ -60,7 +64,7 @@ export class AllTrainingsComponent implements OnInit {
         this.loading = false;
       },
       error: (err) => {
-        console.error('Erreur lors du chargement des formations :', err);
+        //console.error('Erreur lors du chargement des formations :', err);
         this.snackBar.open('Impossible de charger les formations.', 'Fermer', { duration: 3000 });
         this.loading = false;
       }
@@ -74,7 +78,7 @@ export class AllTrainingsComponent implements OnInit {
         this.trainings = this.trainings.filter(training => training.idTraining !== id);
       },
       error: (err) => {
-        console.error('Erreur lors de la suppression :', err);
+        //console.error('Erreur lors de la suppression :', err);
         this.snackBar.open('Erreur lors de la suppression.', 'Fermer', { duration: 3000 });
       }
     });

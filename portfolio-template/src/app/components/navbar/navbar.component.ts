@@ -20,7 +20,7 @@ export class NavbarComponent {
     { path: '/cv', label: 'CV', active: false },
     //{ path: '/dashboard', label: 'Dashboard', active: false },
     { path: '/dashboard-simulation', label: 'Simulations', active: false },
-    { path: '/blog', label: 'Blog', active: false },
+    //{ path: '/blog', label: 'Blog', active: false },
     { path: '/contact', label: 'Contact', active: false }
   ];
 

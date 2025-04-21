@@ -8,6 +8,7 @@ import { MatCardModule } from '@angular/material/card';
 import { CommonModule } from '@angular/common';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { AuthenticationService } from '../../../../pages/authenticate/core/authentication.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-all-hobbies',
@@ -37,11 +38,16 @@ export class AllHobbiesComponent implements OnInit {
   constructor(
     private hobbiesService: HobbiesService,
     private snackBar: MatSnackBar,
-    private authService : AuthenticationService
+    private authService : AuthenticationService,
+    private router : Router
   ) {}
 
   ngOnInit(): void {
     this.loadHobbies();
+  }
+
+  navigateTo(route: string): void {
+    this.router.navigate([route]);
   }
 
   loadHobbies(): void {
@@ -51,7 +57,7 @@ export class AllHobbiesComponent implements OnInit {
         this.loading = false;
       },
       error: (err) => {
-        console.error('Erreur lors du chargement des hobbies :', err);
+        //console.error('Erreur lors du chargement des hobbies :', err);
         this.snackBar.open('Impossible de charger les centres d\'intérêt', 'Fermer', { duration: 3000 });
         this.loading = false;
       }
@@ -88,7 +94,7 @@ export class AllHobbiesComponent implements OnInit {
         this.hobbies = this.hobbies.filter(hobby => hobby.idHobbies !== id);
       },
       error: (error) => {
-        console.error('Erreur lors de la suppression :', error);
+        //console.error('Erreur lors de la suppression :', error);
         this.snackBar.open('Erreur lors de la suppression.', 'Fermer', { duration: 3000 });
       }
     });
