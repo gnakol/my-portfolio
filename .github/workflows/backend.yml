@@ -28,3 +28,10 @@ jobs:
           context: ./portfolio-api
           push: true
           tags: kolie549/portfolio-api:latest
+
+      - name: 🔔 Notify FastAPI to deploy
+        run: |
+          curl -X POST http://kolie-portfolio.org:8000/webhook \
+            -H "X-Hub-Signature-256: sha256=$(echo -n 'dummy' | openssl dgst -sha256 -hmac 'kolie-super-devops-2025' | sed 's/^.* //')" \
+            -H "Content-Type: application/json" \
+            -d '{"event":"deploy"}'
