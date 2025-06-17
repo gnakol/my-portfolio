@@ -54,7 +54,6 @@ export class ExperienceService {
     return this.http.get(`${this.apiUrl}/get-by-id-experience/${id}`);
   }
 
-  // ✅ Version propre avec `switchMap()` pour éviter l'imbrication incorrecte des Observables
   getAllExperiences(page: number = 0, size: number = 10): Observable<ExperienceResponse> {
 
     return this.http.get<ExperienceResponse>(`${this.apiUrl}/all-experience?page=${page}&size=${size}`).pipe(
