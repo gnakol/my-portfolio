@@ -16,7 +16,7 @@ export class HomeComponent implements OnInit {
   days: string = '00';
   hours: string = '00';
   minutes: string = '00';
-  progress: number = 45; // Votre progression actuelle en %
+  progress: number = 55; // Votre progression actuelle en %
 
   constructor(
     private router: Router,
@@ -28,32 +28,25 @@ export class HomeComponent implements OnInit {
   }
 
   startCountdown(): void {
-    // Date cible pour la certification (1er août 2023)
-    const targetDate = new Date('2023-08-01').getTime();
-    
+    // Compte à rebours jusqu'à la rentrée ASTON
+    const targetDate = new Date('2025-10-06T09:00:00').getTime();
+
     const updateCountdown = () => {
       const now = new Date().getTime();
       const distance = targetDate - now;
-      
-      // Calculs pour jours, heures, minutes
-      this.days = Math.floor(distance / (1000 * 60 * 60 * 24)).toString().padStart(2, '0');
-      this.hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)).toString().padStart(2, '0');
-      this.minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60)).toString().padStart(2, '0');
-      
-      // Mise à jour de la progression (exemple)
-      if (distance > 0) {
-        const totalDays = Math.floor((new Date('2023-08-01').getTime() - new Date('2023-01-01').getTime()) / (1000 * 60 * 60 * 24));
-        const daysPassed = totalDays - Math.floor(distance / (1000 * 60 * 60 * 24));
-        this.progress = Math.min(100, Math.floor((daysPassed / totalDays) * 100));
-      } else {
-        this.progress = 100;
-      }
+
+      const d = Math.max(0, Math.floor(distance / (1000 * 60 * 60 * 24)));
+      const h = Math.max(0, Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)));
+      const m = Math.max(0, Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60)));
+
+      this.days = d.toString().padStart(2, '0');
+      this.hours = h.toString().padStart(2, '0');
+      this.minutes = m.toString().padStart(2, '0');
+
+      // progression reste statique pour l’instant (pas de recalcul ici)
     };
-    
-    // Mise à jour immédiate
+
     updateCountdown();
-    
-    // Mise à jour toutes les minutes
     setInterval(updateCountdown, 60000);
   }
 
