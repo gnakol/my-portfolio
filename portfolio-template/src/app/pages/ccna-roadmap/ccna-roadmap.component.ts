@@ -6,7 +6,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatTooltipModule } from '@angular/material/tooltip';
 
 @Component({
-  selector: 'app-ccna-roadmap',
+  selector: 'app-infra-roadmap',
   standalone: true,
   imports: [
     CommonModule,
@@ -17,7 +17,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
   template: `
     <div class="roadmap-container">
       <div class="roadmap-header">
-        <h2>Mon Parcours CCNA <span class="lab-badge">LAB PHYSIQUE</span></h2>
+        <h2>Mon Parcours Infrastructure & Cloud <span class="lab-badge">LAB PHYSIQUE</span></h2>
         <button mat-icon-button (click)="dialogRef.close()" matTooltip="Fermer">
           <mat-icon>close</mat-icon>
         </button>
@@ -27,8 +27,8 @@ import { MatTooltipModule } from '@angular/material/tooltip';
         <div class="lab-description">
           <mat-icon>dns</mat-icon>
           <p>
-            <strong>Mon Lab Physique :</strong> Cisco Catalyst 2960-X, Routeur 2901 Voice, 
-            Raspberry Pi 5 (Serveur Ubuntu), TP-Link, 3 PCs multi-OS, câbles professionnels
+            <strong>Mon Écosystème Technique :</strong> Cisco Catalyst 2960-X, Routeur 2901 Voice, 
+            Raspberry Pi 5 (Serveur Ubuntu), TP-Link, 3 PCs multi-OS, Architecture distribuée Djobo
           </p>
         </div>
 
@@ -41,16 +41,16 @@ import { MatTooltipModule } from '@angular/material/tooltip';
               <h3>{{ item.title }}</h3>
               <p>{{ item.description }}</p>
               
-              <div class="timeline-implementation" *ngIf="item.labImplementation">
+              <div class="timeline-implementation" *ngIf="item.implementation">
                 <mat-icon>dns</mat-icon>
-                <span>Implémentation Lab: <strong>{{ item.labImplementation }}</strong></span>
+                <span>Mise en œuvre: <strong>{{ item.implementation }}</strong></span>
               </div>
               
               <div class="timeline-date">
                 <mat-icon>schedule</mat-icon>
                 {{ item.date }}
                 <span class="badge" *ngIf="item.current">EN COURS</span>
-                <span class="badge badge-lab" *ngIf="item.labDone">LAB OK</span>
+                <span class="badge badge-lab" *ngIf="item.done">VALIDÉ</span>
               </div>
               
               <div class="timeline-resources" *ngIf="item.resources">
@@ -297,70 +297,102 @@ import { MatTooltipModule } from '@angular/material/tooltip';
     }
   `]
 })
-export class CCNARoadmapComponent {
-  constructor(public dialogRef: MatDialogRef<CCNARoadmapComponent>) {}
+export class InfraRoadmapComponent {
+  constructor(public dialogRef: MatDialogRef<InfraRoadmapComponent>) {}
 
-  roadmapItems = [
-    {
-      title: 'Fondamentaux réseaux',
-      description: 'Modèles OSI/TCP-IP, sous-réseaux, VLAN basique',
-      labImplementation: 'Packet Tracer',
-      date: 'Novembre 2024',
-      completed: true,
-      labDone: true,
-      resources: [
-        { name: 'NetAcad', url: 'https://www.netacad.com' },
-        { name: 'RFC 1180', url: 'https://tools.ietf.org/html/rfc1180' }
-      ]
-    },
-    {
-      title: 'Routage Inter-VLAN',
-      description: 'Configuration de trunk (802.1Q), Router-on-a-Stick',
-      labImplementation: 'Lab Physique (Routeur Cisco 2901 + Switch 2960-X)',
-      date: 'Janvier 2025',
-      completed: true,
-      labDone: true
-    },
-    {
-      title: 'Protocoles dynamiques',
-      description: 'OSPF, EIGRP, redistribution de routes',
-      labImplementation: 'Lab Physique avec 2 routeurs Cisco + Switch',
-      date: 'Janvier 2025',
-      completed: true,
-      labDone: true
-    },
-    {
-      title: 'Sécurité réseau',
-      description: 'ACL, NAT/PAT, Sécurisation des équipements (SSH, VPN)',
-      labImplementation: 'Routeur Cisco + Firewall TP-Link + Serveur Ubuntu',
-      date: 'Fevrier 2025',
-      completed: true,
-      labDone: true
-    },
-    {
-      title: 'Services réseaux',
-      description: 'DHCP Relais, DNS, NTP, QoS, Radius',
-      labImplementation: 'Raspberry Pi 5 (Serveur Ubuntu) + Cisco 2901',
-      date: 'Mars 2025',
-      completed: true,
-      labDone: true,
-      current: true
-    },
-    {
-      title: 'Automatisation',
-      description: 'Python pour réseaux, Ansible, APIs Cisco',
-      labImplementation: 'En cours - Scripts Python/Bash pour gestion du lab',
-      date: 'Juin 2025',
-      completed: false,
-      labDone: false
-    },
-    {
-      title: 'Préparation CCNA',
-      description: 'Tests pratiques, examens blancs, revue complète',
-      labImplementation: 'Lab complet + Simulations temps réel',
-      date: 'Juillet 2025',
-      completed: false,
-      labDone: false
-    }
-  ];
+roadmapItems = [
+  {
+    title: 'Fondamentaux réseaux avancés',
+    description: 'OSI/TCP-IP, subnetting, VLAN, routage inter-VLAN (RoaS).',
+    implementation: 'Lab physique Cisco (2960-X + 2901) + Packet Tracer',
+    date: 'Janv – Fév 2025',
+    completed: true,
+    done: true,
+    resources: [
+      { name: 'NetAcad', url: 'https://www.netacad.com' },
+      { name: 'Cisco Docs', url: 'https://www.cisco.com' }
+    ]
+  },
+  {
+    title: 'Architecture distribuée Djobo',
+    description: 'Backend sur PC fixe; Angular (Ubuntu) et Flutter (Windows) en clients. Réseau local dédié, ports exposés.',
+    implementation: 'Switch Cisco + TL-SG108E, plan d’adressage, tests latence',
+    date: 'Mars 2025',
+    completed: true,
+    done: true
+  },
+  {
+    title: 'Services réseau “entreprise”',
+    description: 'DHCP relais, DNS, NTP, durcissement équipements, accès SSH/ACL.',
+    implementation: 'Raspberry Pi 5 (Ubuntu Server) + Cisco 2901',
+    date: 'Avr 2025',
+    completed: true,
+    done: true
+  },
+  {
+    title: 'Déploiement Cloud AWS du portfolio',
+    description: 'EC2, Nginx reverse proxy, Docker Compose, domaine + HTTPS (Certbot).',
+    implementation: 'AWS EC2 + Route 53 + Let’s Encrypt',
+    date: 'Mai 2025',
+    completed: true,
+    done: true
+  },
+  {
+    title: 'CI/CD & Observabilité',
+    description: 'GitHub Actions, images Docker, variables d’environnement, logs/metrics de base.',
+    implementation: 'Pipelines GitHub + registry, stratégies de branches',
+    date: 'Juin – Juil 2025',
+    completed: true,
+    done: true
+  },
+  {
+    title: 'Couches applicatives & sécurité applicative',
+    description: 'CORS dynamique, proxy Nginx, notifications e-mail (SMTP), bonnes pratiques de secrets.',
+    implementation: 'Spring Boot + Nginx + SMTP',
+    date: 'Août 2025',
+    completed: true,
+    done: true
+  },
+  {
+    title: 'Aston – Année 1 : Admin Infra Sécurisées & Cloud',
+    description: 'Cursus officiel : Cloud, virtualisation, réseaux avancés, sécurité d’Infra.',
+    implementation: 'École Aston (alternance/projets)',
+    date: 'Oct 2025 – Juil 2026',
+    completed: false,
+    done: false
+  },
+  {
+    title: 'SecOps & conformité de base',
+    description: 'Sauvegardes, monitoring, durcissement serveurs, IAM, PRA basique.',
+    implementation: 'Ubuntu Server + AWS (logs, sauvegardes, rôles)',
+    date: 'Nov 2025 – Fév 2026',
+    completed: false,
+    current: true,
+    done: false
+  },
+  {
+    title: 'Industrialisation & IaC',
+    description: 'Infrastructure as Code, gabarits de déploiement, env. dev/prod.',
+    implementation: 'Terraform/Ansible (selon besoins projets) + Docker',
+    date: 'Mars – Juin 2026',
+    completed: false,
+    done: false
+  },
+  {
+    title: 'Aston – Année 2 : Spécialisation Cybersécurité',
+    description: 'Sécurité offensive/défensive, durcissement, détection, réponses aux incidents.',
+    implementation: 'École Aston (projets sécurité & cas pratiques)',
+    date: 'Sept 2026 – Juin 2027',
+    completed: false,
+    done: false
+  },
+  {
+    title: 'Projet de fin d’études (Cyber)',
+    description: 'Cas réel mêlant Cloud + Réseau + SecOps (ex: app conteneurisée, supervision, menaces simulées).',
+    implementation: 'Stack perso + AWS + lab Cisco',
+    date: 'Mai – Juin 2027',
+    completed: false,
+    done: false
+  }
+];
 }
