@@ -92,7 +92,7 @@ const routes: Routes = [
   { path: 'login', component : AuthComponent},
   { path: 'dashboard-admin', component : DashboardComponent, canActivate : [AuthGuard]},
   { path: 'profile', component : ProfileComponent, canActivate : [AuthGuard]},
-  { path: 'dashboard-simulation', component : SimulationDashboardComponent},
+  { path: '0a13f9e4-👁️-simulation-🛡️-network-bf1926', component : SimulationDashboardComponent},
   { path: 'network-simulation', component : NetworkSimulationComponent},
   { path: 'vlan-simulation', component : VlanSimulationComponent},
   { path: 'eigrp-simulation', component : EigrpSimulationComponent},
