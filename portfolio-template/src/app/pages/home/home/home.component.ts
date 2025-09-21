@@ -2,7 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { AddContactComponent } from '../../../components/contact-package/web-service/add-contact/add-contact.component';
-import { CCNARoadmapComponent } from '../../ccna-roadmap/ccna-roadmap.component';
+import { InfraRoadmapComponent } from '../../ccna-roadmap/ccna-roadmap.component';
+
 
 @Component({
   selector: 'app-home',
@@ -80,7 +81,7 @@ export class HomeComponent implements OnInit {
   }
 
   openCCNADialog(): void {
-    this.dialog.open(CCNARoadmapComponent, {
+    this.dialog.open(InfraRoadmapComponent, {
       width: '100%',
       maxWidth: '800px',
       panelClass: 'roadmap-modal-container',
