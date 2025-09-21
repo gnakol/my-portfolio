@@ -15,6 +15,7 @@ import {MatDatepickerModule} from '@angular/material/datepicker';
 import {MatSelectModule} from '@angular/material/select';
 import { MatNativeDateModule } from '@angular/material/core'; // ✅ Ajouté ici
 import { CommonModule } from '@angular/common';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-ping-simulations',
@@ -42,7 +43,10 @@ export class PingSimulationsComponent {
 
   pingResult: string = '';
 
-  constructor(private simulationService: SimulationService) {}
+  constructor(
+    private simulationService: SimulationService,
+    private router : Router
+  ) {}
 
   testPing() {
     if (!this.ipAddress) {
@@ -69,6 +73,9 @@ export class PingSimulationsComponent {
     );
 }
 
+  navigateTo(route: string): void {
+    this.router.navigate([route]);
+  }
 
 
 }

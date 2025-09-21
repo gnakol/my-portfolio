@@ -25,8 +25,8 @@
         <p class="hero-subtitle">
           En <span class="highlight-dev">reconversion vers l'infrastructure cloud et réseaux</span>.  
           <br>
-          Actuellement en <span class="highlight-network">préparation CCNA</span> avec lab physique Cisco,  
-          <span class="highlight-security">alternance admin S&R/DevOps dès Septembre 2025</span>.
+          Actuellement en <span class="highlight-network">rentrée ASTON (06 oct. 2025)</span> avec lab physique Cisco,  
+          <span class="highlight-security">alternance admin S&R/DevOps dès Octobre 2025</span>.
         </p>
         
         <div class="hero-actions">
@@ -70,12 +70,14 @@
     <div class="countdown-container">
       <div class="countdown-content">
         <div class="countdown-header">
-          <div class="countdown-badge">
-            <mat-icon>bolt</mat-icon>
-            <span>CERTIFICATION À VENIR</span>
-          </div>
-          <h2 class="countdown-title">Préparation intensive <span>CCNA</span></h2>
-          <p class="countdown-subtitle">Objectif certification pour cet été avec lab Cisco physique</p>
+<div class="countdown-badge">
+  <mat-icon>bolt</mat-icon>
+  <span>PROCHAINE ÉTAPE</span>
+</div>
+<h2 class="countdown-title">Cap vers la <span>Cybersécurité</span></h2>
+<p class="countdown-subtitle">
+  Rentrée ASTON — Admin Infra Sécurisées & Cloud (06 oct. 2025). Objectif final : spécialisation Cybersécurité (année 2).
+</p>
         </div>
         
         <div class="countdown-timer">
@@ -96,10 +98,10 @@
         </div>
         
         <div class="progress-container">
-          <div class="progress-label">
-            <span>Progression CCNA</span>
-            <span>{{ progress }}%</span>
-          </div>
+<div class="progress-label">
+  <span>Progression reconversion</span>
+  <span>{{ progress }}%</span>
+</div>
           <mat-progress-bar 
             mode="determinate" 
             [value]="progress"
@@ -107,13 +109,10 @@
           </mat-progress-bar>
         </div>
         
-        <button 
-          mat-stroked-button 
-          class="ccna-button"
-          (click)="openCCNADialog()">
-          <mat-icon>visibility</mat-icon>
-          Voir mon parcours CCNA
-        </button>
+<button mat-stroked-button class="ccna-button" (click)="openCCNADialog()">
+  <mat-icon>visibility</mat-icon>
+  Voir mon parcours
+</button>
       </div>
       
       <div class="countdown-visual">
