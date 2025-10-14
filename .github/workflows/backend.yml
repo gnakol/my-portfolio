@@ -1,37 +1,46 @@
-name: 🚀 Deploy Backend to Docker Hub
+name: 🚀 Deploy Backend to K8s
 
 on:
   push:
-    branches:
-      - main
+    branches: [ main ]
     paths:
       - 'portfolio-api/**'
       - '.github/workflows/backend.yml'
 
 jobs:
-  build-and-push-backend:
+  build-push-and-rollout:
     runs-on: ubuntu-latest
-
     steps:
-      - name: 📥 Checkout code
-        uses: actions/checkout@v3
+      - name: 📥 Checkout
+        uses: actions/checkout@v4
 
-      - name: 🔐 Login to Docker Hub
+      - name: 🔐 Docker login
         uses: docker/login-action@v3
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME_BACK }}
           password: ${{ secrets.DOCKERHUB_TOKEN_BACK }}
 
-      - name: 🛠️ Build and Push Docker image
-        uses: docker/build-push-action@v5
+      - name: 🏷️ Build & Push (sha + latest)
+        uses: docker/build-push-action@v6
         with:
           context: ./portfolio-api
           push: true
-          tags: kolie549/portfolio-api:latest
+          tags: |
+            kolie549/portfolio-api:${{ github.sha }}
+            kolie549/portfolio-api:latest
 
-      - name: 🔔 Notify FastAPI to deploy
+      - name: 🧰 Install kubectl
+        uses: azure/setup-kubectl@v4
+        with:
+          version: 'latest'
+
+      - name: 🌐 Configure kubeconfig
         run: |
-          curl -X POST http://kolie-portfolio.org:8000/webhook \
-            -H "X-Hub-Signature-256: sha256=$(echo -n 'dummy' | openssl dgst -sha256 -hmac 'kolie-super-devops-2025' | sed 's/^.* //')" \
-            -H "Content-Type: application/json" \
-            -d '{"event":"deploy"}'
+          mkdir -p $HOME/.kube
+          echo "${{ secrets.KUBE_CONFIG }}" > $HOME/.kube/config
+
+      - name: 🔄 Set image & rollout
+        run: |
+          kubectl set image deployment/portfolio-api \
+            portfolio-api=kolie549/portfolio-api:${{ github.sha }} -n portfolio --record
+          kubectl rollout status deployment/portfolio-api -n portfolio --timeout=120s
