@@ -29,18 +29,18 @@ jobs:
             kolie549/portfolio-api:${{ github.sha }}
             kolie549/portfolio-api:latest
 
-      - name: 🧰 Install kubectl
-        uses: azure/setup-kubectl@v4
+      - name: 🚪 SSH on EC2 & rollout BACK
+        uses: appleboy/ssh-action@v1.0.3
         with:
-          version: 'latest'
-
-      - name: 🌐 Configure kubeconfig
-        run: |
-          mkdir -p $HOME/.kube
-          echo "${{ secrets.KUBE_CONFIG }}" > $HOME/.kube/config
-
-      - name: 🔄 Set image & rollout
-        run: |
-          kubectl set image deployment/portfolio-api \
-            portfolio-api=kolie549/portfolio-api:${{ github.sha }} -n portfolio --record
-          kubectl rollout status deployment/portfolio-api -n portfolio --timeout=120s
+          host: ${{ secrets.EC2_HOST }}
+          username: ubuntu
+          key: ${{ secrets.EC2_SSH_KEY }}
+          script: |
+            echo "[INFO] Hostname: $(hostname)"
+            echo "[INFO] kubectl: $(which kubectl)"
+            echo "[ROLLING] set image portfolio-api -> kolie549/portfolio-api:${{ github.sha }}"
+            kubectl -n portfolio set image deployment/portfolio-api \
+              portfolio-api=kolie549/portfolio-api:${{ github.sha }} --record
+            echo "[WAIT] rollout status..."
+            kubectl -n portfolio rollout status deployment/portfolio-api --timeout=180s
+            echo "[DONE] rollout ok"
