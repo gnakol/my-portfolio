@@ -117,15 +117,23 @@ export class AllExperienceComponent implements OnInit {
     return colors[typeName] || '#64748b';
   }
 
-  viewExperience(experience: any): void {
-    this.dialog.open(ExperienceDetailComponent, {
-      width: '800px',
-      maxWidth: '90vw',
-      maxHeight: '90vh',
-      panelClass: 'experience-modal',
-      data: { experience }
-    });
-  }
+viewExperience(experience: any): void {
+  const isDesktop = window.innerWidth >= 1024; // même breakpoint que ton shell (grid 35% / 65%)
+
+  this.dialog.open(ExperienceDetailComponent, {
+    width: '800px',
+    maxWidth: '90vw',
+    maxHeight: '90vh',
+    panelClass: 'experience-modal', // on garde ta classe
+    data: { experience },
+
+    // 👉 Décale la modale vers la droite uniquement sur desktop
+    position: isDesktop ? { left: 'calc(35% + 2rem)' } : undefined
+    // 35% = largeur de la colonne sidebar dans le shell
+    // + 2rem = l'espace (gap) que tu as entre les colonnes
+  });
+}
+
 
   deleteExperience(id: number): void {
     if (confirm('Êtes-vous sûr de vouloir supprimer cette expérience ?')) {

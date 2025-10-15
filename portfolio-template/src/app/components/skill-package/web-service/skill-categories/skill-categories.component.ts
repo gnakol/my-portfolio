@@ -82,9 +82,9 @@ export class SkillCategoriesComponent implements OnInit {
     return icons[categoryName] || 'category';
   }
 
-// Modifie la méthode navigateToSkills
+// Modifie la méthode navigateToSkills (version ABSOLUE vers /cv)
 navigateToSkills(categoryId: number): void {
-  this.router.navigate(['/skills/category', categoryId]); // '/category' pour correspondre à ton endpoint
+  this.router.navigate(['/cv/skills/category', categoryId]);
 }
 
 navigateTo(route: string): void {

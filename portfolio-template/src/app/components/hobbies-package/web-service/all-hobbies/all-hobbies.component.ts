@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { trigger, transition, style, animate } from '@angular/animations';
 import { HobbiesService } from '../../../../services/hobbies.service';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
@@ -31,19 +31,107 @@ import { Router } from '@angular/router';
     ])
   ]
 })
-export class AllHobbiesComponent implements OnInit {
+export class AllHobbiesComponent implements OnInit, OnDestroy {
   hobbies: any[] = [];
   loading = true;
+  selectedFace: string = '';
+  autoRotate = true;
+  currentRotation = 0;
+  private rotationInterval: any;
+
+  passionData = {
+    hiphop: {
+      title: 'Hip-Hop Freestyle & Chorégraphie',
+      icon: '💃',
+      description: 'Entre le travail d\'équipe des chorégraphies et l\'intensité des battles, le hip-hop m\'a appris à improviser et m\'adapter rapidement. Ces compétences se retrouvent dans ma façon de coder et résoudre des problèmes IT avec créativité.',
+      skills: ['Improvisation', 'Travail d\'équipe', 'Créativité', 'Adaptabilité']
+    },
+    humour: {
+      title: 'Stand-Up & Spectacles d\'Humour',
+      icon: '😂',
+      description: 'J\'observe comment les artistes captivent leur public par la précision, le rythme et l\'authenticité. Cela renforce mes compétences en communication technique et en storytelling.',
+      skills: ['Storytelling', 'Communication', 'Écoute active', 'Présentation']
+    },
+    gym: {
+      title: 'Gymnastique & Acrobaties',
+      icon: '🤸',
+      description: 'La gymnastique m\'a forgé la persévérance, la rigueur et le dépassement de soi. Des qualités essentielles pour résoudre des bugs complexes et apprendre de nouvelles technologies.',
+      skills: ['Persévérance', 'Rigueur', 'Dépassement', 'Précision']
+    },
+    tech: {
+      title: 'Technologie & Innovation',
+      icon: '💻',
+      description: 'Passionné par les nouvelles technologies et l\'innovation, j\'aime explorer les dernières tendances et outils pour rester à la pointe dans mon domaine.',
+      skills: ['Veille techno', 'Innovation', 'Curiosité', 'Apprentissage continu']
+    }
+  };
 
   constructor(
     private hobbiesService: HobbiesService,
     private snackBar: MatSnackBar,
-    private authService : AuthenticationService,
-    private router : Router
+    private authService: AuthenticationService,
+    private router: Router
   ) {}
 
   ngOnInit(): void {
     this.loadHobbies();
+    this.startAutoRotation();
+  }
+
+  ngOnDestroy(): void {
+    this.stopAutoRotation();
+  }
+
+  get cubeTransform(): string {
+    return `rotateY(${this.currentRotation}deg)`;
+  }
+
+  startAutoRotation(): void {
+    this.rotationInterval = setInterval(() => {
+      if (this.autoRotate && !this.selectedFace) {
+        this.currentRotation += 90;
+      }
+    }, 3000);
+  }
+
+  stopAutoRotation(): void {
+    if (this.rotationInterval) {
+      clearInterval(this.rotationInterval);
+    }
+  }
+
+  toggleAutoRotate(): void {
+    this.autoRotate = !this.autoRotate;
+  }
+
+  rotateCube(direction: 'left' | 'right'): void {
+    this.currentRotation += direction === 'right' ? 90 : -90;
+  }
+
+  selectFace(face: string): void {
+    this.selectedFace = face;
+    this.autoRotate = false;
+  }
+
+  closeDetails(): void {
+    this.selectedFace = '';
+    this.autoRotate = true;
+  }
+
+  getFaceIcon(face: string): string {
+    return this.passionData[face as keyof typeof this.passionData]?.icon || '⭐';
+  }
+
+  getFaceTitle(face: string): string {
+    return this.passionData[face as keyof typeof this.passionData]?.title || '';
+  }
+
+  getFaceDescription(face: string): string {
+    return this.passionData[face as keyof typeof this.passionData]?.description || '';
+  }
+
+  getFaceSkills(face: string): string[] {
+    return this.passionData[face as keyof typeof this.passionData]?.skills || [];
   }
 
   navigateTo(route: string): void {
@@ -57,51 +145,13 @@ export class AllHobbiesComponent implements OnInit {
         this.loading = false;
       },
       error: (err) => {
-        //console.error('Erreur lors du chargement des hobbies :', err);
         this.snackBar.open('Impossible de charger les centres d\'intérêt', 'Fermer', { duration: 3000 });
         this.loading = false;
       }
     });
   }
 
-  getHobbyIcon(hobbyName: string): string {
-    const icons: Record<string, string> = {
-      'Musique': 'music_note',
-      'Sport': 'sports',
-      'Lecture': 'menu_book',
-      'Voyage': 'flight',
-      'Photographie': 'camera_alt',
-      'Cinéma': 'movie',
-      'Jeux vidéo': 'sports_esports',
-      'Cuisine': 'restaurant',
-      'Art': 'palette',
-      'Technologie': 'computer'
-    };
-
-    // Trouve l'icône correspondante ou utilise une icône par défaut
-    for (const key in icons) {
-      if (hobbyName.toLowerCase().includes(key.toLowerCase())) {
-        return icons[key];
-      }
-    }
-    return 'favorite'; // Icône par défaut
-  }
-
-  deleteHobby(id: number): void {
-    this.hobbiesService.deleteHobby(id).subscribe({
-      next: () => {
-        this.snackBar.open('Centre d\'intérêt supprimé avec succès !', 'Fermer', { duration: 3000 });
-        this.hobbies = this.hobbies.filter(hobby => hobby.idHobbies !== id);
-      },
-      error: (error) => {
-        //console.error('Erreur lors de la suppression :', error);
-        this.snackBar.open('Erreur lors de la suppression.', 'Fermer', { duration: 3000 });
-      }
-    });
-  }
-
-  isAdmin() : boolean
-  {
+  isAdmin(): boolean {
     return this.authService.isAdmin();
   }
 }
