@@ -1,0 +1,32 @@
+.cv-shell {
+  display: grid;
+  grid-template-columns: 35% 1fr;
+  gap: 2rem;
+  min-height: 100vh;
+  padding: 2rem;
+  background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+}
+
+.cv-shell__sidebar {
+  position: sticky;
+  top: 96px; // ajuste selon la hauteur de ta navbar
+  align-self: start;
+}
+
+.cv-shell__content {
+  min-width: 0; // évite les débordements horizontaux
+}
+
+/* Mobile : la sidebar passe au-dessus */
+@media (max-width: 1024px) {
+  .cv-shell {
+    grid-template-columns: 1fr;
+    padding: 1rem;
+  }
+
+  .cv-shell__sidebar {
+    position: static;
+    top: auto;
+    margin-bottom: 1rem;
+  }
+}

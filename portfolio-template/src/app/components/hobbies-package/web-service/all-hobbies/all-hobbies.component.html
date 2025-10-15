@@ -1,11 +1,12 @@
 <div class="hobbies-page">
-        <!-- Bouton Retour -->
-        <button class="retour-button" (click)="navigateTo('cv')">
-          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-            <path fill-rule="evenodd" d="M9.707 16.707a1 1 0 01-1.414 0l-6-6a1 1 0 010-1.414l6-6a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l4.293 4.293a1 1 0 010 1.414z" clip-rule="evenodd" />
-          </svg>
-          <span>Retour</span>
-        </button>
+  <!-- Bouton Retour -->
+  <button class="retour-button" (click)="navigateTo('cv')">
+    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+      <path fill-rule="evenodd" d="M9.707 16.707a1 1 0 01-1.414 0l-6-6a1 1 0 010-1.414l6-6a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l4.293 4.293a1 1 0 010 1.414z" clip-rule="evenodd" />
+    </svg>
+    <span>Retour</span>
+  </button>
+
   <!-- Fond animé amélioré -->
   <div class="animated-background">
     <div class="gradient-circle circle-1"></div>
@@ -18,44 +19,111 @@
     <!-- En-tête -->
     <div class="page-header">
       <h1 class="page-title">Mes <span class="text-gradient">Passions</span></h1>
-      <p class="page-subtitle">Centres d'intérêt et activités hors travail</p>
+      <p class="page-subtitle">Découvrez ce qui m'anime au quotidien</p>
       <div class="header-divider"></div>
     </div>
 
-    <!-- Contenu -->
-    <ng-container *ngIf="loading; else content">
-      <div class="loading-container">
-        <mat-spinner diameter="50" color="accent"></mat-spinner>
-        <p class="loading-message">Chargement des centres d'intérêt...</p>
-      </div>
-    </ng-container>
-
-    <ng-template #content>
-      <div *ngIf="hobbies.length === 0" class="empty-state">
-        <mat-icon class="empty-icon">sentiment_very_satisfied</mat-icon>
-        <h3>Aucun hobby enregistré</h3>
-        <p>Ajoutez vos centres d'intérêt pour personnaliser votre profil</p>
-      </div>
-
-      <div class="hobbies-grid">
-        <mat-card *ngFor="let hobby of hobbies; let i = index" class="hobby-card" [@fadeIn]="i">
-          <div class="hobby-icon">
-            <mat-icon>{{ getHobbyIcon(hobby.name) }}</mat-icon>
+    <!-- Cube 3D des Passions -->
+    <div class="cube-scene">
+      <div class="cube" [class.auto-rotate]="autoRotate" [style.transform]="cubeTransform">
+        <!-- Face Hip-Hop -->
+        <div class="cube-face cube-face-front" (click)="selectFace('hiphop')" [class.active]="selectedFace === 'hiphop'">
+          <div class="face-content">
+            <div class="face-icon">💃</div>
+            <h3>Hip-Hop & Dance</h3>
+            <div class="face-preview">
+              <div class="music-bar"></div>
+              <div class="music-bar"></div>
+              <div class="music-bar"></div>
+            </div>
           </div>
-          <mat-card-content>
-            <h3 class="hobby-name">{{ hobby.name }}</h3>
-            <p class="hobby-description">{{ hobby.description || 'Passion qui me tient à cœur' }}</p>
-          </mat-card-content>
-          <mat-card-actions>
-            <button mat-icon-button
-            *ngIf="isAdmin()" 
-            (click)="deleteHobby(hobby.idHobbies)" 
-            class="delete-btn">
-              <mat-icon>delete</mat-icon>
-            </button>
-          </mat-card-actions>
-        </mat-card>
+        </div>
+
+        <!-- Face Humour -->
+        <div class="cube-face cube-face-back" (click)="selectFace('humour')" [class.active]="selectedFace === 'humour'">
+          <div class="face-content">
+            <div class="face-icon">😂</div>
+            <h3>Stand-Up & Humour</h3>
+            <div class="face-preview">
+              <div class="laugh-bubble">😆</div>
+              <div class="laugh-bubble">🤣</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Face Gymnastique -->
+        <div class="cube-face cube-face-right" (click)="selectFace('gym')" [class.active]="selectedFace === 'gym'">
+          <div class="face-content">
+            <div class="face-icon">🤸</div>
+            <h3>Gymnastique</h3>
+            <div class="face-preview">
+              <div class="flip-element">↻</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Face cachée (techno) -->
+        <div class="cube-face cube-face-left" (click)="selectFace('tech')" [class.active]="selectedFace === 'tech'">
+          <div class="face-content">
+            <div class="face-icon">💻</div>
+            <h3>Tech & Code</h3>
+            <div class="face-preview">
+              <div class="code-line"></div>
+              <div class="code-line"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Face haut -->
+        <div class="cube-face cube-face-top">
+          <div class="face-content">
+            <div class="spinning-icon">✨</div>
+            <h3>Mes Passions</h3>
+          </div>
+        </div>
+
+        <!-- Face bas -->
+        <div class="cube-face cube-face-bottom">
+          <div class="face-content">
+            <div class="pulse-icon">⭐</div>
+            <h3>Energy & Fun</h3>
+          </div>
+        </div>
       </div>
-    </ng-template>
+    </div>
+
+    <!-- Contrôles du cube -->
+    <div class="cube-controls">
+      <button class="control-btn" (click)="rotateCube('left')">
+        <mat-icon>chevron_left</mat-icon>
+      </button>
+      <button class="control-btn play-pause" (click)="toggleAutoRotate()">
+        <mat-icon>{{ autoRotate ? 'pause' : 'play_arrow' }}</mat-icon>
+      </button>
+      <button class="control-btn" (click)="rotateCube('right')">
+        <mat-icon>chevron_right</mat-icon>
+      </button>
+    </div>
+
+    <!-- Détails de la passion sélectionnée -->
+    <div class="passion-details" [class.show]="selectedFace">
+      <div class="details-content" *ngIf="selectedFace">
+        <div class="details-header">
+          <div class="details-icon">{{ getFaceIcon(selectedFace) }}</div>
+          <h2>{{ getFaceTitle(selectedFace) }}</h2>
+          <button class="close-btn" (click)="closeDetails()">
+            <mat-icon>close</mat-icon>
+          </button>
+        </div>
+        <div class="details-body">
+          <p>{{ getFaceDescription(selectedFace) }}</p>
+          <div class="skills-list">
+            <div class="skill-tag" *ngFor="let skill of getFaceSkills(selectedFace)">
+              {{ skill }}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </div>

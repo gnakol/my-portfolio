@@ -6,47 +6,6 @@
     <div class="grid-pattern"></div>
   </div>
 
-  <!-- Carte principale -->
-  <mat-card class="cv-card glassmorphism-effect">
-    <mat-card-content class="cv-content">
-      <div class="cv-photo">
-        <img src="https://kolie-portfolio-profile.s3.eu-north-1.amazonaws.com/profile.png" alt="Photo de profil" class="profile-image">
-        <div class="status-indicator"></div>
-      </div>
-
-      <div class="cv-info">
-        <h1 class="cv-title">KOLIE N'GNA</h1>
-        <p class="cv-subtitle">Développeur FullStack & Futur Admin Systèmes & Réseaux Cloud</p>
-        
-        <div class="info-grid">
-          <div class="info-item">
-            <mat-icon class="info-icon">email</mat-icon>
-            <a [attr.href]="'mailto:' + email" class="info-text">{{ email }}</a>
-          </div>
-          <div class="info-item">
-            <mat-icon class="info-icon">location_on</mat-icon>
-            <span class="info-text">Arras, France</span>
-          </div>
-          <div class="info-item">
-            <mat-icon class="info-icon">link</mat-icon>
-            <a href="https://linkedin.com/in/n-gna-kolie-841237361" target="_blank" class="info-text">linkedin.com/in/kolie</a>
-          </div>
-          <div class="info-item">
-            <mat-icon class="info-icon">code</mat-icon>
-            <a href="https://github.com/gnakol" target="_blank" class="info-text">github.com/kolie</a>
-          </div>
-        </div>
-
-        <div class="cv-actions">
-          <button mat-raised-button color="primary" (click)="downloadCv()" class="download-btn">
-            <mat-icon>download</mat-icon>
-            Télécharger le CV
-          </button>
-        </div>
-      </div>
-    </mat-card-content>
-  </mat-card>
-
   <!-- Navigation par sections -->
   <div class="cv-sections">
     <mat-card class="cv-nav-card" (click)="showSection('experiences')" [style.--card-color]="'#6366f1'">
@@ -90,5 +49,28 @@
         <mat-card-title>Langues</mat-card-title>
       </div>
     </mat-card>
+  </div>
+
+  <!-- TERMINAL ANIMÉ -->
+  <div class="terminal-container">
+    <div class="terminal-header">
+      <div class="terminal-buttons">
+        <span class="terminal-button close"></span>
+        <span class="terminal-button minimize"></span>
+        <span class="terminal-button maximize"></span>
+      </div>
+      <div class="terminal-title">terminal — zsh — 80×24</div>
+    </div>
+    
+    <div class="terminal-body" #scrollArea>
+      <div class="terminal-content">
+        <div class="terminal-line" *ngFor="let line of terminalLines; let i = index" 
+             [class.active]="i === terminalLines.length - 1">
+          <span class="prompt">➜ {{i === 0 ? '~' : ' '}}</span>
+          <span class="command">{{line.command}}</span>
+          <span class="cursor" *ngIf="i === terminalLines.length - 1">|</span>
+        </div>
+      </div>
+    </div>
   </div>
 </div>
