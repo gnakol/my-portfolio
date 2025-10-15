@@ -38,22 +38,41 @@ export class NavbarComponent {
     });
   }
 
-  onNavLinkClick(link: any): void {
-    if (link.label === 'Contact') {
-      // Ouvrir la modale "Contact"
-      this.dialog.open(AddContactComponent, {
-        width: '100%',
-        maxWidth: '500px',
-        panelClass: 'contact-modal-container',
-        backdropClass: 'custom-backdrop'
-      });
-    } else {
-      // Naviguer vers la route spécifiée
-      this.router.navigate([link.path]);
-    }
-
+onNavLinkClick(link: any): void {
+  if (link.label === 'Contact') {
+    this.dialog.open(AddContactComponent, {
+      width: '100%',
+      maxWidth: '500px',
+      panelClass: 'contact-modal-container',
+      backdropClass: 'custom-backdrop'
+    });
     this.mobileMenuOpen = false;
+    return;
   }
+
+  // --- ACCUEIL : remonter en haut même si on est déjà sur "/" ---
+  if (link.path === '/' || link.path === '') {
+    if (this.router.url === '/' || this.router.url === '') {
+      // Déjà sur la home : remonte immédiatement
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    } else {
+      // Va sur la home puis remonte quand la nav est terminée
+      this.router.navigate(['/']).then(() => {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      });
+    }
+    this.mobileMenuOpen = false;
+    return;
+  }
+
+  // --- autres liens : nav + scroll top (on les affinera ensuite) ---
+  this.router.navigate([link.path]).then(() => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+
+  this.mobileMenuOpen = false;
+}
+
 
   updateActiveLinks(): void {
     const currentPath = this.router.url;
