@@ -40,6 +40,7 @@ public class ConfigurationSecurityApplication {
                 .csrf(AbstractHttpConfigurer::disable) // ❌ Désactive CSRF (ce qui est correct ici)
                 .cors(Customizer.withDefaults()) // ✅ Ajoute cette ligne pour dire à Spring Security d'activer CORS
                 .authorizeHttpRequests(auth -> auth
+                        .requestMatchers("/actuator/**").permitAll()
                         .requestMatchers(HttpMethod.POST, "/account/add-new-account").permitAll()
                         .requestMatchers(HttpMethod.GET, "/account/get-cv-url/{id}").permitAll()
                         //.requestMatchers(HttpMethod.DELETE, "/account/remove-account/{idAccount}").permitAll()
