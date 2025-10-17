@@ -45,5 +45,4 @@ management:
     health:
       probes:
         enabled: true
-# (optionnel) tag global utile dans Grafana
 
