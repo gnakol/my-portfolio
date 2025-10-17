@@ -36,7 +36,10 @@ public class TokenFilter extends OncePerRequestFilter {
                 "/experience/all-experience", "/training/all-training",
                 "/skill/all-skill", "/language/all-language", "/hobbies/all-hobbies",
                 "/cv/download", "/contact/add-new-contact", "/skill-category/all-skill-category",
-                "/project/all-project"
+                "/project/all-project",
+                "/actuator",
+                "/actuator/health",
+                "/actuator/prometheus"
         );
 
 // Liste des chemins avec un paramètre dynamique {id}
@@ -51,8 +54,10 @@ public class TokenFilter extends OncePerRequestFilter {
         );
 
 // Vérification des chemins sans paramètres dynamiques
-        if (skipPaths.stream().anyMatch(path::startsWith) || path.contains("/refresh-token") ||
-                skipPathsWithId.stream().anyMatch(path::matches)) {
+        if (skipPaths.stream().anyMatch(path::startsWith)
+                || path.contains("/refresh-token")
+                || path.startsWith("/actuator")
+                || skipPathsWithId.stream().anyMatch(path::matches)) {
             filterChain.doFilter(request, response);
             return;
         }
