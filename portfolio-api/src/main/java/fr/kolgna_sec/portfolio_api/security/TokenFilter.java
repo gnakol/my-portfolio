@@ -52,6 +52,11 @@ public class TokenFilter extends OncePerRequestFilter {
                 "/account/get-cv-url/\\d+"
         );
 
+        if (path.startsWith("/actuator") || path.contains("/actuator/")) {
+            filterChain.doFilter(request, response);
+            return;
+        }
+
         // Si l’URL est publique -> on laisse passer immédiatement
         if (skipPaths.stream().anyMatch(path::startsWith)
                 || path.contains("/refresh-token")
