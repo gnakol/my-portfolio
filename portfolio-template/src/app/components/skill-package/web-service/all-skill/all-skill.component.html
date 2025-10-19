@@ -63,6 +63,12 @@
                     class="delete-btn">
               <mat-icon>delete</mat-icon>
             </button>
+<button mat-icon-button
+        *ngIf="isAdmin()"
+        (click)="editSkill(skill)"
+        class="edit-btn">
+  <mat-icon>edit</mat-icon>
+</button>
           </mat-card-actions>
         </mat-card>
       </div>

@@ -13,6 +13,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { AuthenticationService } from '../../../../pages/authenticate/core/authentication.service';
 import { MatDialog } from '@angular/material/dialog';
 import { SkillDetailComponent } from '../../skill-detail/skill-detail.component';
+import { UpdateSkillComponent } from '../update-skill/update-skill.component';
 
 @Component({
   selector: 'app-all-skill',
@@ -182,4 +183,23 @@ export class AllSkillComponent implements OnInit {
   navigateTo(route: string): void {
     this.router.navigate([route]);
   }
+
+  editSkill(skill: any): void {
+  document.body.classList.add('modal-backdrop-blur');
+  
+  const dialogRef = this.dialog.open(UpdateSkillComponent, {
+    width: '800px',
+    maxWidth: '90vw',
+    panelClass: 'skill-modal',
+    backdropClass: 'skill-modal-backdrop',
+    data: { 
+      skill: skill,
+      onUpdate: () => this.loadSkills() // Pour recharger après update
+    }
+  });
+
+  dialogRef.afterClosed().subscribe(() => {
+    document.body.classList.remove('modal-backdrop-blur');
+  });
+}
 }
