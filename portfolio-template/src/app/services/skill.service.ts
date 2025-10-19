@@ -27,13 +27,18 @@ export class SkillService {
   }
 
 
-    addSkill(experience: Skill): Observable<Skill> {
+    addSkill(skill: Skill): Observable<Skill> {
       
       const headers = this.genericMethodeService.getHeaders();
     
-      //console.log("🚀 Données envoyées au backend :", experience);
-    
-      return this.http.post<Skill>(`${this.apiUrl}/add-skill`, experience, { headers });
+      return this.http.post<Skill>(`${this.apiUrl}/add-skill`, skill, { headers });
+    }
+
+    updateSkill(id: number, skillData: any): Observable<Skill> {
+
+      const headers = this.genericMethodeService.getHeaders();
+
+      return this.http.put<Skill>(`${this.apiUrl}/update-skill/${id}`, skillData, { headers });
     }
   
   
@@ -41,7 +46,6 @@ export class SkillService {
       return this.http.get(`${this.apiUrl}/get-by-id-skill/${id}`);
     }
   
-    // ✅ Version propre avec `switchMap()` pour éviter l'imbrication incorrecte des Observables
     getAllSkill(page: number = 0, size: number = 10): Observable<SkillResponse> {
 
      // const headers = this.genericMethodeService.getHeaders();

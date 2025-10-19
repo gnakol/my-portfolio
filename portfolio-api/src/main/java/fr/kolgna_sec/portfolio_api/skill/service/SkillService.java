@@ -72,12 +72,13 @@ public class SkillService implements Webservices<SkillDTO> {
 
         return this.skillMapper.fromSkill(this.skillRepository.findById(id)
                 .map(skill -> {
-                    if (skill.getRefSkill() == null)
-                        skill.setRefSkill(this.uuidService.generateUuid());
+/*                    if (skill.getRefSkill() == null)
+                        skill.setRefSkill(this.uuidService.generateUuid());*/
                     if (skill.getName() != null)
                         skill.setName(e.getName());
                     if (skill.getDescription() != null)
                         skill.setDescription(e.getDescription());
+                    Optional.ofNullable(skill.getLevelSkill()).ifPresent(skill::setLevelSkill);
                     if (skill.getSkillCategory() != null)
                     {
                         Optional<SkillCategory> skillCategory = this.skillCategoryRepository.findById(e.getSkillCategory_id());

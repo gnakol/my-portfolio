@@ -1,0 +1,95 @@
+<div class="update-skill-modal">
+  <!-- Fond animé identique -->
+  <div class="animated-background">
+    <div class="gradient-circle circle-1"></div>
+    <div class="gradient-circle circle-2"></div>
+    <div class="grid-pattern"></div>
+  </div>
+
+  <!-- Carte du formulaire -->
+  <mat-card class="form-card">
+    <div class="form-header">
+      <h1 class="form-title">Modifier la <span class="text-gradient">Compétence</span></h1>
+      <p class="form-subtitle">Mettez à jour les informations de la compétence</p>
+      <div class="header-divider"></div>
+    </div>
+
+    <mat-card-content>
+      <form [formGroup]="updateForm" class="form-content">
+        <!-- Nom -->
+        <mat-form-field appearance="fill" class="form-field">
+          <mat-label>Nom de la compétence</mat-label>
+          <input matInput formControlName="name" placeholder="Ex: Spring Boot">
+          <mat-icon matSuffix>code</mat-icon>
+          <mat-error *ngIf="updateForm.get('name')?.hasError('required')">
+            Le nom est requis
+          </mat-error>
+          <mat-error *ngIf="updateForm.get('name')?.hasError('minlength')">
+            Minimum 2 caractères
+          </mat-error>
+        </mat-form-field>
+
+        <!-- Description -->
+        <mat-form-field appearance="fill" class="form-field">
+          <mat-label>Description</mat-label>
+          <textarea matInput formControlName="description" rows="4" 
+                    placeholder="Décrivez cette compétence..."></textarea>
+          <mat-icon matSuffix>description</mat-icon>
+          <mat-error *ngIf="updateForm.get('description')?.hasError('required')">
+            La description est requise
+          </mat-error>
+          <mat-error *ngIf="updateForm.get('description')?.hasError('minlength')">
+            Minimum 10 caractères
+          </mat-error>
+        </mat-form-field>
+
+        <!-- Niveau -->
+        <mat-form-field appearance="fill" class="form-field">
+          <mat-label>Niveau</mat-label>
+          <mat-select formControlName="levelSkill">
+            <mat-option [value]="1">★☆☆☆☆ - Débutant</mat-option>
+            <mat-option [value]="2">★★☆☆☆ - Intermédiaire</mat-option>
+            <mat-option [value]="3">★★★☆☆ - Avancé</mat-option>
+            <mat-option [value]="4">★★★★☆ - Expert</mat-option>
+            <mat-option [value]="5">★★★★★ - Maître</mat-option>
+          </mat-select>
+          <mat-icon matSuffix>star</mat-icon>
+          <mat-hint>
+            Niveau actuel: {{ getLevelStars(updateForm.get('levelSkill')?.value) }}
+          </mat-hint>
+        </mat-form-field>
+
+        <!-- Catégorie -->
+        <mat-form-field appearance="fill" class="form-field">
+          <mat-label>Catégorie</mat-label>
+          <mat-select formControlName="skillCategory_id">
+            <mat-option>-- Sélectionnez une catégorie --</mat-option>
+            <mat-option *ngFor="let category of categories" [value]="category.idSkillCategory">
+              {{ category.name }}
+            </mat-option>
+          </mat-select>
+          <mat-icon matSuffix>category</mat-icon>
+          <mat-error *ngIf="updateForm.get('skillCategory_id')?.hasError('required')">
+            La catégorie est requise
+          </mat-error>
+        </mat-form-field>
+      </form>
+    </mat-card-content>
+
+    <mat-card-actions align="end">
+      <button mat-button (click)="onCancel()" [disabled]="saving" class="cancel-btn">
+        <mat-icon>cancel</mat-icon>
+        Annuler
+      </button>
+      <button mat-raised-button 
+              color="primary" 
+              (click)="onSubmit()" 
+              [disabled]="updateForm.invalid || saving"
+              class="update-btn">
+        <mat-icon *ngIf="!saving">save</mat-icon>
+        <mat-spinner *ngIf="saving" diameter="20"></mat-spinner>
+        {{ saving ? 'Mise à jour...' : 'Mettre à jour' }}
+      </button>
+    </mat-card-actions>
+  </mat-card>
+</div>

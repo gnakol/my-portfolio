@@ -40,7 +40,7 @@ export class AddSkillComponent implements OnInit {
 
   skillCategories: any[] = [];
 
-  accountId: number | null = null; // ✅ Stocker l'ID utilisateur
+  accountId: number | null = null;
 
   constructor(
     private fb: FormBuilder,

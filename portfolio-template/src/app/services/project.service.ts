@@ -18,7 +18,6 @@ export class ProjectService {
     private projectTypeService : ProjectTypeService
 ) {}
 
-  // Mettre à jour une expérience
   updateProject(id: number, project: any): Observable<any> {
     return this.http.put(`${this.apiUrl}/update-project/${id}`, project);
   }
@@ -53,7 +52,6 @@ export class ProjectService {
     return this.http.get(`${this.apiUrl}/get-project-by-id/${id}`);
   }
 
-  // ✅ Version propre avec `switchMap()` pour éviter l'imbrication incorrecte des Observables
   getAllProject(page: number = 0, size: number = 10): Observable<ProjectResponse> {
 
     const headers = this.genericMethodeService.getHeaders();
