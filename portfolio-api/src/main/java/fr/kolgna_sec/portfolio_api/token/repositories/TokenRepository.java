@@ -20,8 +20,29 @@ public interface TokenRepository extends JpaRepository<Token, Long> {
     void deleteByIdRange(@Param("startId") Long startId, @Param("endId") Long endId);
 
     // delete by choose id
-
     @Modifying
     @Query("DELETE FROM Token t WHERE t.idToken IN :ids")
     void deleteByIds(@Param("ids") List<Long> ids);
+
+    // Nouvelles méthodes pour le nettoyage automatique - MODIFIÉES
+    @Query("SELECT t FROM Token t WHERE t.expirationToken = true OR t.statusToken = true")
+    List<Token> findExpiredOrDisabledTokens();
+
+    @Modifying
+    @Query("DELETE FROM Token t WHERE t.expirationToken = true OR t.statusToken = true")
+    int deleteExpiredOrDisabledTokens(); // Changé de void à int
+
+    @Query("SELECT t FROM Token t WHERE t.expirationToken = true")
+    List<Token> findExpiredTokens();
+
+    @Modifying
+    @Query("DELETE FROM Token t WHERE t.expirationToken = true")
+    int deleteExpiredTokens(); // Changé de void à int
+
+    @Query("SELECT t FROM Token t WHERE t.statusToken = true")
+    List<Token> findDisabledTokens();
+
+    @Modifying
+    @Query("DELETE FROM Token t WHERE t.statusToken = true")
+    int deleteDisabledTokens(); // Changé de void à int
 }

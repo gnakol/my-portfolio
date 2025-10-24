@@ -20,6 +20,9 @@ spring:
     properties:
       mail.smtp.auth: true
       mail.smtp.starttls.enable: true
+  task:
+    scheduling:
+      enabled: true
 
 server:
   port: 9000
@@ -57,4 +60,32 @@ management:
     export:
       prometheus:
         enabled: true
+
+security:
+  tls:
+    hosts: kolie-portfolio.org:443, v2.kolie-portfolio.org:443
+backup:
+  scheduled: true
+  dir: /tmp                 # dossier où on écrit les dumps
+  retentionDays: 7
+
+# Configuration personnalisée pour le nettoyage des tokens
+token:
+  cleanup:
+    enabled: true
+    schedule: "0 0 3 * * ?"  # Tous les jours à 03h00
+    retention-days: 1         # Garder seulement les tokens valides du jour
+
+monitoring:
+  retention:
+    availability:
+      detailed-hours: 12    # Garde tout sur 24h
+      aggregated-days: 7    # Garde un point par heure sur 7 jours
+    security:
+      detailed-days: 1      # Garde tout sur 7 jours
+      aggregated-days: 30   # Un point par jour sur 30 jours
+    backup:
+      logs-days: 30         # Garde les logs backup 30 jours
+
+
 

@@ -24,6 +24,7 @@
           <a routerLink="/profile" class="nav-link">Profil</a>
           <a routerLink="/dashboard-admin" class="nav-link">Admin</a>
           <button (click)="logout()" class="nav-link">Déconnexion</button>
+          <a routerLink="/mission-control" class="nav-link">Monitoring</a>
         </ng-container>
         <ng-container *ngIf="!isAuthenticated">
           <a routerLink="/login" class="nav-link">Connexion</a>

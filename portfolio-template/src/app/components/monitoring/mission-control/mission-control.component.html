@@ -1,0 +1,286 @@
+<div class="min-h-screen bg-gradient-to-br from-slate-900 via-[#0B1220] to-slate-900 text-slate-200 p-4 md:p-6">
+  <!-- Header -->
+  <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-8">
+    <div class="flex items-center gap-3">
+      <div class="w-3 h-8 bg-gradient-to-b from-sky-400 to-blue-600 rounded-full"></div>
+      <div>
+        <h1 class="text-2xl md:text-3xl font-bold bg-gradient-to-r from-slate-200 to-slate-400 bg-clip-text text-transparent">
+          Mission Control
+        </h1>
+        <p class="text-sm text-slate-400 mt-1">Dashboard de monitoring en temps réel</p>
+      </div>
+    </div>
+    
+    <div class="flex items-center gap-3">
+      <button 
+        (click)="refresh()" 
+        [disabled]="loading"
+        class="px-4 py-2.5 rounded-xl bg-slate-800/60 hover:bg-slate-700/60 ring-1 ring-slate-700/50 hover:ring-slate-600/50 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2 group">
+        <svg class="w-4 h-4 group-hover:rotate-180 transition-transform duration-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
+        </svg>
+        {{ loading ? 'Rafraîchissement...' : 'Rafraîchir' }}
+      </button>
+      
+      <a 
+        [href]="grafanaSecurityUrl" 
+        target="_blank"
+        class="px-4 py-2.5 rounded-xl bg-sky-500/10 hover:bg-sky-500/20 ring-1 ring-sky-500/30 hover:ring-sky-400/40 transition-all duration-200 flex items-center gap-2 group">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path>
+        </svg>
+        Grafana
+      </a>
+    </div>
+  </div>
+
+  <!-- Bannière d'alerte WebSocket -->
+  <div *ngIf="showAlert && currentAlert" 
+       class="fixed top-4 left-1/2 transform -translate-x-1/2 z-50 w-full max-w-2xl px-4 animate-slide-in">
+    <div class="rounded-2xl p-4 backdrop-blur-sm border-l-4 shadow-lg"
+         [ngClass]="{
+           'bg-amber-900/20 border-amber-400 ring-1 ring-amber-500/30': currentAlert.level === 'WARNING',
+           'bg-rose-900/20 border-rose-400 ring-1 ring-rose-500/30': currentAlert.level === 'CRITICAL',
+           'bg-sky-900/20 border-sky-400 ring-1 ring-sky-500/30': currentAlert.level === 'INFO'
+         }">
+      <div class="flex items-center justify-between">
+        <div class="flex items-center gap-3">
+          <div class="w-6 h-6 rounded-full flex items-center justify-center"
+               [ngClass]="{
+                 'bg-amber-400': currentAlert.level === 'WARNING',
+                 'bg-rose-400': currentAlert.level === 'CRITICAL', 
+                 'bg-sky-400': currentAlert.level === 'INFO'
+               }">
+            <svg class="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 20 20">
+              <path *ngIf="currentAlert.level === 'CRITICAL'" fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"></path>
+              <path *ngIf="currentAlert.level !== 'CRITICAL'" fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8 9a1 1 0 011-1h2a1 1 0 110 2H9a1 1 0 01-1-1z" clip-rule="evenodd"></path>
+            </svg>
+          </div>
+          <div>
+            <h3 class="font-semibold"
+                [ngClass]="{
+                  'text-amber-300': currentAlert.level === 'WARNING',
+                  'text-rose-300': currentAlert.level === 'CRITICAL',
+                  'text-sky-300': currentAlert.level === 'INFO'
+                }">
+              {{ currentAlert.level }} - Mission Control
+            </h3>
+            <p class="text-sm mt-1 text-slate-200">{{ currentAlert.message }}</p>
+          </div>
+        </div>
+        <button 
+          (click)="dismissAlert()"
+          class="p-1 rounded-lg hover:bg-white/10 transition-colors">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+          </svg>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Indicateur de connexion WebSocket -->
+  <div class="fixed bottom-4 right-4 z-40 flex items-center gap-2 px-3 py-2 rounded-full text-xs backdrop-blur-sm"
+       [ngClass]="wsConnected ? 'bg-emerald-500/20 text-emerald-300 ring-1 ring-emerald-500/40' : 'bg-amber-500/20 text-amber-300 ring-1 ring-amber-500/40'">
+    <div class="w-2 h-2 rounded-full animate-pulse"
+         [ngClass]="wsConnected ? 'bg-emerald-400' : 'bg-amber-400'"></div>
+    {{ wsConnected ? 'LIVE' : 'OFFLINE' }}
+  </div>
+
+  <!-- Loading State -->
+  <div *ngIf="loading" class="grid gap-6 xl:grid-cols-4 md:grid-cols-2">
+    <div *ngFor="let i of [1,2,3,4]" class="rounded-2xl p-6 bg-slate-800/20 ring-1 ring-slate-700/50 animate-pulse dashboard-card">
+      <div class="h-6 bg-slate-700/50 rounded mb-4 w-3/4"></div>
+      <div class="space-y-3">
+        <div *ngFor="let j of [1,2,3]" class="h-4 bg-slate-700/30 rounded"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Error State -->
+  <div *ngIf="!loading && error" 
+       class="rounded-2xl p-6 bg-rose-900/20 ring-1 ring-rose-700/50 backdrop-blur-sm mb-6 animate-fade-in">
+    <div class="flex items-center gap-3">
+      <div class="w-6 h-6 bg-rose-500 rounded-full flex items-center justify-center">
+        <svg class="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 20 20">
+          <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"></path>
+        </svg>
+      </div>
+      <div>
+        <h3 class="font-semibold text-rose-300">Erreur</h3>
+        <p class="text-sm text-rose-200/80">{{ error }}</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main Dashboard Grid -->
+  <div *ngIf="!loading && !error" class="grid gap-6 xl:grid-cols-4 md:grid-cols-2 animate-fade-in">
+    
+    <!-- 1) SANTÉ DU SYSTÈME -->
+    <div class="rounded-2xl p-6 bg-slate-800/20 ring-1 ring-slate-700/50 backdrop-blur-sm hover:ring-slate-600/50 transition-all duration-300 group dashboard-card">
+      <div class="flex items-center justify-between mb-6">
+        <h2 class="font-semibold text-lg flex items-center gap-2">
+          <div class="w-2 h-2 bg-emerald-400 rounded-full animate-pulse"></div>
+          Santé du système
+        </h2>
+        <a [href]="grafanaSystemUrl" target="_blank" class="text-xs text-sky-300 hover:text-sky-200 transition-colors flex items-center gap-1">
+          Détails
+          <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path>
+          </svg>
+        </a>
+      </div>
+      
+      <div class="space-y-4">
+        <div class="flex justify-between items-center">
+          <span class="text-slate-400">CPU Load</span>
+          <span class="font-mono font-semibold">{{ (data?.system?.cpuLoad ?? 0) | number:'1.2-2' }}</span>
+        </div>
+        
+        <div class="space-y-3">
+          <div class="flex justify-between items-center">
+            <span class="text-slate-400">Heap Used</span>
+            <span class="font-mono text-sm">{{ formatBytes(data?.system?.heapUsedBytes) }}</span>
+          </div>
+          <div class="w-full bg-slate-700/50 rounded-full h-2">
+            <div class="bg-gradient-to-r from-sky-400 to-blue-500 h-2 rounded-full transition-all duration-1000 ease-out"
+                 [style.width.%]="((data?.system?.heapUsedBytes ?? 0) / (data?.system?.heapMaxBytes ?? 1)) * 100"></div>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-2 gap-4 pt-2">
+          <div>
+            <div class="text-xs text-slate-400 mb-1">Heap Max</div>
+            <div class="font-mono text-sm">{{ formatBytes(data?.system?.heapMaxBytes) }}</div>
+          </div>
+          <div>
+            <div class="text-xs text-slate-400 mb-1">Disk Free</div>
+            <div class="font-mono text-sm">{{ formatBytes(data?.system?.freeDiskBytes) }}</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 2) DISPONIBILITÉ -->
+    <div class="rounded-2xl p-6 bg-slate-800/20 ring-1 ring-slate-700/50 backdrop-blur-sm hover:ring-slate-600/50 transition-all duration-300 group dashboard-card">
+      <div class="flex items-center justify-between mb-6">
+        <h2 class="font-semibold text-lg flex items-center gap-2">
+          <div class="w-2 h-2" [ngClass]="data?.availability?.ok ? 'bg-emerald-400 animate-pulse' : 'bg-rose-400 animate-pulse'"></div>
+          Disponibilité
+        </h2>
+        <span class="px-3 py-1 rounded-full text-xs font-medium transition-all duration-300"
+              [ngClass]="badge(data?.availability?.ok)">{{ data?.availability?.ok ? 'STABLE' : 'ALERTE' }}</span>
+      </div>
+      
+      <div class="space-y-4">
+        <div class="flex justify-between items-center">
+          <span class="text-slate-400">Uptime</span>
+          <span class="font-mono text-sm">{{ uptime() }}</span>
+        </div>
+        
+        <div class="grid grid-cols-2 gap-4">
+          <div class="text-center p-3 rounded-xl bg-slate-700/20 ring-1 ring-slate-600/30">
+            <div class="text-2xl font-bold text-slate-200">{{ data?.availability?.errors5xxLast5m ?? 0 }}</div>
+            <div class="text-xs text-slate-400 mt-1">5xx (5min)</div>
+          </div>
+          <div class="text-center p-3 rounded-xl bg-slate-700/20 ring-1 ring-slate-600/30">
+            <div class="text-2xl font-bold text-slate-200">{{ data?.availability?.errors5xxLast60m ?? 0 }}</div>
+            <div class="text-xs text-slate-400 mt-1">5xx (60min)</div>
+          </div>
+        </div>
+        
+        <div class="text-xs text-slate-400 bg-slate-800/30 p-3 rounded-lg ring-1 ring-slate-700/30">
+          {{ data?.availability?.message || 'Tous les systèmes fonctionnent normalement' }}
+        </div>
+      </div>
+    </div>
+
+    <!-- 3) SÉCURITÉ TLS -->
+    <div class="rounded-2xl p-6 bg-slate-800/20 ring-1 ring-slate-700/50 backdrop-blur-sm hover:ring-slate-600/50 transition-all duration-300 group dashboard-card">
+      <div class="flex items-center justify-between mb-6">
+        <h2 class="font-semibold text-lg flex items-center gap-2">
+          <div class="w-2 h-2 bg-amber-400 rounded-full animate-pulse"></div>
+          Sécurité TLS
+        </h2>
+        <a [href]="grafanaSecurityUrl" target="_blank" class="text-xs text-sky-300 hover:text-sky-200 transition-colors flex items-center gap-1">
+          Grafana
+          <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path>
+          </svg>
+        </a>
+      </div>
+
+      <div class="space-y-3 max-h-48 overflow-y-auto pr-2 custom-scrollbar">
+        <div *ngFor="let r of data?.security?.tls; let i = index" 
+             class="flex items-center justify-between p-3 rounded-lg bg-slate-700/10 hover:bg-slate-700/20 transition-all duration-200 animate-fade-in"
+             [style.animation-delay.ms]="i * 100">
+          <div class="min-w-0 flex-1">
+            <div class="text-sm font-medium truncate">{{ r.target }}</div>
+            <div class="text-xs text-slate-400 truncate mt-1">{{ r.message }}</div>
+          </div>
+          <span class="px-2.5 py-1 rounded-full text-xs font-medium whitespace-nowrap ml-2 transition-all duration-300"
+                [ngClass]="badge(r.ok)">{{ r.daysLeft ?? '-' }} jours</span>
+        </div>
+        
+        <div *ngIf="!data?.security?.tls?.length" class="text-center py-4 text-slate-400 text-sm">
+          Aucun certificat surveillé
+        </div>
+      </div>
+
+      <div class="mt-6 flex gap-2">
+        <input 
+          [(ngModel)]="tlsHostPort" 
+          placeholder="ex: example.com:443"
+          class="flex-1 px-3 py-2 rounded-xl bg-slate-700/20 ring-1 ring-slate-600/50 focus:ring-2 focus:ring-sky-400/50 outline-none transition-all duration-200 text-sm placeholder-slate-500" />
+        <button 
+          (click)="checkTls()" 
+          [disabled]="!tlsHostPort.trim()"
+          class="px-4 py-2 rounded-xl bg-slate-700/60 hover:bg-slate-600/60 ring-1 ring-slate-600/50 disabled:opacity-30 disabled:cursor-not-allowed transition-all duration-200 text-sm">
+          Check
+        </button>
+      </div>
+    </div>
+
+    <!-- 4) MAINTENANCE -->
+    <div class="rounded-2xl p-6 bg-slate-800/20 ring-1 ring-slate-700/50 backdrop-blur-sm hover:ring-slate-600/50 transition-all duration-300 group dashboard-card">
+      <div class="flex items-center justify-between mb-6">
+        <h2 class="font-semibold text-lg flex items-center gap-2">
+          <div class="w-2 h-2 bg-purple-400 rounded-full animate-pulse"></div>
+          Maintenancer
+        </h2>
+        <span class="px-3 py-1 rounded-full text-xs font-medium transition-all duration-300"
+              [ngClass]="badge(data?.maintenance?.lastBackupOk ?? false)">
+          {{ (data?.maintenance?.lastBackupOk ? 'BACKUP OK' : 'BACKUP KO') }}
+        </span>
+      </div>
+
+      <div class="space-y-4 mb-6">
+        <div class="flex justify-between items-center">
+          <span class="text-slate-400">Dernier backup</span>
+          <span class="font-mono text-sm">{{ data?.maintenance?.lastBackupAt || '-' }}</span>
+        </div>
+        
+        <div class="flex justify-between items-center">
+          <span class="text-slate-400">Taille</span>
+          <span class="font-mono text-sm">{{ formatBytes(data?.maintenance?.lastBackupSizeBytes) }}</span>
+        </div>
+        
+        <div class="bg-slate-800/30 p-3 rounded-lg ring-1 ring-slate-700/30">
+          <div class="text-xs text-slate-400 mb-1">Fichier</div>
+          <div class="text-sm font-mono truncate" [title]="data?.maintenance?.lastBackupFile">
+            {{ data?.maintenance?.lastBackupFile || 'Aucun backup' }}
+          </div>
+        </div>
+      </div>
+
+      <button 
+        (click)="runBackup()"
+        class="w-full px-4 py-3 rounded-xl bg-gradient-to-r from-purple-500/10 to-blue-500/10 hover:from-purple-500/20 hover:to-blue-500/20 ring-1 ring-purple-500/30 hover:ring-purple-400/40 transition-all duration-200 flex items-center justify-center gap-2 group">
+        <svg class="w-4 h-4 group-hover:scale-110 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"></path>
+        </svg>
+        Lancer un backup maintenant
+      </button>
+    </div>
+  </div>
+</div>
