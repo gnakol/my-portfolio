@@ -9,7 +9,7 @@ spring:
 
   task:
     scheduling:
-      enabled: true 
+      enabled: true
 
 server:
   port: 9000

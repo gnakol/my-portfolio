@@ -1,19 +1,20 @@
-# Étape 1 : builder l'app Angular
-FROM node:18 as build
-
+# ---- Build stage
+FROM node:18-alpine AS build
 WORKDIR /app
+
+# Meilleur cache: d'abord les deps
+COPY package*.json ./
+RUN npm ci
+
+# Puis le code
 COPY . .
-RUN npm install
-RUN npm run build --prod
+# Angular 17/18/19: pas de --prod; on utilise la conf du package.json
+RUN npm run build
 
-# Étape 2 : servir l'app avec Nginx
+# ---- Runtime stage
 FROM nginx:alpine
-
-# ✅ Copie les bons fichiers (dans le dossier /browser)
+# ATTENTION: adapte le nom "portfolio-template" si ton projet Angular a un autre "name" dans angular.json
 COPY --from=build /app/dist/portfolio-template/browser /usr/share/nginx/html
 
-# Optionnel : config nginx perso
-# COPY nginx.conf /etc/nginx/nginx.conf
-
 EXPOSE 80
-CMD ["nginx", "-g", "daemon off;"]
+CMD ["nginx","-g","daemon off;"]
