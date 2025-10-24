@@ -59,10 +59,11 @@ public class TokenService {
 
         Token tokenBean = Token.builder()
                 .valueToken(bearer)
-                .statusToken(false)
-                .expirationToken(false)
+                .statusToken(false) // Token actif
+                .expirationToken(false) // Pas encore expiré
                 .account(account)
                 .build();
+
         System.out.println("Saving new token: " + bearer);
         this.tokenRepository.save(tokenBean);
         return Map.of("bearer", bearer);

@@ -57,6 +57,7 @@ import { AddProjectTypeComponent } from './components/project-package/web-servic
 import { AllProjectTypeComponent } from './components/project-package/web-service/all-project-type/all-project-type.component';
 import { AllProjectComponent } from './components/project-package/web-service/all-project/all-project.component';
 import { AddProjectComponent } from './components/project-package/web-service/add-project/add-project.component';
+import { MissionControlComponent } from './components/monitoring/mission-control/mission-control.component';
 
 const routes: Routes = [
   { path: '', loadChildren: () => import('./pages/home/home.module').then(m => m.HomeModule) },
@@ -152,7 +153,9 @@ const routes: Routes = [
 
   { path : 'security-template', component : SecuritySimulationsComponent},
   { path : 'intro-firewall', component : IntroFirewallComponent},
-  { path : 'go-firewal-simulation', component : GoSimulationFirewallComponent}
+  { path : 'go-firewal-simulation', component : GoSimulationFirewallComponent},
+  { path: 'mission-control', component: MissionControlComponent }
+
   
 ];
 

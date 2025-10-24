@@ -1,3 +1,4 @@
+@use "sass:math";
 /* Variables thématiques */
 :root {
   --neon-blue: #00f2ff;
@@ -73,11 +74,11 @@
     
     @for $i from 1 through 12 {
       &:nth-child(#{$i}) {
-        top: random(100) * 1%;
-        left: random(100) * 1%;
-        width: random(40) + 10vw;
-        animation-delay: random(15) * -1s;
-        opacity: random(5) * 0.1 + 0.1;
+        top: math.random(100) * 1%;
+        left: math.random(100) * 1%;
+        width: math.random(40) + 10vw;
+        animation-delay: math.random(15) * -1s;
+        opacity: math.random(5) * 0.1 + 0.1;
       }
     }
   }

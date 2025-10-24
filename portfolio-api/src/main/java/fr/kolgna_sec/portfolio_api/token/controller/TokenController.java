@@ -3,6 +3,7 @@ package fr.kolgna_sec.portfolio_api.token.controller;
 import fr.kolgna_sec.portfolio_api.security.TokenService;
 import fr.kolgna_sec.portfolio_api.token.dto.TokenDTO;
 import fr.kolgna_sec.portfolio_api.token.service.TokenBeanService;
+import fr.kolgna_sec.portfolio_api.token.service.TokenCleanupService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -24,6 +25,7 @@ public class TokenController {
     private final TokenBeanService tokenBeanService;
 
     private final TokenService tokenService;
+    private final TokenCleanupService tokenCleanupService;
 
     @GetMapping("all-token")
     public ResponseEntity<Page<TokenDTO>> allToken(Pageable pageable)
@@ -75,6 +77,31 @@ public class TokenController {
         this.tokenBeanService.removeTokenByCheckId(ids);
 
         return ResponseEntity.ok("Token was successfully remove by check id");
+    }
+
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
+    @PostMapping("cleanup-tokens")
+    public ResponseEntity<Map<String, Object>> cleanupTokens() {
+        log.info("Nettoyage manuel des tokens demandé...");
+
+        Map<String, Long> statsBefore = tokenCleanupService.getTokenStats();
+        int deletedCount = tokenCleanupService.cleanupExpiredAndDisabledTokens();
+        Map<String, Long> statsAfter = tokenCleanupService.getTokenStats();
+
+        Map<String, Object> response = Map.of(
+                "message", "Nettoyage des tokens terminé avec succès",
+                "tokensDeleted", deletedCount,
+                "statsBefore", statsBefore,
+                "statsAfter", statsAfter
+        );
+
+        return ResponseEntity.ok(response);
+    }
+
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
+    @GetMapping("token-stats")
+    public ResponseEntity<Map<String, Long>> getTokenStats() {
+        return ResponseEntity.ok(tokenCleanupService.getTokenStats());
     }
 
 }

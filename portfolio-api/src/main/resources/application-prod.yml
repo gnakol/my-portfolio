@@ -3,28 +3,60 @@ spring:
     url: jdbc:mysql://mysql:3306/portfolio_db
     username: kol_sec_admin
     password: noumko009
-
   jpa:
     hibernate:
       ddl-auto: none
 
-  mail:
-    host: smtp.mail.yahoo.com
-    port: 587
-    username: gna.kolie@yahoo.fr
-    password: ${YAHOO_APP_PASSWORD}
-    properties:
-      mail.smtp.auth: true
-      mail.smtp.starttls.enable: true
+  task:
+    scheduling:
+      enabled: true   # ← nécessaire pour @Scheduled (updates WS + backups)
 
 server:
   port: 9000
   servlet:
     context-path: /portfolio-api
   multipart:
+    enabled: true
     max-file-size: 20MB
     max-request-size: 20MB
-    enabled: true
+
+management:
+  endpoints:
+    web:
+      base-path: /actuator       # ← explicite
+      exposure:
+        include: health,info,prometheus,metrics
+  endpoint:
+    health:
+      show-details: always       # ← utile pour probes/démo
+      probes:
+        enabled: true
+    prometheus:
+      enabled: true
+  metrics:
+    export:
+      prometheus:
+        enabled: true
+
+security:
+  tls:
+    hosts: kolie-portfolio.org:443, v2.kolie-portfolio.org:443
+
+backup:
+  scheduled: true
+  dir: /tmp
+  retentionDays: 7
+
+monitoring:
+  retention:
+    availability:
+      detailed-hours: 12
+      aggregated-days: 7
+    security:
+      detailed-days: 1
+      aggregated-days: 30
+    backup:
+      logs-days: 30
 
 cloud:
   aws:
@@ -35,14 +67,9 @@ cloud:
       static: eu-west-1
     stack:
       auto: false
-
-management:
-  endpoints:
-    web:
-      exposure:
-        include: health,info,prometheus
-  endpoint:
-    health:
-      probes:
-        enabled: true
-
+# Configuration personnalisée pour le nettoyage des tokens
+token:
+  cleanup:
+    enabled: true
+    schedule: "0 0 3 * * ?"  # Tous les jours à 03h00
+    retention-days: 1         # Garder seulement les tokens valides du jour
