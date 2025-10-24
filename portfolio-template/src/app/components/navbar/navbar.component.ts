@@ -50,13 +50,11 @@ onNavLinkClick(link: any): void {
     return;
   }
 
-  // --- ACCUEIL : remonter en haut même si on est déjà sur "/" ---
   if (link.path === '/' || link.path === '') {
     if (this.router.url === '/' || this.router.url === '') {
       // Déjà sur la home : remonte immédiatement
       window.scrollTo({ top: 0, behavior: 'smooth' });
     } else {
-      // Va sur la home puis remonte quand la nav est terminée
       this.router.navigate(['/']).then(() => {
         window.scrollTo({ top: 0, behavior: 'smooth' });
       });
@@ -65,7 +63,6 @@ onNavLinkClick(link: any): void {
     return;
   }
 
-  // --- autres liens : nav + scroll top (on les affinera ensuite) ---
   this.router.navigate([link.path]).then(() => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   });
@@ -88,6 +85,6 @@ onNavLinkClick(link: any): void {
   }
 
   toggleMobileMenu(): void {
-    this.mobileMenuOpen = !this.mobileMenuOpen; // Implémentation de la méthode
+    this.mobileMenuOpen = !this.mobileMenuOpen;
   }
 }
