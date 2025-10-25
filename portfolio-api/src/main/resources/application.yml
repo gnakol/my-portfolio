@@ -80,7 +80,7 @@ monitoring:
   retention:
     availability:
       detailed-hours: 12    # Garde tout sur 24h
-      aggregated-days: 7    # Garde un point par heure sur 7 jours
+      aggregated-days: 7    # Garde un point par heure sur 7 jrs
     security:
       detailed-days: 1      # Garde tout sur 7 jours
       aggregated-days: 30   # Un point par jour sur 30 jours
