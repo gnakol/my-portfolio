@@ -99,7 +99,7 @@ getCvUrl(userId: number): Observable<string> {
     headers: new HttpHeaders({
       'Content-Type': 'application/json',
   }),
-    responseType: 'text'  // important pour récupérer un simple string
+    responseType: 'text'
   });
 }
 

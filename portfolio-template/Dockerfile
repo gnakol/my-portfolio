@@ -1,19 +1,19 @@
 # ---- Build stage
-FROM node:18-alpine AS build
+FROM node:20-alpine AS build
 WORKDIR /app
 
-# Meilleur cache: d'abord les deps
+# Déps d'abord (cache optimal)
 COPY package*.json ./
 RUN npm ci
 
 # Puis le code
 COPY . .
-# Angular 17/18/19: pas de --prod; on utilise la conf du package.json
+# Angular >= v12 : plus de --prod, la conf prod se gère dans package.json
 RUN npm run build
 
 # ---- Runtime stage
 FROM nginx:alpine
-# ATTENTION: adapte le nom "portfolio-template" si ton projet Angular a un autre "name" dans angular.json
+# Adapter si nécessaire le nom du projet (angular.json -> "outputPath")
 COPY --from=build /app/dist/portfolio-template/browser /usr/share/nginx/html
 
 EXPOSE 80
