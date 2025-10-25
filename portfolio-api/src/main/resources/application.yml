@@ -83,7 +83,7 @@ monitoring:
       aggregated-days: 7    # Garde un point par heure sur 7 jrs
     security:
       detailed-days: 1      # Garde tout sur 7 jours
-      aggregated-days: 30   # Un point par jour sur 30 jours
+      aggregated-days: 30   # Un point par jour sur 30 jrs
     backup:
       logs-days: 30         # Garde les logs backup 30 jours
 
