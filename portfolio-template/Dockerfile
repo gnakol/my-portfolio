@@ -6,10 +6,13 @@ WORKDIR /app
 COPY package*.json ./
 RUN npm ci
 
+RUN node -v && npm -v
+RUN npx ng version || true
+
 # Puis le code
 COPY . .
 # Angular >= v12 : plus de --prod, la conf prod se gère dans package.json
-RUN npm run build
+RUN npm run build --verbose
 
 # ---- Runtime stage
 FROM nginx:alpine

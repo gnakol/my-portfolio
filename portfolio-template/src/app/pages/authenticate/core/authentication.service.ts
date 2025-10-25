@@ -169,7 +169,6 @@ export class AuthenticationService {
     if (!parsedToken || !parsedToken.roles) return false;
   
     const isAdmin = parsedToken.roles.some((role: any) => role.name === 'ADMIN');
-    //console.log('Is Admin:', isAdmin); // Debugging : affiche si l'utilisateur est admin
     return isAdmin;
   }
 
