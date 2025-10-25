@@ -33,6 +33,9 @@ jobs:
 
       - name: 🏷️ Build & Push (sha + latest)
         uses: docker/build-push-action@v6
+        env:
+          DOCKER_BUILDKIT: 1
+          BUILDKIT_PROGRESS: plain
         with:
           context: ./portfolio-template
           push: true
