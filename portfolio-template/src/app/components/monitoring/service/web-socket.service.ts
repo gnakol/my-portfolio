@@ -28,13 +28,11 @@ export class WebSocketService {
 
   connect(): void {
     if (this.stompClient?.connected) {
-      console.log('✅ WebSocket déjà connecté');
       return;
     }
 
     // CORRECTION : URL SANS le /portfolio-api
     const wsUrl = `${environment.apiBaseUrl}/ws-mission-control`; 
-    console.log('🔗 Tentative de connexion WebSocket:', wsUrl);
     
     const socket = new SockJS(wsUrl);
     
