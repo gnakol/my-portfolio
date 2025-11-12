@@ -1,0 +1,113 @@
+<div class="projets-container">
+  <!-- Fond animé -->
+  <div class="animated-background">
+    <div class="gradient-circle circle-1"></div>
+    <div class="gradient-circle circle-2"></div>
+    <div class="grid-pattern"></div>
+  </div>
+
+  <!-- Header -->
+  <section class="projets-header">
+    <h1 class="page-title">
+      <span>Mes Projets</span>
+      <span class="text-gradient">En Production</span>
+    </h1>
+    <p class="page-subtitle">
+      Infrastructures déployées, applications en ligne, et laboratoires opérationnels.
+    </p>
+
+    <!-- Filtres -->
+    <div class="filters">
+      <button
+        mat-stroked-button
+        [class.active]="activeFilter === 'all'"
+        (click)="filterProjects('all')">
+        Tous les projets
+      </button>
+      <button
+        mat-stroked-button
+        [class.active]="activeFilter === 'fullstack'"
+        (click)="filterProjects('fullstack')">
+        Full-Stack
+      </button>
+      <button
+        mat-stroked-button
+        [class.active]="activeFilter === 'infrastructure'"
+        (click)="filterProjects('infrastructure')">
+        Infrastructure
+      </button>
+      <button
+        mat-stroked-button
+        [class.active]="activeFilter === 'innovation'"
+        (click)="filterProjects('innovation')">
+        Innovation
+      </button>
+    </div>
+  </section>
+
+  <!-- Liste des projets -->
+  <section class="projets-list">
+    <mat-card *ngFor="let project of filteredProjects" class="project-card">
+      <mat-card-header>
+        <div class="project-category">
+          <mat-icon *ngIf="project.category === 'fullstack'">code</mat-icon>
+          <mat-icon *ngIf="project.category === 'infrastructure'">router</mat-icon>
+          <mat-icon *ngIf="project.category === 'innovation'">lightbulb</mat-icon>
+          <span>{{ project.category === 'fullstack' ? 'Full-Stack' : project.category === 'infrastructure' ? 'Infrastructure' : 'Innovation' }}</span>
+        </div>
+        <h2>{{ project.title }}</h2>
+      </mat-card-header>
+
+      <mat-card-content>
+        <p class="project-description">{{ project.description }}</p>
+
+        <div class="project-section">
+          <h3><mat-icon>flag</mat-icon> Défi technique</h3>
+          <p>{{ project.challenge }}</p>
+        </div>
+
+        <div class="project-section">
+          <h3><mat-icon>check_circle</mat-icon> Résultats</h3>
+          <ul class="results-list">
+            <li *ngFor="let result of project.results">
+              <mat-icon>arrow_right</mat-icon>
+              {{ result }}
+            </li>
+          </ul>
+        </div>
+
+        <div class="project-section">
+          <h3><mat-icon>build</mat-icon> Stack technique</h3>
+          <div class="stack-chips">
+            <mat-chip *ngFor="let tech of project.stack">{{ tech }}</mat-chip>
+          </div>
+        </div>
+
+<div class="project-actions">
+  <button
+    *ngFor="let link of project.links"
+    mat-raised-button
+    [disabled]="link.disabled"
+    [routerLink]="link.external ? null : (link.url || null)"
+    [queryParams]="link.external ? null : (link.queryParams || null)"
+    [attr.href]="link.external ? link.url : null"
+    [attr.target]="link.external ? '_blank' : null">
+    <mat-icon>{{ link.external ? 'open_in_new' : 'visibility' }}</mat-icon>
+    {{ link.label }}
+  </button>
+</div>
+
+      </mat-card-content>
+    </mat-card>
+  </section>
+
+  <!-- CTA final -->
+  <section class="cta-section">
+    <h2>Besoin d'une infrastructure similaire ?</h2>
+    <p>Discutons de votre projet et trouvons la meilleure solution technique.</p>
+    <button mat-raised-button routerLink="/" fragment="contact" class="cta-button">
+      <mat-icon>email</mat-icon>
+      Me contacter
+    </button>
+  </section>
+</div>

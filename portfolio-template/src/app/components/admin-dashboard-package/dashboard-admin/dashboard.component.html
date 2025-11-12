@@ -94,5 +94,25 @@
       <p class="card-description">Consultez et gérez les logs de sécurité</p>
       <div class="card-badge">Monitoring</div>
     </mat-card>
+
+    <!-- Carte Media -->
+    <mat-card class="dashboard-card" (click)="showSection('media-template')" [style.--card-color]="'#a855f7'">
+      <div class="card-icon">
+        <mat-icon>perm_media</mat-icon>
+      </div>
+      <h2 class="card-title">Media</h2>
+      <p class="card-description">Gérez vos fichiers média (images, vidéos, documents)</p>
+      <div class="card-badge">CRUD</div>
+    </mat-card>
+
+    <!-- Carte Tracking Visites -->
+    <mat-card class="dashboard-card" (click)="showSection('visit-tracking')" [style.--card-color]="'#00d4ff'">
+      <div class="card-icon">
+        <mat-icon>analytics</mat-icon>
+      </div>
+      <h2 class="card-title">Tracking Visites</h2>
+      <p class="card-description">Cockpit analytics : visites, pays, devices, durée de session</p>
+      <div class="card-badge">Analytics</div>
+    </mat-card>
   </div>
 </div>

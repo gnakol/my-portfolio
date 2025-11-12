@@ -16,6 +16,8 @@ import { VpnConfigurationComponent } from './components/simulation-package/secur
 import { NetworkIntrusionComponent } from './components/simulation-package/security-simulations/network-intrusion/network-intrusion.component';
 import { RadiusComponent } from './components/simulation-package/security-simulations/radius/radius.component';
 import { ProtectSystemComponent } from './components/simulation-package/security-simulations/protect-system/protect-system.component';
+import { AddMediaComponent } from './components/medias-package/web-service/add-media/add-media.component';
+import { AllMediaComponent } from './components/medias-package/web-service/all-media/all-media.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -24,6 +26,8 @@ import { ProtectSystemComponent } from './components/simulation-package/security
     NetworkIntrusionComponent,
     RadiusComponent,
     ProtectSystemComponent,
+    AddMediaComponent,
+    AllMediaComponent
   ],
   imports: [
     BrowserModule,

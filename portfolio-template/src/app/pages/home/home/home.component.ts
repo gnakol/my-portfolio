@@ -10,13 +10,9 @@ import { InfraRoadmapComponent } from '../../ccna-roadmap/ccna-roadmap.component
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss'],
   standalone : false,
-  
+
 })
 export class HomeComponent implements OnInit {
-  days: string = '00';
-  hours: string = '00';
-  minutes: string = '00';
-  progress: number = 55; // Votre progression actuelle en %
 
   constructor(
     private router: Router,
@@ -24,30 +20,7 @@ export class HomeComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.startCountdown();
-  }
-
-  startCountdown(): void {
-    // Compte à rebours jusqu'à la rentrée ASTON
-    const targetDate = new Date('2025-10-06T09:00:00').getTime();
-
-    const updateCountdown = () => {
-      const now = new Date().getTime();
-      const distance = targetDate - now;
-
-      const d = Math.max(0, Math.floor(distance / (1000 * 60 * 60 * 24)));
-      const h = Math.max(0, Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)));
-      const m = Math.max(0, Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60)));
-
-      this.days = d.toString().padStart(2, '0');
-      this.hours = h.toString().padStart(2, '0');
-      this.minutes = m.toString().padStart(2, '0');
-
-      // progression reste statique pour l’instant (pas de recalcul ici)
-    };
-
-    updateCountdown();
-    setInterval(updateCountdown, 60000);
+    // Plus de countdown, component simplifié
   }
 
   navigateTo(route: string): void {
@@ -80,5 +53,13 @@ export class HomeComponent implements OnInit {
       panelClass: 'roadmap-modal-container',
       backdropClass: 'custom-backdrop'
     });
+  }
+
+  openCalendly(): void {
+    // Option 1: Ouvrir Calendly dans un nouvel onglet
+    // window.open('https://calendly.com/votre-compte/consultation-15min', '_blank');
+
+    // Option 2: Pour l'instant, ouvrir le formulaire de contact
+    this.openAddContactDialog();
   }
 }

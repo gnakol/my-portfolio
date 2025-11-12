@@ -12,53 +12,52 @@
   <section class="hero-section">
     <div class="hero-content">
       <div class="hero-text">
-        <div class="badge-coming-soon">
-          <span>PROCHAINEMENT</span>
+        <div class="badge-available">
+          <span>DISPONIBLE POUR MISSIONS</span>
           <div class="pulse-dot"></div>
         </div>
-        
-<h1 class="hero-title">
-  <span>N’gna KOLIE -- Développeur FullStack</span>
-  <span class="text-gradient">Futur Admin Systèmes & Réseaux Cloud</span>
-</h1>
 
-        
+        <h1 class="hero-title">
+          <span>N'gna KOLIE — Ingénieur Indépendant</span>
+          <span class="text-gradient">Java · Angular · DevOps · Réseaux & Cloud</span>
+        </h1>
+
         <p class="hero-subtitle">
-          En <span class="highlight-dev">reconversion vers l'infrastructure cloud et réseaux</span>.  
+          Je conçois, déploie et sécurise des <span class="highlight-dev">plateformes modernes</span>
+          (Spring Boot, Angular, Docker, K8s, AWS).
           <br>
-          Actuellement en <span class="highlight-network">rentrée ASTON (06 oct. 2025)</span> avec lab physique Cisco,  
-          <span class="highlight-security">alternance admin S&R/DevOps dès Octobre 2025</span>.
+          <span class="highlight-security">Full-Stack · DevOps · Infrastructure Cloud</span> — de l'architecture à la production.
         </p>
-        
+
         <div class="hero-actions">
-          <button 
+          <button
             mat-raised-button
-            routerLink="/cv"
-            class="cv-button">
-            <mat-icon>description</mat-icon>
-            Voir mon CV
+            (click)="openCalendly()"
+            class="cta-primary">
+            <mat-icon>calendar_today</mat-icon>
+            Réserver un appel
           </button>
-          
-          <button 
+
+          <button
             mat-stroked-button
-            (click)="navigateTo('add-contact')"
-            class="contact-button">
-            <mat-icon>email</mat-icon>
-            Me contacter
+            routerLink="/projets"
+            class="cta-secondary">
+            <mat-icon>work</mat-icon>
+            Voir mes réalisations
           </button>
         </div>
       </div>
-      
+
       <div class="hero-card">
         <mat-card class="profile-card">
           <mat-card-content>
             <div class="profile-content">
               <div class="cyber-icon-container">
-                <mat-icon class="profile-icon">security</mat-icon>
+                <mat-icon class="profile-icon">verified</mat-icon>
                 <div class="cyber-pulse"></div>
               </div>
-              <h3 class="profile-title">Protection Numérique</h3>
-              <p class="profile-description">Vos systèmes en sécurité</p>
+              <h3 class="profile-title">Livraison garantie</h3>
+              <p class="profile-description">Production · Sécurité · Performance</p>
             </div>
           </mat-card-content>
         </mat-card>
@@ -66,66 +65,67 @@
     </div>
   </section>
 
-  <!-- CCNA Countdown Section -->
-  <section class="countdown-section">
-    <div class="countdown-container">
-      <div class="countdown-content">
-        <div class="countdown-header">
-<div class="countdown-badge">
-  <mat-icon>bolt</mat-icon>
-  <span>PROCHAINE ÉTAPE</span>
-</div>
-<h2 class="countdown-title">Cap vers la <span>Cybersécurité</span></h2>
-<p class="countdown-subtitle">
-  Rentrée ASTON — Admin Infra Sécurisées & Cloud (06 oct. 2025). Objectif final : spécialisation Cybersécurité (année 2).
-</p>
+  <!-- Section Preuves techniques (métriques concrètes) -->
+  <section class="proof-section">
+    <div class="proof-container">
+      <div class="proof-header">
+        <div class="proof-badge">
+          <mat-icon>verified_user</mat-icon>
+          <span>PROJETS EN PRODUCTION</span>
         </div>
-        
-        <div class="countdown-timer">
-          <div class="timer-item">
-            <div class="timer-value">{{ days }}</div>
-            <div class="timer-label">Jours</div>
-          </div>
-          <div class="timer-separator">:</div>
-          <div class="timer-item">
-            <div class="timer-value">{{ hours }}</div>
-            <div class="timer-label">Heures</div>
-          </div>
-          <div class="timer-separator">:</div>
-          <div class="timer-item">
-            <div class="timer-value">{{ minutes }}</div>
-            <div class="timer-label">Minutes</div>
-          </div>
-        </div>
-        
-        <div class="progress-container">
-<div class="progress-label">
-  <span>Progression reconversion</span>
-  <span>{{ progress }}%</span>
-</div>
-          <mat-progress-bar 
-            mode="determinate" 
-            [value]="progress"
-            class="ccna-progress">
-          </mat-progress-bar>
-        </div>
-        
-<button mat-stroked-button class="ccna-button" (click)="openCCNADialog()">
-  <mat-icon>visibility</mat-icon>
-  Voir mon parcours
-</button>
+        <h2 class="proof-title">Résultats <span>mesurables</span></h2>
+        <p class="proof-subtitle">
+          Infrastructure AWS opérationnelle avec monitoring temps réel et déploiements automatisés.
+        </p>
       </div>
-      
-      <div class="countdown-visual">
-        <div class="cisco-logo"></div>
-        <div class="network-animation">
-          <div class="node" style="--delay: 0s"></div>
-          <div class="node" style="--delay: 0.2s"></div>
-          <div class="node" style="--delay: 0.4s"></div>
-          <div class="node" style="--delay: 0.6s"></div>
-          <div class="node" style="--delay: 0.8s"></div>
-          <div class="connection-line"></div>
-        </div>
+
+      <div class="metrics-grid">
+        <mat-card class="metric-card">
+          <div class="metric-icon">
+            <mat-icon>cloud_done</mat-icon>
+          </div>
+          <h3 class="metric-value">99.9%</h3>
+          <p class="metric-label">Uptime AWS (2024)</p>
+          <span class="metric-detail">Monitoring Grafana 24/7</span>
+        </mat-card>
+
+        <mat-card class="metric-card">
+          <div class="metric-icon">
+            <mat-icon>speed</mat-icon>
+          </div>
+          <h3 class="metric-value">&lt;200ms</h3>
+          <p class="metric-label">Temps réponse API</p>
+          <span class="metric-detail">Spring Boot optimisé</span>
+        </mat-card>
+
+        <mat-card class="metric-card">
+          <div class="metric-icon">
+            <mat-icon>security</mat-icon>
+          </div>
+          <h3 class="metric-value">0 incident</h3>
+          <p class="metric-label">Sécurité (2024)</p>
+          <span class="metric-detail">JWT + alerting actif</span>
+        </mat-card>
+
+        <mat-card class="metric-card">
+          <div class="metric-icon">
+            <mat-icon>router</mat-icon>
+          </div>
+          <h3 class="metric-value">Lab Cisco</h3>
+          <p class="metric-label">Infrastructure physique</p>
+          <span class="metric-detail">VLAN · OSPF · VPN</span>
+        </mat-card>
+      </div>
+
+      <div class="proof-cta">
+        <button mat-raised-button class="proof-button-primary" routerLink="/projets">
+          <mat-icon>folder_open</mat-icon>
+          Voir mes projets
+        </button>
+        <button mat-stroked-button class="proof-button" (click)="openCCNADialog()">
+          <mat-icon>architecture</mat-icon>
+          Architecture détaillée
+        </button>
       </div>
     </div>
   </section>
@@ -133,84 +133,84 @@
   <!-- Section Compétences -->
   <section class="skills-section">
     <div class="section-header">
-      <h2 class="section-title">Mon Parcours Technique</h2>
+      <h2 class="section-title">Expertises Techniques</h2>
       <p class="section-subtitle">
-        De développeur FullStack à futur Admin Systèmes & Réseaux Cloud, une trajectoire axée sur la maîtrise technique et la sécurité.
+        De la conception backend à l'infrastructure cloud, une maîtrise complète de la stack moderne.
       </p>
     </div>
-    
+
     <div class="skills-grid">
-      <!-- Carte Cybersécurité -->
-      <mat-card class="skill-card network-card"> <!-- Changement de classe pour style cohérent -->
-        <div class="skill-icon security-icon"> <!-- Ou utilise une icône cloud (cloud_queue) -->
-          <mat-icon>cloud_queue</mat-icon> <!-- Ou settings_ethernet pour réseaux -->
+      <!-- Carte DevOps -->
+      <mat-card class="skill-card network-card">
+        <div class="skill-icon security-icon">
+          <mat-icon>cloud_queue</mat-icon>
         </div>
-        <h3 class="skill-title">Infra Cloud & Réseaux</h3> <!-- Titre recentré -->
+        <h3 class="skill-title">DevOps & Cloud</h3>
         <p class="skill-description">
-          Objectif alternance en <strong>administration systèmes/réseaux et DevOps</strong> pour bâtir une expertise solide avant la cybersécurité.
+          Déploiement automatisé sur AWS avec orchestration Kubernetes et monitoring temps réel.
         </p>
         <ul class="skill-list">
           <li>
             <mat-icon>check_circle</mat-icon>
-            Lab Cisco physique (VLAN, routage, VPN)
+            AWS (EC2, RDS, S3, VPC)
           </li>
           <li>
             <mat-icon>check_circle</mat-icon>
-            Déploiement AWS avec Docker/CI-CD
+            Docker + Kubernetes (Helm)
           </li>
           <li>
             <mat-icon>check_circle</mat-icon>
-            Automatisation (Ansible, Terraform)
+            CI/CD (GitHub Actions, Jenkins)
           </li>
         </ul>
       </mat-card>
-      
+
       <!-- Carte Réseaux -->
       <mat-card class="skill-card network-card">
         <div class="skill-icon network-icon">
           <mat-icon>settings_ethernet</mat-icon>
         </div>
-        <h3 class="skill-title">Réseaux</h3>
+        <h3 class="skill-title">Infrastructure & Réseaux</h3>
         <p class="skill-description">
-          Lab physique complet avec matériel Cisco professionnel et serveurs dédiés.
+          Configuration réseaux avancée (Cisco) et administration systèmes Linux/Windows.
         </p>
         <ul class="skill-list">
           <li>
             <mat-icon>check_circle</mat-icon>
-            VLAN, OSPF, ACL, Radius
+            VLAN, OSPF, ACL, VPN (Cisco)
           </li>
           <li>
             <mat-icon>check_circle</mat-icon>
-            DHCP, DNS, VPN, Firewall
+            Firewall, Reverse Proxy (Nginx)
           </li>
           <li>
             <mat-icon>check_circle</mat-icon>
-            Active Directory, Serveurs
+            Active Directory, DNS, DHCP
           </li>
         </ul>
       </mat-card>
-      
+
       <!-- Carte Développement -->
       <mat-card class="skill-card dev-card">
         <div class="skill-icon dev-icon">
           <mat-icon>code</mat-icon>
         </div>
-        <h3 class="skill-title">Développement</h3>
+        <h3 class="skill-title">Développement Full-Stack</h3>
         <p class="skill-description">
-          Expertise FullStack Java/Angular avec focus sur la sécurité des applications.
+          Architecture microservices Java/Spring Boot avec frontend Angular moderne et sécurisé.
         </p>
         <ul class="skill-list">
           <li>
             <mat-icon>check_circle</mat-icon>
-            Spring Boot & Spring Security
+            Spring Boot + Spring Security
           </li>
           <li>
             <mat-icon>check_circle</mat-icon>
-            Angular (Ngrx, PWA)
+            Angular (Ngrx, RxJS, Material)
           </li>
           <li>
             <mat-icon>check_circle</mat-icon>
-            Microservices & Keycloak
+            API REST + JWT + OAuth2/Keycloak
           </li>
         </ul>
       </mat-card>
