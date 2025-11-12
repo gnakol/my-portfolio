@@ -1,0 +1,68 @@
+<div class="media-gallery-container">
+  <!-- Header -->
+  <header class="gallery-header">
+    <button mat-icon-button routerLink="/projets" class="back-button">
+      <mat-icon>arrow_back</mat-icon>
+    </button>
+    <h1>{{ galleryTitle }}</h1>
+  </header>
+
+  <!-- Loading -->
+  <div *ngIf="isLoading" class="loading-state">
+    <mat-spinner diameter="50"></mat-spinner>
+    <p>Chargement des médias...</p>
+  </div>
+
+  <!-- Grille de médias -->
+  <div *ngIf="!isLoading && mediaList.length > 0" class="media-grid">
+    <div *ngFor="let media of mediaList" class="media-item" (click)="openMedia(media)">
+      <!-- Image -->
+      <img *ngIf="isImage(media)" [src]="media.url" [alt]="media.fileName" loading="lazy">
+
+      <!-- Vidéo (thumbnail avec play icon) -->
+      <div *ngIf="isVideo(media)" class="video-thumbnail">
+        <video [src]="media.url" preload="metadata"></video>
+        <div class="play-overlay">
+          <mat-icon>play_circle_filled</mat-icon>
+        </div>
+      </div>
+
+      <!-- Caption optionnel -->
+      <div *ngIf="media.caption" class="media-caption">
+        {{ media.caption }}
+      </div>
+    </div>
+  </div>
+
+  <!-- État vide -->
+  <div *ngIf="!isLoading && mediaList.length === 0" class="empty-state">
+    <mat-icon>photo_library</mat-icon>
+    <h2>Aucun média disponible</h2>
+    <p>Les médias pour cette catégorie seront bientôt ajoutés.</p>
+    <button mat-raised-button routerLink="/projets">
+      <mat-icon>arrow_back</mat-icon>
+      Retour aux projets
+    </button>
+  </div>
+
+  <!-- Modal plein écran -->
+  <div *ngIf="selectedMedia" class="media-modal" (click)="closeMedia()">
+    <div class="modal-content" (click)="$event.stopPropagation()">
+      <button mat-icon-button class="close-button" (click)="closeMedia()">
+        <mat-icon>close</mat-icon>
+      </button>
+
+      <!-- Image plein écran -->
+      <img *ngIf="isImage(selectedMedia)" [src]="selectedMedia.url" [alt]="selectedMedia.fileName">
+
+      <!-- Vidéo plein écran -->
+      <video *ngIf="isVideo(selectedMedia)" [src]="selectedMedia.url" controls autoplay></video>
+
+      <!-- Infos -->
+      <div class="media-info" *ngIf="selectedMedia.caption || selectedMedia.fileName">
+        <p class="media-caption" *ngIf="selectedMedia.caption">{{ selectedMedia.caption }}</p>
+        <p class="media-filename">{{ selectedMedia.fileName }}</p>
+      </div>
+    </div>
+  </div>
+</div>

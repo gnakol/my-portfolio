@@ -4,6 +4,15 @@ import { Observable } from 'rxjs';
 import { FeedbackDTO, PingRequest, PingResponse, SimulationRequest, SimulationResponse, VlanRequest, VlanResponse } from '../interface/simulation.model';
 import { GenericMethodeService } from '../../../services/generic-methode.service';
 import { environment } from '../../../../environments/environment';
+import {
+  StartSessionRequest,
+  StartSessionResponse,
+  SendCommandRequest,
+  SendCommandResponse,
+  FinishSessionResponse,
+  SaveFeedbackRequest,
+  SaveFeedbackResponse
+} from '../../../models/simulation.models';
 
 @Injectable({
   providedIn: 'root'
@@ -67,8 +76,66 @@ export class SimulationService {
 
     addFeedback(feedback: FeedbackDTO): Observable<FeedbackDTO> {
 
-      const headers = this.genericMethodeService.getHeaders();
+      //const headers = this.genericMethodeService.getHeaders();
 
-      return this.http.post<FeedbackDTO>(`${this.feedbackUrl}/add-feedback`, feedback, {headers});
+      return this.http.post<FeedbackDTO>(`${this.feedbackUrl}/add-feedback`, feedback);
+    }
+
+    // ========== NOUVEAUX ENDPOINTS POUR SIMULATION PERSISTÉE ==========
+
+    /**
+     * Démarre une nouvelle session de simulation
+     */
+    startSession(request: StartSessionRequest): Observable<StartSessionResponse> {
+      const headers = new HttpHeaders({
+        'Content-Type': 'application/json'
+      });
+
+      return this.http.post<StartSessionResponse>(`${this.apiUrl}/session/start`, request, { headers });
+    }
+
+    /**
+     * Envoie une commande à la session active
+     */
+    sendCommand(sessionId: number, request: SendCommandRequest): Observable<SendCommandResponse> {
+      const headers = new HttpHeaders({
+        'Content-Type': 'application/json'
+      });
+
+      return this.http.post<SendCommandResponse>(
+        `${this.apiUrl}/session/${sessionId}/command`,
+        request,
+        { headers }
+      );
+    }
+
+    /**
+     * Termine la session et calcule le score
+     */
+    finishSession(sessionId: number): Observable<FinishSessionResponse> {
+      const headers = new HttpHeaders({
+        'Content-Type': 'application/json'
+      });
+
+      return this.http.post<FinishSessionResponse>(
+        `${this.apiUrl}/session/${sessionId}/finish`,
+        {},
+        { headers }
+      );
+    }
+
+    /**
+     * Enregistre le feedback pour une session
+     */
+    saveFeedback(sessionId: number, request: SaveFeedbackRequest): Observable<SaveFeedbackResponse> {
+      const headers = new HttpHeaders({
+        'Content-Type': 'application/json'
+      });
+
+      return this.http.post<SaveFeedbackResponse>(
+        `${this.apiUrl}/session/${sessionId}/feedback`,
+        request,
+        { headers }
+      );
     }
 }

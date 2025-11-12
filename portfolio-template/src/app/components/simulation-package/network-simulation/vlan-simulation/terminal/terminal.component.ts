@@ -1,11 +1,13 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { SimulationService } from '../../../services/simulation.service';
+import { SimulationStateService } from '../../../../../services/simulation-state.service';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { Router, RouterModule } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 import { FeedBackComponent } from '../feed-back/feed-back.component';
 import { Howl } from 'howler';
+import { Subject, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-terminal',
@@ -18,13 +20,19 @@ import { Howl } from 'howler';
     RouterModule
   ]
 })
-export class TerminalComponent implements OnInit {
+export class TerminalComponent implements OnInit, OnDestroy {
   command: string = '';
   terminalOutput: string = 'Initializing VLAN Configuration Terminal v3.7...\n\n';
   currentStep: number = 0;
   isProcessing: boolean = false;
   connectionQuality: number = 5;
   switchStatus: string = 'Switch: Ready\nVLANs: None\nPorts: Down';
+
+  // Session backend
+  private destroy$ = new Subject<void>();
+  sessionId: number | null = null;
+  score: number = 0;
+  errorCount: number = 0;
   
   // Configuration du réseau
   networkNodes = Array.from({length: 15}, (_, i) => ({
@@ -102,7 +110,8 @@ export class TerminalComponent implements OnInit {
 ];
 
   constructor(
-    private simulationService: SimulationService, 
+    private simulationService: SimulationService,
+    private simulationState: SimulationStateService,
     private dialog: MatDialog,
     private router : Router
   ) {}
@@ -112,8 +121,55 @@ export class TerminalComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.initializeSession();
     this.typeWelcomeMessage();
     this.randomizeLights();
+  }
+
+  ngOnDestroy() {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
+
+  /**
+   * Initialise ou restaure une session
+   */
+  initializeSession() {
+    // Vérifier si une session existe déjà
+    if (this.simulationState.isSessionActive) {
+      this.sessionId = this.simulationState.sessionId;
+      this.currentStep = this.simulationState.currentStep;
+      console.log('Session restaurée:', this.sessionId, 'Step:', this.currentStep);
+    } else {
+      // Créer une nouvelle session
+      this.startNewSession();
+    }
+  }
+
+  /**
+   * Démarre une nouvelle session backend
+   */
+  startNewSession() {
+    const clientHash = this.simulationState.generateClientHash();
+    const userAgent = navigator.userAgent;
+
+    this.simulationService.startSession({
+      type: 'VLAN',
+      clientHash,
+      userAgent
+    })
+    .pipe(takeUntil(this.destroy$))
+    .subscribe({
+      next: (response) => {
+        this.sessionId = response.sessionId;
+        this.simulationState.initSession(response.sessionId);
+        console.log('Nouvelle session créée:', this.sessionId);
+      },
+      error: (error) => {
+        console.error('Erreur lors de la création de session:', error);
+        this.terminalOutput += '\n⚠️ Erreur de connexion au serveur. Mode hors-ligne activé.\n\n> ';
+      }
+    });
   }
 
   typeWelcomeMessage() {
@@ -183,27 +239,165 @@ Initialisation de la configuration VLAN du terminal... Prêt.\n
   }
 
   processCommand(command: string) {
+    // Si pas de session, mode hors-ligne
+    if (!this.sessionId) {
+      this.processCommandOffline(command);
+      return;
+    }
+
+    // Envoyer la commande au backend
+    this.simulationService.sendCommand(this.sessionId, { rawCommand: command })
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: (response) => {
+          // Sauvegarder dans l'état local
+          this.simulationState.addCommand({
+            command,
+            status: response.status,
+            message: response.message,
+            timestamp: Date.now(),
+            animationCue: response.animationCue
+          });
+
+          if (response.status === 'OK') {
+            this.successSound.play();
+            this.terminalOutput += response.message + '\n\n';
+
+            // Exécuter l'animation correspondante
+            if (response.animationCue) {
+              this.executeAnimation(response.animationCue);
+            }
+
+            this.currentStep = response.stepIndex;
+
+            // Si toutes les étapes sont terminées
+            if (this.currentStep >= this.steps.length) {
+              this.terminalOutput += '\n🚀 Configuration terminée! Calcul du score...\n\n> ';
+              setTimeout(() => this.finishSession(), 2000);
+            } else {
+              this.terminalOutput += `💡 ${this.steps[this.currentStep - 1].suggestion}\n\n> `;
+            }
+          } else {
+            this.errorSound.play();
+            this.errorCount++;
+            this.terminalOutput += `❌ ${response.message}\n\n> `;
+          }
+
+          this.command = '';
+          this.scrollToBottom();
+        },
+        error: (error) => {
+          console.error('Erreur lors de l\'envoi de commande:', error);
+          this.errorSound.play();
+          this.terminalOutput += '\n⚠️ Erreur serveur. Réessayez.\n\n> ';
+          this.command = '';
+          this.scrollToBottom();
+        }
+      });
+  }
+
+  /**
+   * Mode hors-ligne (fallback)
+   */
+  processCommandOffline(command: string) {
     const currentStep = this.steps[this.currentStep];
-    
+
     if (command === currentStep.command) {
       this.successSound.play();
       this.terminalOutput += currentStep.message + '\n\n';
       this.terminalOutput += `💡 ${currentStep.suggestion}\n\n> `;
-      
+
       currentStep.action();
       this.currentStep++;
-      
+
       if (this.currentStep >= this.steps.length) {
-        this.terminalOutput += '\n🚀 Configuration complete! Resetting terminal...\n';
-        setTimeout(() => this.resetTerminal(), 3000);
+        this.terminalOutput += '\n🚀 Configuration terminée!\n';
       }
     } else {
       this.errorSound.play();
-      this.terminalOutput += `❌ Invalid command. Expected: "${currentStep.command}"\n\n> `;
+      this.terminalOutput += `❌ Commande invalide. Attendu: "${currentStep.command}"\n\n> `;
     }
-    
+
     this.command = '';
     this.scrollToBottom();
+  }
+
+  /**
+   * Exécute une animation selon le cue
+   */
+  executeAnimation(cue: string) {
+    switch (cue) {
+      case 'vlan10Created':
+        this.updateSwitchStatus('VLAN 10 créé\nPorts : Aucun assigné');
+        this.animateServer(1, '#4caf50');
+        break;
+      case 'vlan20Created':
+        this.updateSwitchStatus('VLANs : 10, 20\nPorts : Aucun assigné');
+        this.animateServer(2, '#4caf50');
+        break;
+      case 'port1Selected':
+        this.highlightPort(1);
+        break;
+      case 'port1AccessMode':
+        this.updateSwitchStatus('Port Fa0/1 : Mode accès\nEn attente d\'assignation VLAN');
+        break;
+      case 'port1AssignedVlan10':
+        this.activatePort(1, 10);
+        this.updateSwitchStatus('Port Fa0/1 : VLAN 10\nStatut : Actif');
+        this.animateAllServers();
+        break;
+    }
+  }
+
+  /**
+   * Termine la session et affiche le feedback
+   */
+  finishSession() {
+    if (!this.sessionId) return;
+
+    this.simulationService.finishSession(this.sessionId)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: (response) => {
+          this.score = response.score;
+          this.simulationState.finishSession();
+
+          this.terminalOutput += `\n📊 RÉSULTATS:\n`;
+          this.terminalOutput += `   Score: ${response.score} points\n`;
+          this.terminalOutput += `   Durée: ${Math.round(response.durationMs / 1000)}s\n`;
+          this.terminalOutput += `   Succès: ${response.success ? 'OUI ✅' : 'NON ❌'}\n\n`;
+
+          // Ouvrir le modal de feedback après 2s
+          setTimeout(() => this.openFeedbackDialog(), 2000);
+        },
+        error: (error) => {
+          console.error('Erreur lors de la fin de session:', error);
+        }
+      });
+  }
+
+  /**
+   * Ouvre le dialog de feedback
+   */
+  openFeedbackDialog() {
+    const dialogRef = this.dialog.open(FeedBackComponent, {
+      width: '500px',
+      disableClose: true
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result && this.sessionId) {
+        // Sauvegarder le feedback au backend
+        this.simulationService.saveFeedback(this.sessionId, {
+          experienceName: 'VLAN Simulation',
+          feedbackType: 'rating',
+          feedbackValue: result
+        }).subscribe();
+      }
+
+      // Réinitialiser
+      setTimeout(() => this.resetTerminal(), 1000);
+    });
   }
 
   highlightPort(portId: number) {
@@ -276,30 +470,34 @@ Initialisation de la configuration VLAN du terminal... Prêt.\n
   }
 
   resetTerminal() {
-    this.terminalOutput = 'Resetting terminal...\n\n';
+    // Réinitialiser l'état du backend et localStorage
+    this.simulationState.reset();
+
+    // Réinitialiser les variables locales
+    this.sessionId = null;
     this.currentStep = 0;
+    this.score = 0;
+    this.errorCount = 0;
     this.command = '';
+
+    // Réinitialiser le terminal visuel
+    this.terminalOutput = 'Resetting terminal...\n\n';
     this.switchStatus = 'Switch: Ready\nVLANs: None\nPorts: Down';
+
     this.switchPorts.forEach(port => {
       port.active = false;
       port.vlan = 0;
     });
+
     this.servers.forEach(server => {
       server.ledColor = '#ff3e3e';
       server.lights.forEach(light => light.active = false);
     });
-    
-    setTimeout(() => {
-      this.typeWelcomeMessage();
-      this.openFeedbackDialog();
-    }, 1000);
-  }
 
-  openFeedbackDialog() {
-    this.dialog.open(FeedBackComponent, {
-      width: '500px',
-      panelClass: 'feedback-dialog',
-      data: { experienceName: 'VLAN Configuration Simulation' }
-    });
+    // Redémarrer une nouvelle session
+    setTimeout(() => {
+      this.startNewSession();
+      this.typeWelcomeMessage();
+    }, 1000);
   }
 }

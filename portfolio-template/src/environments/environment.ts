@@ -1,6 +1,6 @@
 export const environment = {
   production: false,
-  apiBaseUrl: 'http://localhost:9000/portfolio-api',
+  apiBaseUrl: 'http://192.168.0.101:9000/portfolio-api',
   grafana: {
     baseUrl: 'http://localhost:3000',
     orgId: '1', // optionnel mais pratique

@@ -20,18 +20,31 @@ spring:
     properties:
       mail.smtp.auth: true
       mail.smtp.starttls.enable: true
+
   task:
     scheduling:
       enabled: true
+
+  # ✅ Limites multipart côté Spring (vraiment prises en compte)
+  servlet:
+    multipart:
+      enabled: true
+      max-file-size: 500MB          # taille max d'un fichier
+      max-request-size: 500MB       # taille max de la requête
+
+  mvc:
+    async:
+      request-timeout: 10m          # évite les timeouts lors d'uploads lourds
 
 server:
   port: 9000
   servlet:
     context-path: /portfolio-api
-  multipart:
-    max-file-size: 20MB
-    max-request-size: 20MB
-    enabled: true
+  tomcat:
+    # ✅ Important avec Tomcat quand on a de gros bodies
+    max-swallow-size: -1            # illimité (évite les erreurs de parsing body)
+    max-http-post-size: 524288000   # 500MB (524288000 bytes) - CRITIQUE pour les uploads
+    connection-timeout: 60s
 
 cloud:
   aws:
@@ -42,13 +55,17 @@ cloud:
       static: eu-north-1
     stack:
       auto: false
+    s3:
+      bucket: ${AWS_S3_BUCKET:kolie-portfolio-profile}
+      mediaFolder: media/
 
 management:
   endpoints:
     web:
+      base-path: /actuator
+      # ✅ On expose env/configprops pour vérifier en live les valeurs effectives
       exposure:
-        include: health,info,prometheus,metrics
-      base-path: /actuator  
+        include: health,info,prometheus,metrics,env,configprops
   endpoint:
     health:
       show-details: always
@@ -64,28 +81,25 @@ management:
 security:
   tls:
     hosts: kolie-portfolio.org:443, v2.kolie-portfolio.org:443
+
 backup:
   scheduled: true
-  dir: /tmp                 # dossier où on écrit les dumps
+  dir: /tmp
   retentionDays: 7
 
-# Configuration personnalisée pour le nettoyage des tokens
 token:
   cleanup:
     enabled: true
-    schedule: "0 0 3 * * ?"  # Tous les jours à 03h00
-    retention-days: 1         # Garder seulement les tokens valides du jour
+    schedule: "0 0 3 * * ?"
+    retention-days: 1
 
 monitoring:
   retention:
     availability:
-      detailed-hours: 12    # Garde tout sur 24h
-      aggregated-days: 7    # Garde un point par heure sur 7 jrs
+      detailed-hours: 12
+      aggregated-days: 7
     security:
-      detailed-days: 1      # Garde tout sur 7 jours
-      aggregated-days: 30   # Un point par jour sur 30 jrs
+      detailed-days: 1
+      aggregated-days: 30
     backup:
-      logs-days: 30         # Garde les logs backup 30 jours
-
-
-
+      logs-days: 30

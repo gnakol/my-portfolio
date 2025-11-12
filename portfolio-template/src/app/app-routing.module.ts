@@ -58,10 +58,14 @@ import { AllProjectTypeComponent } from './components/project-package/web-servic
 import { AllProjectComponent } from './components/project-package/web-service/all-project/all-project.component';
 import { AddProjectComponent } from './components/project-package/web-service/add-project/add-project.component';
 import { MissionControlComponent } from './components/monitoring/mission-control/mission-control.component';
+import { MediaTemplateComponent } from './components/medias-package/media-template/media-template.component';
+import { MediaGalleryComponent } from './components/medias-package/media-gallery/media-gallery.component';
+import { VisitTrackingComponent } from './components/visit-tracking/visit-tracking.component';
 
 const routes: Routes = [
   { path: '', loadChildren: () => import('./pages/home/home.module').then(m => m.HomeModule) },
   { path: 'cv', loadChildren: () => import('./pages/cv/cv.module').then(m => m.CvModule) },
+  { path: 'projets', loadChildren: () => import('./pages/projets/projets.module').then(m => m.ProjetsModule) },
   { path: 'simulations', loadChildren: () => import('./pages/simulations/simulations.module').then(m => m.SimulationsModule) },
   { path: 'blog', loadChildren: () => import('./pages/blog/blog.module').then(m => m.BlogModule) },
   { path: 'contact', loadChildren: () => import('./pages/contact/contact.module').then(m => m.ContactModule) },
@@ -121,6 +125,8 @@ const routes: Routes = [
   { path: 'language-template', component : LanguageTemplateComponent, canActivate : [AuthGuard]},
   { path: 'contact-template', component : ContactTemplateComponent, canActivate : [AuthGuard]},
   { path: 'project-template', component : ProjectTemplateComponent, canActivate : [AuthGuard]},
+  { path: 'media-template', component : MediaTemplateComponent, canActivate : [AuthGuard]},
+  { path: 'media-gallery', component : MediaGalleryComponent}, // PUBLIC - Galerie pour visiteurs
 
   { path: 'pdf-generator', component : PdfGeneratorComponent},
 
@@ -154,7 +160,8 @@ const routes: Routes = [
   { path : 'security-template', component : SecuritySimulationsComponent},
   { path : 'intro-firewall', component : IntroFirewallComponent},
   { path : 'go-firewal-simulation', component : GoSimulationFirewallComponent},
-  { path: 'mission-control', component: MissionControlComponent }
+  { path: 'mission-control', component: MissionControlComponent },
+  { path: 'visit-tracking', component: VisitTrackingComponent, canActivate: [AuthGuard] } // Cockpit analytics
 
   
 ];

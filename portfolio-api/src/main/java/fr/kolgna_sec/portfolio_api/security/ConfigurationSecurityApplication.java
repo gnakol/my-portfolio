@@ -66,6 +66,16 @@ public class ConfigurationSecurityApplication {
                         .requestMatchers(HttpMethod.GET, "/language/all-language").permitAll()
                         .requestMatchers(HttpMethod.GET, "/cv/download").permitAll()
                         .requestMatchers("/ws-mission-control/**").permitAll()
+                        .requestMatchers("/simulation/session/**").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/simulation/ping").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/simulation/vlan").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/simulation/eigrp").permitAll()
+                        .requestMatchers(POST, "/feedback/add-feedback").permitAll()
+                        .requestMatchers(POST, "/simulation/session/start").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/media/public").permitAll()
+                        .requestMatchers(HttpMethod.POST,    "/visits").permitAll()                  // créer une visite
+                        .requestMatchers(HttpMethod.PUT,     "/visits/*/duration").permitAll()       // heartbeat (maj durée)
+                        .requestMatchers(HttpMethod.OPTIONS, "/visits/**").permitAll()
                         .anyRequest().authenticated())
                 .exceptionHandling(exceptions -> exceptions
                         .authenticationEntryPoint(jwtAuthenticationEntryPoint)) // Configure l'entry point d'authentification

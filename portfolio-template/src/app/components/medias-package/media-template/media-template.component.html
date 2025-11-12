@@ -1,0 +1,159 @@
+<div class="media-template-container">
+  <!-- En-tête -->
+  <div class="media-header">
+    <h1 class="media-title">Gestion des <span class="text-gradient">Médias</span></h1>
+    <p class="media-subtitle">Gérez vos fichiers multimédias (Lab, Schéma réseau, Démo VLAN)</p>
+    <div class="header-divider"></div>
+  </div>
+
+  <!-- Section Upload (2 boutons horizontaux) -->
+  <div class="upload-section">
+    <!-- Bouton Import Médias -->
+    <div class="upload-card" (click)="fileInput.click()">
+      <mat-icon>cloud_upload</mat-icon>
+      <h3>Importer des médias</h3>
+      <p>Glissez-déposez</p>
+      <input #fileInput type="file" hidden accept="image/*,video/*" multiple
+             (change)="handleUpload($event)">
+    </div>
+
+    <!-- Bouton Webcam -->
+    <div class="webcam-card" (click)="toggleWebcam('photo')">
+      <mat-icon>camera_alt</mat-icon>
+      <h3>Prendre une photo/vidéo</h3>
+      <p>Utiliser votre webcam</p>
+    </div>
+  </div>
+
+  <!-- Webcam Modal -->
+  <div class="webcam-modal" *ngIf="showWebcam">
+    <div class="webcam-content">
+      <div class="webcam-header">
+        <h3>{{ cameraMode === 'photo' ? 'Prendre une photo' : 'Enregistrer une vidéo' }}</h3>
+        <button (click)="toggleWebcam()"><mat-icon>close</mat-icon></button>
+      </div>
+
+      <!-- Webcam Native -->
+      <div class="webcam-video-container">
+        <video #webcamVideo autoplay playsinline class="webcam-element"></video>
+      </div>
+
+      <!-- Actions Mode Photo -->
+      <div class="webcam-actions" *ngIf="cameraMode === 'photo'">
+        <button (click)="triggerSnapshot()" class="capture-btn">
+          <mat-icon>camera</mat-icon> Prendre la photo
+        </button>
+        <button (click)="toggleWebcam(); toggleWebcam('video')" class="switch-mode-btn">
+          <mat-icon>videocam</mat-icon> Passer en mode vidéo
+        </button>
+      </div>
+
+      <!-- Actions Mode Vidéo -->
+      <div class="webcam-actions" *ngIf="cameraMode === 'video'">
+        <button *ngIf="!isRecording" (click)="startRecording()" class="record-btn">
+          <mat-icon>fiber_manual_record</mat-icon> Démarrer l'enregistrement
+        </button>
+        <button *ngIf="isRecording" (click)="stopRecording()" class="stop-btn">
+          <mat-icon>stop</mat-icon> Arrêter l'enregistrement
+        </button>
+        <button (click)="toggleWebcam(); toggleWebcam('photo')" class="switch-mode-btn">
+          <mat-icon>camera_alt</mat-icon> Passer en mode photo
+        </button>
+      </div>
+    </div>
+  </div>
+
+<!-- Galerie de médias -->
+<div class="media-gallery-section" *ngIf="displayedMedia.length > 0">
+  <h3>Vos médias uploadés</h3>
+
+  <div class="media-grid">
+    <div *ngFor="let media of displayedMedia"
+         class="media-item"
+         (mouseenter)="hoveredMediaId = (media.tempId ?? media.mediaId)"
+         (mouseleave)="hoveredMediaId = null">
+
+      <!-- Vignette -->
+      <div class="media-thumbnail">
+        <img *ngIf="isImage(media)" [src]="media.url" [alt]="media.fileName">
+        <video *ngIf="isVideo(media)" [src]="media.url" muted></video>
+
+        <!-- Badge type (visible au survol) -->
+        <div class="media-type-badge"
+             *ngIf="hoveredMediaId === (media.tempId ?? media.mediaId)"
+             (click)="playMedia(media)">
+          {{ isImage(media) ? 'Image' : 'Vidéo' }}
+        </div>
+
+        <!-- Bandeau brouillon pour les items locaux -->
+        <div class="draft-badge" *ngIf="media.localOnly">Brouillon</div>
+
+        <!-- Tag dropdown (visible au survol et quand non encore vraiment tagué) -->
+        <div class="tag-dropdown"
+             *ngIf="hoveredMediaId === (media.tempId ?? media.mediaId)">
+
+          <!-- Vidéo => Démo VLAN -->
+          <button *ngIf="isVideo(media)" (click)="applyTag(media, 'demo vlan')" class="tag-btn vlan-tag">
+            <mat-icon>router</mat-icon> Démo VLAN
+          </button>
+
+          <!-- Image => Lab / Schéma -->
+          <ng-container *ngIf="isImage(media)">
+            <button (click)="applyTag(media, 'lab')" class="tag-btn lab-tag">
+              <mat-icon>science</mat-icon> Lab
+            </button>
+            <button (click)="applyTag(media, 'schema reseau')" class="tag-btn schema-tag">
+              <mat-icon>hub</mat-icon> Schéma réseau
+            </button>
+          </ng-container>
+        </div>
+
+        <!-- Badge tag déjà défini (si persisté & tag != image|video) -->
+        <div class="tagged-badge"
+             *ngIf="!media.localOnly && (media.mediaType !== 'image' && media.mediaType !== 'video')">
+          <mat-icon>local_offer</mat-icon> {{ media.mediaType }}
+        </div>
+      </div>
+
+      <!-- Actions -->
+      <div class="media-actions">
+        <!-- Remplacer : seulement si persisté -->
+        <label class="action-btn replace-btn" *ngIf="!media.localOnly">
+          <mat-icon>sync</mat-icon> Remplacer
+          <input type="file" hidden accept="image/*,video/*"
+                 (change)="updateMedia(media, $event)">
+        </label>
+
+        <!-- Supprimer : local ou persisté -->
+        <button class="action-btn delete-btn"
+                (click)="deleteMedia(media.tempId || media.mediaId)">
+          <mat-icon>delete</mat-icon> Supprimer
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- État vide -->
+<div class="empty-state" *ngIf="displayedMedia.length === 0">
+  <mat-icon>photo_library</mat-icon>
+  <p>Aucun média à afficher</p>
+  <small>Importez un média puis taguez-le au survol pour le persister</small>
+</div>
+
+
+  <!-- Modal de lecture vidéo/image -->
+  <div class="preview-modal" *ngIf="selectedMedia">
+    <div class="preview-content">
+      <div class="preview-header">
+        <h3>{{ selectedMedia.fileName }}</h3>
+        <button (click)="selectedMedia = null"><mat-icon>close</mat-icon></button>
+      </div>
+
+      <div class="preview-body">
+        <img *ngIf="isImage(selectedMedia)" [src]="selectedMedia.url" [alt]="selectedMedia.fileName">
+        <video *ngIf="isVideo(selectedMedia)" [src]="selectedMedia.url" controls autoplay></video>
+      </div>
+    </div>
+  </div>
+</div>
