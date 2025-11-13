@@ -14,6 +14,8 @@
   max-width: 1600px;
   margin-left: auto;
   margin-right: auto;
+  flex-wrap: wrap;
+  gap: 1rem;
 
   .header-content {
     display: flex;
@@ -43,6 +45,11 @@
       font-size: 1rem;
       margin: 0;
     }
+  }
+
+  .header-actions {
+    display: flex;
+    gap: 1rem;
   }
 }
 
@@ -352,6 +359,147 @@
   }
 }
 
+// Action bar
+.action-bar {
+  mat-card-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+
+  .action-buttons {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+  }
+
+  .quick-filters {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+  }
+}
+
+// Material Table
+.table-container {
+  overflow-x: auto;
+  margin-top: 1rem;
+}
+
+.visits-mat-table {
+  width: 100%;
+  background: transparent;
+
+  ::ng-deep {
+    .mat-mdc-table {
+      background: transparent;
+    }
+
+    .mat-mdc-header-row {
+      background: rgba(0, 212, 255, 0.1);
+    }
+
+    .mat-mdc-header-cell {
+      color: #00d4ff;
+      font-weight: 600;
+      text-transform: uppercase;
+      font-size: 0.85rem;
+      letter-spacing: 1px;
+      border-bottom: 2px solid rgba(0, 212, 255, 0.3);
+    }
+
+    .mat-mdc-row {
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      transition: background 0.2s ease;
+
+      &:hover {
+        background: rgba(0, 212, 255, 0.05);
+      }
+    }
+
+    .mat-mdc-cell {
+      color: rgba(255, 255, 255, 0.9);
+      font-size: 0.9rem;
+
+      &.page-url {
+        color: #00d4ff;
+        font-family: monospace;
+        font-size: 0.85rem;
+      }
+    }
+
+    .mat-sort-header-arrow {
+      color: #00d4ff;
+    }
+  }
+}
+
+// Paginator
+::ng-deep {
+  .mat-mdc-paginator {
+    background: transparent;
+    color: rgba(255, 255, 255, 0.9);
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+
+    .mat-mdc-paginator-page-size-label,
+    .mat-mdc-paginator-range-label {
+      color: rgba(255, 255, 255, 0.7);
+    }
+
+    .mat-mdc-icon-button {
+      color: rgba(255, 255, 255, 0.7);
+
+      &:disabled {
+        opacity: 0.3;
+      }
+    }
+
+    .mat-mdc-select-value {
+      color: rgba(255, 255, 255, 0.9);
+    }
+  }
+
+  // Snackbar styles
+  .snackbar-success {
+    background: #4caf50 !important;
+    color: white !important;
+  }
+
+  .snackbar-error {
+    background: #f44336 !important;
+    color: white !important;
+  }
+
+  .snackbar-warning {
+    background: #ff9800 !important;
+    color: white !important;
+  }
+
+  // Datepicker
+  .mat-datepicker-content {
+    background: #1a1a2e;
+
+    .mat-calendar {
+      background: #1a1a2e;
+
+      .mat-calendar-body-selected {
+        background-color: #00d4ff;
+        color: #000;
+      }
+
+      .mat-calendar-body-cell-content {
+        color: rgba(255, 255, 255, 0.9);
+      }
+
+      .mat-calendar-body-label {
+        color: rgba(255, 255, 255, 0.7);
+      }
+    }
+  }
+}
+
 // Responsive
 @media (max-width: 768px) {
   .visit-tracking-container {
@@ -365,6 +513,15 @@
 
     .header-content h1 {
       font-size: 1.8rem;
+    }
+
+    .header-actions {
+      width: 100%;
+      justify-content: stretch;
+
+      button {
+        flex: 1;
+      }
     }
   }
 
@@ -380,11 +537,29 @@
     grid-template-columns: 1fr;
   }
 
-  .visits-table {
+  .action-bar mat-card-content {
+    flex-direction: column;
+    align-items: stretch;
+
+    .action-buttons,
+    .quick-filters {
+      width: 100%;
+      justify-content: stretch;
+
+      button {
+        flex: 1;
+      }
+    }
+  }
+
+  .visits-table,
+  .visits-mat-table {
     font-size: 0.8rem;
 
     thead th,
-    tbody td {
+    tbody td,
+    .mat-mdc-header-cell,
+    .mat-mdc-cell {
       padding: 0.5rem;
     }
   }

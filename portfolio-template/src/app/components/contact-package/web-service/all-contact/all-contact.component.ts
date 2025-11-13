@@ -64,7 +64,7 @@ export class AllContactComponent implements OnInit {
         this.isLoading = false;
       },
       error: (err) => {
-        console.error('Erreur lors du chargement des contacts', err);
+        // console.error('Erreur lors du chargement des contacts', err);
         this.isLoading = false;
       }
     });
@@ -78,7 +78,7 @@ export class AllContactComponent implements OnInit {
 
   viewDetails(contact: Contact): void {
     // À implémenter avec le composant de détail
-    console.log('Détails du contact:', contact);
+    // console.log('Détails du contact:', contact);
     // this.dialog.open(ContactDetailComponent, { data: contact });
   }
 
@@ -98,7 +98,7 @@ export class AllContactComponent implements OnInit {
             this.loadContacts();
           },
           error: (err) => {
-            console.error('Erreur lors de la suppression', err);
+            // console.error('Erreur lors de la suppression', err);
           }
         });
       }

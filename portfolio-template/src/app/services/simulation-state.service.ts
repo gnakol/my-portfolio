@@ -109,7 +109,7 @@ export class SimulationStateService {
     try {
       localStorage.setItem(this.STORAGE_KEY, JSON.stringify(state));
     } catch (error) {
-      console.error('Erreur lors de la sauvegarde de l\'état:', error);
+      // console.error('Erreur lors de la sauvegarde de l\'état:', error);
     }
   }
 
@@ -124,7 +124,7 @@ export class SimulationStateService {
         }
       }
     } catch (error) {
-      console.error('Erreur lors du chargement de l\'état:', error);
+      // console.error('Erreur lors du chargement de l\'état:', error);
     }
   }
 
@@ -132,7 +132,7 @@ export class SimulationStateService {
     try {
       localStorage.removeItem(this.STORAGE_KEY);
     } catch (error) {
-      console.error('Erreur lors du nettoyage du storage:', error);
+      // console.error('Erreur lors du nettoyage du storage:', error);
     }
   }
 

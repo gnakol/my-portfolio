@@ -10,10 +10,16 @@
         <p class="subtitle">Suivi des visites du portfolio</p>
       </div>
     </div>
-    <button mat-raised-button color="primary" (click)="exportToCSV()" *ngIf="selectedTab === 'visits'">
-      <mat-icon>download</mat-icon>
-      Exporter CSV
-    </button>
+    <div class="header-actions">
+      <button mat-raised-button color="primary" (click)="exportToCSV()" *ngIf="selectedTab === 'visits'">
+        <mat-icon>download</mat-icon>
+        Exporter CSV
+      </button>
+      <button mat-raised-button color="warn" (click)="purgeOldVisits(30)" *ngIf="selectedTab === 'visits'">
+        <mat-icon>delete_sweep</mat-icon>
+        Purge 30j
+      </button>
+    </div>
   </header>
 
   <!-- Loading -->
@@ -24,6 +30,7 @@
 
   <!-- Tabs -->
   <mat-tab-group *ngIf="!isLoading" class="tracking-tabs" (selectedIndexChange)="onTabChange($event)">
+
     <!-- TAB 1: Vue d'ensemble -->
     <mat-tab label="Vue d'ensemble">
       <div class="tab-content">
@@ -82,7 +89,7 @@
             <span class="badge">{{ recentVisitsCount }}</span>
           </mat-card-header>
           <mat-card-content>
-            <div class="visits-table-wrapper" *ngIf="stats?.recentVisits && stats.recentVisits.length > 0">
+            <div class="visits-table-wrapper" *ngIf="stats.recentVisits && stats.recentVisits.length > 0">
               <table class="visits-table">
                 <thead>
                   <tr>
@@ -104,7 +111,7 @@
                 </tbody>
               </table>
             </div>
-            <div *ngIf="!stats?.recentVisits || stats.recentVisits.length === 0" class="empty-state">
+            <div *ngIf="!stats.recentVisits || stats.recentVisits.length === 0" class="empty-state">
               <mat-icon>info</mat-icon>
               <p>Aucune visite dans les dernières 24h</p>
             </div>
@@ -116,10 +123,57 @@
     <!-- TAB 2: Toutes les visites -->
     <mat-tab label="Toutes les visites">
       <div class="tab-content">
+
+        <!-- Barre d'actions -->
+        <mat-card class="action-bar">
+          <div class="action-buttons">
+            <button mat-raised-button color="warn"
+                    (click)="deleteSelectedVisits()"
+                    [disabled]="selection.selected.length === 0">
+              <mat-icon>delete</mat-icon>
+              Supprimer ({{ selection.selected.length }})
+            </button>
+            <button mat-raised-button (click)="resetFilters()">
+              <mat-icon>clear_all</mat-icon>
+              Réinitialiser
+            </button>
+          </div>
+          <div class="quick-filters">
+            <button mat-button (click)="filterToday()">
+              <mat-icon>today</mat-icon>
+              Aujourd'hui
+            </button>
+            <button mat-button (click)="filterLast7Days()">
+              <mat-icon>date_range</mat-icon>
+              7 jours
+            </button>
+            <button mat-button (click)="filterLast30Days()">
+              <mat-icon>calendar_month</mat-icon>
+              30 jours
+            </button>
+          </div>
+        </mat-card>
+
         <!-- Filtres -->
         <mat-card class="filters-card">
           <mat-card-content>
             <div class="filters-grid">
+              <!-- Filtres temporels -->
+              <mat-form-field appearance="outline">
+                <mat-label>Date début</mat-label>
+                <input matInput [matDatepicker]="pickerStart" [(ngModel)]="startDate" (dateChange)="applyFilters()">
+                <mat-datepicker-toggle matSuffix [for]="pickerStart"></mat-datepicker-toggle>
+                <mat-datepicker #pickerStart></mat-datepicker>
+              </mat-form-field>
+
+              <mat-form-field appearance="outline">
+                <mat-label>Date fin</mat-label>
+                <input matInput [matDatepicker]="pickerEnd" [(ngModel)]="endDate" (dateChange)="applyFilters()">
+                <mat-datepicker-toggle matSuffix [for]="pickerEnd"></mat-datepicker-toggle>
+                <mat-datepicker #pickerEnd></mat-datepicker>
+              </mat-form-field>
+
+              <!-- Filtres texte -->
               <mat-form-field appearance="outline">
                 <mat-label>Pays</mat-label>
                 <input matInput [(ngModel)]="filterCountry" (keyup)="applyFilters()" placeholder="France, USA...">
@@ -137,51 +191,99 @@
                 <input matInput [(ngModel)]="filterPage" (keyup)="applyFilters()" placeholder="/projets, /cv...">
                 <mat-icon matSuffix>link</mat-icon>
               </mat-form-field>
-
-              <button mat-raised-button (click)="resetFilters()">
-                <mat-icon>clear</mat-icon>
-                Reset
-              </button>
             </div>
           </mat-card-content>
         </mat-card>
 
-        <!-- Table complète -->
+        <!-- Table avec MatTable + Pagination + Tri -->
         <mat-card class="visits-list-card">
           <mat-card-header>
             <h3>Toutes les visites ({{ filteredVisits.length }})</h3>
           </mat-card-header>
           <mat-card-content>
-            <div class="visits-table-wrapper" *ngIf="filteredVisits.length > 0">
-              <table class="visits-table full">
-                <thead>
-                  <tr>
-                    <th>ID</th>
-                    <th>Date</th>
-                    <th>Page</th>
-                    <th>Pays</th>
-                    <th>Device</th>
-                    <th>Browser</th>
-                    <th>OS</th>
-                    <th>Durée</th>
-                    <th>Referrer</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr *ngFor="let visit of filteredVisits">
-                    <td>{{ visit.idVisit }}</td>
-                    <td>{{ formatDate(visit.visitDate) }}</td>
-                    <td class="page-url">{{ visit.pageUrl }}</td>
-                    <td>{{ visit.country || 'N/A' }}</td>
-                    <td>{{ visit.deviceType || 'N/A' }}</td>
-                    <td>{{ visit.browser || 'N/A' }}</td>
-                    <td>{{ visit.operatingSystem || 'N/A' }}</td>
-                    <td>{{ formatDuration(visit.sessionDuration) }}</td>
-                    <td class="referrer">{{ visit.referrer || 'direct' }}</td>
-                  </tr>
-                </tbody>
+            <div class="table-container">
+              <table mat-table [dataSource]="dataSource" matSort class="visits-mat-table">
+
+                <!-- Colonne Checkbox -->
+                <ng-container matColumnDef="select">
+                  <th mat-header-cell *matHeaderCellDef>
+                    <mat-checkbox
+                      (change)="$event ? toggleAllRows() : null"
+                      [checked]="selection.hasValue() && isAllSelected()"
+                      [indeterminate]="selection.hasValue() && !isAllSelected()">
+                    </mat-checkbox>
+                  </th>
+                  <td mat-cell *matCellDef="let row">
+                    <mat-checkbox
+                      (click)="$event.stopPropagation()"
+                      (change)="$event ? selection.toggle(row) : null"
+                      [checked]="selection.isSelected(row)">
+                    </mat-checkbox>
+                  </td>
+                </ng-container>
+
+                <!-- Colonne ID -->
+                <ng-container matColumnDef="idVisit">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header> ID </th>
+                  <td mat-cell *matCellDef="let visit"> {{ visit.idVisit }} </td>
+                </ng-container>
+
+                <!-- Colonne Date -->
+                <ng-container matColumnDef="visitDate">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header> Date </th>
+                  <td mat-cell *matCellDef="let visit"> {{ formatDate(visit.visitDate) }} </td>
+                </ng-container>
+
+                <!-- Colonne Page -->
+                <ng-container matColumnDef="pageUrl">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header> Page </th>
+                  <td mat-cell *matCellDef="let visit" class="page-url"> {{ visit.pageUrl }} </td>
+                </ng-container>
+
+                <!-- Colonne Pays -->
+                <ng-container matColumnDef="country">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header> Pays </th>
+                  <td mat-cell *matCellDef="let visit"> {{ visit.country || 'N/A' }} </td>
+                </ng-container>
+
+                <!-- Colonne Device -->
+                <ng-container matColumnDef="deviceType">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header> Device </th>
+                  <td mat-cell *matCellDef="let visit"> {{ visit.deviceType || 'N/A' }} </td>
+                </ng-container>
+
+                <!-- Colonne Browser -->
+                <ng-container matColumnDef="browser">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header> Browser </th>
+                  <td mat-cell *matCellDef="let visit"> {{ visit.browser || 'N/A' }} </td>
+                </ng-container>
+
+                <!-- Colonne Durée -->
+                <ng-container matColumnDef="sessionDuration">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header> Durée </th>
+                  <td mat-cell *matCellDef="let visit"> {{ formatDuration(visit.sessionDuration) }} </td>
+                </ng-container>
+
+                <!-- Colonne Actions -->
+                <ng-container matColumnDef="actions">
+                  <th mat-header-cell *matHeaderCellDef> Actions </th>
+                  <td mat-cell *matCellDef="let visit">
+                    <button mat-icon-button color="warn" (click)="deleteVisit(visit)" matTooltip="Supprimer">
+                      <mat-icon>delete</mat-icon>
+                    </button>
+                  </td>
+                </ng-container>
+
+                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
               </table>
+
+              <mat-paginator [pageSizeOptions]="[10, 25, 50, 100]"
+                             showFirstLastButtons
+                             aria-label="Sélectionner une page">
+              </mat-paginator>
             </div>
+
             <div *ngIf="filteredVisits.length === 0" class="empty-state">
               <mat-icon>search_off</mat-icon>
               <p>Aucune visite trouvée avec ces filtres</p>
@@ -201,7 +303,7 @@
             <h3>Visites par Pays</h3>
           </mat-card-header>
           <mat-card-content>
-            <div class="chart-list" *ngIf="stats?.visitsByCountry && stats.visitsByCountry.length > 0">
+            <div class="chart-list" *ngIf="stats.visitsByCountry && stats.visitsByCountry.length > 0">
               <div class="chart-item" *ngFor="let item of stats.visitsByCountry">
                 <span class="label">{{ item.country }}</span>
                 <div class="bar-container">
@@ -220,7 +322,7 @@
             <h3>Pages les plus visitées</h3>
           </mat-card-header>
           <mat-card-content>
-            <div class="chart-list" *ngIf="stats?.visitsByPage && stats.visitsByPage.length > 0">
+            <div class="chart-list" *ngIf="stats.visitsByPage && stats.visitsByPage.length > 0">
               <div class="chart-item" *ngFor="let item of stats.visitsByPage">
                 <span class="label">{{ item.page }}</span>
                 <div class="bar-container">
@@ -239,7 +341,7 @@
             <h3>Devices</h3>
           </mat-card-header>
           <mat-card-content>
-            <div class="chart-list" *ngIf="stats?.visitsByDevice && stats.visitsByDevice.length > 0">
+            <div class="chart-list" *ngIf="stats.visitsByDevice && stats.visitsByDevice.length > 0">
               <div class="chart-item" *ngFor="let item of stats.visitsByDevice">
                 <span class="label">{{ item.device }}</span>
                 <div class="bar-container">
@@ -258,7 +360,7 @@
             <h3>Top Referrers</h3>
           </mat-card-header>
           <mat-card-content>
-            <div class="chart-list" *ngIf="stats?.topReferrers && stats.topReferrers.length > 0">
+            <div class="chart-list" *ngIf="stats.topReferrers && stats.topReferrers.length > 0">
               <div class="chart-item" *ngFor="let item of stats.topReferrers">
                 <span class="label">{{ item.referrer }}</span>
                 <div class="bar-container">
@@ -267,7 +369,7 @@
                 </div>
               </div>
             </div>
-            <div *ngIf="!stats?.topReferrers || stats.topReferrers.length === 0" class="empty-state">
+            <div *ngIf="!stats.topReferrers || stats.topReferrers.length === 0" class="empty-state">
               <mat-icon>info</mat-icon>
               <p>Aucun referrer externe détecté (visites directes uniquement)</p>
             </div>

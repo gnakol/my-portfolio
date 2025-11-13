@@ -167,5 +167,51 @@ public class BackupService {
         }
     }
 
+    /**
+     * Purge manuelle des backups antérieurs à X jours
+     */
+    public int purgeOldBackups(int days) {
+        if (days < 0) {
+            throw new IllegalArgumentException("Days must be positive");
+        }
+
+        Instant cutoff = Instant.now().minus(Duration.ofDays(days));
+        int count = 0;
+
+        // Purge files
+        try {
+            if (Files.exists(Path.of(backupDir))) {
+                Files.list(Path.of(backupDir))
+                        .filter(p -> {
+                            try {
+                                return Files.getLastModifiedTime(p).toInstant().isBefore(cutoff);
+                            } catch (Exception e) {
+                                return false;
+                            }
+                        })
+                        .forEach(p -> {
+                            try {
+                                Files.deleteIfExists(p);
+                                log.info("Deleted old backup file: {}", p);
+                            } catch (Exception e) {
+                                log.warn("Cannot delete {}: {}", p, e.getMessage());
+                            }
+                        });
+            }
+        } catch (Exception e) {
+            log.warn("Purge files error: {}", e.getMessage());
+        }
+
+        // Purge DB rows
+        try {
+            count = repo.deleteByRanAtBefore(cutoff);
+            log.info("Deleted {} old backup_log rows", count);
+        } catch (Exception e) {
+            log.warn("Purge DB rows error: {}", e.getMessage());
+        }
+
+        return count;
+    }
+
 }
 

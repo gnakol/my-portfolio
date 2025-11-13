@@ -32,7 +32,7 @@ export class AnimationEigrpComponent implements OnChanges {
   }
 
   runAnimation(animationType: string) {
-    console.log(`🎬 Lancement de l'animation EIGRP : ${animationType}`);
+    // console.log(`🎬 Lancement de l'animation EIGRP : ${animationType}`);
     this.resetNetworkState();
 
     switch (animationType) {
@@ -55,7 +55,7 @@ export class AnimationEigrpComponent implements OnChanges {
         this.networkState['pc2'] = 'pingSuccess';
         break;
       default:
-        console.warn(`⚠️ Aucune animation définie pour : ${animationType}`);
+        // console.warn(`⚠️ Aucune animation définie pour : ${animationType}`);
         break;
     }
 }

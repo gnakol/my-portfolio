@@ -1,6 +1,7 @@
 package fr.kolgna_sec.portfolio_api.visit.controller;
 
 import fr.kolgna_sec.portfolio_api.visit.dto.CreateVisitRequest;
+import fr.kolgna_sec.portfolio_api.visit.dto.DeleteVisitsBatchRequest;
 import fr.kolgna_sec.portfolio_api.visit.dto.VisitDTO;
 import fr.kolgna_sec.portfolio_api.visit.dto.VisitStatsDTO;
 import fr.kolgna_sec.portfolio_api.visit.service.VisitService;
@@ -12,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
@@ -107,6 +109,96 @@ public class VisitController {
             return ResponseEntity.ok(visits);
         } catch (Exception e) {
             log.error("❌ Erreur récupération visites", e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
+
+    // ========== NOUVEAUX ENDPOINTS DE GESTION ==========
+
+    /**
+     * Supprime une visite par son ID (ADMIN)
+     *
+     * DELETE /visits/{id}
+     * @param visitId ID de la visite à supprimer
+     * @return 204 No Content si succès
+     */
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteVisit(@PathVariable("id") Long visitId) {
+        log.info("🗑️ DELETE /visits/{}", visitId);
+
+        try {
+            visitService.deleteVisit(visitId);
+            return ResponseEntity.noContent().build();
+        } catch (RuntimeException e) {
+            log.error("❌ Visite introuvable: {}", e.getMessage());
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        } catch (Exception e) {
+            log.error("❌ Erreur suppression visite", e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
+
+    /**
+     * Supprime plusieurs visites en batch (ADMIN)
+     *
+     * DELETE /visits/batch
+     * @param request DeleteVisitsBatchRequest contenant la liste des IDs
+     * @return 204 No Content si succès
+     */
+    @DeleteMapping("/batch")
+    public ResponseEntity<Void> deleteVisitsInBatch(@RequestBody DeleteVisitsBatchRequest request) {
+        log.info("🗑️ DELETE /visits/batch - {} visites", request.getIds() != null ? request.getIds().size() : 0);
+
+        try {
+            visitService.deleteVisitsInBatch(request.getIds());
+            return ResponseEntity.noContent().build();
+        } catch (Exception e) {
+            log.error("❌ Erreur suppression batch", e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
+
+    /**
+     * Supprime toutes les visites antérieures à X jours (ADMIN - purge)
+     *
+     * DELETE /visits/older-than/{days}
+     * @param days Nombre de jours (ex: 30 pour supprimer tout ce qui a > 30 jours)
+     * @return Nombre de visites supprimées
+     */
+    @DeleteMapping("/older-than/{days}")
+    public ResponseEntity<Map<String, Object>> deleteVisitsOlderThan(@PathVariable("days") int days) {
+        log.info("🗑️ DELETE /visits/older-than/{}", days);
+
+        try {
+            int deletedCount = visitService.deleteVisitsOlderThan(days);
+            return ResponseEntity.ok(Map.of(
+                    "deletedCount", deletedCount,
+                    "message", deletedCount + " visite(s) supprimée(s)"
+            ));
+        } catch (IllegalArgumentException e) {
+            log.error("❌ Paramètre invalide: {}", e.getMessage());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        } catch (Exception e) {
+            log.error("❌ Erreur purge visites", e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
+
+    /**
+     * Récupère l'évolution temporelle des visites (ADMIN - analytics)
+     *
+     * GET /visits/stats/timeline
+     * @return Liste de {date, count}
+     */
+    @GetMapping("/stats/timeline")
+    public ResponseEntity<List<Map<String, Object>>> getVisitsTimeline() {
+        log.info("📈 GET /visits/stats/timeline");
+
+        try {
+            List<Map<String, Object>> timeline = visitService.getVisitsTimeline();
+            return ResponseEntity.ok(timeline);
+        } catch (Exception e) {
+            log.error("❌ Erreur récupération timeline", e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }

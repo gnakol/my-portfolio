@@ -72,7 +72,7 @@ export class AddTrainingsComponent implements OnInit {
         this.establishments = data.content || [];
       },
       error: (error) => {
-        console.error('Erreur lors du chargement des établissements :', error);
+        // console.error('Erreur lors du chargement des établissements :', error);
         this.snackBar.open('Impossible de charger les établissement.', 'Fermer', { duration: 3000 });
       }
     });
@@ -88,10 +88,10 @@ export class AddTrainingsComponent implements OnInit {
           this.accountService.getAccountIdByEmail(email).subscribe({
             next: (userId) => {
               this.accountId = userId;
-              console.log("✅ ID utilisateur chargé :", this.accountId);
+              // console.log("✅ ID utilisateur chargé :", this.accountId);
             },
             error: (error) => {
-              console.error("❌ Erreur récupération ID utilisateur :", error);
+              // console.error("❌ Erreur récupération ID utilisateur :", error);
               this.accountId = null;
             }
           });
@@ -100,8 +100,8 @@ export class AddTrainingsComponent implements OnInit {
 
   // ✅ Soumettre le formulaire
   onSubmit(): void {
-    console.log("Formulaire valide ?", this.trainingForm.valid);
-    console.log("Valeurs du formulaire :", this.trainingForm.value);
+    // console.log("Formulaire valide ?", this.trainingForm.valid);
+    // console.log("Valeurs du formulaire :", this.trainingForm.value);
 
     if (this.trainingForm.valid && this.accountId) {
         const trainingData = {
@@ -109,7 +109,7 @@ export class AddTrainingsComponent implements OnInit {
             account_id: this.accountId // ✅ Utilisation directe du formControlName
         };
 
-        console.log("🚀 Données envoyées au backend :", trainingData);
+        // console.log("🚀 Données envoyées au backend :", trainingData);
 
         this.trainingService.addTraining(trainingData).subscribe({
             next: () => {

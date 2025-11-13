@@ -100,5 +100,20 @@ export class ProjetsComponent {
     this.filteredProjects = category === 'all'
       ? this.projects
       : this.projects.filter(p => p.category === category);
+
+    // Scroll automatique vers les filtres (pour garder boutons + cards visibles)
+    setTimeout(() => {
+      const filtersSection = document.querySelector('.filters');
+      if (filtersSection) {
+        const yOffset = -20; // Petit décalage de 20px pour respirer
+        const elementPosition = filtersSection.getBoundingClientRect().top;
+        const offsetPosition = elementPosition + window.pageYOffset + yOffset;
+
+        window.scrollTo({
+          top: offsetPosition,
+          behavior: 'smooth'
+        });
+      }
+    }, 150);
   }
 }

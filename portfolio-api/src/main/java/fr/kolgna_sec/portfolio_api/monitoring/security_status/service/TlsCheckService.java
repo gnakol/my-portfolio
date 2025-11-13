@@ -83,4 +83,11 @@ public class TlsCheckService {
         out.addAll(this.securityStatusRepository.findTop5ByKindOrderByCheckedAtDesc("TLS"));
         return out;
     }
+
+    /**
+     * Récupère tout l'historique des checks TLS
+     */
+    public List<SecurityStatus> getAllHistory() {
+        return this.securityStatusRepository.findByKindOrderByCheckedAtDesc("TLS");
+    }
 }

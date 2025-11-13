@@ -134,6 +134,64 @@ public class VisitService {
                 .collect(Collectors.toList());
     }
 
+    // ========== NOUVELLES MÉTHODES DE GESTION (DELETE) ==========
+
+    /**
+     * Supprime une visite par son ID
+     */
+    @Transactional
+    public void deleteVisit(Long visitId) {
+        Visit visit = visitRepository.findById(visitId)
+                .orElseThrow(() -> new RuntimeException("Visit not found: " + visitId));
+
+        visitRepository.delete(visit);
+        log.info("🗑️ Visite supprimée: id={}", visitId);
+    }
+
+    /**
+     * Supprime plusieurs visites en batch
+     */
+    @Transactional
+    public void deleteVisitsInBatch(List<Long> visitIds) {
+        if (visitIds == null || visitIds.isEmpty()) {
+            log.warn("⚠️ Tentative de suppression batch avec liste vide");
+            return;
+        }
+
+        List<Visit> visits = visitRepository.findAllById(visitIds);
+        visitRepository.deleteAll(visits);
+        log.info("🗑️ Suppression batch: {} visites supprimées", visits.size());
+    }
+
+    /**
+     * Supprime toutes les visites antérieures à X jours
+     */
+    @Transactional
+    public int deleteVisitsOlderThan(int days) {
+        if (days < 0) {
+            throw new IllegalArgumentException("Le nombre de jours doit être positif");
+        }
+
+        LocalDateTime threshold = LocalDateTime.now().minusDays(days);
+        List<Visit> oldVisits = visitRepository.findByVisitDateBefore(threshold);
+
+        int count = oldVisits.size();
+        visitRepository.deleteAll(oldVisits);
+
+        log.info("🗑️ Purge: {} visites supprimées (> {} jours)", count, days);
+        return count;
+    }
+
+    /**
+     * Récupère l'évolution temporelle des visites (groupées par jour)
+     * Format retourné: [{date: "2025-01-01", count: 42}, ...]
+     */
+    @Transactional(readOnly = true)
+    public List<Map<String, Object>> getVisitsTimeline() {
+        List<Object[]> timelineData = visitRepository.countVisitsGroupedByDay();
+        return convertToMapList(timelineData, "date", "count");
+    }
+
     // ========== MÉTHODES UTILITAIRES ==========
 
     /**

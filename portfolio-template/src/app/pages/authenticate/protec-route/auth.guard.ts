@@ -36,7 +36,7 @@ export class AuthGuard implements CanActivate {
         if (error.status === 401) {
           this.router.navigate(['/login']);
         } else {
-          console.warn('Erreur réseau / serveur détectée:', error.message);
+          // console.warn('Erreur réseau / serveur détectée:', error.message);
         }
         return of(false);
       })

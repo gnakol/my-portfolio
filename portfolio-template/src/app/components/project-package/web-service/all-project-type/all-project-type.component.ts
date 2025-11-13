@@ -49,7 +49,7 @@ export class AllProjectTypeComponent implements OnInit {
         this.loading = false;
       },
       error: (err) => {
-        console.error('Erreur lors du chargement des types de projet :', err);
+        // console.error('Erreur lors du chargement des types de projet :', err);
         this.snackBar.open('Impossible de charger les types de projet', 'Fermer', { duration: 3000 });
         this.loading = false;
       }
@@ -64,7 +64,7 @@ export class AllProjectTypeComponent implements OnInit {
           this.projectTypes = this.projectTypes.filter(type => type.idProjectType !== id);
         },
         error: (error) => {
-          console.error('Erreur lors de la suppression :', error);
+          // console.error('Erreur lors de la suppression :', error);
           this.snackBar.open('Erreur lors de la suppression.', 'Fermer', { duration: 3000 });
         }
       });

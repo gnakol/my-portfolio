@@ -63,10 +63,10 @@ export class AddHobbiesComponent implements OnInit {
       this.accountService.getAccountIdByEmail(email).subscribe({
         next: (userId) => {
           this.accountId = userId;
-          console.log("✅ ID utilisateur chargé :", this.accountId);
+          // console.log("✅ ID utilisateur chargé :", this.accountId);
         },
         error: (error) => {
-          console.error("❌ Erreur récupération ID utilisateur :", error);
+          // console.error("❌ Erreur récupération ID utilisateur :", error);
           this.accountId = null;
         }
       });
@@ -83,18 +83,18 @@ export class AddHobbiesComponent implements OnInit {
         account_id: this.accountId // ✅ Associer l'utilisateur courant
       };
 
-      console.log("🚀 Données envoyées :", hobbyData);
+      // console.log("🚀 Données envoyées :", hobbyData);
 
       this.hobbiesService.createHobby(hobbyData).subscribe({
         next: (response) => {
-          console.log("✅ Réponse API :", response);
+          // console.log("✅ Réponse API :", response);
           this.snackBar.open('Centre d\'intérêt enregistré avec succès !', 'Fermer', { duration: 3000 });
           this.hobbyForm.reset();
           this.router.navigate(['/hobbies']);
 
         },
         error: (error) => {
-          console.error("❌ Erreur lors de l'ajout :", error);
+          // console.error("❌ Erreur lors de l'ajout :", error);
           this.snackBar.open('Erreur lors de l\'enregistrement du centre d\'intérêt.', 'Fermer', { duration: 3000 });
         }
       });

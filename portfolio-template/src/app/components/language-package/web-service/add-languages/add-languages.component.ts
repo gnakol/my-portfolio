@@ -66,10 +66,10 @@ export class AddLanguagesComponent implements OnInit {
       this.accountService.getAccountIdByEmail(email).subscribe({
         next: (userId) => {
           this.accountId = userId;
-          console.log("✅ ID utilisateur chargé :", this.accountId);
+          // console.log("✅ ID utilisateur chargé :", this.accountId);
         },
         error: (error) => {
-          console.error("❌ Erreur récupération ID utilisateur :", error);
+          // console.error("❌ Erreur récupération ID utilisateur :", error);
           this.accountId = null;
         }
       });
@@ -83,7 +83,7 @@ export class AddLanguagesComponent implements OnInit {
         ...this.languageForm.value,
         account_id: this.accountId
       };
-      console.log("🚀 Données envoyées :", languageData); 
+      // console.log("🚀 Données envoyées :", languageData); 
 
       this.languageService.createLanguage(languageData).subscribe({
         next: () => {
@@ -92,7 +92,7 @@ export class AddLanguagesComponent implements OnInit {
           this.router.navigate(['/languages']);
         },
         error: (error) => {
-          console.error("❌ Erreur lors de l'ajout :", error);
+          // console.error("❌ Erreur lors de l'ajout :", error);
           this.snackBar.open('Erreur lors de l\'enregistrement de la langue.', 'Fermer', { duration: 3000 });
         }
       });

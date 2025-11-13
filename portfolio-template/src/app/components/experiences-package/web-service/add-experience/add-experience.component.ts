@@ -75,7 +75,7 @@ export class AddExperienceComponent implements OnInit {
         this.experienceTypes = data.content || [];
       },
       error: (error) => {
-        console.error('Erreur lors du chargement des types d\'expérience :', error);
+        // console.error('Erreur lors du chargement des types d\'expérience :', error);
         this.snackBar.open('Impossible de charger les types d\'expériences.', 'Fermer', { duration: 3000 });
       }
     });
@@ -91,10 +91,10 @@ export class AddExperienceComponent implements OnInit {
         this.accountService.getAccountIdByEmail(email).subscribe({
           next: (userId) => {
             this.accountId = userId;
-            console.log("✅ ID utilisateur chargé :", this.accountId);
+            // console.log("✅ ID utilisateur chargé :", this.accountId);
           },
           error: (error) => {
-            console.error("❌ Erreur récupération ID utilisateur :", error);
+            // console.error("❌ Erreur récupération ID utilisateur :", error);
             this.accountId = null;
           }
         });

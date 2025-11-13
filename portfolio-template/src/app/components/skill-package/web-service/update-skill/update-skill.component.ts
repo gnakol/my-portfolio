@@ -112,7 +112,7 @@ export class UpdateSkillComponent implements OnInit {
         this.loading = false;
       },
       error: (error) => {
-        console.error('Erreur chargement catégories:', error);
+        // console.error('Erreur chargement catégories:', error);
         this.snackBar.open('Erreur lors du chargement des catégories', 'Fermer', { duration: 3000 });
         this.loading = false;
       }
@@ -157,7 +157,7 @@ export class UpdateSkillComponent implements OnInit {
         this.dialogRef.close(updatedSkill);
       },
       error: (error) => {
-        console.error('Erreur mise à jour:', error);
+        // console.error('Erreur mise à jour:', error);
         this.snackBar.open('Erreur lors de la mise à jour', 'Fermer', { duration: 3000 });
         this.saving = false;
       }

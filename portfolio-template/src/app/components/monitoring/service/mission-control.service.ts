@@ -5,6 +5,30 @@ import { Dashboard } from '../model/dashboard.model';
 import { environment } from '../../../../environments/environment';
 import { GenericMethodeService } from '../../../services/generic-methode.service';
 
+export interface SystemHealthMetric {
+  systemCpuLoad: number | null;
+  heapUsedBytes: number;
+  heapMaxBytes: number;
+  totalDiskBytes: number;
+  freeDiskBytes: number;
+}
+
+export interface TLSHistory {
+  kind: string;
+  target: string;
+  checkedAt: string;
+  daysLeft: number | null;
+  ok: boolean;
+  message: string;
+}
+
+export interface SLAStats {
+  uptimePercent: number;
+  totalChecks: number;
+  okChecks: number;
+  totalErrors5xx: number;
+}
+
 @Injectable({ providedIn: 'root' })
 export class MissionControlService {
   private readonly api = '/portfolio-api';
@@ -16,7 +40,7 @@ export class MissionControlService {
   ) {}
 
   getDashboard(): Observable<Dashboard> {
-    const headers = this.genericMethodeService.getHeaders(); 
+    const headers = this.genericMethodeService.getHeaders();
     return this.http.get<Dashboard>(`${this.apiUrl}/dashboard/status`, {headers});
   }
 
@@ -27,5 +51,62 @@ export class MissionControlService {
   checkTls(hostPort: string): Observable<any> {
     const params = new HttpParams().set('hostPort', hostPort);
     return this.http.post(`${this.api}/security-status/check-tls`, null, { params });
+  }
+
+  // ========== NOUVEAUX ENDPOINTS PHASE 1 ==========
+
+  /**
+   * Récupère la timeline des métriques système (X dernières heures)
+   */
+  getSystemHealthTimeline(hours: number = 24): Observable<SystemHealthMetric[]> {
+    const headers = this.genericMethodeService.getHeaders();
+    return this.http.get<SystemHealthMetric[]>(
+      `${this.apiUrl}/system-health/timeline?hours=${hours}`,
+      { headers }
+    );
+  }
+
+  /**
+   * Récupère l'historique des checks TLS
+   */
+  getSecurityHistory(): Observable<TLSHistory[]> {
+    const headers = this.genericMethodeService.getHeaders();
+    return this.http.get<TLSHistory[]>(
+      `${this.apiUrl}/security-status/history`,
+      { headers }
+    );
+  }
+
+  /**
+   * Purge les logs/backups anciens
+   */
+  purgeLogs(days: number): Observable<{ deletedCount: number; message: string }> {
+    const headers = this.genericMethodeService.getHeaders();
+    return this.http.delete<{ deletedCount: number; message: string }>(
+      `${this.apiUrl}/maintenance/logs/older-than/${days}`,
+      { headers }
+    );
+  }
+
+  /**
+   * Purge les snapshots système anciens
+   */
+  purgeSystemSnapshots(days: number): Observable<{ deletedCount: number; message: string }> {
+    const headers = this.genericMethodeService.getHeaders();
+    return this.http.delete<{ deletedCount: number; message: string }>(
+      `${this.apiUrl}/system-health/snapshots/older-than/${days}`,
+      { headers }
+    );
+  }
+
+  /**
+   * Récupère les stats SLA (uptime %)
+   */
+  getSLAStats(days: number = 30): Observable<SLAStats> {
+    const headers = this.genericMethodeService.getHeaders();
+    return this.http.get<SLAStats>(
+      `${this.apiUrl}/availability/sla?days=${days}`,
+      { headers }
+    );
   }
 }

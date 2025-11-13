@@ -11,5 +11,6 @@ import java.util.List;
 public interface SecurityStatusRepository extends JpaRepository<SecurityStatus, Long> {
 
     List<SecurityStatus> findTop5ByKindOrderByCheckedAtDesc(String kind);
+    List<SecurityStatus> findByKindOrderByCheckedAtDesc(String kind);
     int deleteByCheckedAtBefore(Instant cutoff);
 }
