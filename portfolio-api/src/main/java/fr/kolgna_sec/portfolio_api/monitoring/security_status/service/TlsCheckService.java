@@ -76,6 +76,21 @@ public class TlsCheckService {
             if (hp == null || hp.isBlank()) continue;
             checkOne(hp.trim());
         }
+        // Purge automatique après chaque check
+        purgeOldChecks();
+    }
+
+    /**
+     * Purge automatique: garde seulement les 50 derniers checks TLS
+     * (pour éviter l'accumulation infinie)
+     */
+    private void purgeOldChecks() {
+        List<SecurityStatus> allChecks = this.securityStatusRepository.findByKindOrderByCheckedAtDesc("TLS");
+        if (allChecks.size() > 50) {
+            // Garder les 50 plus récents, supprimer les autres
+            List<SecurityStatus> toDelete = allChecks.subList(50, allChecks.size());
+            this.securityStatusRepository.deleteAll(toDelete);
+        }
     }
 
     public List<SecurityStatus> latestSnapshot() {

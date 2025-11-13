@@ -115,8 +115,62 @@
 /* Classes pour les cartes du dashboard */
 .dashboard-card {
   transition: all 0.3s ease;
-  
+
   &:hover {
     transform: translateY(-2px);
+  }
+}
+
+/* Styles pour la table TLS (mode sombre) */
+::ng-deep {
+  .mat-mdc-table {
+    background: transparent !important;
+    color: #e2e8f0 !important;
+  }
+
+  .mat-mdc-header-row {
+    background: rgba(30, 41, 59, 0.6) !important;
+  }
+
+  .mat-mdc-header-cell {
+    color: #cbd5e1 !important;
+    font-weight: 600 !important;
+    border-bottom-color: rgba(71, 85, 105, 0.3) !important;
+  }
+
+  .mat-mdc-row {
+    background: rgba(15, 23, 42, 0.3) !important;
+    border-bottom-color: rgba(71, 85, 105, 0.2) !important;
+
+    &:hover {
+      background: rgba(30, 41, 59, 0.5) !important;
+    }
+  }
+
+  .mat-mdc-cell {
+    color: #cbd5e1 !important;
+    border-bottom-color: rgba(71, 85, 105, 0.2) !important;
+  }
+
+  .mat-mdc-paginator {
+    background: transparent !important;
+    color: #cbd5e1 !important;
+  }
+
+  .mat-mdc-paginator-container {
+    background: rgba(30, 41, 59, 0.3) !important;
+    border-radius: 0.75rem !important;
+  }
+
+  .mat-mdc-icon-button {
+    color: #94a3b8 !important;
+
+    &:hover {
+      color: #cbd5e1 !important;
+    }
+
+    &[disabled] {
+      color: #475569 !important;
+    }
   }
 }

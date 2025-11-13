@@ -86,7 +86,7 @@ cloud:
       accessKey: ${AWS_ACCESS_KEY}
       secretKey: ${AWS_SECRET_KEY}
     region:
-      static: eu-west-1
+      static: eu-north-1
     stack:
       auto: false
     # ✅ NOUVEAU: Configuration S3 spécifique (copié du local)
