@@ -49,7 +49,7 @@ export class AllTypeExperienceComponent implements OnInit {
         this.loading = false;
       },
       error: (err) => {
-        console.error('Erreur lors du chargement des types d\'expérience :', err);
+        // console.error('Erreur lors du chargement des types d\'expérience :', err);
         this.snackBar.open('Impossible de charger les types d\'expérience', 'Fermer', { duration: 3000 });
         this.loading = false;
       }
@@ -64,7 +64,7 @@ export class AllTypeExperienceComponent implements OnInit {
           this.experienceTypes = this.experienceTypes.filter(type => type.idExperienceType !== id);
         },
         error: (error) => {
-          console.error('Erreur lors de la suppression :', error);
+          // console.error('Erreur lors de la suppression :', error);
           this.snackBar.open('Erreur lors de la suppression.', 'Fermer', { duration: 3000 });
         }
       });

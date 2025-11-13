@@ -15,6 +15,6 @@ export class AppComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    console.log('📊 Visit tracking activé');
+    // console.log('📊 Visit tracking activé');
   }
 }

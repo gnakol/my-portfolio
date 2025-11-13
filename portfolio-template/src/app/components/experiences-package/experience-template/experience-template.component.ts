@@ -28,7 +28,7 @@ export class ExperienceTemplateComponent {
   }
 
   reloadData(): void {
-    console.log('Données rechargées !');
+    // console.log('Données rechargées !');
     // Ajoutez ici la logique pour recharger les données
   }
 }

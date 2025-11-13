@@ -20,7 +20,7 @@ const pdfMakeInstance: any = { ...pdfMake };
 pdfMakeInstance.vfs = pdfFonts?.pdfMake?.vfs || {};
 
 if (!pdfMakeInstance.vfs) {
-    console.error('pdfMake.vfs est indéfini.');
+    // console.error('pdfMake.vfs est indéfini.');
 }
 
 
@@ -74,7 +74,7 @@ export class PdfGeneratorComponent implements OnInit {
       ]);
       this.generatePdf(); // Ajout de cette ligne
     } catch (error) {
-      console.error("Erreur lors du chargement des données pour le PDF :", error);
+      // console.error("Erreur lors du chargement des données pour le PDF :", error);
     }
   }
 

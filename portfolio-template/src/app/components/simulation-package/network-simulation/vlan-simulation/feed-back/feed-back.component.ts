@@ -39,7 +39,7 @@ export class FeedBackComponent {
         this.dialogRef.close();
       },
       (error) => {
-        console.error('Erreur lors de l\'envoi du feedback :', error);
+        // console.error('Erreur lors de l\'envoi du feedback :', error);
         alert('Une erreur est survenue. Merci de réessayer.');
       }
     );

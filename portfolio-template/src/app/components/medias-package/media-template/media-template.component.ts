@@ -74,9 +74,9 @@ export class MediaTemplateComponent implements OnInit {
           ...persisted.map<GalleryItem>(m => ({ ...m, kind: this.toKindFromType(m.mediaType) })),
           ...locals
         ];
-        console.log('✅ Médias chargés (persistés):', persisted.length);
+        // console.log('✅ Médias chargés (persistés):', persisted.length);
       },
-      error: (err) => console.error('❌ Erreur chargement médias:', err)
+      // error: (err) => console.error('❌ Erreur chargement médias:', err)
     });
   }
 
@@ -118,7 +118,7 @@ export class MediaTemplateComponent implements OnInit {
 
   /** Survol -> choix tag -> si local: upload puis tag. Si déjà persisté: juste tag. */
   applyTag(media: GalleryItem, tag: 'lab' | 'schema reseau' | 'demo vlan'): void {
-    console.log(`🏷️ Tag demandé: ${tag} sur`, media);
+    // console.log(`🏷️ Tag demandé: ${tag} sur`, media);
 
     // Cas 1 : item déjà en DB (pas localOnly) -> juste tagger
     if (!media.localOnly) {
@@ -140,15 +140,15 @@ export class MediaTemplateComponent implements OnInit {
               ...updated,
               kind: this.toKindFromType(updated.mediaType)
             });
-            console.log('✅ Persisté + tag appliqué');
+            // console.log('✅ Persisté + tag appliqué');
           },
           error: (err) => {
-            console.error('❌ Erreur tag après upload:', err);
+            // console.error('❌ Erreur tag après upload:', err);
           }
         });
       },
       error: (err) => {
-        console.error('❌ Erreur upload (persist):', err);
+        // console.error('❌ Erreur upload (persist):', err);
       }
     });
   }
@@ -161,9 +161,9 @@ export class MediaTemplateComponent implements OnInit {
         media.kind = this.toKindFromType(updated.mediaType);
         // force refresh de l’URL signée potentiellement régénérée côté service (optionnel)
         media.url = updated.url || media.url;
-        console.log('✅ Tag appliqué sur média persisté');
+        // console.log('✅ Tag appliqué sur média persisté');
       },
-      error: (err) => console.error('❌ Erreur tag persisté:', err)
+      // error: (err) => console.error('❌ Erreur tag persisté:', err)
     });
   }
 
@@ -192,9 +192,9 @@ export class MediaTemplateComponent implements OnInit {
             ? ({ ...m, url: updated.url, fileName: updated.fileName })
             : m
         );
-        console.log('✅ Média remplacé:', updated.fileName);
+        // console.log('✅ Média remplacé:', updated.fileName);
       },
-      error: (err) => console.error('❌ Erreur update:', err)
+      // error: (err) => console.error('❌ Erreur update:', err)
     });
 
     input.value = '';
@@ -214,10 +214,10 @@ export class MediaTemplateComponent implements OnInit {
     if (confirm('Êtes-vous sûr de vouloir supprimer ce média ?')) {
       this.mediaService.deleteMedia(Number(item.mediaId)).subscribe({
         next: () => {
-          console.log('✅ Média supprimé');
+          // console.log('✅ Média supprimé');
           this.mediaList = this.mediaList.filter(m => m.mediaId !== item.mediaId);
         },
-        error: (err) => console.error('❌ Erreur delete:', err)
+        // error: (err) => console.error('❌ Erreur delete:', err)
       });
     }
   }
@@ -261,7 +261,7 @@ export class MediaTemplateComponent implements OnInit {
         this.mediaStream = stream;
         if (this.webcamVideo) this.webcamVideo.nativeElement.srcObject = stream;
       })
-      .catch(err => console.error('❌ Erreur accès webcam:', err));
+      // .catch(err => console.error('❌ Erreur accès webcam:', err));
   }
   triggerSnapshot(): void {
     if (!this.webcamVideo || !this.mediaStream) return;

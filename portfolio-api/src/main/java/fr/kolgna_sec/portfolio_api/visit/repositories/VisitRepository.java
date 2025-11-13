@@ -64,4 +64,15 @@ public interface VisitRepository extends JpaRepository<Visit, Long> {
      */
     @Query("SELECT v.referrer, COUNT(v) FROM Visit v WHERE v.referrer IS NOT NULL AND v.referrer != '' GROUP BY v.referrer ORDER BY COUNT(v) DESC")
     List<Object[]> findTopReferrers();
+
+    /**
+     * Trouve toutes les visites avant une date donnée
+     */
+    List<Visit> findByVisitDateBefore(LocalDateTime date);
+
+    /**
+     * Compte les visites groupées par jour
+     */
+    @Query("SELECT DATE(v.visitDate), COUNT(v) FROM Visit v GROUP BY DATE(v.visitDate) ORDER BY DATE(v.visitDate) DESC")
+    List<Object[]> countVisitsGroupedByDay();
 }

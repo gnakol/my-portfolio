@@ -47,7 +47,7 @@ export class AddProjectComponent implements OnInit {
         this.projectTypes = data.content || [];
       },
       error: (error) => {
-        console.error('Erreur lors du chargement des types de projet :', error);
+        // console.error('Erreur lors du chargement des types de projet :', error);
         this.snackBar.open('Impossible de charger les types de projets.', 'Fermer', { duration: 3000 });
       }
     });
@@ -62,10 +62,10 @@ export class AddProjectComponent implements OnInit {
       this.accountService.getAccountIdByEmail(email).subscribe({
         next: (userId) => {
           this.accountId = userId;
-          console.log("✅ ID utilisateur chargé :", this.accountId);
+          // console.log("✅ ID utilisateur chargé :", this.accountId);
         },
         error: (error) => {
-          console.error("❌ Erreur récupération ID utilisateur :", error);
+          // console.error("❌ Erreur récupération ID utilisateur :", error);
           this.accountId = null;
         }
       });

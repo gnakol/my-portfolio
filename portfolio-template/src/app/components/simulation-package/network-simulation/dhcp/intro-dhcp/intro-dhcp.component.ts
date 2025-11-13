@@ -56,10 +56,10 @@ export class IntroDhcpComponent {
     const route = this.getSimulationRoute();
     this.router.navigate([route]).then(success => {
       if (!success) {
-        console.error('Échec de la navigation vers', route);
+        // console.error('Échec de la navigation vers', route);
       }
     }).catch(err => {
-      console.error('Erreur de navigation:', err);
+      // console.error('Erreur de navigation:', err);
     });
   }
 

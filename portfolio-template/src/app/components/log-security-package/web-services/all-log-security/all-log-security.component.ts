@@ -67,7 +67,7 @@ onDeleteSelectedLogs(): void {
       this.loadLogs(); // Recharger les logs
     },
     error: (err) => {
-      console.error('Erreur lors de la suppression des logs :', err);
+      // console.error('Erreur lors de la suppression des logs :', err);
       alert('Une erreur est survenue lors de la suppression des logs.');
     }
   });

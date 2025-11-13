@@ -139,7 +139,7 @@ export class TerminalComponent implements OnInit, OnDestroy {
     if (this.simulationState.isSessionActive) {
       this.sessionId = this.simulationState.sessionId;
       this.currentStep = this.simulationState.currentStep;
-      console.log('Session restaurée:', this.sessionId, 'Step:', this.currentStep);
+      // console.log('Session restaurée:', this.sessionId, 'Step:', this.currentStep);
     } else {
       // Créer une nouvelle session
       this.startNewSession();
@@ -163,10 +163,10 @@ export class TerminalComponent implements OnInit, OnDestroy {
       next: (response) => {
         this.sessionId = response.sessionId;
         this.simulationState.initSession(response.sessionId);
-        console.log('Nouvelle session créée:', this.sessionId);
+        // console.log('Nouvelle session créée:', this.sessionId);
       },
       error: (error) => {
-        console.error('Erreur lors de la création de session:', error);
+        // console.error('Erreur lors de la création de session:', error);
         this.terminalOutput += '\n⚠️ Erreur de connexion au serveur. Mode hors-ligne activé.\n\n> ';
       }
     });
@@ -287,7 +287,7 @@ Initialisation de la configuration VLAN du terminal... Prêt.\n
           this.scrollToBottom();
         },
         error: (error) => {
-          console.error('Erreur lors de l\'envoi de commande:', error);
+          // console.error('Erreur lors de l\'envoi de commande:', error);
           this.errorSound.play();
           this.terminalOutput += '\n⚠️ Erreur serveur. Réessayez.\n\n> ';
           this.command = '';
@@ -371,7 +371,7 @@ Initialisation de la configuration VLAN du terminal... Prêt.\n
           setTimeout(() => this.openFeedbackDialog(), 2000);
         },
         error: (error) => {
-          console.error('Erreur lors de la fin de session:', error);
+          // console.error('Erreur lors de la fin de session:', error);
         }
       });
   }

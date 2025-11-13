@@ -28,7 +28,7 @@ export class ProjectTemplateComponent {
   }
 
   reloadData(): void {
-    console.log('Données des projets rechargées !');
+    // console.log('Données des projets rechargées !');
     // Ajoutez ici la logique pour recharger les données des projets
   }
 }

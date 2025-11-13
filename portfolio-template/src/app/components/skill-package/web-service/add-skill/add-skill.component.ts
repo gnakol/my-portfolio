@@ -70,7 +70,7 @@ export class AddSkillComponent implements OnInit {
         this.skillCategories = data.content || [];
       },
       error: (error) => {
-        console.error('Erreur lors du chargement des catégories de compétences :', error);
+        // console.error('Erreur lors du chargement des catégories de compétences :', error);
         this.snackBar.open('Impossible de charger les catégories de compétences.', 'Fermer', { duration: 3000 });
       }
     });
@@ -86,10 +86,10 @@ export class AddSkillComponent implements OnInit {
         this.accountService.getAccountIdByEmail(email).subscribe({
           next: (userId) => {
             this.accountId = userId;
-            console.log("✅ ID utilisateur chargé :", this.accountId);
+            // console.log("✅ ID utilisateur chargé :", this.accountId);
           },
           error: (error) => {
-            console.error("❌ Erreur récupération ID utilisateur :", error);
+            // console.error("❌ Erreur récupération ID utilisateur :", error);
             this.accountId = null;
           }
         });

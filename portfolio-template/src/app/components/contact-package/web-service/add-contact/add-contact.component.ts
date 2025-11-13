@@ -91,13 +91,13 @@ export class AddContactComponent {
   
       this.contactService.createContact(contactData).subscribe({
         next: (response) => {
-          console.log('Contact ajouté avec succès:', response);
+          // console.log('Contact ajouté avec succès:', response);
           this.contactSubmitted.emit(contactData);
           this.isSubmitting = false;
           this.dialogRef.close(contactData);
         },
         error: (error) => {
-          console.error('Erreur lors de l\'ajout du contact:', error);
+          // console.error('Erreur lors de l\'ajout du contact:', error);
           this.isSubmitting = false;
         }
       });

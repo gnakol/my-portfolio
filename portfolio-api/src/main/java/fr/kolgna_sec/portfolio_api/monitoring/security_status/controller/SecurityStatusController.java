@@ -38,4 +38,23 @@ public class SecurityStatusController {
                 .kind(s.getKind()).target(s.getTarget()).checkedAt(s.getCheckedAt())
                 .daysLeft(s.getDaysLeft()).ok(s.getOk()).message(s.getMessage()).build());
     }
+
+    /**
+     * Récupère l'historique complet des checks TLS
+     * GET /security-status/history
+     */
+    @GetMapping("/history")
+    public ResponseEntity<List<SecurityStatusDTO>> history() {
+        var history = this.tlsCheckService.getAllHistory().stream()
+                .map(s -> SecurityStatusDTO.builder()
+                        .kind(s.getKind())
+                        .target(s.getTarget())
+                        .checkedAt(s.getCheckedAt())
+                        .daysLeft(s.getDaysLeft())
+                        .ok(s.getOk())
+                        .message(s.getMessage())
+                        .build())
+                .toList();
+        return ResponseEntity.ok(history);
+    }
 }

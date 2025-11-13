@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import java.lang.management.ManagementFactory;
 import java.time.Duration;
 import java.time.Instant;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -59,6 +60,48 @@ public class AvailabilityService {
     @Scheduled(cron = "0 */5 * * * *")
     public void scheduledCheck() {
         checkNow();
+    }
+
+    /**
+     * Calcule les stats SLA (uptime %, erreurs, etc.)
+     */
+    public SLAStatsDTO calculateSLA(int days) {
+        Instant since = Instant.now().minus(Duration.ofDays(days));
+        List<AvailabilityStatus> snapshots = repo.findByCheckedAtAfter(since);
+
+        if (snapshots.isEmpty()) {
+            return SLAStatsDTO.builder()
+                    .uptimePercent(0.0)
+                    .totalChecks(0)
+                    .okChecks(0)
+                    .totalErrors5xx(0)
+                    .build();
+        }
+
+        int totalChecks = snapshots.size();
+        int okChecks = (int) snapshots.stream().filter(AvailabilityStatus::getOk).count();
+        int totalErrors = snapshots.stream().mapToInt(AvailabilityStatus::getErrors5xxLast5m).sum();
+
+        double uptimePercent = (okChecks * 100.0) / totalChecks;
+
+        return SLAStatsDTO.builder()
+                .uptimePercent(uptimePercent)
+                .totalChecks(totalChecks)
+                .okChecks(okChecks)
+                .totalErrors5xx(totalErrors)
+                .build();
+    }
+
+    /**
+     * DTO pour les stats SLA
+     */
+    @lombok.Data
+    @lombok.Builder
+    public static class SLAStatsDTO {
+        private Double uptimePercent;
+        private Integer totalChecks;
+        private Integer okChecks;
+        private Integer totalErrors5xx;
     }
 }
 

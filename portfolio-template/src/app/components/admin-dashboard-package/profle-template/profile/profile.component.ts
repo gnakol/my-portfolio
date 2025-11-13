@@ -93,15 +93,15 @@ export class ProfileComponent implements OnInit {
       return;
     }
   
-    console.log('Token envoyé:', this.authService.getToken()); // Vérifie que le token est bon
+    // console.log('Token envoyé:', this.authService.getToken()); // Vérifie que le token est bon
   
     this.accountService.uploadProfileImage(this.userId, file).subscribe({
       next: (url) => {
-        console.log('✅ Success!', url);
+        // console.log('✅ Success!', url);
         this.user.avatar = url;
       },
       error: (err) => {
-        console.error('🔥 Erreur complète:', err);
+        // console.error('🔥 Erreur complète:', err);
         if (err.status === 401) {
           alert('Session expirée, veuillez vous reconnecter');
           this.authService.logout();
@@ -131,7 +131,7 @@ export class ProfileComponent implements OnInit {
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
         // Optionnel: faire quelque chose si le mot de passe a été changé
-        console.log('Mot de passe changé avec succès');
+        // console.log('Mot de passe changé avec succès');
       }
     });
   }
@@ -148,11 +148,11 @@ export class ProfileComponent implements OnInit {
   
     this.accountService.uploadCv(this.userId, file).subscribe({
       next: (url) => {
-        console.log('✅ CV uploaded successfully:', url);
+        // console.log('✅ CV uploaded successfully:', url);
         alert('Ton CV a été mis à jour avec succès !');
       },
       error: (err) => {
-        console.error('🔥 Erreur upload CV:', err);
+        // console.error('🔥 Erreur upload CV:', err);
         alert('Une erreur est survenue pendant l’upload du CV.');
       }
     });

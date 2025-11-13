@@ -38,24 +38,24 @@ export class WebSocketService {
     
     this.stompClient = new Client({
       webSocketFactory: () => socket,
-      debug: (msg: string) => console.log('STOMP:', msg),
+      // debug: (msg: string) => console.log('STOMP:', msg),
       reconnectDelay: 5000,
       heartbeatIncoming: 4000,
       heartbeatOutgoing: 4000,
     });
 
     this.stompClient.onConnect = (frame) => {
-      console.log('✅ WebSocket CONNECTÉ avec succès:', frame);
+      // console.log('✅ WebSocket CONNECTÉ avec succès:', frame);
       this.connected.next(true);
 
       // S'abonner aux updates du dashboard
       this.stompClient?.subscribe('/topic/dashboard-updates', (message: IMessage) => {
         try {
           const update = JSON.parse(message.body);
-          console.log('📡 Update WebSocket reçu:', update);
+          // console.log('📡 Update WebSocket reçu:', update);
           this.dashboardUpdates.next(update);
         } catch (e) {
-          console.error('❌ Erreur parsing update:', e);
+          // console.error('❌ Erreur parsing update:', e);
         }
       });
 
@@ -63,37 +63,37 @@ export class WebSocketService {
       this.stompClient?.subscribe('/topic/alerts', (message: IMessage) => {
         try {
           const alert = JSON.parse(message.body);
-          console.log('🚨 Alerte WebSocket reçue:', alert);
+          // console.log('🚨 Alerte WebSocket reçue:', alert);
           this.alerts.next(alert);
           this.showAlertNotification(alert);
         } catch (e) {
-          console.error('❌ Erreur parsing alert:', e);
+          // console.error('❌ Erreur parsing alert:', e);
         }
       });
     };
 
     this.stompClient.onStompError = (frame) => {
-      console.error('❌ Erreur WebSocket:', frame);
+      // console.error('❌ Erreur WebSocket:', frame);
       this.connected.next(false);
     };
 
     this.stompClient.onWebSocketError = (error) => {
-      console.error('❌ Erreur WebSocket native:', error);
+      // console.error('❌ Erreur WebSocket native:', error);
       this.connected.next(false);
     };
 
     this.stompClient.onDisconnect = () => {
-      console.log('🔌 WebSocket déconnecté');
+      // console.log('🔌 WebSocket déconnecté');
       this.connected.next(false);
     };
 
     this.stompClient.activate();
-    console.log('🔄 Activation WebSocket en cours...');
+    // console.log('🔄 Activation WebSocket en cours...');
   }
 
   disconnect(): void {
     if (this.stompClient) {
-      console.log('🔌 Déconnexion WebSocket manuelle');
+      // console.log('🔌 Déconnexion WebSocket manuelle');
       this.stompClient.deactivate();
       this.connected.next(false);
     }
@@ -124,6 +124,6 @@ export class WebSocketService {
     }
 
     // Notification dans la console
-    console.log(`🚨 ALERTE ${alert.level}: ${alert.message}`);
+    // console.log(`🚨 ALERTE ${alert.level}: ${alert.message}`);
   }
 }

@@ -86,9 +86,9 @@ export class VisitTrackingService {
       next: (visit) => {
         this.currentVisitId = visit.idVisit;
         this.sessionStartTime = Date.now();
-        console.log('✅ Visite trackée:', visit.idVisit, pageUrl);
+        // console.log('✅ Visite trackée:', visit.idVisit, pageUrl);
       },
-      error: (err) => console.error('❌ Erreur tracking visite:', err)
+      // error: (err) => console.error('❌ Erreur tracking visite:', err)
     });
   }
 
@@ -100,8 +100,8 @@ export class VisitTrackingService {
       if (this.currentVisitId) {
         const duration = Math.floor((Date.now() - this.sessionStartTime) / 1000);
         this.updateSessionDuration(this.currentVisitId, duration).subscribe({
-          next: () => console.log(`⏱️ Session duration: ${duration}s`),
-          error: (err) => console.error('❌ Erreur heartbeat:', err)
+          // next: () => console.log(`⏱️ Session duration: ${duration}s`),
+          // error: (err) => console.error('❌ Erreur heartbeat:', err)
         });
       }
     });
@@ -140,6 +140,40 @@ export class VisitTrackingService {
    */
   getAllVisits(): Observable<VisitDTO[]> {
     return this.http.get<VisitDTO[]>(this.visitsUrl);
+  }
+
+  // ========== NOUVELLES MÉTHODES DE GESTION ==========
+
+  /**
+   * Supprime une visite par son ID (ADMIN)
+   */
+  deleteVisit(visitId: number): Observable<void> {
+    return this.http.delete<void>(`${this.visitsUrl}/${visitId}`);
+  }
+
+  /**
+   * Supprime plusieurs visites en batch (ADMIN)
+   */
+  deleteVisitsInBatch(visitIds: number[]): Observable<void> {
+    return this.http.delete<void>(`${this.visitsUrl}/batch`, {
+      body: { ids: visitIds }
+    });
+  }
+
+  /**
+   * Supprime toutes les visites antérieures à X jours (ADMIN)
+   */
+  deleteVisitsOlderThan(days: number): Observable<{ deletedCount: number; message: string }> {
+    return this.http.delete<{ deletedCount: number; message: string }>(
+      `${this.visitsUrl}/older-than/${days}`
+    );
+  }
+
+  /**
+   * Récupère l'évolution temporelle des visites (ADMIN)
+   */
+  getVisitsTimeline(): Observable<Array<{ date: string; count: number }>> {
+    return this.http.get<Array<{ date: string; count: number }>>(`${this.visitsUrl}/stats/timeline`);
   }
 
   /**

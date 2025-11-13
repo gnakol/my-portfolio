@@ -39,7 +39,7 @@ export class FooterComponent {
     
         dialogRef.afterClosed().subscribe(result => {
           if (result) {
-            console.log('Contact ajouté:', result);
+            // console.log('Contact ajouté:', result);
             // Ici tu peux ajouter la logique pour sauvegarder le contact
           }
         });

@@ -61,12 +61,12 @@ export class PingSimulationsComponent {
 
     this.simulationService.executePing(cleanedIpAddress).subscribe(
         (response) => {
-            console.log('🟢 Réponse du backend : ', response);
+            // console.log('🟢 Réponse du backend : ', response);
             this.pingResult = response.expectedResult || 'Aucun résultat retourné.';
             this.ipAddress = '';
         },
         (error) => {
-            console.error('🔴 Erreur lors de la requête : ', error);
+            // console.error('🔴 Erreur lors de la requête : ', error);
             this.pingResult = 'Erreur : ' + error.message;
             this.ipAddress = '';
         }

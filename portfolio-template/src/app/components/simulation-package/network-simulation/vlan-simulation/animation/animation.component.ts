@@ -36,7 +36,7 @@ export class AnimationComponent implements OnChanges {
   }
 
   runAnimation(animationType: string) {
-    console.log(`🎬 Lancement de l'animation : ${animationType}`);
+    // console.log(`🎬 Lancement de l'animation : ${animationType}`);
     this.resetNetworkState();
 
     switch (animationType) {
@@ -59,7 +59,7 @@ export class AnimationComponent implements OnChanges {
         this.networkState['switch'] = 'vlan10';
         break;
       default:
-        console.warn(`⚠️ Aucune animation définie pour : ${animationType}`);
+        // console.warn(`⚠️ Aucune animation définie pour : ${animationType}`);
         break;
     }
 }

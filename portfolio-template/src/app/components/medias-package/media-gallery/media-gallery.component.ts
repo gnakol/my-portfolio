@@ -51,10 +51,10 @@ export class MediaGalleryComponent implements OnInit {
       next: (media) => {
         this.mediaList = media;
         this.isLoading = false;
-        console.log(`✅ ${media.length} médias chargés pour tag="${this.tag}"`);
+        // console.log(`✅ ${media.length} médias chargés pour tag="${this.tag}"`);
       },
       error: (err) => {
-        console.error('❌ Erreur chargement médias publics:', err);
+        // console.error('❌ Erreur chargement médias publics:', err);
         this.isLoading = false;
       }
     });

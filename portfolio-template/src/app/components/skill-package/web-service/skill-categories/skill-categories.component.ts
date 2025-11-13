@@ -45,7 +45,7 @@ export class SkillCategoriesComponent implements OnInit {
         this.loading = false;
       },
       error: (error) => {
-        console.error('Erreur lors du chargement des catégories:', error);
+        // console.error('Erreur lors du chargement des catégories:', error);
         this.snackBar.open('Impossible de charger les catégories', 'Fermer', { duration: 3000 });
         this.loading = false;
       }

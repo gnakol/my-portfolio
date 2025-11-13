@@ -59,7 +59,7 @@ export class SkillDetailComponent implements OnInit {
         }
       },
       error: (error) => {
-        console.error('Error loading skill:', error);
+        // console.error('Error loading skill:', error);
         this.snackBar.open('Erreur lors du chargement', 'Fermer', { duration: 3000 });
         this.loading = false;
       }
@@ -73,7 +73,7 @@ export class SkillDetailComponent implements OnInit {
         this.loading = false;
       },
       error: (error) => {
-        console.error('Error loading category:', error);
+        // console.error('Error loading category:', error);
         this.loading = false;
       }
     });
