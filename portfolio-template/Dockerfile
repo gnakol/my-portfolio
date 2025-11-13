@@ -4,7 +4,8 @@ WORKDIR /app
 
 # Déps d'abord (cache optimal)
 COPY package*.json ./
-RUN npm ci
+# ⚠️ Fix conflit apexcharts / ng-apexcharts
+RUN npm ci --legacy-peer-deps
 
 RUN node -v && npm -v
 RUN npx ng version || true
