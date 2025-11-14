@@ -61,16 +61,15 @@ public class PrometheusMetricsService {
         try {
             log.info("🔍 Querying Prometheus: {} at timestamp {}", query, timestamp);
 
-            String fullUrl = "http://kps-kube-prometheus-stack-prometheus.monitoring.svc.cluster.local:9090/api/v1/query?query=" +
-                    URLEncoder.encode(query, StandardCharsets.UTF_8) + "&time=" + timestamp;
-
-            log.info("🔗 Full URL: {}", fullUrl);
-
             String response = webClient.get()
-                    .uri(fullUrl)  // ⬅️ Utilise l'URL complète plutôt que uriBuilder
+                    .uri(uriBuilder -> uriBuilder
+                            .path("/api/v1/query")
+                            .queryParam("query", query)
+                            .queryParam("time", timestamp)
+                            .build())  // ⬅️ ENLÈVE le "true" pour éviter le double encodage
                     .retrieve()
                     .bodyToMono(String.class)
-                    .timeout(Duration.ofSeconds(10))  // ⬅️ Augmente le timeout
+                    .timeout(Duration.ofSeconds(10))
                     .block();
 
             if (response == null) {
@@ -92,7 +91,6 @@ public class PrometheusMetricsService {
             }
 
             log.warn("⚠️ No result from Prometheus for query: {}", query);
-            log.warn("⚠️ Full response was: {}", response);
             return Optional.empty();
 
         } catch (Exception e) {
