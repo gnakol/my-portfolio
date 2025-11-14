@@ -59,6 +59,9 @@ cloud:
       bucket: ${AWS_S3_BUCKET:kolie-portfolio-profile}
       mediaFolder: media/
 
+prometheus:
+  url: http://localhost:9090
+
 management:
   endpoints:
     web:

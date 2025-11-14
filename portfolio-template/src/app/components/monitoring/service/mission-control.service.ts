@@ -29,6 +29,13 @@ export interface SLAStats {
   totalErrors5xx: number;
 }
 
+export interface K8sMetrics {
+  podsCount: number;
+  totalRamBytes: number;
+  totalRamMB: number;
+  totalRamGB: string;
+}
+
 @Injectable({ providedIn: 'root' })
 export class MissionControlService {
   private readonly api = '/portfolio-api';
@@ -106,6 +113,17 @@ export class MissionControlService {
     const headers = this.genericMethodeService.getHeaders();
     return this.http.get<SLAStats>(
       `${this.apiUrl}/availability/sla?days=${days}`,
+      { headers }
+    );
+  }
+
+  /**
+   * Récupère les métriques Kubernetes depuis Prometheus
+   */
+  getK8sMetrics(): Observable<K8sMetrics> {
+    const headers = this.genericMethodeService.getHeaders();
+    return this.http.get<K8sMetrics>(
+      `${this.apiUrl}/system-health/k8s-metrics`,
       { headers }
     );
   }

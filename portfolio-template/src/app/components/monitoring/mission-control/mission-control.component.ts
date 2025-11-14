@@ -1,6 +1,6 @@
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { Dashboard } from '../model/dashboard.model';
-import { MissionControlService, SystemHealthMetric, TLSHistory, SLAStats } from '../service/mission-control.service';
+import { MissionControlService, SystemHealthMetric, TLSHistory, SLAStats, K8sMetrics } from '../service/mission-control.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { environment } from '../../../../environments/environment';
@@ -70,6 +70,7 @@ export class MissionControlComponent implements OnInit, OnDestroy {
   systemTimeline: SystemHealthMetric[] = [];
   tlsHistory: TLSHistory[] = [];
   slaStats: SLAStats | null = null;
+  k8sMetrics: K8sMetrics | null = null;
 
   // Table TLS
   tlsDataSource = new MatTableDataSource<TLSHistory>([]);
@@ -109,6 +110,7 @@ export class MissionControlComponent implements OnInit, OnDestroy {
     this.loadTimeline();
     this.loadTLSHistory();
     this.loadSLAStats();
+    this.loadK8sMetrics();
     this.setupWebSocket();
   }
 
@@ -223,6 +225,17 @@ export class MissionControlComponent implements OnInit, OnDestroy {
       },
       error: (err) => {
         // console.error('❌ Erreur chargement SLA stats:', err);
+      }
+    });
+  }
+
+  loadK8sMetrics(): void {
+    this.api.getK8sMetrics().subscribe({
+      next: (metrics) => {
+        this.k8sMetrics = metrics;
+      },
+      error: (err) => {
+        // console.error('❌ Erreur chargement K8s metrics:', err);
       }
     });
   }
