@@ -55,7 +55,8 @@ public class PrometheusMetricsService {
      */
     private Optional<Double> executeQuery(String query) {
         try {
-            // Utilise build(true) pour encoder correctement les caractères spéciaux
+            log.info("🔍 Querying Prometheus: {}", query);
+
             String response = webClient.get()
                     .uri(uriBuilder -> uriBuilder
                             .path("/api/v1/query")
@@ -71,20 +72,24 @@ public class PrometheusMetricsService {
                 return Optional.empty();
             }
 
+            log.info("📄 Prometheus response: {}", response);
+
             // Parse JSON response
             JsonNode root = objectMapper.readTree(response);
             JsonNode result = root.path("data").path("result");
 
             if (result.isArray() && result.size() > 0) {
                 String valueStr = result.get(0).path("value").get(1).asText();
-                return Optional.of(Double.parseDouble(valueStr));
+                double value = Double.parseDouble(valueStr);
+                log.info("✅ Parsed value: {}", value);
+                return Optional.of(value);
             }
 
             log.debug("ℹ️ No result from Prometheus for query: {}", query);
             return Optional.empty();
 
         } catch (Exception e) {
-            log.error("❌ Error querying Prometheus: query={}, error={}", query, e.getMessage());
+            log.error("❌ Error querying Prometheus: query={}, error={}", query, e.getMessage(), e);
             return Optional.empty();
         }
     }
