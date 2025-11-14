@@ -37,7 +37,7 @@ server:
     context-path: /portfolio-api
   # ✅ NOUVEAU: Configuration Tomcat pour gros fichiers (copié du local)
   tomcat:
-    max-swallow-size: -1            # illimité (évite les erreurs de parsing body)
+    max-swallow-size: -1            # 
     max-http-post-size: 524288000   # 500MB (524288000 bytes) - CRITIQUE pour les uploads
     connection-timeout: 60s
 
@@ -45,7 +45,6 @@ management:
   endpoints:
     web:
       base-path: /actuator
-      # ✅ NOUVEAU: Exposition des endpoints env/configprops (copié du local)
       exposure:
         include: health,info,prometheus,metrics,env,configprops
   endpoint:
