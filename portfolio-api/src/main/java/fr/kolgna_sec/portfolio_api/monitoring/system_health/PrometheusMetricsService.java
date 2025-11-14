@@ -61,15 +61,20 @@ public class PrometheusMetricsService {
         try {
             log.info("🔍 Querying Prometheus: {} at timestamp {}", query, timestamp);
 
-            // Encode seulement les guillemets pour éviter l'erreur d'expansion
-            String encodedQuery = query.replace("\"", "%22");
+            // Encode MANUELLEMENT toute la query comme le fait curl
+            String encodedQuery = java.net.URLEncoder.encode(query, "UTF-8");
+
+            // Construit l'URL complète MANUELLEMENT
+            String fullUrl = String.format(
+                    "http://kps-kube-prometheus-stack-prometheus.monitoring.svc.cluster.local:9090/api/v1/query?query=%s&time=%d",
+                    encodedQuery,
+                    timestamp
+            );
+
+            log.info("🔗 Full URL: {}", fullUrl);
 
             String response = webClient.get()
-                    .uri(uriBuilder -> uriBuilder
-                            .path("/api/v1/query")
-                            .queryParam("query", encodedQuery)  // ⬅️ Utilise la query encodée
-                            .queryParam("time", timestamp)
-                            .build())
+                    .uri(fullUrl)  // ⬅️ Utilise l'URL complète déjà encodée
                     .retrieve()
                     .bodyToMono(String.class)
                     .timeout(Duration.ofSeconds(10))
