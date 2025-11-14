@@ -88,7 +88,7 @@ cloud:
       static: eu-north-1
     stack:
       auto: false
-    # ✅ NOUVEAU: Configuration S3 spécifique (copié du local)
+    # ✅ NOUVEAU: Configuration S3 spécifique
     s3:
       bucket: ${AWS_S3_BUCKET:kolie-portfolio-profile}
       mediaFolder: media/

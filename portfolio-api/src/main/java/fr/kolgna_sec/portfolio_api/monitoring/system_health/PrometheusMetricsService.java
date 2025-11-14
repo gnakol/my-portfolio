@@ -34,8 +34,9 @@ public class PrometheusMetricsService {
      * Compte le nombre de pods actifs dans le namespace portfolio
      */
     public int getPodsCount() {
+        long timestamp = System.currentTimeMillis() / 1000; // timestamp en secondes
         String query = "count(kube_pod_info{namespace=\"portfolio\",pod=~\"portfolio.*|mysql.*|nginx.*\"})";
-        return executeQuery(query)
+        return executeQuery(query, timestamp)
                 .map(value -> (int) Math.round(value))
                 .orElse(0);
     }
@@ -44,8 +45,9 @@ public class PrometheusMetricsService {
      * Récupère la RAM totale consommée par les pods (en bytes)
      */
     public long getTotalPodsRamBytes() {
+        long timestamp = System.currentTimeMillis() / 1000; // timestamp en secondes
         String query = "sum(container_memory_working_set_bytes{namespace=\"portfolio\",container!=\"\",container!=\"POD\"})";
-        return executeQuery(query)
+        return executeQuery(query, timestamp)
                 .map(Math::round)
                 .orElse(0L);
     }
@@ -53,14 +55,15 @@ public class PrometheusMetricsService {
     /**
      * Exécute une query PromQL et retourne le résultat scalaire
      */
-    private Optional<Double> executeQuery(String query) {
+    private Optional<Double> executeQuery(String query, long timestamp) {  // ⬅️ AJOUTE timestamp EN PARAMÈTRE
         try {
-            log.info("🔍 Querying Prometheus: {}", query);
+            log.info("🔍 Querying Prometheus: {} at timestamp {}", query, timestamp);
 
             String response = webClient.get()
                     .uri(uriBuilder -> uriBuilder
                             .path("/api/v1/query")
                             .queryParam("query", query)
+                            .queryParam("time", timestamp) // ⬅️ AJOUTE CE TIMESTAMP
                             .build(true))
                     .retrieve()
                     .bodyToMono(String.class)
