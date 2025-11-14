@@ -196,6 +196,51 @@
 
     </div>
 
+    <!-- ========== SECTION K8S METRICS (Prometheus) ========== -->
+    <div class="grid gap-6 xl:grid-cols-2 md:grid-cols-2">
+
+      <!-- Card Pods Count -->
+      <div class="rounded-2xl p-6 bg-gradient-to-br from-emerald-900/10 to-emerald-800/5 ring-1 ring-emerald-700/40 backdrop-blur-sm hover:ring-emerald-400/50 transition-all duration-300 group dashboard-card">
+        <div class="flex items-center justify-between mb-4">
+          <div class="flex items-center gap-2">
+            <div class="w-2 h-2 bg-emerald-400 rounded-full animate-pulse"></div>
+            <h3 class="font-semibold text-lg text-emerald-300">Kubernetes Pods</h3>
+          </div>
+          <div class="text-3xl font-bold text-emerald-400">
+            {{ k8sMetrics?.podsCount ?? '-' }}
+          </div>
+        </div>
+        <div class="flex items-center gap-2 text-xs text-emerald-200/70 mt-4">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+          </svg>
+          <span>Pods actifs dans le namespace portfolio</span>
+        </div>
+        <div class="text-[10px] text-slate-500 mt-2">Source: Prometheus</div>
+      </div>
+
+      <!-- Card Total RAM Pods -->
+      <div class="rounded-2xl p-6 bg-gradient-to-br from-amber-900/10 to-amber-800/5 ring-1 ring-amber-700/40 backdrop-blur-sm hover:ring-amber-400/50 transition-all duration-300 group dashboard-card">
+        <div class="flex items-center justify-between mb-4">
+          <div class="flex items-center gap-2">
+            <div class="w-2 h-2 bg-amber-400 rounded-full animate-pulse"></div>
+            <h3 class="font-semibold text-lg text-amber-300">Total RAM Pods</h3>
+          </div>
+          <div class="text-3xl font-bold text-amber-400">
+            {{ k8sMetrics?.totalRamGB ?? '-' }} GB
+          </div>
+        </div>
+        <div class="flex items-center gap-2 text-xs text-amber-200/70 mt-4">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path>
+          </svg>
+          <span>RAM totale consommée ({{ k8sMetrics?.totalRamMB ?? 0 }} MB)</span>
+        </div>
+        <div class="text-[10px] text-slate-500 mt-2">Source: Prometheus</div>
+      </div>
+
+    </div>
+
     <!-- ========== SECTION 2: GRAPHIQUES TIMELINE 24H ========== -->
     <div class="grid gap-6 xl:grid-cols-3 md:grid-cols-1">
 

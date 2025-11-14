@@ -14,6 +14,7 @@ import java.util.Map;
 public class SystemHealthController {
 
     private final SystemHealthService service;
+    private final PrometheusMetricsService prometheusService;
 
     /**
      * Récupère le snapshot système actuel
@@ -53,6 +54,23 @@ public class SystemHealthController {
         return ResponseEntity.ok(Map.of(
                 "deletedCount", deletedCount,
                 "message", deletedCount + " snapshot(s) supprimé(s)"
+        ));
+    }
+
+    /**
+     * Récupère les métriques Kubernetes depuis Prometheus
+     * GET /system-health/k8s-metrics
+     */
+    @GetMapping("/k8s-metrics")
+    public ResponseEntity<Map<String, Object>> getKubernetesMetrics() {
+        int podsCount = prometheusService.getPodsCount();
+        long totalRamBytes = prometheusService.getTotalPodsRamBytes();
+
+        return ResponseEntity.ok(Map.of(
+                "podsCount", podsCount,
+                "totalRamBytes", totalRamBytes,
+                "totalRamMB", totalRamBytes / (1024 * 1024),
+                "totalRamGB", String.format("%.2f", totalRamBytes / (1024.0 * 1024.0 * 1024.0))
         ));
     }
 }

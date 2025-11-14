@@ -94,6 +94,10 @@ cloud:
       bucket: ${AWS_S3_BUCKET:kolie-portfolio-profile}
       mediaFolder: media/
 
+# Configuration Prometheus (accessible via port-forward ou service interne K8s)
+prometheus:
+  url: ${PROMETHEUS_URL:http://localhost:9090}
+
 # Configuration personnalisée pour le nettoyage des tokens
 token:
   cleanup:
