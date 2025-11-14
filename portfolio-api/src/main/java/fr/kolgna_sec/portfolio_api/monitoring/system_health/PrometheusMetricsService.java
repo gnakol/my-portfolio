@@ -55,11 +55,12 @@ public class PrometheusMetricsService {
      */
     private Optional<Double> executeQuery(String query) {
         try {
+            // Utilise build(true) pour encoder correctement les caractères spéciaux
             String response = webClient.get()
                     .uri(uriBuilder -> uriBuilder
                             .path("/api/v1/query")
                             .queryParam("query", query)
-                            .build())
+                            .build(true))
                     .retrieve()
                     .bodyToMono(String.class)
                     .timeout(Duration.ofSeconds(5))
