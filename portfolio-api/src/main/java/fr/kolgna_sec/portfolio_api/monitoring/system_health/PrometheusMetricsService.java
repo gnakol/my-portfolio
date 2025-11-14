@@ -7,6 +7,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.time.Duration;
 import java.util.Optional;
 
@@ -55,19 +57,20 @@ public class PrometheusMetricsService {
     /**
      * Exécute une query PromQL et retourne le résultat scalaire
      */
-    private Optional<Double> executeQuery(String query, long timestamp) {  // ⬅️ AJOUTE timestamp EN PARAMÈTRE
+    private Optional<Double> executeQuery(String query, long timestamp) {
         try {
             log.info("🔍 Querying Prometheus: {} at timestamp {}", query, timestamp);
 
+            String fullUrl = "http://kps-kube-prometheus-stack-prometheus.monitoring.svc.cluster.local:9090/api/v1/query?query=" +
+                    URLEncoder.encode(query, StandardCharsets.UTF_8) + "&time=" + timestamp;
+
+            log.info("🔗 Full URL: {}", fullUrl);
+
             String response = webClient.get()
-                    .uri(uriBuilder -> uriBuilder
-                            .path("/api/v1/query")
-                            .queryParam("query", query)
-                            .queryParam("time", timestamp) // ⬅️ AJOUTE CE TIMESTAMP
-                            .build(true))
+                    .uri(fullUrl)  // ⬅️ Utilise l'URL complète plutôt que uriBuilder
                     .retrieve()
                     .bodyToMono(String.class)
-                    .timeout(Duration.ofSeconds(5))
+                    .timeout(Duration.ofSeconds(10))  // ⬅️ Augmente le timeout
                     .block();
 
             if (response == null) {
@@ -88,7 +91,8 @@ public class PrometheusMetricsService {
                 return Optional.of(value);
             }
 
-            log.debug("ℹ️ No result from Prometheus for query: {}", query);
+            log.warn("⚠️ No result from Prometheus for query: {}", query);
+            log.warn("⚠️ Full response was: {}", response);
             return Optional.empty();
 
         } catch (Exception e) {
