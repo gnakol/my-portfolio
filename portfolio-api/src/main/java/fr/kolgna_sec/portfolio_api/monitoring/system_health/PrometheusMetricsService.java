@@ -61,12 +61,15 @@ public class PrometheusMetricsService {
         try {
             log.info("🔍 Querying Prometheus: {} at timestamp {}", query, timestamp);
 
+            // Encode seulement les guillemets pour éviter l'erreur d'expansion
+            String encodedQuery = query.replace("\"", "%22");
+
             String response = webClient.get()
                     .uri(uriBuilder -> uriBuilder
                             .path("/api/v1/query")
-                            .queryParam("query", query)
+                            .queryParam("query", encodedQuery)  // ⬅️ Utilise la query encodée
                             .queryParam("time", timestamp)
-                            .build())  // ⬅️ ENLÈVE le "true" pour éviter le double encodage
+                            .build())
                     .retrieve()
                     .bodyToMono(String.class)
                     .timeout(Duration.ofSeconds(10))
