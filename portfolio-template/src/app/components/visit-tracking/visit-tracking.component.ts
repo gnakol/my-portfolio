@@ -2,6 +2,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { VisitTrackingService, VisitDTO, VisitStatsDTO } from '../../services/visit-tracking.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { RouterModule } from '@angular/router';
 import { MatIconModule } from '@angular/material/icon';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatTabsModule } from '@angular/material/tabs';
@@ -28,6 +29,7 @@ import { SelectionModel } from '@angular/cdk/collections';
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
+    RouterModule,
     MatIconModule,
     MatProgressSpinnerModule,
     MatTabsModule,

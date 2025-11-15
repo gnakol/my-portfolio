@@ -14,6 +14,7 @@ import { MatInputModule } from '@angular/material/input';
 import { NgApexchartsModule } from 'ng-apexcharts';
 import { ApexAxisChartSeries, ApexChart, ApexXAxis, ApexYAxis, ApexDataLabels, ApexStroke } from 'ng-apexcharts';
 import { TlsDashboardService, TlsSecurityScan, CrontabInfo, TlsStatistics } from '../service/tls-dashboard.service';
+import { Router } from '@angular/router';
 
 export type ChartOptions = {
   series: ApexAxisChartSeries;
@@ -70,7 +71,8 @@ export class TlsDashboardComponent implements OnInit {
 
   constructor(
     private tlsService: TlsDashboardService,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private router: Router
   ) {}
 
   ngOnInit(): void {
@@ -185,6 +187,10 @@ export class TlsDashboardComponent implements OnInit {
 
   formatDate(date: string): string {
     return new Date(date).toLocaleString('fr-FR');
+  }
+
+  goBackToMissionControl(): void {
+    this.router.navigate(['/mission-control']);
   }
 
   private initChart(): void {
