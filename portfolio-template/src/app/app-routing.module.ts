@@ -58,6 +58,7 @@ import { AllProjectTypeComponent } from './components/project-package/web-servic
 import { AllProjectComponent } from './components/project-package/web-service/all-project/all-project.component';
 import { AddProjectComponent } from './components/project-package/web-service/add-project/add-project.component';
 import { MissionControlComponent } from './components/monitoring/mission-control/mission-control.component';
+import { TlsDashboardComponent } from './components/monitoring/tls-dashboard/tls-dashboard.component';
 import { MediaTemplateComponent } from './components/medias-package/media-template/media-template.component';
 import { MediaGalleryComponent } from './components/medias-package/media-gallery/media-gallery.component';
 import { VisitTrackingComponent } from './components/visit-tracking/visit-tracking.component';
@@ -161,9 +162,10 @@ const routes: Routes = [
   { path : 'intro-firewall', component : IntroFirewallComponent},
   { path : 'go-firewal-simulation', component : GoSimulationFirewallComponent},
   { path: 'mission-control', component: MissionControlComponent },
+  { path: 'tls-dashboard', component: TlsDashboardComponent, canActivate: [AuthGuard] },
   { path: 'visit-tracking', component: VisitTrackingComponent, canActivate: [AuthGuard] } // Cockpit analytics
 
-  
+
 ];
 
 @NgModule({

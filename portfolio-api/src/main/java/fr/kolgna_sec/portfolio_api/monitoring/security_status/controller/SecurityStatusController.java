@@ -1,7 +1,9 @@
 package fr.kolgna_sec.portfolio_api.monitoring.security_status.controller;
 
 import fr.kolgna_sec.portfolio_api.monitoring.security_status.bean.TlsSecurityScan;
+import fr.kolgna_sec.portfolio_api.monitoring.security_status.dto.CrontabInfoDTO;
 import fr.kolgna_sec.portfolio_api.monitoring.security_status.dto.SecurityStatusDTO;
+import fr.kolgna_sec.portfolio_api.monitoring.security_status.service.CrontabService;
 import fr.kolgna_sec.portfolio_api.monitoring.security_status.service.TlsCheckService;
 import fr.kolgna_sec.portfolio_api.monitoring.security_status.service.TlsSecurityScanner;
 import lombok.RequiredArgsConstructor;
@@ -17,6 +19,7 @@ public class SecurityStatusController {
 
     private final TlsCheckService tlsCheckService;
     private final TlsSecurityScanner tlsSecurityScanner;
+    private final CrontabService crontabService;
 
     @GetMapping("/status")
     public ResponseEntity<List<SecurityStatusDTO>> status() {
@@ -109,5 +112,27 @@ public class SecurityStatusController {
     public ResponseEntity<List<TlsSecurityScan>> getScanHistory(@RequestParam String target) {
         List<TlsSecurityScan> history = tlsSecurityScanner.getScanHistory(target);
         return ResponseEntity.ok(history);
+    }
+
+    // ========== ENDPOINT CRONTAB INFO ==========
+
+    /**
+     * Récupère les informations de planification du renouvellement de certificat
+     * GET /security-status/crontab-info
+     */
+    @GetMapping("/crontab-info")
+    public ResponseEntity<CrontabInfoDTO> getCrontabInfo() {
+        CrontabInfoDTO info = crontabService.getCertRenewalCronInfo();
+        return ResponseEntity.ok(info);
+    }
+
+    /**
+     * Récupère toutes les tâches cron
+     * GET /security-status/crontab-jobs
+     */
+    @GetMapping("/crontab-jobs")
+    public ResponseEntity<List<CrontabInfoDTO>> getAllCronJobs() {
+        List<CrontabInfoDTO> jobs = crontabService.getAllCronJobs();
+        return ResponseEntity.ok(jobs);
     }
 }

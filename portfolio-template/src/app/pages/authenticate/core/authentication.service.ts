@@ -39,7 +39,7 @@ export class AuthenticationService {
         map(response => {
           if (response?.bearer) {
             localStorage.setItem('jwtToken', response.bearer);
-            this.authStatus.next(true);  // 🔥 Met à jour l’état d’authentification
+            this.authStatus.next(true); 
             this.router.navigate(['/dashboard-admin']);
             return response.bearer;
           } else {
