@@ -59,12 +59,11 @@ public class PrometheusMetricsService {
         try {
             log.info("🔍 Querying Prometheus: {} at timestamp {}", query, timestamp);
 
-            String url = UriComponentsBuilder.fromHttpUrl(prometheusUrl)
-                    .path("/api/v1/query")
-                    .queryParam("query", query)
-                    .queryParam("time", timestamp)
-                    .build(false)  // false = ne pas encoder les caractères déjà présents
-                    .toUriString();
+            // Construction manuelle de l'URL avec encodage correct pour PromQL
+            String encodedQuery = java.net.URLEncoder.encode(query, java.nio.charset.StandardCharsets.UTF_8)
+                    .replace("+", "%20");  // Remplace + par %20 pour les espaces
+
+            String url = prometheusUrl + "/api/v1/query?query=" + encodedQuery + "&time=" + timestamp;
 
             log.info("📡 URL construite: {}", url);
 
