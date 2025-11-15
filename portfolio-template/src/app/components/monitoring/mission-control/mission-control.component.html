@@ -481,6 +481,16 @@
           </svg>
           Check TLS
         </button>
+        <button
+          (click)="runAdvancedSecurityScan()"
+          [disabled]="!tlsHostPort.trim() || loading"
+          class="px-6 py-3 rounded-xl bg-gradient-to-r from-amber-500/20 to-orange-500/20 hover:from-amber-500/30 hover:to-orange-500/30 ring-1 ring-amber-500/50 disabled:opacity-30 disabled:cursor-not-allowed transition-all duration-200 text-sm flex items-center gap-2 group relative overflow-hidden">
+          <div class="absolute inset-0 bg-gradient-to-r from-amber-400/0 via-amber-400/10 to-amber-400/0 group-hover:translate-x-full transition-transform duration-1000"></div>
+          <svg class="w-4 h-4 text-amber-300 relative z-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path>
+          </svg>
+          <span class="relative z-10 text-amber-200">Advanced Scan</span>
+        </button>
       </div>
 
       <!-- Table Material -->
@@ -614,4 +624,266 @@
     </div>
 
   </div>
+
+  <!-- ========== MODAL ADVANCED SECURITY SCAN ========== -->
+  <div *ngIf="showAdvancedScanModal"
+       class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm animate-fade-in"
+       (click)="closeAdvancedScanModal()">
+    <div class="w-full max-w-4xl max-h-[90vh] overflow-y-auto rounded-2xl bg-gradient-to-br from-slate-800 to-slate-900 ring-1 ring-slate-700 shadow-2xl"
+         (click)="$event.stopPropagation()">
+
+      <!-- Header -->
+      <div class="sticky top-0 z-10 p-6 bg-gradient-to-r from-amber-900/30 to-orange-900/30 border-b border-amber-500/30 backdrop-blur-sm">
+        <div class="flex items-center justify-between">
+          <div class="flex items-center gap-3">
+            <div class="w-12 h-12 rounded-xl bg-amber-500/20 flex items-center justify-center ring-2 ring-amber-400/50">
+              <svg class="w-6 h-6 text-amber-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path>
+              </svg>
+            </div>
+            <div>
+              <h2 class="text-xl font-bold text-white">Advanced SSL/TLS Security Scan</h2>
+              <p class="text-sm text-amber-200/80" *ngIf="advancedScanResult">{{ advancedScanResult.target }}</p>
+            </div>
+          </div>
+          <button
+            (click)="closeAdvancedScanModal()"
+            class="p-2 rounded-lg hover:bg-white/10 transition-colors">
+            <svg class="w-5 h-5 text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+            </svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- Loading State -->
+      <div *ngIf="advancedScanLoading" class="p-12 text-center">
+        <div class="inline-block w-12 h-12 border-4 border-amber-400/20 border-t-amber-400 rounded-full animate-spin"></div>
+        <p class="mt-4 text-slate-300">Scanning SSL/TLS security...</p>
+        <p class="text-sm text-slate-400 mt-2">This may take a few seconds</p>
+      </div>
+
+      <!-- Results -->
+      <div *ngIf="!advancedScanLoading && advancedScanResult" class="p-6 space-y-6">
+
+        <!-- Security Grade Card -->
+        <div class="rounded-xl p-6 bg-gradient-to-br"
+             [ngClass]="{
+               'from-emerald-900/30 to-emerald-800/30 ring-1 ring-emerald-500/50': advancedScanResult.securityGrade === 'A+' || advancedScanResult.securityGrade === 'A',
+               'from-sky-900/30 to-sky-800/30 ring-1 ring-sky-500/50': advancedScanResult.securityGrade === 'B',
+               'from-amber-900/30 to-amber-800/30 ring-1 ring-amber-500/50': advancedScanResult.securityGrade === 'C',
+               'from-orange-900/30 to-orange-800/30 ring-1 ring-orange-500/50': advancedScanResult.securityGrade === 'D',
+               'from-rose-900/30 to-rose-800/30 ring-1 ring-rose-500/50': advancedScanResult.securityGrade === 'F'
+             }">
+          <div class="flex items-center justify-between">
+            <div>
+              <p class="text-sm text-slate-400 mb-1">Security Grade</p>
+              <div class="text-5xl font-bold"
+                   [ngClass]="{
+                     'text-emerald-300': advancedScanResult.securityGrade === 'A+' || advancedScanResult.securityGrade === 'A',
+                     'text-sky-300': advancedScanResult.securityGrade === 'B',
+                     'text-amber-300': advancedScanResult.securityGrade === 'C',
+                     'text-orange-300': advancedScanResult.securityGrade === 'D',
+                     'text-rose-300': advancedScanResult.securityGrade === 'F'
+                   }">
+                {{ advancedScanResult.securityGrade }}
+              </div>
+            </div>
+            <div class="text-right">
+              <p class="text-sm text-slate-400 mb-1">Security Score</p>
+              <div class="text-3xl font-bold text-white">{{ advancedScanResult.securityScore }}<span class="text-lg text-slate-400">/100</span></div>
+            </div>
+          </div>
+
+          <div *ngIf="advancedScanResult.warnings" class="mt-4 p-3 rounded-lg bg-black/20 border-l-4 border-amber-400">
+            <p class="text-xs text-amber-200 font-semibold mb-1">⚠️ Warnings</p>
+            <p class="text-sm text-slate-300">{{ advancedScanResult.warnings }}</p>
+          </div>
+        </div>
+
+        <!-- Certificate Info -->
+        <div class="rounded-xl p-5 bg-slate-700/20 ring-1 ring-slate-600/50">
+          <h3 class="font-semibold text-slate-200 mb-4 flex items-center gap-2">
+            <svg class="w-5 h-5 text-sky-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+            </svg>
+            Certificate Information
+          </h3>
+          <div class="grid grid-cols-2 gap-4 text-sm">
+            <div>
+              <p class="text-slate-400 mb-1">Issuer</p>
+              <p class="text-slate-200 font-mono text-xs break-all">{{ advancedScanResult.certificateIssuer }}</p>
+            </div>
+            <div>
+              <p class="text-slate-400 mb-1">Signature Algorithm</p>
+              <p class="text-slate-200 font-mono">{{ advancedScanResult.signatureAlgorithm }}</p>
+            </div>
+            <div>
+              <p class="text-slate-400 mb-1">Valid Until</p>
+              <p class="text-slate-200">{{ advancedScanResult.certificateNotAfter | date:'medium' }}</p>
+            </div>
+            <div>
+              <p class="text-slate-400 mb-1">Days Until Expiry</p>
+              <p class="font-bold"
+                 [ngClass]="{
+                   'text-emerald-400': advancedScanResult.daysUntilExpiry > 60,
+                   'text-amber-400': advancedScanResult.daysUntilExpiry <= 60 && advancedScanResult.daysUntilExpiry > 30,
+                   'text-rose-400': advancedScanResult.daysUntilExpiry <= 30
+                 }">
+                {{ advancedScanResult.daysUntilExpiry }} days
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- TLS Versions -->
+        <div class="rounded-xl p-5 bg-slate-700/20 ring-1 ring-slate-600/50">
+          <h3 class="font-semibold text-slate-200 mb-4 flex items-center gap-2">
+            <svg class="w-5 h-5 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4m0 5c0 2.21-3.582 4-8 4s-8-1.79-8-4"></path>
+            </svg>
+            Supported TLS Versions
+          </h3>
+          <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+            <div class="p-3 rounded-lg text-center"
+                 [ngClass]="advancedScanResult.supportsTls10 ? 'bg-rose-500/20 ring-1 ring-rose-500/50' : 'bg-slate-600/20'">
+              <p class="text-xs text-slate-400 mb-1">TLS 1.0</p>
+              <p class="text-lg font-bold"
+                 [ngClass]="advancedScanResult.supportsTls10 ? 'text-rose-300' : 'text-slate-500'">
+                {{ advancedScanResult.supportsTls10 ? '✗ Vulnerable' : '✓ Disabled' }}
+              </p>
+            </div>
+            <div class="p-3 rounded-lg text-center"
+                 [ngClass]="advancedScanResult.supportsTls11 ? 'bg-orange-500/20 ring-1 ring-orange-500/50' : 'bg-slate-600/20'">
+              <p class="text-xs text-slate-400 mb-1">TLS 1.1</p>
+              <p class="text-lg font-bold"
+                 [ngClass]="advancedScanResult.supportsTls11 ? 'text-orange-300' : 'text-slate-500'">
+                {{ advancedScanResult.supportsTls11 ? '✗ Obsolete' : '✓ Disabled' }}
+              </p>
+            </div>
+            <div class="p-3 rounded-lg text-center"
+                 [ngClass]="advancedScanResult.supportsTls12 ? 'bg-emerald-500/20 ring-1 ring-emerald-500/50' : 'bg-slate-600/20'">
+              <p class="text-xs text-slate-400 mb-1">TLS 1.2</p>
+              <p class="text-lg font-bold"
+                 [ngClass]="advancedScanResult.supportsTls12 ? 'text-emerald-300' : 'text-slate-500'">
+                {{ advancedScanResult.supportsTls12 ? '✓ Enabled' : '✗ Missing' }}
+              </p>
+            </div>
+            <div class="p-3 rounded-lg text-center"
+                 [ngClass]="advancedScanResult.supportsTls13 ? 'bg-sky-500/20 ring-1 ring-sky-500/50' : 'bg-slate-600/20'">
+              <p class="text-xs text-slate-400 mb-1">TLS 1.3</p>
+              <p class="text-lg font-bold"
+                 [ngClass]="advancedScanResult.supportsTls13 ? 'text-sky-300' : 'text-slate-500'">
+                {{ advancedScanResult.supportsTls13 ? '✓ Modern' : '✗ Missing' }}
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Vulnerabilities -->
+        <div class="rounded-xl p-5 bg-slate-700/20 ring-1 ring-slate-600/50">
+          <h3 class="font-semibold text-slate-200 mb-4 flex items-center gap-2">
+            <svg class="w-5 h-5 text-rose-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
+            </svg>
+            Known Vulnerabilities
+          </h3>
+          <div class="grid grid-cols-2 gap-3">
+            <div class="flex items-center justify-between p-3 rounded-lg bg-slate-600/20">
+              <span class="text-sm text-slate-300">POODLE</span>
+              <span class="px-2 py-1 rounded-full text-xs font-medium"
+                    [ngClass]="advancedScanResult.vulnerableToPoodle ? 'bg-rose-500/20 text-rose-300' : 'bg-emerald-500/20 text-emerald-300'">
+                {{ advancedScanResult.vulnerableToPoodle ? '✗ Vulnerable' : '✓ Safe' }}
+              </span>
+            </div>
+            <div class="flex items-center justify-between p-3 rounded-lg bg-slate-600/20">
+              <span class="text-sm text-slate-300">BEAST</span>
+              <span class="px-2 py-1 rounded-full text-xs font-medium"
+                    [ngClass]="advancedScanResult.vulnerableToBeast ? 'bg-rose-500/20 text-rose-300' : 'bg-emerald-500/20 text-emerald-300'">
+                {{ advancedScanResult.vulnerableToBeast ? '✗ Vulnerable' : '✓ Safe' }}
+              </span>
+            </div>
+            <div class="flex items-center justify-between p-3 rounded-lg bg-slate-600/20">
+              <span class="text-sm text-slate-300">Heartbleed</span>
+              <span class="px-2 py-1 rounded-full text-xs font-medium"
+                    [ngClass]="advancedScanResult.vulnerableToHeartbleed ? 'bg-rose-500/20 text-rose-300' : 'bg-emerald-500/20 text-emerald-300'">
+                {{ advancedScanResult.vulnerableToHeartbleed ? '✗ Vulnerable' : '✓ Safe' }}
+              </span>
+            </div>
+            <div class="flex items-center justify-between p-3 rounded-lg bg-slate-600/20">
+              <span class="text-sm text-slate-300">CRIME</span>
+              <span class="px-2 py-1 rounded-full text-xs font-medium"
+                    [ngClass]="advancedScanResult.vulnerableToCrime ? 'bg-rose-500/20 text-rose-300' : 'bg-emerald-500/20 text-emerald-300'">
+                {{ advancedScanResult.vulnerableToCrime ? '✗ Vulnerable' : '✓ Safe' }}
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Security Features -->
+        <div class="rounded-xl p-5 bg-slate-700/20 ring-1 ring-slate-600/50">
+          <h3 class="font-semibold text-slate-200 mb-4 flex items-center gap-2">
+            <svg class="w-5 h-5 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path>
+            </svg>
+            Security Features
+          </h3>
+          <div class="grid grid-cols-2 gap-3 text-sm">
+            <div class="flex items-center gap-2">
+              <span [ngClass]="advancedScanResult.supportsPfs ? 'text-emerald-400' : 'text-rose-400'">
+                {{ advancedScanResult.supportsPfs ? '✓' : '✗' }}
+              </span>
+              <span class="text-slate-300">Perfect Forward Secrecy</span>
+            </div>
+            <div class="flex items-center gap-2">
+              <span [ngClass]="advancedScanResult.hasStrongCiphers ? 'text-emerald-400' : 'text-rose-400'">
+                {{ advancedScanResult.hasStrongCiphers ? '✓' : '✗' }}
+              </span>
+              <span class="text-slate-300">Strong Cipher Suites</span>
+            </div>
+            <div class="flex items-center gap-2">
+              <span [ngClass]="!advancedScanResult.hasWeakCiphers ? 'text-emerald-400' : 'text-rose-400'">
+                {{ !advancedScanResult.hasWeakCiphers ? '✓' : '✗' }}
+              </span>
+              <span class="text-slate-300">No Weak Ciphers</span>
+            </div>
+            <div class="flex items-center gap-2">
+              <span [ngClass]="advancedScanResult.chainTrusted ? 'text-emerald-400' : 'text-rose-400'">
+                {{ advancedScanResult.chainTrusted ? '✓' : '✗' }}
+              </span>
+              <span class="text-slate-300">Trusted Certificate Chain</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Recommendations -->
+        <div *ngIf="advancedScanResult.recommendations" class="rounded-xl p-5 bg-gradient-to-r from-sky-900/20 to-blue-900/20 ring-1 ring-sky-500/30">
+          <h3 class="font-semibold text-sky-200 mb-3 flex items-center gap-2">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+            </svg>
+            Recommendations
+          </h3>
+          <p class="text-sm text-slate-300">{{ advancedScanResult.recommendations }}</p>
+        </div>
+
+      </div>
+
+      <!-- Footer -->
+      <div class="sticky bottom-0 p-6 bg-slate-800/80 border-t border-slate-700 backdrop-blur-sm">
+        <div class="flex items-center justify-between">
+          <p class="text-xs text-slate-400">
+            Scan performed at: {{ advancedScanResult?.scannedAt | date:'medium' }}
+          </p>
+          <button
+            (click)="closeAdvancedScanModal()"
+            class="px-6 py-2.5 rounded-xl bg-slate-700/60 hover:bg-slate-600/60 ring-1 ring-slate-600/50 transition-all duration-200">
+            Close
+          </button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
 </div>

@@ -83,7 +83,7 @@ management:
 
 security:
   tls:
-    hosts: kolie-portfolio.org:443, v2.kolie-portfolio.org:443
+    hosts: kolie-portfolio.org:443
 
 backup:
   scheduled: true
@@ -106,3 +106,10 @@ monitoring:
       aggregated-days: 30
     backup:
       logs-days: 30
+
+# ========== LOGGING (local uniquement) ==========
+logging:
+  level:
+    # Réduire les erreurs Prometheus en local (pas de K8s/Prometheus en dev)
+    fr.kolgna_sec.portfolio_api.monitoring.system_health.PrometheusMetricsService: WARN
+    org.springframework.web.client.RestTemplate: WARN

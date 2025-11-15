@@ -81,6 +81,11 @@ export class MissionControlComponent implements OnInit, OnDestroy {
   // Pour l'action TLS
   tlsHostPort = '';
 
+  // Advanced Security Scan
+  showAdvancedScanModal = false;
+  advancedScanLoading = false;
+  advancedScanResult: any = null;
+
   // WebSocket
   wsConnected = false;
   lastUpdate = new Date();
@@ -429,6 +434,33 @@ export class MissionControlComponent implements OnInit, OnDestroy {
         this.showSnackBar('❌ Erreur TLS check', 'error');
       }
     });
+  }
+
+  runAdvancedSecurityScan(): void {
+    if (!this.tlsHostPort?.trim()) return;
+
+    this.showAdvancedScanModal = true;
+    this.advancedScanLoading = true;
+    this.advancedScanResult = null;
+
+    this.api.runAdvancedSecurityScan(this.tlsHostPort.trim()).subscribe({
+      next: (result) => {
+        this.advancedScanResult = result;
+        this.advancedScanLoading = false;
+        this.showSnackBar(`✅ Security scan complete: Grade ${result.securityGrade}`, 'success');
+      },
+      error: (e) => {
+        this.advancedScanLoading = false;
+        this.showSnackBar('❌ Advanced scan failed', 'error');
+        this.closeAdvancedScanModal();
+      }
+    });
+  }
+
+  closeAdvancedScanModal(): void {
+    this.showAdvancedScanModal = false;
+    this.advancedScanResult = null;
+    this.advancedScanLoading = false;
   }
 
   showSnackBar(message: string, type: 'success' | 'error'): void {
