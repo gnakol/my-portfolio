@@ -61,7 +61,7 @@ management:
 
 security:
   tls:
-    hosts: kolie-portfolio.org:443, v2.kolie-portfolio.org:443
+    hosts: kolie-portfolio.org:443
 
 backup:
   scheduled: true

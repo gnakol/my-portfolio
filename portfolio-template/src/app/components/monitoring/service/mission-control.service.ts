@@ -56,8 +56,19 @@ export class MissionControlService {
   }
 
   checkTls(hostPort: string): Observable<any> {
+    const headers = this.genericMethodeService.getHeaders();
     const params = new HttpParams().set('hostPort', hostPort);
-    return this.http.post(`${this.api}/security-status/check-tls`, null, { params });
+    return this.http.post(`${this.apiUrl}/security-status/check-tls`, null, { params, headers });
+  }
+
+  /**
+   * Lance un scan de sécurité SSL/TLS avancé
+   * Analyse complète : versions TLS, cipher suites, vulnérabilités, score de sécurité
+   */
+  runAdvancedSecurityScan(hostPort: string): Observable<any> {
+    const headers = this.genericMethodeService.getHeaders();
+    const params = new HttpParams().set('hostPort', hostPort);
+    return this.http.post(`${this.apiUrl}/security-status/advanced-scan`, null, { params, headers });
   }
 
   // ========== NOUVEAUX ENDPOINTS PHASE 1 ==========
