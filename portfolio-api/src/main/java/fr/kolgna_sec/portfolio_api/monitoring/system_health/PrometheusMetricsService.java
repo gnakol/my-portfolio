@@ -5,9 +5,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import org.springframework.web.reactive.function.client.WebClient;
+import org.springframework.web.client.RestTemplate;
+import org.springframework.web.util.UriComponentsBuilder;
 
-import java.time.Duration;
 import java.util.Optional;
 
 /**
@@ -17,17 +17,17 @@ import java.util.Optional;
 @Slf4j
 public class PrometheusMetricsService {
 
-    private final WebClient webClient;
+    private final String prometheusUrl;
     private final ObjectMapper objectMapper;
+    private final RestTemplate restTemplate;
 
     public PrometheusMetricsService(
             @Value("${prometheus.url:http://localhost:9090}") String prometheusUrl,
             ObjectMapper objectMapper
     ) {
-        this.webClient = WebClient.builder()
-                .baseUrl(prometheusUrl)
-                .build();
+        this.prometheusUrl = prometheusUrl;
         this.objectMapper = objectMapper;
+        this.restTemplate = new RestTemplate();
     }
 
     /**
@@ -59,25 +59,15 @@ public class PrometheusMetricsService {
         try {
             log.info("🔍 Querying Prometheus: {} at timestamp {}", query, timestamp);
 
-            String response = webClient.get()
-                    .uri(uriBuilder -> {
-                        String uri = uriBuilder
-                                .path("/api/v1/query")
-                                .queryParam("query", query)
-                                .queryParam("time", timestamp)
-                                .build()
-                                .toString();
-                        log.info("📡 URI construit: {}", uri);
-                        return uriBuilder
-                                .path("/api/v1/query")
-                                .queryParam("query", query)
-                                .queryParam("time", timestamp)
-                                .build();
-                    })
-                    .retrieve()
-                    .bodyToMono(String.class)
-                    .timeout(Duration.ofSeconds(10))
-                    .block();
+            String url = UriComponentsBuilder.fromHttpUrl(prometheusUrl)
+                    .path("/api/v1/query")
+                    .queryParam("query", query)
+                    .queryParam("time", timestamp)
+                    .toUriString();
+
+            log.info("📡 URL construite: {}", url);
+
+            String response = restTemplate.getForObject(url, String.class);
 
             if (response == null) {
                 log.warn("❌ Prometheus query returned null for: {}", query);
