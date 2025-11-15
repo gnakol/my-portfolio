@@ -4,9 +4,13 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
-import org.springframework.web.util.UriComponentsBuilder;
 
 import java.util.Optional;
 
@@ -59,15 +63,23 @@ public class PrometheusMetricsService {
         try {
             log.info("🔍 Querying Prometheus: {} at timestamp {}", query, timestamp);
 
-            // Construction manuelle de l'URL avec encodage correct pour PromQL
-            String encodedQuery = java.net.URLEncoder.encode(query, java.nio.charset.StandardCharsets.UTF_8)
-                    .replace("+", "%20");  // Remplace + par %20 pour les espaces
+            // Utilisation de POST avec form-data pour éviter l'encodage URL
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
 
-            String url = prometheusUrl + "/api/v1/query?query=" + encodedQuery + "&time=" + timestamp;
+            MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
+            params.add("query", query);
+            params.add("time", String.valueOf(timestamp));
 
-            log.info("📡 URL construite: {}", url);
+            HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<>(params, headers);
 
-            String response = restTemplate.getForObject(url, String.class);
+            log.info("📡 Querying with POST: query={}", query);
+
+            String response = restTemplate.postForObject(
+                    prometheusUrl + "/api/v1/query",
+                    request,
+                    String.class
+            );
 
             if (response == null) {
                 log.warn("❌ Prometheus query returned null for: {}", query);
