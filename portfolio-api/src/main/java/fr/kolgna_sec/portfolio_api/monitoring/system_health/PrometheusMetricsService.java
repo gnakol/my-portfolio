@@ -59,12 +59,15 @@ public class PrometheusMetricsService {
         try {
             log.info("🔍 Querying Prometheus: {} at timestamp {}", query, timestamp);
 
+            // Construction manuelle de l'URI pour éviter le double-encodage
+            String uri = String.format("/api/v1/query?query=%s&time=%d",
+                    java.net.URLEncoder.encode(query, java.nio.charset.StandardCharsets.UTF_8),
+                    timestamp);
+
+            log.info("📡 URI construit: {}", uri);
+
             String response = webClient.get()
-                    .uri(uriBuilder -> uriBuilder
-                            .path("/api/v1/query")
-                            .queryParam("query", query)
-                            .queryParam("time", timestamp)
-                            .build())
+                    .uri(uri)
                     .retrieve()
                     .bodyToMono(String.class)
                     .timeout(Duration.ofSeconds(10))
