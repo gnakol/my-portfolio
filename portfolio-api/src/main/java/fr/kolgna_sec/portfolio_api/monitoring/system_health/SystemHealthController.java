@@ -63,8 +63,11 @@ public class SystemHealthController {
      */
     @GetMapping("/k8s-metrics")
     public ResponseEntity<Map<String, Object>> getKubernetesMetrics() {
+        System.out.println("🚀 DÉBUT getKubernetesMetrics()");
         int podsCount = prometheusService.getPodsCount();
+        System.out.println("📊 podsCount = " + podsCount);
         long totalRamBytes = prometheusService.getTotalPodsRamBytes();
+        System.out.println("💾 totalRamBytes = " + totalRamBytes);
 
         return ResponseEntity.ok(Map.of(
                 "podsCount", podsCount,
