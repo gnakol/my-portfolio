@@ -15,6 +15,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatCardModule } from '@angular/material/card';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
+import { Router } from '@angular/router';
 import {
   ApexAxisChartSeries,
   ApexChart,
@@ -107,7 +108,8 @@ export class MissionControlComponent implements OnInit, OnDestroy {
   constructor(
     private api: MissionControlService,
     private wsService: WebSocketService,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private router: Router
   ) {}
 
   ngOnInit(): void {
@@ -461,6 +463,10 @@ export class MissionControlComponent implements OnInit, OnDestroy {
     this.showAdvancedScanModal = false;
     this.advancedScanResult = null;
     this.advancedScanLoading = false;
+  }
+
+  openTlsDashboard(): void {
+    this.router.navigate(['/tls-dashboard']);
   }
 
   showSnackBar(message: string, type: 'success' | 'error'): void {
