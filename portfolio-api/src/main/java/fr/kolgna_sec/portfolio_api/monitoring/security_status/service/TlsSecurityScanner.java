@@ -24,6 +24,7 @@ import java.util.stream.Collectors;
 public class TlsSecurityScanner {
 
     private final TlsSecurityScanRepository scanRepository;
+    private final TlsMetricsExporter tlsMetricsExporter;
 
     // Cipher suites faibles (à éviter)
     private static final Set<String> WEAK_CIPHERS = Set.of(
@@ -105,6 +106,9 @@ public class TlsSecurityScanner {
             // Jours avant expiration
             int daysLeft = (int) Duration.between(Instant.now(), cert.getNotAfter().toInstant()).toDays();
             builder.daysUntilExpiry(daysLeft);
+
+            // Mise à jour de la métrique Prometheus
+            tlsMetricsExporter.updateTlsDaysRemaining(daysLeft);
 
             // Chaîne de certificats
             builder.chainLength(chain.length)
