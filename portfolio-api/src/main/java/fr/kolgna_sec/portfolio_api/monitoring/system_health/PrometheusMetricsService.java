@@ -63,6 +63,7 @@ public class PrometheusMetricsService {
                     .path("/api/v1/query")
                     .queryParam("query", query)
                     .queryParam("time", timestamp)
+                    .build(false)  // false = ne pas encoder les caractères déjà présents
                     .toUriString();
 
             log.info("📡 URL construite: {}", url);
