@@ -1,6 +1,8 @@
 // projets.component.ts
 import { Component } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import { Params } from '@angular/router';
+import { AddContactComponent } from '../../../components/contact-package/web-service/add-contact/add-contact.component';
 
 interface ProjectLink {
   label: string;
@@ -28,6 +30,11 @@ interface Project {
   standalone: false
 })
 export class ProjetsComponent {
+
+  constructor(
+    private dialog: MatDialog
+  ) {}
+
   projects: Project[] = [
     {
       title: 'Portfolio Full-Stack en Production',
@@ -86,7 +93,7 @@ export class ProjetsComponent {
       ],
       stack: ['Angular','TypeScript','Canvas API','GSAP','RxJS','Material Design'],
       links: [
-        { label: 'Accéder aux simulations', url: '/simulations' }
+        { label: 'Accéder aux simulations', url: '/0a13f9e4-👁️-simulation-🛡️-network-bf1926' }
       ],
       category: 'innovation'
     }
@@ -116,4 +123,13 @@ export class ProjetsComponent {
       }
     }, 150);
   }
+
+  openContactModal(): void {
+  this.dialog.open(AddContactComponent, {
+    width: '100%',
+    maxWidth: '500px',
+    panelClass: 'contact-modal-container',
+    backdropClass: 'custom-backdrop'
+  });
+}
 }
