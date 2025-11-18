@@ -127,7 +127,7 @@ const routes: Routes = [
   { path: 'contact-template', component : ContactTemplateComponent, canActivate : [AuthGuard]},
   { path: 'project-template', component : ProjectTemplateComponent, canActivate : [AuthGuard]},
   { path: 'media-template', component : MediaTemplateComponent, canActivate : [AuthGuard]},
-  { path: 'media-gallery', component : MediaGalleryComponent}, // PUBLIC - Galerie pour visiteurs
+  { path: 'media-gallery', component : MediaGalleryComponent}, 
 
   { path: 'pdf-generator', component : PdfGeneratorComponent},
 
@@ -163,7 +163,7 @@ const routes: Routes = [
   { path : 'go-firewal-simulation', component : GoSimulationFirewallComponent},
   { path: 'mission-control', component: MissionControlComponent },
   { path: 'tls-dashboard', component: TlsDashboardComponent, canActivate: [AuthGuard] },
-  { path: 'visit-tracking', component: VisitTrackingComponent, canActivate: [AuthGuard] } // Cockpit analytics
+  { path: 'visit-tracking', component: VisitTrackingComponent, canActivate: [AuthGuard] } 
 
 
 ];

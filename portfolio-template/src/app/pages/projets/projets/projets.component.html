@@ -105,9 +105,9 @@
   <section class="cta-section">
     <h2>Besoin d'une infrastructure similaire ?</h2>
     <p>Discutons de votre projet et trouvons la meilleure solution technique.</p>
-    <button mat-raised-button routerLink="/" fragment="contact" class="cta-button">
-      <mat-icon>email</mat-icon>
-      Me contacter
-    </button>
+<button mat-raised-button (click)="openContactModal()" class="cta-button">
+  <mat-icon>email</mat-icon>
+  Me contacter
+</button>
   </section>
 </div>
