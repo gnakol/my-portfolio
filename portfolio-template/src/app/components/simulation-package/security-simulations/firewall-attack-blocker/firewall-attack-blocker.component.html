@@ -1,3 +1,22 @@
-<div *ngIf="showIntroFirewall">
-    <app-intro-firewall (startSimulation)="onStartSimulation()"></app-intro-firewall>
+<div class="firewall-container">
+  <!-- Intro -->
+  <app-intro-firewall
+    *ngIf="currentView === 'intro'"
+    (startSimulation)="onStartSimulation($event)">
+  </app-intro-firewall>
+
+  <!-- Dashboard SOC -->
+  <app-soc-dashboard
+    *ngIf="currentView === 'dashboard'"
+    [playerPseudo]="playerPseudo"
+    (sessionEnded)="onSessionEnded($event)">
+  </app-soc-dashboard>
+
+  <!-- Résultats -->
+  <app-results
+    *ngIf="currentView === 'results' && sessionResult"
+    [result]="sessionResult"
+    (restart)="onRestart()"
+    (exit)="onExit()">
+  </app-results>
 </div>

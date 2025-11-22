@@ -1,0 +1,162 @@
+<div class="results-container">
+  <!-- Header avec grade -->
+  <div class="results-header">
+    <div class="grade-badge" [ngClass]="getGradeClass()">
+      <mat-icon>{{ getGradeIcon() }}</mat-icon>
+      <h2>{{ result.grade }}</h2>
+    </div>
+
+    <div class="mission-status">
+      <mat-icon>{{ result.blockRate >= 90 ? 'check_circle' : 'info' }}</mat-icon>
+      <span>{{ result.blockRate >= 90 ? 'MISSION ACCOMPLIE' : 'MISSION TERMINÉE' }}</span>
+    </div>
+  </div>
+
+  <!-- Stats principales -->
+  <div class="stats-grid">
+    <div class="stat-card score">
+      <mat-icon>emoji_events</mat-icon>
+      <div class="stat-value">{{ result.finalScore }}</div>
+      <div class="stat-label">Score Final</div>
+    </div>
+
+    <div class="stat-card">
+      <mat-icon>shield</mat-icon>
+      <div class="stat-value">{{ result.attacksBlocked }}/{{ result.totalAttacks }}</div>
+      <div class="stat-label">Attaques Bloquées</div>
+    </div>
+
+    <div class="stat-card">
+      <mat-icon>percent</mat-icon>
+      <div class="stat-value">{{ result.blockRate | number:'1.0-0' }}%</div>
+      <div class="stat-label">Taux de Blocage</div>
+    </div>
+
+    <div class="stat-card">
+      <mat-icon>timer</mat-icon>
+      <div class="stat-value">{{ formatTime(result.durationSeconds) }}</div>
+      <div class="stat-label">Temps Écoulé</div>
+    </div>
+
+    <div class="stat-card">
+      <mat-icon>attach_money</mat-icon>
+      <div class="stat-value">{{ result.moneySaved | number:'1.0-0' }}€</div>
+      <div class="stat-label">CA Sauvé</div>
+    </div>
+
+    <div class="stat-card">
+      <mat-icon>rule</mat-icon>
+      <div class="stat-value">{{ result.rulesCreated }}</div>
+      <div class="stat-label">Règles Créées</div>
+    </div>
+  </div>
+
+  <!-- Classement -->
+  <div class="ranking-section">
+    <div class="ranking-card">
+      <div class="your-rank" [class.top10]="result.isTop10">
+        <mat-icon>{{ result.isTop10 ? 'emoji_events' : 'trending_up' }}</mat-icon>
+        <div>
+          <span class="rank-label">Votre Rang</span>
+          <span class="rank-value">#{{ result.leaderboardRank }}</span>
+        </div>
+        <div class="rank-badge" *ngIf="result.isTop10">TOP 10</div>
+      </div>
+
+      <div class="leaderboard-title">
+        <mat-icon>leaderboard</mat-icon>
+        <h3>Classement Global</h3>
+      </div>
+
+      <div class="leaderboard-list">
+        <div class="leaderboard-item" *ngFor="let entry of leaderboard; let i = index"
+             [class.highlight]="i < 3"
+             [class.you]="entry.rank === result.leaderboardRank">
+          <div class="rank">
+            <mat-icon *ngIf="i === 0">emoji_events</mat-icon>
+            <mat-icon *ngIf="i === 1">military_tech</mat-icon>
+            <mat-icon *ngIf="i === 2">workspace_premium</mat-icon>
+            <span *ngIf="i > 2">#{{ entry.rank }}</span>
+          </div>
+          <div class="player">{{ entry.playerPseudo }}</div>
+          <div class="score">{{ entry.finalScore }} pts</div>
+          <div class="grade-mini">{{ entry.grade }}</div>
+        </div>
+
+        <div class="loading" *ngIf="loadingLeaderboard">
+          <p>Chargement du classement...</p>
+        </div>
+
+        <div class="no-data" *ngIf="!loadingLeaderboard && leaderboard.length === 0">
+          <p>Aucun score enregistré</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Notation et feedback -->
+  <div class="feedback-section">
+    <div class="rating-card" *ngIf="!showFeedbackForm">
+      <h3>Notez votre expérience</h3>
+      <div class="stars">
+        <mat-icon *ngFor="let star of getFilledStars(); let i = index"
+                  (click)="setRating(i + 1)"
+                  class="star filled">
+          star
+        </mat-icon>
+        <mat-icon *ngFor="let star of getEmptyStars(); let i = index"
+                  (click)="setRating(rating + i + 1)"
+                  class="star empty">
+          star_border
+        </mat-icon>
+      </div>
+      <button mat-stroked-button
+              (click)="showFeedbackForm = true"
+              [disabled]="rating === 0"
+              class="feedback-btn">
+        <mat-icon>comment</mat-icon>
+        Ajouter un commentaire
+      </button>
+    </div>
+
+    <div class="feedback-form" *ngIf="showFeedbackForm">
+      <h3>Votre avis compte !</h3>
+      <textarea
+        [(ngModel)]="feedback"
+        placeholder="Partagez votre expérience..."
+        rows="4"
+        maxlength="500">
+      </textarea>
+      <div class="form-actions">
+        <button mat-stroked-button (click)="showFeedbackForm = false">
+          Annuler
+        </button>
+        <button mat-raised-button (click)="submitFeedback()" class="submit-btn">
+          <mat-icon>send</mat-icon>
+          Envoyer
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Actions -->
+  <div class="actions-section">
+    <button mat-raised-button (click)="onRestart()" class="restart-btn">
+      <mat-icon>replay</mat-icon>
+      REJOUER
+    </button>
+    <button mat-stroked-button (click)="onExit()" class="exit-btn">
+      <mat-icon>exit_to_app</mat-icon>
+      RETOUR
+    </button>
+  </div>
+
+  <!-- Badge TOP 10 flottant -->
+  <div class="top10-celebration" *ngIf="result.isTop10">
+    <div class="celebration-content">
+      <mat-icon>celebration</mat-icon>
+      <h2>FÉLICITATIONS !</h2>
+      <p>Vous êtes dans le TOP 10 mondial ! 🎉</p>
+    </div>
+  </div>
+</div>

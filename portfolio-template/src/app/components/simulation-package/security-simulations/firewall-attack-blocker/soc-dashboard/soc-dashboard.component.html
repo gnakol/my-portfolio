@@ -1,0 +1,208 @@
+<div class="soc-dashboard-container">
+  <!-- HUD Top Bar -->
+  <div class="hud-topbar">
+    <div class="hud-section">
+      <div class="hud-label">
+        <mat-icon>timer</mat-icon>
+        TIME
+      </div>
+      <div class="hud-value" [class.critical]="gameState.timeRemaining <= 10">
+        {{ formatTime(gameState.timeRemaining) }}
+      </div>
+    </div>
+
+    <div class="hud-section">
+      <div class="hud-label">
+        <mat-icon>shield</mat-icon>
+        BLOCKED
+      </div>
+      <div class="hud-value">
+        {{ gameState.attacksBlocked }} / {{ gameState.totalAttacks }}
+      </div>
+    </div>
+
+    <div class="hud-section">
+      <div class="hud-label">
+        <mat-icon>emoji_events</mat-icon>
+        SCORE
+      </div>
+      <div class="hud-value score">
+        {{ gameState.currentScore }}
+      </div>
+    </div>
+
+    <div class="hud-section">
+      <div class="hud-label">
+        <mat-icon>attach_money</mat-icon>
+        SAVED
+      </div>
+      <div class="hud-value money">
+        {{ moneySaved | number:'1.0-0' }}€
+      </div>
+    </div>
+
+    <div class="hud-section alert-indicator" [ngClass]="getAlertClass()">
+      <div class="hud-label">
+        <mat-icon>warning</mat-icon>
+        ALERT
+      </div>
+      <div class="hud-value">
+        {{ alertLevel }}/10
+      </div>
+    </div>
+  </div>
+
+  <!-- Main Dashboard Grid -->
+  <div class="dashboard-grid">
+
+    <!-- Panel 1: Traffic Monitor -->
+    <div class="dashboard-panel traffic-panel">
+      <div class="panel-header">
+        <mat-icon>timeline</mat-icon>
+        <h3>TRAFFIC MONITOR</h3>
+        <span class="live-indicator">● LIVE</span>
+      </div>
+      <div class="panel-content">
+        <div class="traffic-stats">
+          <div class="stat">
+            <span class="stat-label">Current</span>
+            <span class="stat-value">{{ requestsPerSecond | number }} req/s</span>
+          </div>
+          <div class="stat">
+            <span class="stat-label">Normal</span>
+            <span class="stat-value">2,000 req/s</span>
+          </div>
+          <div class="stat">
+            <span class="stat-label">Status</span>
+            <span class="stat-value" [class.danger]="requestsPerSecond > 10000">
+              {{ requestsPerSecond > 10000 ? 'CRITICAL' : 'MONITORING' }}
+            </span>
+          </div>
+        </div>
+        <canvas #trafficCanvas class="traffic-canvas"></canvas>
+      </div>
+    </div>
+
+    <!-- Panel 2: Threat Intelligence -->
+    <div class="dashboard-panel threats-panel">
+      <div class="panel-header">
+        <mat-icon>bug_report</mat-icon>
+        <h3>THREAT INTELLIGENCE</h3>
+        <span class="threat-count">{{ getActiveAttacksCount() }} Active</span>
+      </div>
+      <div class="panel-content">
+        <div class="threats-list">
+          <div class="threat-item" *ngFor="let attack of gameState.activeAttacks"
+               [class.blocked]="attack.isBlocked"
+               [class.critical]="attack.severity === 'CRITICAL'"
+               [class.high]="attack.severity === 'HIGH'">
+            <div class="threat-header">
+              <mat-icon>{{ attack.isBlocked ? 'block' : 'warning' }}</mat-icon>
+              <span class="threat-type">{{ attack.attackType }}</span>
+              <span class="threat-status">{{ attack.isBlocked ? 'BLOCKED' : 'ACTIVE' }}</span>
+            </div>
+            <div class="threat-details">
+              <span>{{ attack.sourceIp }} ({{ attack.sourceCountry }})</span>
+              <span>Port {{ attack.targetPort }}/{{ attack.protocol }}</span>
+              <span>{{ attack.requestsPerSecond | number }} req/s</span>
+            </div>
+          </div>
+
+          <div class="no-threats" *ngIf="gameState.activeAttacks.length === 0">
+            <mat-icon>check_circle</mat-icon>
+            <p>No active threats detected</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Panel 3: Terminal Console -->
+    <div class="dashboard-panel terminal-panel">
+      <div class="panel-header">
+        <mat-icon>terminal</mat-icon>
+        <h3>FIREWALL CONSOLE</h3>
+        <div class="terminal-leds">
+          <div class="led" [class.active]="alertLevel <= 3"></div>
+          <div class="led yellow" [class.active]="alertLevel > 3 && alertLevel <= 6"></div>
+          <div class="led red" [class.active]="alertLevel > 6"></div>
+        </div>
+      </div>
+      <div class="panel-content terminal-content">
+        <div class="terminal-output">
+          <pre *ngFor="let log of terminalLogs">{{ log }}</pre>
+        </div>
+
+        <div class="terminal-input-wrapper">
+          <div class="command-suggestions" *ngIf="showSuggestions">
+            <div class="suggestion"
+                 *ngFor="let suggestion of commandSuggestions"
+                 (click)="useSuggestion(suggestion)">
+              {{ suggestion }}
+            </div>
+          </div>
+
+          <div class="terminal-input">
+            <span class="prompt">root&#64;firewall#</span>
+            <input
+              type="text"
+              [(ngModel)]="currentCommand"
+              (keyup.enter)="executeCommand()"
+              (input)="onCommandInput()"
+              (keydown)="onKeyDown($event)"
+              placeholder="Enter command..."
+              [disabled]="!gameState.isRunning"
+              autocomplete="off">
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Panel 4: Infrastructure Status -->
+    <div class="dashboard-panel infra-panel">
+      <div class="panel-header">
+        <mat-icon>dns</mat-icon>
+        <h3>INFRASTRUCTURE</h3>
+      </div>
+      <div class="panel-content">
+        <div class="server-grid">
+          <div class="server-card safe">
+            <mat-icon>computer</mat-icon>
+            <div class="server-name">WEB-01</div>
+            <div class="server-status">PROTECTED</div>
+            <div class="server-metrics">
+              <span>CPU: 45%</span>
+              <span>MEM: 62%</span>
+            </div>
+          </div>
+
+          <div class="server-card safe">
+            <mat-icon>storage</mat-icon>
+            <div class="server-name">DB-01</div>
+            <div class="server-status">PROTECTED</div>
+            <div class="server-metrics">
+              <span>CPU: 38%</span>
+              <span>MEM: 71%</span>
+            </div>
+          </div>
+
+          <div class="server-card safe">
+            <mat-icon>security</mat-icon>
+            <div class="server-name">AD-01</div>
+            <div class="server-status">PROTECTED</div>
+            <div class="server-metrics">
+              <span>CPU: 22%</span>
+              <span>MEM: 54%</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="firewall-rules-section">
+          <div class="rules-header">
+            <mat-icon>rule</mat-icon>
+            <span>Active Rules ({{ gameState.rulesCreated }})</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
