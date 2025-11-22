@@ -1,26 +1,57 @@
 import { Component } from '@angular/core';
-import { IntroFirewallComponent } from './intro-firewall/intro-firewall.component';
 import { CommonModule } from '@angular/common';
-import { ReactiveFormsModule } from '@angular/forms';
+import { IntroFirewallComponent } from './intro-firewall/intro-firewall.component';
+import { SocDashboardComponent } from './soc-dashboard/soc-dashboard.component';
+import { ResultsComponent } from './results/results.component';
+import { SessionResult } from './models/firewall.models';
 
 @Component({
   selector: 'app-firewall-attack-blocker',
   standalone: true,
   templateUrl: './firewall-attack-blocker.component.html',
   styleUrl: './firewall-attack-blocker.component.scss',
-  imports : [
-    IntroFirewallComponent,
+  imports: [
     CommonModule,
-    ReactiveFormsModule,
-    
+    IntroFirewallComponent,
+    SocDashboardComponent,
+    ResultsComponent
   ]
 })
 export class FirewallAttackBlockerComponent {
 
-  showIntroFirewall: boolean = true;
+  currentView: 'intro' | 'dashboard' | 'results' = 'intro';
+  playerPseudo: string = 'Anonymous';
+  sessionResult?: SessionResult;
 
-  onStartSimulation() {
-    this.showIntroFirewall = false;
+  /**
+   * Démarre la simulation
+   */
+  onStartSimulation(pseudo: string): void {
+    this.playerPseudo = pseudo;
+    this.currentView = 'dashboard';
   }
 
+  /**
+   * Affiche les résultats
+   */
+  onSessionEnded(result: SessionResult): void {
+    this.sessionResult = result;
+    this.currentView = 'results';
+  }
+
+  /**
+   * Recommence la simulation
+   */
+  onRestart(): void {
+    this.sessionResult = undefined;
+    this.currentView = 'dashboard';
+  }
+
+  /**
+   * Retour à l'intro
+   */
+  onExit(): void {
+    this.sessionResult = undefined;
+    this.currentView = 'intro';
+  }
 }

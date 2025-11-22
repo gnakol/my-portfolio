@@ -72,6 +72,12 @@ public class ConfigurationSecurityApplication {
                         .requestMatchers(HttpMethod.POST, "/simulation/eigrp").permitAll()
                         .requestMatchers(POST, "/feedback/add-feedback").permitAll()
                         .requestMatchers(POST, "/simulation/session/start").permitAll()
+                        // Firewall Attack Blocker Simulation
+                        .requestMatchers(HttpMethod.POST, "/api/simulation/firewall/start").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/api/simulation/firewall/execute-rule").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/api/simulation/firewall/end").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/simulation/firewall/leaderboard").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/simulation/firewall/health").permitAll()
                         .requestMatchers(HttpMethod.GET, "/media/public").permitAll()
                         .requestMatchers(HttpMethod.POST,    "/visits").permitAll()                  // créer une visite
                         .requestMatchers(HttpMethod.PUT,     "/visits/*/duration").permitAll()       // heartbeat (maj durée)

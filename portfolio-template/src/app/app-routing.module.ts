@@ -47,7 +47,6 @@ import { MonitoringComponent } from './components/simulation-package/admin-simul
 import { MonitoringCyberWarComponent } from './components/simulation-package/admin-simulations/monitoring/monitoring-cyber-war/monitoring-cyber-war.component';
 import { SecuritySimulationsComponent } from './components/simulation-package/security-simulations/security-simulations.component';
 import { IntroFirewallComponent } from './components/simulation-package/security-simulations/firewall-attack-blocker/intro-firewall/intro-firewall.component';
-import { GoSimulationFirewallComponent } from './components/simulation-package/security-simulations/firewall-attack-blocker/go-simulation-firewall/go-simulation-firewall.component';
 import { FirewallAttackBlockerComponent } from './components/simulation-package/security-simulations/firewall-attack-blocker/firewall-attack-blocker.component';
 import { MonitoringIntroComponent } from './components/simulation-package/admin-simulations/monitoring/monitoring-intro/monitoring-intro.component';
 import { SkillCategoriesComponent } from './components/skill-package/web-service/skill-categories/skill-categories.component';
@@ -160,7 +159,6 @@ const routes: Routes = [
 
   { path : 'security-template', component : SecuritySimulationsComponent},
   { path : 'intro-firewall', component : IntroFirewallComponent},
-  { path : 'go-firewal-simulation', component : GoSimulationFirewallComponent},
   { path: 'mission-control', component: MissionControlComponent },
   { path: 'tls-dashboard', component: TlsDashboardComponent, canActivate: [AuthGuard] },
   { path: 'visit-tracking', component: VisitTrackingComponent, canActivate: [AuthGuard] } 
