@@ -20,25 +20,30 @@ spring:
     scheduling:
       enabled: true
 
-  # ✅ NOUVEAU: Limites multipart côté Spring (copié du local)
   servlet:
     multipart:
       enabled: true
-      max-file-size: 500MB          # taille max d'un fichier
-      max-request-size: 500MB       # taille max de la requête
+      max-file-size: 500MB
+      max-request-size: 500MB
 
   mvc:
     async:
-      request-timeout: 10m          # évite les timeouts lors d'uploads lourds
+      request-timeout: 10m
+
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          # 👉 L’URL publique de Keycloak en PROD (on va la rendre vraie avec Nginx + K8s)
+          issuer-uri: https://kolie-portfolio.org/auth/realms/portfolio
 
 server:
   port: 9000
   servlet:
     context-path: /portfolio-api
-  # ✅ NOUVEAU: Configuration Tomcat pour gros fichiers (copié du local)
   tomcat:
-    max-swallow-size: -1            #
-    max-http-post-size: 524288000   # 500MB (524288000 bytes) - CRITIQUE pour les uploads
+    max-swallow-size: -1
+    max-http-post-size: 524288000
     connection-timeout: 60s
 
 management:
@@ -88,18 +93,26 @@ cloud:
       static: eu-north-1
     stack:
       auto: false
-    # ✅ NOUVEAU: Configuration S3 spécifique
     s3:
       bucket: ${AWS_S3_BUCKET:kolie-portfolio-profile}
       mediaFolder: media/
 
-# Configuration Prometheus (service interne K8s)
 prometheus:
+  # En prod, ton Prometheus de K8s
   url: ${PROMETHEUS_URL:http://kps-kube-prometheus-stack-prometheus.monitoring.svc.cluster.local:9090}
 
-# Configuration personnalisée pour le nettoyage des tokens
 token:
   cleanup:
     enabled: true
     schedule: "0 0 3 * * ?"
     retention-days: 1
+
+# 👉 Bloc Keycloak PROD (même client-id/secret que le local)
+keycloak:
+  server-url: https://kolie-portfolio.org/auth
+  realm: portfolio
+  client-id: portfolio-api
+  client-secret: "arf68yswzUZuTJRh1VJRrWvJdHPVWJjk"
+  admin-username: admin
+  admin-password: admin
+  front-client-id: portfolio-frontend
