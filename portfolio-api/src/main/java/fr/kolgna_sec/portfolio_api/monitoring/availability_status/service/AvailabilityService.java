@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.lang.management.ManagementFactory;
 import java.time.Duration;
@@ -23,6 +24,7 @@ public class AvailabilityService {
     @Value("${availability.retentionDays:7}")
     private int retentionDays;
 
+    @Transactional
     public AvailabilityStatus checkNow() {
         long uptimeMs = ManagementFactory.getRuntimeMXBean().getUptime();
         int e5  = errorFilter.countLastMinutes(5);
@@ -50,14 +52,17 @@ public class AvailabilityService {
         return repo.findTopByOrderByCheckedAtDesc().orElse(null);
     }
 
+    @Transactional
     private void purgeOld() {
         if (retentionDays <= 0) return;
         Instant cutoff = Instant.now().minus(Duration.ofDays(retentionDays));
         repo.deleteByCheckedAtBefore(cutoff);
     }
 
-    /** Exemple : snapshot toutes les 5 min (désactive si tu veux) */
+    /** Exemple : snapshot toutes les 5 min */
+    @Transactional
     @Scheduled(cron = "0 */5 * * * *")
+
     public void scheduledCheck() {
         checkNow();
     }

@@ -127,6 +127,7 @@ public class SystemHealthService {
      * Snapshot automatique toutes les 5 minutes
      */
     @Scheduled(cron = "0 */5 * * * *")
+    @Transactional
     public void scheduledSnapshot() {
         saveSnapshot();
         // Auto-purge > 7 jours

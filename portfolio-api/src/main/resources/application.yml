@@ -36,6 +36,12 @@ spring:
     async:
       request-timeout: 10m          # évite les timeouts lors d'uploads lourds
 
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: http://localhost:8082/realms/portfolio
+
 server:
   port: 9000
   servlet:
@@ -45,6 +51,16 @@ server:
     max-swallow-size: -1            # illimité (évite les erreurs de parsing body)
     max-http-post-size: 524288000   # 500MB (524288000 bytes) - CRITIQUE pour les uploads
     connection-timeout: 60s
+
+# Keycloak Configuration
+keycloak:
+  server-url: http://localhost:8082
+  realm: portfolio
+  client-id: portfolio-api
+  client-secret: "arf68yswzUZuTJRh1VJRrWvJdHPVWJjk"
+  admin-username: admin
+  admin-password: admin
+  front-client-id: portfolio-frontend
 
 cloud:
   aws:

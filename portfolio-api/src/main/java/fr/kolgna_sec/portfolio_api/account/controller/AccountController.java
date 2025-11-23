@@ -68,17 +68,20 @@ public class AccountController {
         return ResponseEntity.ok(userId);
     }
 
+    /**
+     * DEPRECATED : Le changement de mot de passe est maintenant géré par Keycloak
+     *
+     * Les utilisateurs doivent aller sur :
+     * - http://localhost:8082/realms/portfolio/account/ (en dev)
+     * - https://keycloak.kolie-portfolio.org/realms/portfolio/account/ (en prod)
+     */
+    @Deprecated
     @PutMapping("change-password")
     public ResponseEntity<?> changePassword(@Validated @RequestBody ChangePasswordDTO changePasswordDTO, Authentication authentication)
     {
-        try
-        {
-            this.accountService.changePassword(authentication.getName(), changePasswordDTO.getOlPassword(), changePasswordDTO.getNewPassword());
-            return ResponseEntity.ok().body("Password successfully updated");
-        } catch (Exception e)
-        {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
+        return ResponseEntity.status(HttpStatus.NOT_IMPLEMENTED)
+                .body("Le changement de mot de passe est maintenant géré par Keycloak. " +
+                      "Rendez-vous sur : http://localhost:8082/realms/portfolio/account/");
     }
 
     @PostMapping("/upload-profile-image/{id}")

@@ -1,12 +1,15 @@
 package fr.kolgna_sec.portfolio_api.account.dto;
 
-import fr.kolgna_sec.portfolio_api.role.dto.RoleDTO;
-import jakarta.persistence.Column;
 import lombok.Builder;
 import lombok.Data;
 
-import java.util.List;
-
+/**
+ * AccountDTO - Données métier de l'utilisateur
+ *
+ * IMPORTANT : Après migration Keycloak :
+ * - password et roles supprimés (gérés par Keycloak)
+ * - Contient uniquement les données métier
+ */
 @Data
 @Builder
 public class AccountDTO {
@@ -15,13 +18,13 @@ public class AccountDTO {
 
     private String refAccount;
 
+    private String keycloakUserId;
+
     private String name;
 
     private String firstName;
 
     private String email;
-
-    private String password;
 
     private Long phoneNumber;
 
@@ -34,8 +37,6 @@ public class AccountDTO {
     private String address;
 
     private String profileImageUrl;
-
-    private List<RoleDTO> roleDTOS;
 
     private String cvUrl;
 }

@@ -1,8 +1,7 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
-import { BehaviorSubject, catchError, map, Observable, of } from 'rxjs';
-import { GenericMethodeService } from '../../../services/generic-methode.service';
+import { BehaviorSubject, catchError, map, Observable, of, throwError } from 'rxjs';
 import { environment } from '../../../../environments/environment';
 
 @Injectable({
@@ -33,41 +32,69 @@ export class AuthenticationService {
   }
 
 
-  login(username: string, password: string): Observable<string> {
-    return this.http.post<{ bearer: string }>(this.authUrl, { username, password })
-      .pipe(
-        map(response => {
-          if (response?.bearer) {
-            localStorage.setItem('jwtToken', response.bearer);
-            this.authStatus.next(true); 
-            this.router.navigate(['/dashboard-admin']);
-            return response.bearer;
-          } else {
-            throw new Error('Invalid response from server');
+login(email: string, password: string): Observable<string> {
+  return this.http.post<{
+    access_token: string;
+    refresh_token: string;
+    expires_in: string;
+  }>(this.authUrl, { email, password })
+    .pipe(
+      map(response => {
+        if (response?.access_token) {
+          // on stocke le token d’accès ET le refresh token
+          localStorage.setItem('jwtToken', response.access_token);
+          if (response.refresh_token) {
+            localStorage.setItem('refreshToken', response.refresh_token);
           }
-        })
-      );
+
+          this.authStatus.next(true);
+          this.router.navigate(['/dashboard-admin']);
+          return response.access_token;
+        } else {
+          throw new Error('Invalid response from server');
+        }
+      })
+    );
+}
+
+
+logout(): void {
+  const accessToken  = localStorage.getItem('jwtToken');
+  const refreshToken = localStorage.getItem('refreshToken');
+
+  if (!refreshToken) {
+    // On nettoie quand même le localStorage
+    localStorage.removeItem('jwtToken');
+    localStorage.removeItem('refreshToken');
+    this.authStatus.next(false);
+    this.router.navigate(['/login']);
+    return;
   }
 
-  logout(): void {
-    const token = localStorage.getItem('jwtToken');
-    if (!token) return;
+  const headers = new HttpHeaders({
+    'Content-Type': 'application/json',
+    ...(accessToken ? { 'Authorization': `Bearer ${accessToken}` } : {})
+  });
 
-    const headers = new HttpHeaders({
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${token}`
-    });
+  const body = { refresh_token: refreshToken };
 
-    this.http.post<{ message: string }>(this.disconnectUrl, {}, { headers }).subscribe(() => {
-      localStorage.removeItem('jwtToken');
-      this.authStatus.next(false);
-      this.router.navigate(['/login']);
-    }, () => {
-      localStorage.removeItem('jwtToken');
-      this.authStatus.next(false);
-      this.router.navigate(['/login']);
-    });
-  }
+  this.http.post<{ message: string }>(this.disconnectUrl, body, { headers })
+    .subscribe(
+      () => {
+        localStorage.removeItem('jwtToken');
+        localStorage.removeItem('refreshToken');
+        this.authStatus.next(false);
+        this.router.navigate(['/login']);
+      },
+      () => {
+        localStorage.removeItem('jwtToken');
+        localStorage.removeItem('refreshToken');
+        this.authStatus.next(false);
+        this.router.navigate(['/login']);
+      }
+    );
+}
+
 
   getToken(): string | null {
     return localStorage.getItem('jwtToken');
@@ -119,44 +146,45 @@ export class AuthenticationService {
 }
 
 
-  validateTokenWithServer(token: string): Observable<{ isValid: boolean }> {
+  // validateTokenWithServer(token: string): Observable<{ isValid: boolean }> {
     
-    const headers = new HttpHeaders({
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${token}`
-    });
-    return this.http.post<{ isValid: boolean }>(`${this.tokenUrl}/validate-token`, { token }, { headers });
-  }
+  //   const headers = new HttpHeaders({
+  //     'Content-Type': 'application/json',
+  //     'Authorization': `Bearer ${token}`
+  //   });
+  //   return this.http.post<{ isValid: boolean }>(`${this.tokenUrl}/validate-token`, { token }, { headers });
+  // }
 
   isAuthenticated() : boolean
   {
     return !!this.getToken();
   }
 
-  refreshToken() : Observable<string>
-  {
-    const token = this.getToken();
+refreshToken(): Observable<string> {
+  const refreshToken = localStorage.getItem('refreshToken');
+  if (!refreshToken) {
+    return throwError(() => new Error('No refresh token'));
+  }
 
-    const headers = new HttpHeaders({
-      'Content-Type' : 'application/json',
-      'Authorization' : `Bearer ${token}`
-    });
-
-    return this.http.post<{ bearer : string }>(`${this.refreshTokenUrl}`, {}, {headers})
+  return this.http.post<{
+    access_token: string;
+    refresh_token: string;
+    expires_in: string;
+  }>(this.refreshTokenUrl, { refresh_token: refreshToken })
     .pipe(
       map(response => {
-        if(response && response.bearer)
-        {
-          localStorage.setItem('jwtToken', response.bearer);
-          return response.bearer;
-        }
-        else
-        {
+        if (response?.access_token) {
+          localStorage.setItem('jwtToken', response.access_token);
+          if (response.refresh_token) {
+            localStorage.setItem('refreshToken', response.refresh_token);
+          }
+          return response.access_token;
+        } else {
           throw new Error('Failed to refresh token');
         }
       })
     );
-  }
+}
 
   // Admin
   isAdmin(): boolean {
