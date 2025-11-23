@@ -14,7 +14,7 @@ export class AuthGuard implements CanActivate {
     private router: Router
   ) {}
 
-  canActivate(): Observable<boolean> | boolean {
+  canActivate(): boolean {
     const token = this.authService.getToken();
 
     if (!token) {
@@ -22,24 +22,6 @@ export class AuthGuard implements CanActivate {
       return false;
     }
 
-    return this.authService.validateTokenWithServer(token).pipe(
-      map(response => {
-        if (response.isValid) {
-          return true;
-        } else {
-          this.router.navigate(['/login']);
-          return false;
-        }
-      }),
-      catchError((error: HttpErrorResponse) => {
-        // ⚠️ Ne redirige que sur 401 (token expiré / invalide)
-        if (error.status === 401) {
-          this.router.navigate(['/login']);
-        } else {
-          // console.warn('Erreur réseau / serveur détectée:', error.message);
-        }
-        return of(false);
-      })
-    );
+    return true;
   }
 }

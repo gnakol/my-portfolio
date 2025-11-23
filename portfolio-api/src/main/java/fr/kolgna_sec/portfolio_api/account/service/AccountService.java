@@ -1,54 +1,41 @@
 package fr.kolgna_sec.portfolio_api.account.service;
 
 import com.amazonaws.services.s3.AmazonS3;
-import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import fr.kolgna_sec.portfolio_api.account.bean.Account;
 import fr.kolgna_sec.portfolio_api.account.dto.AccountDTO;
 import fr.kolgna_sec.portfolio_api.account.mappers.AccountMapper;
 import fr.kolgna_sec.portfolio_api.account.repositories.AccountRepository;
-import fr.kolgna_sec.portfolio_api.role.bean.Role;
-import fr.kolgna_sec.portfolio_api.role.mappers.RoleMapper;
-import fr.kolgna_sec.portfolio_api.role.repositories.RoleRepository;
-import fr.kolgna_sec.portfolio_api.role.service.RoleService;
 import fr.kolgna_sec.portfolio_api.uuid.service.UuidService;
 import fr.kolgna_sec.portfolio_api.webservices.Webservices;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
+/**
+ * Service Account - Gestion des données métier uniquement
+ *
+ * IMPORTANT : Après migration Keycloak :
+ * - L'authentification est gérée par Keycloak (plus de UserDetailsService)
+ * - Les rôles sont gérés par Keycloak (plus de gestion de roles en DB)
+ * - Ce service gère uniquement les données métier (profile, CV, S3, etc.)
+ */
 @Service
 @RequiredArgsConstructor
-public class AccountService implements Webservices<AccountDTO>, UserDetailsService {
+public class AccountService implements Webservices<AccountDTO> {
 
     private final AccountRepository accountRepository;
 
     private final AccountMapper accountMapper;
 
     private final UuidService uuidService;
-
-    private final BCryptPasswordEncoder passwordEncoder;
-
-    private final RoleService roleService;
-
-    private final RoleRepository roleRepository;
-
-    private final RoleMapper roleMapper;
 
     private final AmazonS3 amazonS3;
 
@@ -59,67 +46,56 @@ public class AccountService implements Webservices<AccountDTO>, UserDetailsServi
 
     @Override
     public AccountDTO add(AccountDTO e) {
-
         Account account = this.accountMapper.fromAccountDTO(e);
-
-        List<Role> roles = e.getRoleDTOS().stream()
-                        .map(this.roleMapper::fromRoleDTO)
-                                .collect(Collectors.toList());
-
-        account.setRoles(roles);
         account.setRefAccount(this.uuidService.generateUuid());
-        account.setPassword(this.passwordEncoder.encode(e.getPassword()));
+
+        // Note : La création d'utilisateur devrait se faire via Keycloak
+        // Cet endpoint devrait être utilisé uniquement pour créer les données métier
+        // après qu'un utilisateur ait été créé dans Keycloak
 
         return this.accountMapper.fromAccount(this.accountRepository.save(account));
     }
 
     @Override
     public AccountDTO update(Long id, AccountDTO e) {
-
         return this.accountMapper.fromAccount(this.accountRepository.findById(id)
                 .map(account -> {
-                    if (account.getRefAccount() == null)
+                    if (e.getRefAccount() != null)
                         account.setRefAccount(e.getRefAccount());
-                    if (account.getName() != null)
+                    if (e.getName() != null)
                         account.setName(e.getName());
-                    if (account.getFirstName() != null)
+                    if (e.getFirstName() != null)
                         account.setFirstName(e.getFirstName());
                     if (e.getEmail() != null)
                         account.setEmail(e.getEmail());
-                    if (account.getPhoneNumber() != null)
+                    if (e.getPhoneNumber() != null)
                         account.setPhoneNumber(e.getPhoneNumber());
-                    if (account.getCivility() != null)
+                    if (e.getCivility() != null)
                         account.setCivility(e.getCivility());
-                    if (account.getGithub() != null)
+                    if (e.getGithub() != null)
                         account.setGithub(e.getGithub());
-                    if (account.getLinkedin() != null)
-                        account.setCivility(e.getCivility());
-                    if (account.getAddress() != null)
+                    if (e.getLinkedin() != null)
+                        account.setLinkedin(e.getLinkedin());
+                    if (e.getAddress() != null)
                         account.setAddress(e.getAddress());
-                    if (e.getRoleDTOS() != null || !e.getRoleDTOS().isEmpty())
-                    {
-                        List<Role> roles = e.getRoleDTOS().stream()
-                                .map(this.roleMapper::fromRoleDTO)
-                                .collect(Collectors.toList());
-                        account.setRoles(roles);
-                    }
+
                     Optional.ofNullable(e.getProfileImageUrl()).ifPresent(account::setProfileImageUrl);
+                    Optional.ofNullable(e.getCvUrl()).ifPresent(account::setCvUrl);
 
                     return this.accountRepository.save(account);
                 })
-                .orElseThrow(() -> new RuntimeException("Unable to retrieve Role. Please check the provide ID")));
+                .orElseThrow(() -> new RuntimeException("Unable to retrieve Account. Please check the provided ID")));
     }
 
     @Override
     public void remove(Long id) {
+        Optional<Account> account = this.accountRepository.findById(id);
 
-        Optional<Account> accountDTO = this.accountRepository.findById(id);
+        if (account.isEmpty())
+            throw new RuntimeException("Unable to retrieve Account. Please check the provided ID");
 
-        if (accountDTO.isEmpty())
-            throw new RuntimeException("Unable to retrieve Role. Please check the provide ID");
-
-        this.accountRepository.delete(accountDTO.get());
-
+        // Note : Penser à supprimer aussi l'utilisateur dans Keycloak si nécessaire
+        this.accountRepository.delete(account.get());
     }
 
     @Override
@@ -128,31 +104,27 @@ public class AccountService implements Webservices<AccountDTO>, UserDetailsServi
                 .map(this.accountMapper::fromAccount);
     }
 
-    @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        return this.accountRepository.findByEmail(username)
-                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
-    }
-
-    public Long getAccountIdByEmail(String email)
-    {
-        Account account = this.accountRepository.findByEmail(email).get();
-
+    /**
+     * Récupère l'ID de l'account par email
+     */
+    public Long getAccountIdByEmail(String email) {
+        Account account = this.accountRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("Account not found with email: " + email));
         return account.getIdAccount();
     }
 
-    public void changePassword(String username, String oldPassword, String newPassword)
-    {
-        Account account = this.accountRepository.findByEmail(username)
-                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+    /**
+     * Récupère un account par son UUID Keycloak
+     */
+    public Optional<Account> getAccountByKeycloakUserId(String keycloakUserId) {
+        return this.accountRepository.findByKeycloakUserId(keycloakUserId);
+    }
 
-        if (!this.passwordEncoder.matches(oldPassword, account.getPassword()))
-        {
-            throw new RuntimeException("Old password does not match.");
-        }
-
-        account.setPassword(this.passwordEncoder.encode(newPassword));
-        this.accountRepository.save(account);
+    /**
+     * Récupère un account par email
+     */
+    public Optional<Account> getAccountByEmail(String email) {
+        return this.accountRepository.findByEmail(email);
     }
 
     public String uploadProfileImage(Long id, MultipartFile file) throws IOException {

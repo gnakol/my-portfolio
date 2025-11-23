@@ -1,22 +1,23 @@
 package fr.kolgna_sec.portfolio_api.account.bean;
 
-import fr.kolgna_sec.portfolio_api.role.bean.Role;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
 
-import java.util.*;
-
+/**
+ * Entité Account - Données métier de l'utilisateur
+ *
+ * - L'authentification est gérée par Keycloak
+ * - Les données métier (profile, CV, S3, etc.) restent en DB
+ * - keycloakUserId fait le lien avec Keycloak
+ */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
 @Table(name = "account")
-public class Account implements UserDetails {
+public class Account {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -26,17 +27,20 @@ public class Account implements UserDetails {
     @Column(name = "ref_account")
     private String refAccount;
 
+    /**
+     * UUID de l'utilisateur dans Keycloak (clé de liaison)
+     */
+    @Column(name = "keycloak_user_id", unique = true)
+    private String keycloakUserId;
+
     @Column(name = "name")
     private String name;
 
     @Column(name = "first_name")
     private String firstName;
 
-    @Column(name = "email")
+    @Column(name = "email", unique = true, nullable = false)
     private String email;
-
-    @Column(name = "password")
-    private String password;
 
     @Column(name = "phone_number")
     private Long phoneNumber;
@@ -58,49 +62,4 @@ public class Account implements UserDetails {
 
     @Column(name = "cv_url")
     private String cvUrl;
-
-    @ManyToMany(fetch = FetchType.EAGER)
-    @Column(name = "id_role", nullable = false)
-    @JoinTable(name = "role_account",
-            joinColumns = @JoinColumn(name = "id_account"),
-            inverseJoinColumns = @JoinColumn(name = "id_role"))
-    List<Role> roles = new ArrayList<>();
-
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-
-        Set<GrantedAuthority> authorities = new HashSet<>();
-
-        this.roles.forEach(role -> {
-            authorities.add(new SimpleGrantedAuthority("ROLE_" +role.getName()));
-            authorities.addAll(role.getAuthorities());
-        });
-
-        return authorities;
-    }
-
-    @Override
-    public String getUsername() {
-        return this.getEmail();
-    }
-
-    @Override
-    public boolean isAccountNonExpired() {
-        return true;
-    }
-
-    @Override
-    public boolean isAccountNonLocked() {
-        return true;
-    }
-
-    @Override
-    public boolean isCredentialsNonExpired() {
-        return true;
-    }
-
-    @Override
-    public boolean isEnabled() {
-        return true;
-    }
 }
