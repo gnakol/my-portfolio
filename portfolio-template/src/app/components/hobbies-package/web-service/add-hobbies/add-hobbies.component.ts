@@ -38,7 +38,7 @@ export class AddHobbiesComponent implements OnInit {
     private fb: FormBuilder,
     private snackBar: MatSnackBar,
     private hobbiesService: HobbiesService,
-    private accountService: AccountService, // ✅ Service pour récupérer l'ID utilisateur
+    private accountService: AccountService,
     private router : Router
   ) {
     this.hobbyForm = this.fb.group({
