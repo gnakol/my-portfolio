@@ -1,1 +1,13 @@
 portfolio-api/portfolio-api.tar
+
+# Configuration files locale (ne pas pousser en prod)
+docker-compose.yml
+job-track-service/docker-compose.yml
+job-track-service/.env
+portfolio-api/src/main/resources/application.yml
+
+# IMPORTANT: application-prod.yml doit être poussé sur GitHub (pour la prod)
+!portfolio-api/src/main/resources/application-prod.yml
+
+# GitHub workflows - garder en local pour éviter déclenchement intempestif
+.github/workflows/
