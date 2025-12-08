@@ -37,9 +37,9 @@
         <mat-icon>assignment</mat-icon>
         <span>Mes candidatures</span>
       </button>
-      <button mat-raised-button class="action-btn tertiary" (click)="navigateToStatistics()">
+      <button mat-raised-button class="action-btn tertiary" (click)="refresh()">
         <mat-icon>bar_chart</mat-icon>
-        <span>Statistiques</span>
+        <span>Actualiser les stats</span>
       </button>
     </div>
 
@@ -297,6 +297,71 @@
       <div class="loading-container" *ngIf="isLoadingLocation">
         <mat-spinner diameter="50"></mat-spinner>
         <p>Chargement des statistiques par localisation...</p>
+      </div>
+    </ng-template>
+
+    <!-- Platform Performance -->
+    <div class="section-title" *ngIf="topPlatforms.length > 0">
+      <mat-icon>public</mat-icon>
+      <h2>Performance par Plateforme</h2>
+    </div>
+
+    <div class="top-platforms" *ngIf="!isLoadingPlatform && topPlatforms.length > 0; else loadingPlatform">
+      <mat-card class="platform-card" *ngFor="let platform of topPlatforms; let i = index">
+        <div class="platform-header">
+          <div class="platform-title">
+            <mat-icon class="platform-icon">{{ i === 0 ? 'emoji_events' : i === 1 ? 'workspace_premium' : 'verified' }}</mat-icon>
+            <h3 class="platform-name">{{ platform.platform }}</h3>
+          </div>
+          <mat-chip class="success-chip" [style.background]="getRateColor(platform.successRate)">
+            {{ platform.successRate | number:'1.1-1' }}% succès
+          </mat-chip>
+        </div>
+        <div class="platform-stats">
+          <div class="detail-item">
+            <mat-icon>send</mat-icon>
+            <span>{{ platform.totalApplications }} candidatures</span>
+          </div>
+          <div class="detail-item">
+            <mat-icon>mail</mat-icon>
+            <span>{{ platform.totalResponses }} réponses</span>
+          </div>
+          <div class="detail-item">
+            <mat-icon>groups</mat-icon>
+            <span>{{ platform.totalInterviews }} entretiens</span>
+          </div>
+          <div class="detail-item">
+            <mat-icon>check_circle</mat-icon>
+            <span>{{ platform.totalOffersReceived }} offres</span>
+          </div>
+        </div>
+        <div class="platform-rates">
+          <div class="rate-item">
+            <span class="rate-label">Réponse</span>
+            <span class="rate-value" [style.color]="getRateColor(platform.responseRate)">
+              {{ platform.responseRate | number:'1.1-1' }}%
+            </span>
+          </div>
+          <div class="rate-item">
+            <span class="rate-label">Entretien</span>
+            <span class="rate-value" [style.color]="getRateColor(platform.interviewRate)">
+              {{ platform.interviewRate | number:'1.1-1' }}%
+            </span>
+          </div>
+          <div class="rate-item">
+            <span class="rate-label">Succès</span>
+            <span class="rate-value" [style.color]="getRateColor(platform.successRate)">
+              {{ platform.successRate | number:'1.1-1' }}%
+            </span>
+          </div>
+        </div>
+      </mat-card>
+    </div>
+
+    <ng-template #loadingPlatform>
+      <div class="loading-container" *ngIf="isLoadingPlatform">
+        <mat-spinner diameter="50"></mat-spinner>
+        <p>Chargement des statistiques par plateforme...</p>
       </div>
     </ng-template>
 

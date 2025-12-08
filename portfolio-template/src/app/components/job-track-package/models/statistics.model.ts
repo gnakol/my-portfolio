@@ -49,3 +49,19 @@ export interface LocationPerformance {
   interviewRate: number;
   successRate: number;
 }
+
+export interface PlatformStatistics {
+  platforms: PlatformPerformance[];
+  totalPlatforms: number;
+}
+
+export interface PlatformPerformance {
+  platform: string;
+  totalApplications: number;
+  totalResponses: number;
+  totalInterviews: number;
+  totalOffersReceived: number;
+  responseRate: number;
+  interviewRate: number;
+  successRate: number;
+}

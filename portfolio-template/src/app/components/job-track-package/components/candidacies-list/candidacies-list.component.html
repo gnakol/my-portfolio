@@ -35,7 +35,7 @@
     <mat-card class="filters-card">
       <div class="filters-row">
         <!-- Search -->
-        <mat-form-field class="search-field" appearance="outline">
+        <mat-form-field class="search-field" appearance="fill">
           <mat-label>Rechercher</mat-label>
           <input
             matInput
@@ -55,7 +55,7 @@
         </mat-form-field>
 
         <!-- Status Filter -->
-        <mat-form-field class="status-field" appearance="outline">
+        <mat-form-field class="status-field" appearance="fill">
           <mat-label>Statut</mat-label>
           <mat-select [(ngModel)]="selectedStatus" (selectionChange)="onStatusFilterChange()">
             <mat-option value="ALL">Tous les statuts</mat-option>

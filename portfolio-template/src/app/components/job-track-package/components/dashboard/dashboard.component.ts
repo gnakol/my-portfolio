@@ -17,8 +17,10 @@ import {
   StatisticsOverview,
   StackStatistics,
   LocationStatistics,
+  PlatformStatistics,
   StackPerformance,
-  LocationPerformance
+  LocationPerformance,
+  PlatformPerformance
 } from '../../models/statistics.model';
 
 @Component({
@@ -42,15 +44,18 @@ export class DashboardComponent implements OnInit {
   isLoadingOverview = false;
   isLoadingStack = false;
   isLoadingLocation = false;
+  isLoadingPlatform = false;
 
   // Data
   overview: StatisticsOverview | null = null;
   stackStats: StackStatistics | null = null;
   locationStats: LocationStatistics | null = null;
+  platformStats: PlatformStatistics | null = null;
 
   // Computed data for display
   topStacks: StackPerformance[] = [];
   topLocations: LocationPerformance[] = [];
+  topPlatforms: PlatformPerformance[] = [];
 
   constructor(
     private statisticsService: StatisticsService,
@@ -67,6 +72,7 @@ export class DashboardComponent implements OnInit {
     this.loadOverview();
     this.loadStackStatistics();
     this.loadLocationStatistics();
+    this.loadPlatformStatistics();
   }
 
   // Load overview statistics
@@ -125,6 +131,25 @@ export class DashboardComponent implements OnInit {
     });
   }
 
+  // Load platform statistics
+  loadPlatformStatistics(): void {
+    this.isLoadingPlatform = true;
+    this.statisticsService.getByPlatform().subscribe({
+      next: (data) => {
+        this.platformStats = data;
+        // Get all platforms sorted by success rate
+        this.topPlatforms = [...data.platforms]
+          .sort((a, b) => b.successRate - a.successRate);
+        this.isLoadingPlatform = false;
+      },
+      error: (error) => {
+        console.error('Error loading platform statistics:', error);
+        this.isLoadingPlatform = false;
+        this.showError('Erreur lors du chargement des statistiques par plateforme');
+      }
+    });
+  }
+
   // Navigation helpers
   navigateToScraping(): void {
     this.router.navigate(['/job-track-scraping']);
@@ -132,10 +157,6 @@ export class DashboardComponent implements OnInit {
 
   navigateToCandidacies(): void {
     this.router.navigate(['/job-track-candidacies']);
-  }
-
-  navigateToStatistics(): void {
-    this.router.navigate(['/job-track-statistics']);
   }
 
   goBack(): void {

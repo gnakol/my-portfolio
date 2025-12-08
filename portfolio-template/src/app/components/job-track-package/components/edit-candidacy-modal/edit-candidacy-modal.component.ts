@@ -88,15 +88,32 @@ export class EditCandidacyModalComponent implements OnInit {
     this.isSubmitting = true;
 
     const formValue = this.editForm.value;
-    const updateData: Partial<Candidacy> = {
-      applicationDate: formValue.applicationDate,
+
+    // Convert Date object to YYYY-MM-DD format for backend (date type, not timestamp)
+    let applicationDate: string;
+    if (formValue.applicationDate instanceof Date) {
+      const year = formValue.applicationDate.getFullYear();
+      const month = String(formValue.applicationDate.getMonth() + 1).padStart(2, '0');
+      const day = String(formValue.applicationDate.getDate()).padStart(2, '0');
+      applicationDate = `${year}-${month}-${day}`;
+    } else {
+      applicationDate = formValue.applicationDate;
+    }
+
+    const updateData: any = {
+      applicationDate: applicationDate,
       currentStatus: formValue.currentStatus,
       applicationChannel: formValue.applicationChannel || undefined,
-      expectedMinSalary: formValue.expectedMinSalary || undefined,
-      expectedMaxSalary: formValue.expectedMaxSalary || undefined,
+      expectedMinSalary: formValue.expectedMinSalary ? Number(formValue.expectedMinSalary) : undefined,
+      expectedMaxSalary: formValue.expectedMaxSalary ? Number(formValue.expectedMaxSalary) : undefined,
       note: formValue.note || undefined,
-      levelOfInterest: formValue.levelOfInterest || undefined
+      levelOfInterest: formValue.levelOfInterest ? Number(formValue.levelOfInterest) : undefined
     };
+
+    console.log('🔍 Candidacy ID:', this.candidacy.id);
+    console.log('📤 Data being sent to backend:', JSON.stringify(updateData, null, 2));
+    console.log('📅 Application date type:', typeof updateData.applicationDate);
+    console.log('📅 Application date value:', updateData.applicationDate);
 
     this.candidacyService.updateCandidacy(this.candidacy.id, updateData).subscribe({
       next: (updatedCandidacy) => {

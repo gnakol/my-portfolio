@@ -207,23 +207,9 @@ export class JobOffersListComponent implements OnInit {
     return parts.length > 0 ? parts.join(', ') : 'Non renseigné';
   }
 
-  // Get platform color
-  getPlatformColor(platform: string | undefined): string {
-    switch (platform) {
-      case 'WTTJ':
-        return 'accent';
-      case 'LinkedIn':
-        return 'primary';
-      case 'Indeed':
-        return 'warn';
-      default:
-        return '';
-    }
-  }
-
   // Navigation
   goBack(): void {
-    this.router.navigate(['/job-track']);
+    this.router.navigate(['/job-track-template']);
   }
 
   // Notifications
@@ -244,4 +230,25 @@ export class JobOffersListComponent implements OnInit {
       panelClass: ['error-snackbar']
     });
   }
+
+  clearFilters(): void {
+  this.searchTerm = '';
+  this.selectedPlatform = 'ALL';
+  this.currentPage = 1;
+  this.applyFilters();
+}
+
+// Modify getPlatformColor method to return hex colors instead of theme names
+getPlatformColor(platform: string | undefined): string {
+  switch (platform) {
+    case 'WTTJ':
+      return '#10b981'; // Green
+    case 'LinkedIn':
+      return '#0077b5'; // LinkedIn blue
+    case 'Indeed':
+      return '#2164f3'; // Indeed blue
+    default:
+      return '#6b7280'; // Gray
+  }
+}
 }

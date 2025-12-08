@@ -14,6 +14,10 @@ async function bootstrap() {
       whitelist: true,
       forbidNonWhitelisted: true,
       transform: true,
+      exceptionFactory: (errors) => {
+        console.error('❌ Validation errors:', JSON.stringify(errors, null, 2));
+        return errors;
+      },
     }),
   );
 

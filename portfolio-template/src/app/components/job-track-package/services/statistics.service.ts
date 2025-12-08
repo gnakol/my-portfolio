@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../../../environments/environment';
-import { StatisticsOverview, StackStatistics, LocationStatistics } from '../models/statistics.model';
+import { StatisticsOverview, StackStatistics, LocationStatistics, PlatformStatistics } from '../models/statistics.model';
 
 @Injectable({
   providedIn: 'root'
@@ -45,5 +45,11 @@ export class StatisticsService {
   getByLocation(): Observable<LocationStatistics> {
     const headers = this.getHeaders();
     return this.http.get<LocationStatistics>(`${this.apiUrl}/by-location`, { headers });
+  }
+
+  // Get statistics by platform (WTTJ, LinkedIn, Indeed, etc.)
+  getByPlatform(): Observable<PlatformStatistics> {
+    const headers = this.getHeaders();
+    return this.http.get<PlatformStatistics>(`${this.apiUrl}/by-platform`, { headers });
   }
 }

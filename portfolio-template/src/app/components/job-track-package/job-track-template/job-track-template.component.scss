@@ -87,10 +87,11 @@
   border-radius: 2px;
 }
 
+/* CHANGEMENTS CRITIQUES ICI - pour harmoniser avec le Dashboard */
 .cards-container {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 1.5rem;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); /* Min 240px comme dashboard */
+  gap: 1rem; /* Gap réduit de 1.5rem à 1rem */
   width: 100%;
   max-width: 1200px;
   margin: 0 auto;
@@ -105,12 +106,13 @@
   -webkit-backdrop-filter: blur(10px);
   border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 16px;
-  padding: 2rem;
+  padding: 1.25rem; /* Réduit de 2rem à 1.25rem comme dashboard */
   text-align: center;
   cursor: pointer;
   transition: all 0.3s ease;
   position: relative;
   overflow: hidden;
+  height: 100%; /* Pour uniformité */
 
   &::before {
     content: '';
@@ -140,10 +142,11 @@
   }
 }
 
+/* Icons plus petits pour match le dashboard */
 .card-icon {
-  width: 60px;
-  height: 60px;
-  margin: 0 auto 1.5rem;
+  width: 48px; /* Réduit de 60px à 48px */
+  height: 48px;
+  margin: 0 auto 1rem; /* Marge réduite (1.5rem → 1rem) */
   display: flex;
   align-items: center;
   justify-content: center;
@@ -152,34 +155,39 @@
   transition: all 0.3s ease;
 
   mat-icon {
-    font-size: 28px;
-    width: 28px;
-    height: 28px;
+    font-size: 24px; /* Réduit de 28px à 24px */
+    width: 24px;
+    height: 24px;
     color: var(--card-color);
   }
 }
 
+/* Titres et descriptions plus petits */
 .card-title {
-  font-size: 1.5rem;
+  font-size: 1.125rem; /* Réduit de 1.5rem à 1.125rem */
   font-weight: 600;
   color: #f8fafc;
-  margin-bottom: 1rem;
+  margin-bottom: 0.5rem; /* Réduit de 1rem à 0.5rem */
 }
 
 .card-description {
-  font-size: 1rem;
+  font-size: 0.875rem; /* Réduit de 1rem à 0.875rem */
   color: #94a3b8;
-  margin-bottom: 1.5rem;
+  margin-bottom: 0; /* Retiré le margin-bottom de 1.5rem */
   line-height: 1.5;
 }
 
+/* Badge positionné comme dashboard */
 .card-badge {
+  position: absolute; /* Changé de display: inline-block à position: absolute */
+  top: 0.75rem; /* Positionné en haut comme dashboard */
+  right: 0.75rem;
   display: inline-block;
-  padding: 0.25rem 0.75rem;
+  padding: 0.25rem 0.5rem; /* Padding réduit */
   background: rgba(255, 255, 255, 0.1);
   border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 9999px;
-  font-size: 0.75rem;
+  font-size: 0.7rem; /* Plus petit (0.75rem → 0.7rem) */
   font-weight: 500;
   color: var(--card-color);
   text-transform: uppercase;
@@ -196,7 +204,7 @@
   }
 }
 
-/* Responsive */
+/* Responsive - harmonisé avec dashboard */
 @media (max-width: 768px) {
   .dashboard-title {
     font-size: 2rem;
@@ -209,5 +217,10 @@
   .cards-container {
     grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
     gap: 1rem;
+    padding: 0 0.5rem;
+  }
+  
+  .dashboard-card {
+    padding: 1rem;
   }
 }

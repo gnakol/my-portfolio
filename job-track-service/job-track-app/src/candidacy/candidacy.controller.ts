@@ -60,6 +60,8 @@ export class CandidacyController {
     @Param('id', ParseIntPipe) id: number,
     @Body(ValidationPipe) updateCandidacyDto: UpdateCandidacyDto,
   ): Promise<CandidacyResponseDto> {
+    console.log('🔍 UPDATE Request received for candidacy ID:', id);
+    console.log('📥 DTO received:', JSON.stringify(updateCandidacyDto, null, 2));
     return this.candidacyService.update(id, updateCandidacyDto);
   }
 
