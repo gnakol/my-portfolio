@@ -1,0 +1,253 @@
+<div class="modal-container">
+  <!-- Header -->
+  <div class="modal-header">
+    <div class="header-content">
+      <div class="header-icon">
+        <mat-icon>visibility</mat-icon>
+      </div>
+      <div class="header-text">
+        <h2 class="modal-title">Détails de la candidature</h2>
+        <p class="modal-subtitle">{{ candidacy.company?.name || 'Entreprise inconnue' }}</p>
+      </div>
+    </div>
+    <button mat-icon-button class="close-btn" (click)="close()">
+      <mat-icon>close</mat-icon>
+    </button>
+  </div>
+
+  <mat-divider></mat-divider>
+
+  <!-- Content with Tabs -->
+  <div class="modal-content">
+    <mat-tab-group class="details-tabs" animationDuration="300ms">
+      <!-- Tab 1: Overview -->
+      <mat-tab label="Vue d'ensemble">
+        <div class="tab-content">
+          <!-- Company Section -->
+          <div class="section">
+            <div class="section-header">
+              <mat-icon>business</mat-icon>
+              <h3>Entreprise</h3>
+            </div>
+            <mat-card class="info-card">
+              <div class="info-grid">
+                <div class="info-item">
+                  <span class="info-label">Nom</span>
+                  <span class="info-value">{{ candidacy.company?.name || '-' }}</span>
+                </div>
+                <div class="info-item">
+                  <span class="info-label">Localisation</span>
+                  <span class="info-value">{{ candidacy.company?.location || '-' }}</span>
+                </div>
+                <div class="info-item" *ngIf="candidacy.company?.website">
+                  <span class="info-label">Site web</span>
+                  <a [href]="candidacy.company.website" target="_blank" class="info-link">
+                    {{ candidacy.company.website }}
+                    <mat-icon>open_in_new</mat-icon>
+                  </a>
+                </div>
+              </div>
+            </mat-card>
+          </div>
+
+          <!-- Job Offer Section -->
+          <div class="section" *ngIf="candidacy.jobOffer">
+            <div class="section-header">
+              <mat-icon>work</mat-icon>
+              <h3>Offre d'emploi</h3>
+            </div>
+            <mat-card class="info-card">
+              <div class="info-grid">
+                <div class="info-item full-width">
+                  <span class="info-label">Titre du poste</span>
+                  <span class="info-value">{{ candidacy.jobOffer.title || '-' }}</span>
+                </div>
+                <div class="info-item">
+                  <span class="info-label">Localisation</span>
+                  <span class="info-value">
+                    {{ candidacy.jobOffer.locationCity || '-' }}
+                    <span *ngIf="candidacy.jobOffer.locationCountry">
+                      , {{ candidacy.jobOffer.locationCountry }}
+                    </span>
+                  </span>
+                </div>
+                <div class="info-item">
+                  <span class="info-label">Plateforme</span>
+                  <span class="info-value">{{ candidacy.jobOffer.platform || '-' }}</span>
+                </div>
+                <div class="info-item">
+                  <span class="info-label">Salaire proposé</span>
+                  <span class="info-value">
+                    {{ formatSalary(candidacy.jobOffer.minSalary, candidacy.jobOffer.maxSalary) }}
+                  </span>
+                </div>
+                <div class="info-item">
+                  <span class="info-label">Type de contrat</span>
+                  <span class="info-value">{{ candidacy.jobOffer.typeOfContract || '-' }}</span>
+                </div>
+                <div class="info-item">
+                  <span class="info-label">Mode de travail</span>
+                  <span class="info-value">{{ candidacy.jobOffer.remoteMode || '-' }}</span>
+                </div>
+                <div class="info-item">
+                  <span class="info-label">Niveau d'expérience</span>
+                  <span class="info-value">{{ candidacy.jobOffer.experienceLevel || '-' }}</span>
+                </div>
+                <div class="info-item full-width" *ngIf="candidacy.jobOffer.offerUrl">
+                  <span class="info-label">URL de l'offre</span>
+                  <a [href]="candidacy.jobOffer.offerUrl" target="_blank" class="info-link">
+                    Voir l'offre
+                    <mat-icon>open_in_new</mat-icon>
+                  </a>
+                </div>
+                <div class="info-item full-width" *ngIf="hasStackTags()">
+                  <span class="info-label">Technologies</span>
+                  <div class="stack-tags">
+                    <mat-chip *ngFor="let tag of candidacy.jobOffer.stackTags">
+                      {{ tag.name }}
+                    </mat-chip>
+                  </div>
+                </div>
+              </div>
+            </mat-card>
+          </div>
+
+          <!-- Candidacy Section -->
+          <div class="section">
+            <div class="section-header">
+              <mat-icon>assignment</mat-icon>
+              <h3>Candidature</h3>
+            </div>
+            <mat-card class="info-card">
+              <div class="info-grid">
+                <div class="info-item">
+                  <span class="info-label">Date de candidature</span>
+                  <span class="info-value">{{ formatDateShort(candidacy.applicationDate) }}</span>
+                </div>
+                <div class="info-item">
+                  <span class="info-label">Statut actuel</span>
+                  <mat-chip class="status-chip" [style.background]="getStatusColor(candidacy.currentStatus)">
+                    {{ getStatusLabel(candidacy.currentStatus) }}
+                  </mat-chip>
+                </div>
+                <div class="info-item">
+                  <span class="info-label">Canal de candidature</span>
+                  <span class="info-value">{{ candidacy.applicationChannel || '-' }}</span>
+                </div>
+                <div class="info-item">
+                  <span class="info-label">Salaire souhaité</span>
+                  <span class="info-value">
+                    {{ formatSalary(candidacy.expectedMinSalary, candidacy.expectedMaxSalary) }}
+                  </span>
+                </div>
+                <div class="info-item">
+                  <span class="info-label">Niveau d'intérêt</span>
+                  <span class="info-value interest">{{ getInterestStars(candidacy.levelOfInterest) }}</span>
+                </div>
+                <div class="info-item full-width" *ngIf="candidacy.note">
+                  <span class="info-label">Notes</span>
+                  <p class="info-note">{{ candidacy.note }}</p>
+                </div>
+              </div>
+            </mat-card>
+          </div>
+        </div>
+      </mat-tab>
+
+      <!-- Tab 2: Events -->
+      <mat-tab label="Événements">
+        <div class="tab-content">
+          <div class="section">
+            <div class="section-header">
+              <mat-icon>event</mat-icon>
+              <h3>Historique des événements</h3>
+            </div>
+
+            <div class="empty-state" *ngIf="!hasEvents()">
+              <mat-icon class="empty-icon">inbox</mat-icon>
+              <p>Aucun événement enregistré pour cette candidature</p>
+            </div>
+
+            <div class="timeline" *ngIf="hasEvents()">
+              <div class="timeline-item" *ngFor="let event of candidacy.events">
+                <div class="timeline-dot" [style.background]="getEventColor(event.eventType)"></div>
+                <mat-card class="timeline-card">
+                  <div class="timeline-header">
+                    <div class="timeline-icon" [style.background]="getEventColor(event.eventType)">
+                      <mat-icon>{{ getEventIcon(event.eventType) }}</mat-icon>
+                    </div>
+                    <div class="timeline-info">
+                      <h4 class="timeline-title">{{ getEventTypeLabel(event.eventType) }}</h4>
+                      <p class="timeline-date">{{ formatDate(event.eventDate) }}</p>
+                    </div>
+                  </div>
+                  <div class="timeline-body" *ngIf="event.channel || event.comment">
+                    <p class="timeline-channel" *ngIf="event.channel">
+                      <mat-icon>send</mat-icon>
+                      <span>{{ event.channel }}</span>
+                    </p>
+                    <p class="timeline-comment" *ngIf="event.comment">{{ event.comment }}</p>
+                  </div>
+                </mat-card>
+              </div>
+            </div>
+          </div>
+        </div>
+      </mat-tab>
+
+      <!-- Tab 3: Reminders -->
+      <mat-tab label="Rappels">
+        <div class="tab-content">
+          <div class="section">
+            <div class="section-header">
+              <mat-icon>notifications_active</mat-icon>
+              <h3>Rappels de relance</h3>
+            </div>
+
+            <div class="empty-state" *ngIf="!hasReminders()">
+              <mat-icon class="empty-icon">inbox</mat-icon>
+              <p>Aucun rappel configuré pour cette candidature</p>
+            </div>
+
+            <div class="reminders-grid" *ngIf="hasReminders()">
+              <mat-card class="reminder-card" *ngFor="let reminder of candidacy.reminders">
+                <div class="reminder-header">
+                  <div class="reminder-icon">
+                    <mat-icon>alarm</mat-icon>
+                  </div>
+                  <div class="reminder-info">
+                    <h4 class="reminder-title">{{ getReminderTypeLabel(reminder.reminderType) }}</h4>
+                    <p class="reminder-date">{{ formatDateShort(reminder.dueDate) }}</p>
+                  </div>
+                  <mat-chip
+                    class="reminder-status"
+                    [style.background]="getReminderStatusColor(reminder.status)"
+                  >
+                    {{ getReminderStatusLabel(reminder.status) }}
+                  </mat-chip>
+                </div>
+                <div class="reminder-body" *ngIf="reminder.comment">
+                  <p class="reminder-comment">{{ reminder.comment }}</p>
+                </div>
+                <div class="reminder-footer">
+                  <span class="reminder-auto" *ngIf="reminder.autoGenerated">
+                    <mat-icon>smart_toy</mat-icon>
+                    Généré automatiquement
+                  </span>
+                </div>
+              </mat-card>
+            </div>
+          </div>
+        </div>
+      </mat-tab>
+    </mat-tab-group>
+  </div>
+
+  <!-- Footer -->
+  <div class="modal-footer">
+    <button mat-stroked-button (click)="close()">
+      <mat-icon>close</mat-icon>
+      Fermer
+    </button>
+  </div>
+</div>

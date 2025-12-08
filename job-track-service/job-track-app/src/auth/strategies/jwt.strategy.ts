@@ -15,7 +15,8 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     super({
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
       ignoreExpiration: false,
-      audience: configService.get<string>('KEYCLOAK_CLIENT_ID'),
+      // Audience vérification désactivée car Keycloak génère "aud": "account" par défaut
+      // L'issuer vérifie déjà que le token vient du bon realm
       issuer: `${keycloakUrl}/realms/${keycloakRealm}`,
       algorithms: ['RS256'],
       secretOrKeyProvider: passportJwtSecret({

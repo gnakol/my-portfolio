@@ -1,0 +1,314 @@
+<div class="dashboard-container">
+  <!-- Animated Background -->
+  <div class="animated-background">
+    <div class="gradient-circle circle-1"></div>
+    <div class="gradient-circle circle-2"></div>
+    <div class="gradient-circle circle-3"></div>
+    <div class="grid-pattern"></div>
+  </div>
+
+  <!-- Header -->
+  <div class="dashboard-header">
+    <div class="header-content">
+      <button mat-icon-button class="back-btn" (click)="goBack()" matTooltip="Retour">
+        <mat-icon>arrow_back</mat-icon>
+      </button>
+      <div class="header-text">
+        <h1 class="dashboard-title">Job Tracker <span class="text-gradient">Dashboard</span></h1>
+        <p class="dashboard-subtitle">Vue d'ensemble de vos candidatures et statistiques</p>
+      </div>
+      <button mat-raised-button class="refresh-btn" (click)="refresh()">
+        <mat-icon>refresh</mat-icon>
+        Actualiser
+      </button>
+    </div>
+    <div class="header-divider"></div>
+  </div>
+
+  <!-- Main Content -->
+  <div class="dashboard-content">
+    <!-- Quick Actions -->
+    <div class="quick-actions">
+      <button mat-raised-button class="action-btn primary" (click)="navigateToScraping()">
+        <mat-icon>cloud_download</mat-icon>
+        <span>Scraper une offre</span>
+      </button>
+      <button mat-raised-button class="action-btn secondary" (click)="navigateToCandidacies()">
+        <mat-icon>assignment</mat-icon>
+        <span>Mes candidatures</span>
+      </button>
+      <button mat-raised-button class="action-btn tertiary" (click)="navigateToStatistics()">
+        <mat-icon>bar_chart</mat-icon>
+        <span>Statistiques</span>
+      </button>
+    </div>
+
+    <!-- Overview Section -->
+    <div class="section-title">
+      <mat-icon>dashboard</mat-icon>
+      <h2>Vue d'ensemble</h2>
+    </div>
+
+    <div class="stats-grid" *ngIf="!isLoadingOverview && overview; else loadingOverview">
+      <!-- Total Applications -->
+      <mat-card class="stat-card applications">
+        <div class="stat-icon">
+          <mat-icon>assignment</mat-icon>
+        </div>
+        <div class="stat-content">
+          <p class="stat-label">Candidatures</p>
+          <h3 class="stat-value">{{ overview.totalApplications }}</h3>
+        </div>
+        <div class="stat-trend">
+          <span class="trend-label">{{ overview.applicationsPerWeek | number:'1.1-1' }} / semaine</span>
+        </div>
+      </mat-card>
+
+      <!-- Total Offers -->
+      <mat-card class="stat-card offers">
+        <div class="stat-icon">
+          <mat-icon>work</mat-icon>
+        </div>
+        <div class="stat-content">
+          <p class="stat-label">Offres d'emploi</p>
+          <h3 class="stat-value">{{ overview.totalOffers }}</h3>
+        </div>
+      </mat-card>
+
+      <!-- Total Companies -->
+      <mat-card class="stat-card companies">
+        <div class="stat-icon">
+          <mat-icon>business</mat-icon>
+        </div>
+        <div class="stat-content">
+          <p class="stat-label">Entreprises</p>
+          <h3 class="stat-value">{{ overview.totalCompanies }}</h3>
+        </div>
+      </mat-card>
+
+      <!-- Response Rate -->
+      <mat-card class="stat-card response-rate">
+        <div class="stat-icon">
+          <mat-icon>mail</mat-icon>
+        </div>
+        <div class="stat-content">
+          <p class="stat-label">Taux de réponse</p>
+          <h3 class="stat-value" [style.color]="getRateColor(overview.responseRate)">
+            {{ overview.responseRate | number:'1.1-1' }}%
+          </h3>
+        </div>
+        <div class="stat-progress">
+          <div class="progress-bar" [style.width.%]="overview.responseRate" [style.background]="getRateColor(overview.responseRate)"></div>
+        </div>
+      </mat-card>
+
+      <!-- Interview Rate -->
+      <mat-card class="stat-card interview-rate">
+        <div class="stat-icon">
+          <mat-icon>groups</mat-icon>
+        </div>
+        <div class="stat-content">
+          <p class="stat-label">Taux d'entretien</p>
+          <h3 class="stat-value" [style.color]="getRateColor(overview.interviewRate)">
+            {{ overview.interviewRate | number:'1.1-1' }}%
+          </h3>
+        </div>
+        <div class="stat-progress">
+          <div class="progress-bar" [style.width.%]="overview.interviewRate" [style.background]="getRateColor(overview.interviewRate)"></div>
+        </div>
+      </mat-card>
+
+      <!-- Offer Received Rate -->
+      <mat-card class="stat-card offer-rate">
+        <div class="stat-icon">
+          <mat-icon>check_circle</mat-icon>
+        </div>
+        <div class="stat-content">
+          <p class="stat-label">Taux de succès</p>
+          <h3 class="stat-value" [style.color]="getRateColor(overview.offerReceivedRate)">
+            {{ overview.offerReceivedRate | number:'1.1-1' }}%
+          </h3>
+        </div>
+        <div class="stat-progress">
+          <div class="progress-bar" [style.width.%]="overview.offerReceivedRate" [style.background]="getRateColor(overview.offerReceivedRate)"></div>
+        </div>
+      </mat-card>
+
+      <!-- Average Response Time -->
+      <mat-card class="stat-card response-time">
+        <div class="stat-icon">
+          <mat-icon>schedule</mat-icon>
+        </div>
+        <div class="stat-content">
+          <p class="stat-label">Délai moyen de réponse</p>
+          <h3 class="stat-value">{{ overview.averageResponseTimeInDays | number:'1.0-0' }} jours</h3>
+        </div>
+      </mat-card>
+    </div>
+
+    <ng-template #loadingOverview>
+      <div class="loading-container">
+        <mat-spinner diameter="50"></mat-spinner>
+        <p>Chargement des statistiques...</p>
+      </div>
+    </ng-template>
+
+    <!-- Status Breakdown -->
+    <div class="section-title" *ngIf="overview && overview.statusBreakdown.length > 0">
+      <mat-icon>pie_chart</mat-icon>
+      <h2>Répartition par statut</h2>
+    </div>
+
+    <div class="status-breakdown" *ngIf="overview && overview.statusBreakdown.length > 0">
+      <mat-card class="breakdown-card" *ngFor="let status of overview.statusBreakdown">
+        <div class="status-info">
+          <div class="status-dot" [style.background]="getStatusColor(status.status)"></div>
+          <span class="status-name">{{ getStatusLabel(status.status) }}</span>
+        </div>
+        <div class="status-stats">
+          <span class="status-count">{{ status.count }}</span>
+          <span class="status-percentage">{{ status.percentage | number:'1.1-1' }}%</span>
+        </div>
+        <div class="status-bar">
+          <div class="status-bar-fill"
+               [style.width.%]="status.percentage"
+               [style.background]="getStatusColor(status.status)">
+          </div>
+        </div>
+      </mat-card>
+    </div>
+
+    <!-- Top Stacks -->
+    <div class="section-title" *ngIf="topStacks.length > 0">
+      <mat-icon>code</mat-icon>
+      <h2>Top 3 Stacks performantes</h2>
+    </div>
+
+    <div class="top-stacks" *ngIf="!isLoadingStack && topStacks.length > 0; else loadingStack">
+      <mat-card class="stack-card" *ngFor="let stack of topStacks; let i = index">
+        <div class="stack-rank">
+          <mat-icon *ngIf="i === 0" class="gold">emoji_events</mat-icon>
+          <mat-icon *ngIf="i === 1" class="silver">emoji_events</mat-icon>
+          <mat-icon *ngIf="i === 2" class="bronze">emoji_events</mat-icon>
+        </div>
+        <div class="stack-header">
+          <h3 class="stack-name">{{ stack.stackName }}</h3>
+          <mat-chip class="success-chip" [style.background]="getRateColor(stack.successRate)">
+            {{ stack.successRate | number:'1.1-1' }}% succès
+          </mat-chip>
+        </div>
+        <div class="stack-details">
+          <div class="detail-item">
+            <mat-icon>assignment</mat-icon>
+            <span>{{ stack.totalApplications }} candidatures</span>
+          </div>
+          <div class="detail-item">
+            <mat-icon>mail</mat-icon>
+            <span>{{ stack.totalResponses }} réponses</span>
+          </div>
+          <div class="detail-item">
+            <mat-icon>groups</mat-icon>
+            <span>{{ stack.totalInterviews }} entretiens</span>
+          </div>
+          <div class="detail-item">
+            <mat-icon>check_circle</mat-icon>
+            <span>{{ stack.totalOffersReceived }} offres</span>
+          </div>
+        </div>
+        <div class="stack-rates">
+          <div class="rate-item">
+            <span class="rate-label">Réponse</span>
+            <span class="rate-value" [style.color]="getRateColor(stack.responseRate)">
+              {{ stack.responseRate | number:'1.1-1' }}%
+            </span>
+          </div>
+          <div class="rate-item">
+            <span class="rate-label">Entretien</span>
+            <span class="rate-value" [style.color]="getRateColor(stack.interviewRate)">
+              {{ stack.interviewRate | number:'1.1-1' }}%
+            </span>
+          </div>
+        </div>
+      </mat-card>
+    </div>
+
+    <ng-template #loadingStack>
+      <div class="loading-container" *ngIf="isLoadingStack">
+        <mat-spinner diameter="50"></mat-spinner>
+        <p>Chargement des statistiques par stack...</p>
+      </div>
+    </ng-template>
+
+    <!-- Top Locations -->
+    <div class="section-title" *ngIf="topLocations.length > 0">
+      <mat-icon>location_on</mat-icon>
+      <h2>Top 3 Localisations performantes</h2>
+    </div>
+
+    <div class="top-locations" *ngIf="!isLoadingLocation && topLocations.length > 0; else loadingLocation">
+      <mat-card class="location-card" *ngFor="let location of topLocations; let i = index">
+        <div class="location-rank">
+          <mat-icon *ngIf="i === 0" class="gold">location_on</mat-icon>
+          <mat-icon *ngIf="i === 1" class="silver">location_on</mat-icon>
+          <mat-icon *ngIf="i === 2" class="bronze">location_on</mat-icon>
+        </div>
+        <div class="location-header">
+          <h3 class="location-name">{{ location.location }}</h3>
+          <mat-chip class="success-chip" [style.background]="getRateColor(location.responseRate)">
+            {{ location.responseRate | number:'1.1-1' }}% réponse
+          </mat-chip>
+        </div>
+        <div class="location-details">
+          <div class="detail-item">
+            <mat-icon>assignment</mat-icon>
+            <span>{{ location.totalApplications }} candidatures</span>
+          </div>
+          <div class="detail-item">
+            <mat-icon>mail</mat-icon>
+            <span>{{ location.totalResponses }} réponses</span>
+          </div>
+          <div class="detail-item">
+            <mat-icon>groups</mat-icon>
+            <span>{{ location.totalInterviews }} entretiens</span>
+          </div>
+          <div class="detail-item">
+            <mat-icon>check_circle</mat-icon>
+            <span>{{ location.totalOffersReceived }} offres</span>
+          </div>
+        </div>
+        <div class="location-rates">
+          <div class="rate-item">
+            <span class="rate-label">Entretien</span>
+            <span class="rate-value" [style.color]="getRateColor(location.interviewRate)">
+              {{ location.interviewRate | number:'1.1-1' }}%
+            </span>
+          </div>
+          <div class="rate-item">
+            <span class="rate-label">Succès</span>
+            <span class="rate-value" [style.color]="getRateColor(location.successRate)">
+              {{ location.successRate | number:'1.1-1' }}%
+            </span>
+          </div>
+        </div>
+      </mat-card>
+    </div>
+
+    <ng-template #loadingLocation>
+      <div class="loading-container" *ngIf="isLoadingLocation">
+        <mat-spinner diameter="50"></mat-spinner>
+        <p>Chargement des statistiques par localisation...</p>
+      </div>
+    </ng-template>
+
+    <!-- Empty State -->
+    <div class="empty-state" *ngIf="!isLoadingOverview && overview && overview.totalApplications === 0">
+      <mat-icon class="empty-icon">inbox</mat-icon>
+      <h3>Aucune candidature pour le moment</h3>
+      <p>Commencez par scraper une offre d'emploi ou créer une candidature manuellement</p>
+      <button mat-raised-button color="primary" (click)="navigateToScraping()">
+        <mat-icon>cloud_download</mat-icon>
+        Scraper ma première offre
+      </button>
+    </div>
+  </div>
+</div>

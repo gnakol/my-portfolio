@@ -5,6 +5,18 @@ export class JobOfferResponseDto {
   title?: string;
   description?: string;
   companyId?: number;
+  offerUrl?: string;
+  platform?: string;
+  locationCity?: string;
+  locationCountry?: string;
+  minSalary?: number;
+  maxSalary?: number;
+  typeOfContract?: string;
+  experienceLevel?: string;
+  remoteMode?: string;
+  publicationDate?: Date;
+  expirationDate?: Date;
+  createdAt?: Date;
 }
 
 export class CandidacyResponseDto {

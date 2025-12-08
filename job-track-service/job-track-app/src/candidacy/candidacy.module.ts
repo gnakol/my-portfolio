@@ -5,9 +5,13 @@ import { Company } from '../company/entities/company.entity';
 import { JobOffer } from '../job-offer/entities/job-offer.entity';
 import { CandidacyService } from './candidacy.service';
 import { CandidacyController } from './candidacy.controller';
+import { ReminderModule } from '../reminder/reminder.module';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Candidacy, Company, JobOffer])],
+  imports: [
+    TypeOrmModule.forFeature([Candidacy, Company, JobOffer]),
+    ReminderModule,
+  ],
   controllers: [CandidacyController],
   providers: [CandidacyService],
   exports: [CandidacyService],

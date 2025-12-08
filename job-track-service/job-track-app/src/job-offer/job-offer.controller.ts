@@ -20,11 +20,16 @@ import {
   JobOfferResponseDto,
 } from './dto';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
+import { ScrapingService } from '../scraping/scraping.service';
+import { ScrapeJobUrlDto, ScrapedJobDataDto } from '../scraping/dto';
 
 @Controller('job-offers')
 @UseGuards(JwtAuthGuard)
 export class JobOfferController {
-  constructor(private readonly jobOfferService: JobOfferService) {}
+  constructor(
+    private readonly jobOfferService: JobOfferService,
+    private readonly scrapingService: ScrapingService,
+  ) {}
 
   @Get()
   async findAll(
@@ -69,5 +74,17 @@ export class JobOfferController {
     @Param('id', ParseIntPipe) id: number,
   ): Promise<{ message: string }> {
     return this.jobOfferService.remove(id);
+  }
+
+  /**
+   * Scrape une offre d'emploi depuis une URL
+   * Supporte: WTTJ, LinkedIn, Indeed
+   */
+  @Post('scrape')
+  @HttpCode(HttpStatus.OK)
+  async scrapeJobOffer(
+    @Body(ValidationPipe) scrapeJobUrlDto: ScrapeJobUrlDto,
+  ): Promise<ScrapedJobDataDto> {
+    return this.scrapingService.scrapeJobOffer(scrapeJobUrlDto.url);
   }
 }

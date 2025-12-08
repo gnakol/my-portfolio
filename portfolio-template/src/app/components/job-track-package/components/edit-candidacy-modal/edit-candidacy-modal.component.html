@@ -1,0 +1,174 @@
+<div class="modal-container">
+  <!-- Header -->
+  <div class="modal-header">
+    <div class="header-content">
+      <div class="header-icon">
+        <mat-icon>edit</mat-icon>
+      </div>
+      <div class="header-text">
+        <h2 class="modal-title">Modifier la candidature</h2>
+        <p class="modal-subtitle">{{ candidacy.company?.name || 'Entreprise inconnue' }}</p>
+      </div>
+    </div>
+    <button mat-icon-button class="close-btn" (click)="close()" [disabled]="isSubmitting">
+      <mat-icon>close</mat-icon>
+    </button>
+  </div>
+
+  <!-- Form -->
+  <form [formGroup]="editForm" (ngSubmit)="onSubmit()" class="modal-content">
+    <div class="form-section">
+      <div class="section-header">
+        <mat-icon>info</mat-icon>
+        <h3>Informations générales</h3>
+      </div>
+
+      <div class="form-grid">
+        <!-- Application Date -->
+        <mat-form-field appearance="outline" class="form-field">
+          <mat-label>Date de candidature</mat-label>
+          <input
+            matInput
+            [matDatepicker]="picker"
+            formControlName="applicationDate"
+            required
+          />
+          <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+          <mat-datepicker #picker></mat-datepicker>
+          <mat-error *ngIf="editForm.get('applicationDate')?.hasError('required')">
+            La date de candidature est requise
+          </mat-error>
+        </mat-form-field>
+
+        <!-- Current Status -->
+        <mat-form-field appearance="outline" class="form-field">
+          <mat-label>Statut actuel</mat-label>
+          <mat-select formControlName="currentStatus" required>
+            <mat-option *ngFor="let status of statusOptions" [value]="status">
+              {{ getStatusLabel(status) }}
+            </mat-option>
+          </mat-select>
+          <mat-icon matPrefix>label</mat-icon>
+          <mat-error *ngIf="editForm.get('currentStatus')?.hasError('required')">
+            Le statut est requis
+          </mat-error>
+        </mat-form-field>
+
+        <!-- Application Channel -->
+        <mat-form-field appearance="outline" class="form-field full-width">
+          <mat-label>Canal de candidature</mat-label>
+          <input
+            matInput
+            formControlName="applicationChannel"
+            placeholder="Ex: LinkedIn, Email, Site web..."
+          />
+          <mat-icon matPrefix>send</mat-icon>
+        </mat-form-field>
+      </div>
+    </div>
+
+    <div class="form-section">
+      <div class="section-header">
+        <mat-icon>euro</mat-icon>
+        <h3>Salaire souhaité</h3>
+      </div>
+
+      <div class="form-grid">
+        <!-- Expected Min Salary -->
+        <mat-form-field appearance="outline" class="form-field">
+          <mat-label>Salaire minimum (k€)</mat-label>
+          <input
+            matInput
+            type="number"
+            formControlName="expectedMinSalary"
+            placeholder="Ex: 40"
+            min="0"
+          />
+          <mat-icon matPrefix>euro_symbol</mat-icon>
+          <span matSuffix>k€</span>
+        </mat-form-field>
+
+        <!-- Expected Max Salary -->
+        <mat-form-field appearance="outline" class="form-field">
+          <mat-label>Salaire maximum (k€)</mat-label>
+          <input
+            matInput
+            type="number"
+            formControlName="expectedMaxSalary"
+            placeholder="Ex: 50"
+            min="0"
+          />
+          <mat-icon matPrefix>euro_symbol</mat-icon>
+          <span matSuffix>k€</span>
+        </mat-form-field>
+      </div>
+    </div>
+
+    <div class="form-section">
+      <div class="section-header">
+        <mat-icon>star</mat-icon>
+        <h3>Niveau d'intérêt</h3>
+      </div>
+
+      <div class="form-grid">
+        <!-- Level of Interest -->
+        <mat-form-field appearance="outline" class="form-field full-width">
+          <mat-label>Niveau d'intérêt</mat-label>
+          <mat-select formControlName="levelOfInterest">
+            <mat-option [value]="null">Non renseigné</mat-option>
+            <mat-option *ngFor="let level of interestLevels" [value]="level">
+              {{ '⭐'.repeat(level) }} ({{ level }}/5)
+            </mat-option>
+          </mat-select>
+          <mat-icon matPrefix>star</mat-icon>
+        </mat-form-field>
+      </div>
+    </div>
+
+    <div class="form-section">
+      <div class="section-header">
+        <mat-icon>notes</mat-icon>
+        <h3>Notes personnelles</h3>
+      </div>
+
+      <div class="form-grid">
+        <!-- Note -->
+        <mat-form-field appearance="outline" class="form-field full-width">
+          <mat-label>Notes</mat-label>
+          <textarea
+            matInput
+            formControlName="note"
+            rows="4"
+            placeholder="Ajoutez vos notes ici..."
+          ></textarea>
+          <mat-icon matPrefix>description</mat-icon>
+        </mat-form-field>
+      </div>
+    </div>
+  </form>
+
+  <!-- Footer -->
+  <div class="modal-footer">
+    <button
+      mat-stroked-button
+      type="button"
+      (click)="close()"
+      [disabled]="isSubmitting"
+    >
+      <mat-icon>close</mat-icon>
+      Annuler
+    </button>
+    <button
+      mat-raised-button
+      type="submit"
+      class="submit-btn"
+      (click)="onSubmit()"
+      [disabled]="editForm.invalid || isSubmitting"
+    >
+      <mat-spinner diameter="20" *ngIf="isSubmitting"></mat-spinner>
+      <mat-icon *ngIf="!isSubmitting">save</mat-icon>
+      <span *ngIf="!isSubmitting">Enregistrer</span>
+      <span *ngIf="isSubmitting">Enregistrement...</span>
+    </button>
+  </div>
+</div>

@@ -1,0 +1,273 @@
+<div class="candidacies-container">
+  <!-- Animated Background -->
+  <div class="animated-background">
+    <div class="gradient-circle circle-1"></div>
+    <div class="gradient-circle circle-2"></div>
+    <div class="grid-pattern"></div>
+  </div>
+
+  <!-- Header -->
+  <div class="candidacies-header">
+    <div class="header-content">
+      <button mat-icon-button class="back-btn" (click)="goBack()" matTooltip="Retour">
+        <mat-icon>arrow_back</mat-icon>
+      </button>
+      <div class="header-text">
+        <h1 class="candidacies-title">Mes <span class="text-gradient">Candidatures</span></h1>
+        <p class="candidacies-subtitle">Gérez et suivez toutes vos candidatures en un seul endroit</p>
+      </div>
+      <div class="header-actions">
+        <button mat-raised-button class="action-btn secondary" (click)="navigateToDashboard()">
+          <mat-icon>dashboard</mat-icon>
+          Dashboard
+        </button>
+        <button mat-raised-button class="action-btn primary" (click)="navigateToScraping()">
+          <mat-icon>add</mat-icon>
+          Nouvelle candidature
+        </button>
+      </div>
+    </div>
+    <div class="header-divider"></div>
+  </div>
+
+  <!-- Filters Section -->
+  <div class="filters-section">
+    <mat-card class="filters-card">
+      <div class="filters-row">
+        <!-- Search -->
+        <mat-form-field class="search-field" appearance="outline">
+          <mat-label>Rechercher</mat-label>
+          <input
+            matInput
+            [(ngModel)]="searchTerm"
+            (input)="onSearch()"
+            placeholder="Entreprise ou poste..."
+          />
+          <mat-icon matPrefix>search</mat-icon>
+          <button
+            mat-icon-button
+            matSuffix
+            *ngIf="searchTerm"
+            (click)="searchTerm = ''; onSearch()"
+          >
+            <mat-icon>close</mat-icon>
+          </button>
+        </mat-form-field>
+
+        <!-- Status Filter -->
+        <mat-form-field class="status-field" appearance="outline">
+          <mat-label>Statut</mat-label>
+          <mat-select [(ngModel)]="selectedStatus" (selectionChange)="onStatusFilterChange()">
+            <mat-option value="ALL">Tous les statuts</mat-option>
+            <mat-option *ngFor="let status of statusOptions.slice(1)" [value]="status">
+              {{ getStatusLabel(status) }}
+            </mat-option>
+          </mat-select>
+          <mat-icon matPrefix>filter_list</mat-icon>
+        </mat-form-field>
+
+        <!-- Actions -->
+        <div class="filter-actions">
+          <button
+            mat-stroked-button
+            class="clear-btn"
+            (click)="clearFilters()"
+            [disabled]="searchTerm === '' && selectedStatus === 'ALL'"
+          >
+            <mat-icon>clear_all</mat-icon>
+            Réinitialiser
+          </button>
+          <button mat-icon-button class="refresh-btn" (click)="refresh()" matTooltip="Actualiser">
+            <mat-icon>refresh</mat-icon>
+          </button>
+        </div>
+      </div>
+
+      <!-- Results count -->
+      <div class="results-info">
+        <mat-icon>info</mat-icon>
+        <span>{{ totalItems }} candidature(s) trouvée(s)</span>
+      </div>
+    </mat-card>
+  </div>
+
+  <!-- Table Section -->
+  <div class="table-section" *ngIf="!isLoading; else loading">
+    <!-- Empty State -->
+    <div class="empty-state" *ngIf="filteredCandidacies.length === 0 && !isLoading">
+      <mat-icon class="empty-icon">inbox</mat-icon>
+      <h3>{{ candidacies.length === 0 ? 'Aucune candidature' : 'Aucun résultat' }}</h3>
+      <p *ngIf="candidacies.length === 0">
+        Commencez par scraper une offre d'emploi ou créer une candidature manuellement
+      </p>
+      <p *ngIf="candidacies.length > 0">
+        Essayez de modifier vos filtres de recherche
+      </p>
+      <button
+        mat-raised-button
+        color="primary"
+        (click)="navigateToScraping()"
+        *ngIf="candidacies.length === 0"
+      >
+        <mat-icon>cloud_download</mat-icon>
+        Créer ma première candidature
+      </button>
+      <button
+        mat-raised-button
+        (click)="clearFilters()"
+        *ngIf="candidacies.length > 0"
+      >
+        <mat-icon>clear_all</mat-icon>
+        Réinitialiser les filtres
+      </button>
+    </div>
+
+    <!-- Table -->
+    <mat-card class="table-card" *ngIf="filteredCandidacies.length > 0">
+      <div class="table-container">
+        <table mat-table [dataSource]="displayedCandidacies" class="candidacies-table">
+          <!-- Company Column -->
+          <ng-container matColumnDef="company">
+            <th mat-header-cell *matHeaderCellDef>Entreprise</th>
+            <td mat-cell *matCellDef="let candidacy">
+              <div class="company-cell">
+                <mat-icon class="company-icon">business</mat-icon>
+                <div class="company-info">
+                  <span class="company-name">{{ candidacy.company?.name || 'N/A' }}</span>
+                  <span class="company-location" *ngIf="candidacy.company?.location">
+                    {{ candidacy.company.location }}
+                  </span>
+                </div>
+              </div>
+            </td>
+          </ng-container>
+
+          <!-- Job Offer Column -->
+          <ng-container matColumnDef="jobOffer">
+            <th mat-header-cell *matHeaderCellDef>Poste</th>
+            <td mat-cell *matCellDef="let candidacy">
+              <div class="job-cell">
+                <span class="job-title">{{ candidacy.jobOffer?.title || '-' }}</span>
+                <div class="job-tags" *ngIf="candidacy.jobOffer?.stackTags?.length > 0">
+                  <mat-chip *ngFor="let tag of candidacy.jobOffer.stackTags.slice(0, 2)">
+                    {{ tag.name }}
+                  </mat-chip>
+                  <span *ngIf="candidacy.jobOffer.stackTags.length > 2" class="more-tags">
+                    +{{ candidacy.jobOffer.stackTags.length - 2 }}
+                  </span>
+                </div>
+              </div>
+            </td>
+          </ng-container>
+
+          <!-- Application Date Column -->
+          <ng-container matColumnDef="applicationDate">
+            <th mat-header-cell *matHeaderCellDef>Date de candidature</th>
+            <td mat-cell *matCellDef="let candidacy">
+              <div class="date-cell">
+                <mat-icon>event</mat-icon>
+                <span>{{ formatDate(candidacy.applicationDate) }}</span>
+              </div>
+            </td>
+          </ng-container>
+
+          <!-- Status Column -->
+          <ng-container matColumnDef="status">
+            <th mat-header-cell *matHeaderCellDef>Statut</th>
+            <td mat-cell *matCellDef="let candidacy">
+              <mat-chip
+                class="status-chip"
+                [style.background]="getStatusColor(candidacy.currentStatus)"
+              >
+                {{ getStatusLabel(candidacy.currentStatus) }}
+              </mat-chip>
+            </td>
+          </ng-container>
+
+          <!-- Channel Column -->
+          <ng-container matColumnDef="channel">
+            <th mat-header-cell *matHeaderCellDef>Canal</th>
+            <td mat-cell *matCellDef="let candidacy">
+              <div class="channel-cell">
+                <mat-icon>send</mat-icon>
+                <span>{{ candidacy.applicationChannel || '-' }}</span>
+              </div>
+            </td>
+          </ng-container>
+
+          <!-- Interest Column -->
+          <ng-container matColumnDef="interest">
+            <th mat-header-cell *matHeaderCellDef>Intérêt</th>
+            <td mat-cell *matCellDef="let candidacy">
+              <div class="interest-cell">
+                <span class="stars">{{ getInterestStars(candidacy.levelOfInterest) }}</span>
+                <span class="interest-value" *ngIf="candidacy.levelOfInterest">
+                  {{ candidacy.levelOfInterest }}/5
+                </span>
+              </div>
+            </td>
+          </ng-container>
+
+          <!-- Actions Column -->
+          <ng-container matColumnDef="actions">
+            <th mat-header-cell *matHeaderCellDef>Actions</th>
+            <td mat-cell *matCellDef="let candidacy">
+              <div class="actions-cell">
+                <button
+                  mat-icon-button
+                  class="action-icon view"
+                  (click)="viewDetails(candidacy)"
+                  matTooltip="Voir les détails"
+                >
+                  <mat-icon>visibility</mat-icon>
+                </button>
+                <button
+                  mat-icon-button
+                  class="action-icon edit"
+                  (click)="editCandidacy(candidacy)"
+                  matTooltip="Modifier"
+                >
+                  <mat-icon>edit</mat-icon>
+                </button>
+                <button
+                  mat-icon-button
+                  class="action-icon delete"
+                  (click)="deleteCandidacy(candidacy)"
+                  matTooltip="Supprimer"
+                >
+                  <mat-icon>delete</mat-icon>
+                </button>
+              </div>
+            </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr
+            mat-row
+            *matRowDef="let row; columns: displayedColumns"
+            class="table-row"
+          ></tr>
+        </table>
+      </div>
+
+      <!-- Pagination -->
+      <mat-paginator
+        [length]="totalItems"
+        [pageSize]="pageSize"
+        [pageSizeOptions]="pageSizeOptions"
+        [pageIndex]="currentPage - 1"
+        (page)="onPageChange($event)"
+        showFirstLastButtons
+      >
+      </mat-paginator>
+    </mat-card>
+  </div>
+
+  <!-- Loading State -->
+  <ng-template #loading>
+    <div class="loading-container">
+      <mat-spinner diameter="60"></mat-spinner>
+      <p>Chargement des candidatures...</p>
+    </div>
+  </ng-template>
+</div>
