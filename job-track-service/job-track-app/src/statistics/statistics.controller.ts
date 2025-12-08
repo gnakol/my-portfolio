@@ -6,6 +6,7 @@ import {
   StatisticsOverviewDto,
   StackPerformanceDto,
   LocationPerformanceDto,
+  PlatformPerformanceDto,
 } from './dto';
 
 @Controller('statistics')
@@ -39,5 +40,11 @@ export class StatisticsController {
   async getByLocation(@CurrentUser() user: any): Promise<LocationPerformanceDto> {
     this.logger.log(`Getting statistics by location for user ${user.userId}`);
     return this.statisticsService.getByLocation(user.userId);
+  }
+
+  @Get('by-platform')
+  async getByPlatform(@CurrentUser() user: any): Promise<PlatformPerformanceDto> {
+    this.logger.log(`Getting statistics by platform for user ${user.userId}`);
+    return this.statisticsService.getByPlatform(user.userId);
   }
 }

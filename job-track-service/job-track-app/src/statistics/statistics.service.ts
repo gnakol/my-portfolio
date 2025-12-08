@@ -10,6 +10,8 @@ import {
   StackPerformanceDto,
   StatisticsByLocationDto,
   LocationPerformanceDto,
+  StatisticsByPlatformDto,
+  PlatformPerformanceDto,
 } from './dto';
 
 @Injectable()
@@ -184,6 +186,70 @@ export class StatisticsService {
     return {
       locations,
       totalLocations: locations.length,
+    };
+  }
+
+  /**
+   * Performance par plateforme (WTTJ, LinkedIn, Indeed, etc.)
+   */
+  async getByPlatform(userId: string): Promise<PlatformPerformanceDto> {
+    const candidacies = await this.candidacyRepository.find({
+      relations: ['jobOffer'],
+    });
+
+    // Grouper par plateforme
+    const platformMap = new Map<string, Candidacy[]>();
+
+    candidacies.forEach((candidacy) => {
+      const platform = candidacy.jobOffer?.platform || candidacy.applicationChannel || 'Non spécifié';
+      if (!platformMap.has(platform)) {
+        platformMap.set(platform, []);
+      }
+      platformMap.get(platform)!.push(candidacy);
+    });
+
+    // Calculer les stats par plateforme
+    const platforms: StatisticsByPlatformDto[] = Array.from(platformMap.entries()).map(
+      ([platform, candidacies]) => {
+        const totalApplications = candidacies.length;
+        const totalResponses = candidacies.filter(
+          (c) => c.currentStatus !== 'PENDING' && c.currentStatus !== 'SENT',
+        ).length;
+        const totalInterviews = candidacies.filter((c) =>
+          c.currentStatus?.toUpperCase().includes('INTERVIEW'),
+        ).length;
+        const totalOffersReceived = candidacies.filter(
+          (c) => c.currentStatus === 'OFFER_RECEIVED' || c.currentStatus === 'ACCEPTED',
+        ).length;
+
+        return {
+          platform,
+          totalApplications,
+          totalResponses,
+          totalInterviews,
+          totalOffersReceived,
+          responseRate:
+            totalApplications > 0
+              ? Math.round(((totalResponses / totalApplications) * 100) * 100) / 100
+              : 0,
+          interviewRate:
+            totalApplications > 0
+              ? Math.round(((totalInterviews / totalApplications) * 100) * 100) / 100
+              : 0,
+          successRate:
+            totalApplications > 0
+              ? Math.round(((totalOffersReceived / totalApplications) * 100) * 100) / 100
+              : 0,
+        };
+      },
+    );
+
+    // Trier par nombre de candidatures décroissant
+    platforms.sort((a, b) => b.totalApplications - a.totalApplications);
+
+    return {
+      platforms,
+      totalPlatforms: platforms.length,
     };
   }
 }
