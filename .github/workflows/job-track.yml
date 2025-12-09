@@ -1,0 +1,46 @@
+name: 🚀 Deploy Job Track to K8s
+
+on:
+  push:
+    branches: [ main ]
+    paths:
+      - 'job-track-service/job-track-app/**'
+      - '.github/workflows/job-track.yml'
+
+jobs:
+  build-push-and-rollout:
+    runs-on: ubuntu-latest
+    steps:
+      - name: 📥 Checkout
+        uses: actions/checkout@v4
+
+      - name: 🔐 Docker login
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME_JOB_TRACK }}
+          password: ${{ secrets.DOCKERHUB_TOKEN_JOB_TRACK }}
+
+      - name: 🏷️ Build & Push (sha + latest)
+        uses: docker/build-push-action@v6
+        with:
+          context: ./job-track-service/job-track-app
+          push: true
+          tags: |
+            wiriss99/job-track-app:${{ github.sha }}
+            wiriss99/job-track-app:latest
+
+      - name: 🚪 SSH on EC2 & rollout JOB-TRACK
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ubuntu
+          key: ${{ secrets.EC2_SSH_KEY }}
+          script: |
+            echo "[INFO] Hostname: $(hostname)"
+            echo "[INFO] kubectl: $(which kubectl)"
+            echo "[ROLLING] set image job-track-app -> wiriss99/job-track-app:${{ github.sha }}"
+            kubectl -n portfolio set image deployment/job-track-app \
+              job-track-app=wiriss99/job-track-app:${{ github.sha }} --record
+            echo "[WAIT] rollout status..."
+            kubectl -n portfolio rollout status deployment/job-track-app --timeout=180s
+            echo "[DONE] rollout ok"
