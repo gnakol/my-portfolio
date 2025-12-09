@@ -1,0 +1,253 @@
+.modal-container {
+  background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+  padding: 0;
+  max-width: 700px;
+  width: 100%;
+  border-radius: 16px;
+  overflow: hidden;
+}
+
+// ===========================
+// MODAL HEADER
+// ===========================
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.5rem 2rem;
+  background: rgba(30, 41, 59, 0.8);
+  border-bottom: 1px solid rgba(139, 92, 246, 0.2);
+}
+
+.header-content {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.header-icon {
+  font-size: 2rem;
+  width: 2rem;
+  height: 2rem;
+  color: #8b5cf6;
+  filter: drop-shadow(0 0 8px rgba(139, 92, 246, 0.5));
+}
+
+.modal-title {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: rgba(248, 250, 252, 0.95);
+  margin: 0;
+}
+
+.close-button {
+  color: rgba(226, 232, 240, 0.8) !important;
+
+  &:hover {
+    background: rgba(239, 68, 68, 0.1) !important;
+    color: rgba(239, 68, 68, 0.9) !important;
+  }
+}
+
+// ===========================
+// MODAL FORM
+// ===========================
+.modal-form {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.form-content {
+  padding: 2rem;
+  max-height: 60vh;
+  overflow-y: auto;
+
+  // Custom scrollbar
+  &::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: rgba(15, 23, 42, 0.5);
+    border-radius: 4px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: rgba(139, 92, 246, 0.3);
+    border-radius: 4px;
+
+    &:hover {
+      background: rgba(139, 92, 246, 0.5);
+    }
+  }
+}
+
+// ===========================
+// FORM FIELDS
+// ===========================
+.full-width {
+  width: 100%;
+  margin-bottom: 1rem;
+}
+
+.form-row {
+  display: flex;
+  gap: 1rem;
+  width: 100%;
+  margin-bottom: 1rem;
+
+  .half-width {
+    flex: 1;
+  }
+}
+
+::ng-deep {
+  .modal-container {
+    .mat-mdc-form-field {
+      margin-bottom: 0;
+    }
+
+    .mat-mdc-text-field-wrapper {
+      background: rgba(30, 41, 59, 0.6) !important;
+      border-radius: 8px;
+      backdrop-filter: blur(10px);
+    }
+
+    .mat-mdc-form-field-outline {
+      color: rgba(139, 92, 246, 0.3) !important;
+    }
+
+    .mat-mdc-form-field-outline-thick {
+      color: rgba(139, 92, 246, 0.6) !important;
+    }
+
+    .mat-mdc-form-field-focus-overlay {
+      background-color: rgba(139, 92, 246, 0.05);
+    }
+
+    input,
+    textarea {
+      color: rgba(248, 250, 252, 0.9) !important;
+      caret-color: #8b5cf6;
+    }
+
+    .mat-mdc-input-element::placeholder {
+      color: rgba(226, 232, 240, 0.5);
+    }
+
+    label {
+      color: rgba(226, 232, 240, 0.7) !important;
+    }
+
+    .mat-mdc-form-field-required-marker {
+      color: rgba(239, 68, 68, 0.8);
+    }
+
+    mat-icon {
+      color: rgba(139, 92, 246, 0.7);
+    }
+
+    .mat-mdc-form-field-error {
+      color: rgba(239, 68, 68, 0.9);
+    }
+
+    // Textarea specific
+    textarea.mat-mdc-input-element {
+      resize: vertical;
+      min-height: 60px;
+    }
+  }
+}
+
+// ===========================
+// MODAL ACTIONS
+// ===========================
+.modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+  padding: 1.5rem 2rem;
+  background: rgba(15, 23, 42, 0.5);
+  border-top: 1px solid rgba(139, 92, 246, 0.2);
+}
+
+.cancel-button {
+  color: rgba(226, 232, 240, 0.9) !important;
+  border-color: rgba(139, 92, 246, 0.3) !important;
+  background: rgba(30, 41, 59, 0.6) !important;
+  border-radius: 8px;
+  padding: 0 1.5rem;
+  height: 42px;
+  transition: all 0.3s ease;
+
+  &:hover {
+    background: rgba(30, 41, 59, 0.8) !important;
+    border-color: rgba(139, 92, 246, 0.5) !important;
+  }
+}
+
+.submit-button {
+  background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%) !important;
+  color: white !important;
+  border-radius: 8px;
+  padding: 0 1.5rem;
+  height: 42px;
+  min-width: 120px;
+  box-shadow: 0 4px 15px rgba(139, 92, 246, 0.3);
+  transition: all 0.3s ease;
+
+  &:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(139, 92, 246, 0.4);
+  }
+
+  &:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+
+  ::ng-deep .mat-mdc-progress-spinner circle {
+    stroke: white !important;
+  }
+}
+
+// ===========================
+// RESPONSIVE DESIGN
+// ===========================
+@media (max-width: 768px) {
+  .modal-container {
+    max-width: 100%;
+  }
+
+  .modal-header {
+    padding: 1rem 1.5rem;
+  }
+
+  .modal-title {
+    font-size: 1.25rem;
+  }
+
+  .form-content {
+    padding: 1.5rem;
+  }
+
+  .form-row {
+    flex-direction: column;
+    gap: 0;
+
+    .half-width {
+      width: 100%;
+      margin-bottom: 1rem;
+    }
+  }
+
+  .modal-actions {
+    padding: 1rem 1.5rem;
+    flex-direction: column-reverse;
+
+    button {
+      width: 100%;
+    }
+  }
+}

@@ -1,0 +1,109 @@
+<div class="modal-container">
+  <div class="modal-header">
+    <div class="header-content">
+      <mat-icon class="header-icon">business</mat-icon>
+      <h2 class="modal-title">{{ getTitle() }}</h2>
+    </div>
+    <button mat-icon-button class="close-button" (click)="onCancel()">
+      <mat-icon>close</mat-icon>
+    </button>
+  </div>
+
+  <form [formGroup]="companyForm" (ngSubmit)="onSubmit()" class="modal-form">
+    <div class="form-content">
+      <!-- Company Name (Required) -->
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Nom de l'entreprise *</mat-label>
+        <input matInput formControlName="name" placeholder="Ex: Acme Corporation">
+        <mat-icon matPrefix>business</mat-icon>
+        <mat-error *ngIf="companyForm.get('name')?.invalid">
+          {{ getErrorMessage('name') }}
+        </mat-error>
+      </mat-form-field>
+
+      <!-- Two columns layout -->
+      <div class="form-row">
+        <!-- Sector -->
+        <mat-form-field appearance="outline" class="half-width">
+          <mat-label>Secteur</mat-label>
+          <input matInput formControlName="sector" placeholder="Ex: Technologie">
+          <mat-icon matPrefix>category</mat-icon>
+          <mat-error *ngIf="companyForm.get('sector')?.invalid">
+            {{ getErrorMessage('sector') }}
+          </mat-error>
+        </mat-form-field>
+
+        <!-- Website -->
+        <mat-form-field appearance="outline" class="half-width">
+          <mat-label>Site web</mat-label>
+          <input matInput formControlName="website" placeholder="Ex: https://example.com">
+          <mat-icon matPrefix>link</mat-icon>
+          <mat-error *ngIf="companyForm.get('website')?.invalid">
+            {{ getErrorMessage('website') }}
+          </mat-error>
+        </mat-form-field>
+      </div>
+
+      <!-- Location row -->
+      <div class="form-row">
+        <!-- City -->
+        <mat-form-field appearance="outline" class="half-width">
+          <mat-label>Ville</mat-label>
+          <input matInput formControlName="city" placeholder="Ex: Paris">
+          <mat-icon matPrefix>location_city</mat-icon>
+          <mat-error *ngIf="companyForm.get('city')?.invalid">
+            {{ getErrorMessage('city') }}
+          </mat-error>
+        </mat-form-field>
+
+        <!-- Country -->
+        <mat-form-field appearance="outline" class="half-width">
+          <mat-label>Pays</mat-label>
+          <input matInput formControlName="country" placeholder="Ex: France">
+          <mat-icon matPrefix>public</mat-icon>
+          <mat-error *ngIf="companyForm.get('country')?.invalid">
+            {{ getErrorMessage('country') }}
+          </mat-error>
+        </mat-form-field>
+      </div>
+
+      <!-- Personal Note -->
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Notes personnelles</mat-label>
+        <textarea
+          matInput
+          formControlName="personal_note"
+          rows="3"
+          placeholder="Vos impressions, points forts de l'entreprise..."></textarea>
+        <mat-icon matPrefix>note</mat-icon>
+      </mat-form-field>
+
+      <!-- Recruiter Note -->
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Notes sur le recruteur</mat-label>
+        <textarea
+          matInput
+          formControlName="recruiter_note"
+          rows="3"
+          placeholder="Informations sur le recruteur, contact, échanges..."></textarea>
+        <mat-icon matPrefix>person</mat-icon>
+      </mat-form-field>
+    </div>
+
+    <!-- Actions -->
+    <div class="modal-actions">
+      <button mat-stroked-button type="button" class="cancel-button" (click)="onCancel()">
+        Annuler
+      </button>
+      <button
+        mat-raised-button
+        color="primary"
+        type="submit"
+        class="submit-button"
+        [disabled]="companyForm.invalid || loading">
+        <mat-spinner diameter="20" *ngIf="loading"></mat-spinner>
+        <span *ngIf="!loading">{{ getSubmitButtonText() }}</span>
+      </button>
+    </div>
+  </form>
+</div>

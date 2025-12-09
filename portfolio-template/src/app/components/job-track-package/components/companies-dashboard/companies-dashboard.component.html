@@ -1,0 +1,196 @@
+<div class="companies-container">
+  <!-- Animated Background -->
+  <div class="animated-bg">
+    <div class="circle circle-1"></div>
+    <div class="circle circle-2"></div>
+    <div class="circle circle-3"></div>
+  </div>
+
+  <!-- Header -->
+  <div class="header-section">
+    <div class="header-content">
+      <div class="title-section">
+        <mat-icon class="header-icon">business</mat-icon>
+        <h1 class="page-title">Entreprises</h1>
+      </div>
+      <button mat-raised-button color="primary" class="add-button" (click)="addNewCompany()">
+        <mat-icon>add</mat-icon>
+        Nouvelle Entreprise
+      </button>
+    </div>
+  </div>
+
+  <!-- Search & Filters -->
+  <div class="filters-section">
+    <mat-form-field class="search-field" appearance="outline">
+      <mat-label>Rechercher</mat-label>
+      <input matInput [(ngModel)]="searchTerm" (ngModelChange)="onSearchChange()" placeholder="Nom, ville, secteur...">
+      <mat-icon matPrefix>search</mat-icon>
+    </mat-form-field>
+
+    <button mat-stroked-button class="filter-button" (click)="clearFilters()" *ngIf="searchTerm || selectedSector || selectedCountry">
+      <mat-icon>clear</mat-icon>
+      Effacer les filtres
+    </button>
+  </div>
+
+  <!-- Statistics Cards -->
+  <div class="stats-section">
+    <div class="stat-card">
+      <div class="stat-icon">
+        <mat-icon>business</mat-icon>
+      </div>
+      <div class="stat-content">
+        <div class="stat-value">{{ totalCompanies }}</div>
+        <div class="stat-label">Total Entreprises</div>
+      </div>
+    </div>
+
+    <div class="stat-card">
+      <div class="stat-icon">
+        <mat-icon>category</mat-icon>
+      </div>
+      <div class="stat-content">
+        <div class="stat-value">{{ getUniqueSectors().length }}</div>
+        <div class="stat-label">Secteurs</div>
+      </div>
+    </div>
+
+    <div class="stat-card">
+      <div class="stat-icon">
+        <mat-icon>public</mat-icon>
+      </div>
+      <div class="stat-content">
+        <div class="stat-value">{{ getUniqueCountries().length }}</div>
+        <div class="stat-label">Pays</div>
+      </div>
+    </div>
+
+    <div class="stat-card">
+      <div class="stat-icon">
+        <mat-icon>link</mat-icon>
+      </div>
+      <div class="stat-content">
+        <div class="stat-value">{{ getCompaniesWithWebsiteCount() }}</div>
+        <div class="stat-label">Avec Site Web</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Loading State -->
+  <div class="loading-container" *ngIf="loading">
+    <mat-spinner diameter="60"></mat-spinner>
+    <p class="loading-text">Chargement des entreprises...</p>
+  </div>
+
+  <!-- Error State -->
+  <div class="error-container" *ngIf="error && !loading">
+    <mat-icon class="error-icon">error_outline</mat-icon>
+    <p class="error-text">{{ error }}</p>
+    <button mat-raised-button color="primary" (click)="loadCompanies()">
+      <mat-icon>refresh</mat-icon>
+      Réessayer
+    </button>
+  </div>
+
+  <!-- Companies List -->
+  <div class="companies-list" *ngIf="!loading && !error">
+    <!-- Empty State -->
+    <div class="empty-state" *ngIf="filteredCompanies.length === 0">
+      <mat-icon class="empty-icon">business_center</mat-icon>
+      <h3 class="empty-title">Aucune entreprise trouvée</h3>
+      <p class="empty-message" *ngIf="searchTerm || selectedSector || selectedCountry">
+        Essayez de modifier vos filtres de recherche
+      </p>
+      <p class="empty-message" *ngIf="!searchTerm && !selectedSector && !selectedCountry">
+        Commencez par ajouter votre première entreprise
+      </p>
+      <button mat-raised-button color="primary" (click)="addNewCompany()" *ngIf="!searchTerm && !selectedSector && !selectedCountry">
+        <mat-icon>add</mat-icon>
+        Ajouter une entreprise
+      </button>
+    </div>
+
+    <!-- Companies Grid -->
+    <div class="companies-grid" *ngIf="filteredCompanies.length > 0">
+      <mat-card class="company-card" *ngFor="let company of filteredCompanies">
+        <!-- Card Header -->
+        <div class="card-header">
+          <div class="company-icon">
+            <mat-icon>{{ getSectorIcon(company.sector) }}</mat-icon>
+          </div>
+          <div class="company-basic-info">
+            <h3 class="company-name">{{ company.name }}</h3>
+            <div class="company-meta">
+              <mat-chip class="sector-chip" *ngIf="company.sector">
+                <mat-icon>category</mat-icon>
+                {{ company.sector }}
+              </mat-chip>
+            </div>
+          </div>
+        </div>
+
+        <!-- Card Content -->
+        <mat-card-content class="card-content">
+          <div class="info-row" *ngIf="company.city || company.country">
+            <mat-icon class="info-icon">location_on</mat-icon>
+            <span class="info-text">
+              <span *ngIf="company.city">{{ company.city }}</span>
+              <span *ngIf="company.city && company.country">, </span>
+              <span *ngIf="company.country">{{ company.country }}</span>
+            </span>
+          </div>
+
+          <div class="info-row" *ngIf="company.website">
+            <mat-icon class="info-icon">link</mat-icon>
+            <a class="website-link" (click)="openWebsite(company.website)">
+              {{ company.website }}
+            </a>
+          </div>
+
+          <div class="info-row" *ngIf="company.personal_note">
+            <mat-icon class="info-icon">note</mat-icon>
+            <span class="info-text note-preview">{{ company.personal_note }}</span>
+          </div>
+
+          <div class="info-row" *ngIf="company.recruiter_note">
+            <mat-icon class="info-icon">person</mat-icon>
+            <span class="info-text note-preview">{{ company.recruiter_note }}</span>
+          </div>
+
+          <div class="info-row date-row">
+            <mat-icon class="info-icon">schedule</mat-icon>
+            <span class="info-text date-text">
+              Ajoutée le {{ formatDate(company.created_at) }}
+            </span>
+          </div>
+        </mat-card-content>
+
+        <!-- Card Actions -->
+        <div class="card-actions">
+          <button mat-icon-button matTooltip="Voir les détails" (click)="viewCompanyDetails(company)">
+            <mat-icon>visibility</mat-icon>
+          </button>
+          <button mat-icon-button matTooltip="Modifier" (click)="editCompany(company)">
+            <mat-icon>edit</mat-icon>
+          </button>
+          <button mat-icon-button matTooltip="Supprimer" class="delete-button" (click)="deleteCompany(company)">
+            <mat-icon>delete</mat-icon>
+          </button>
+        </div>
+      </mat-card>
+    </div>
+
+    <!-- Pagination -->
+    <div class="pagination-section" *ngIf="filteredCompanies.length > 0">
+      <mat-paginator
+        [length]="totalCompanies"
+        [pageSize]="pageSize"
+        [pageSizeOptions]="pageSizeOptions"
+        [pageIndex]="currentPage - 1"
+        (page)="onPageChange($event)"
+        showFirstLastButtons>
+      </mat-paginator>
+    </div>
+  </div>
+</div>

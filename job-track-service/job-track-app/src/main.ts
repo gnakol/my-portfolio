@@ -22,9 +22,15 @@ async function bootstrap() {
   );
 
   // CORS configuration
+  const allowedOrigins = configService.get('NODE_ENV') === 'production'
+    ? ['https://kolie-portfolio.org', 'https://www.kolie-portfolio.org']
+    : ['http://localhost:4200', 'http://localhost:3000'];
+
   app.enableCors({
-    origin: ['http://localhost:4200', 'http://localhost:3000'],
+    origin: allowedOrigins,
     credentials: true,
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With'],
   });
 
   // API prefix

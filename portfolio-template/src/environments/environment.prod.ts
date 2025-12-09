@@ -4,7 +4,7 @@ export const environment = {
 
   // ton proxy Nginx redirige /api → backend
   apiBaseUrl: '/api',
-  jobTrackApiUrl: 'http://localhost:3001/api', // Update this in production with correct URL
+  jobTrackApiUrl: '/api/job-track', // Route vers job-track-app via Nginx K8s
 
   // ⚠️ ajouté pour le build Angular (mêmes clés que l'env de dev)
   grafana: {

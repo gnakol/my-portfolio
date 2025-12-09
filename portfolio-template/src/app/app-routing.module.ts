@@ -67,6 +67,7 @@ import { DashboardComponent as JobTrackDashboardComponent } from './components/j
 import { CandidaciesListComponent } from './components/job-track-package/components/candidacies-list/candidacies-list.component';
 import { JobOffersListComponent } from './components/job-track-package/components/job-offers-list/job-offers-list.component';
 import { RemindersDashboardComponent } from './components/job-track-package/components/reminders-dashboard/reminders-dashboard.component';
+import { CompaniesDashboardComponent } from './components/job-track-package/components/companies-dashboard/companies-dashboard.component';
 
 const routes: Routes = [
   { path: '', loadChildren: () => import('./pages/home/home.module').then(m => m.HomeModule) },
@@ -139,6 +140,7 @@ const routes: Routes = [
   { path: 'job-track-candidacies', component : CandidaciesListComponent, canActivate : [AuthGuard]},
   { path: 'job-track-offers', component : JobOffersListComponent, canActivate : [AuthGuard]},
   { path: 'job-track-reminders', component : RemindersDashboardComponent, canActivate : [AuthGuard]},
+  { path: 'job-track-companies', component : CompaniesDashboardComponent, canActivate : [AuthGuard]},
 
   { path: 'pdf-generator', component : PdfGeneratorComponent},
 
