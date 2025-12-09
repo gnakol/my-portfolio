@@ -1,3 +1,5 @@
+import { CompanyResponseDto } from '../../company/dto';
+
 export class JobOfferResponseDto {
   id: number;
   companyId: number;
@@ -16,4 +18,5 @@ export class JobOfferResponseDto {
   expirationDate?: Date;
   scrapedData?: Record<string, any>;
   createdAt: Date;
+  company?: CompanyResponseDto;
 }

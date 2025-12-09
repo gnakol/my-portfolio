@@ -1,0 +1,297 @@
+<div class="reminders-container">
+  <!-- Animated Background -->
+  <div class="animated-background">
+    <div class="gradient-circle circle-1"></div>
+    <div class="gradient-circle circle-2"></div>
+    <div class="gradient-circle circle-3"></div>
+    <div class="grid-pattern"></div>
+  </div>
+
+  <!-- Header -->
+  <div class="reminders-header">
+    <div class="header-content">
+      <button mat-icon-button class="back-btn" (click)="goBack()" matTooltip="Retour">
+        <mat-icon>arrow_back</mat-icon>
+      </button>
+      <div class="header-text">
+        <h1 class="reminders-title">
+          <mat-icon class="title-icon">notifications_active</mat-icon>
+          Mes <span class="text-gradient">Rappels</span>
+        </h1>
+        <p class="reminders-subtitle">Gérez vos rappels de relance et ne manquez aucune opportunité</p>
+      </div>
+      <button mat-raised-button class="refresh-btn" (click)="refresh()">
+        <mat-icon>refresh</mat-icon>
+        Actualiser
+      </button>
+    </div>
+    <div class="header-divider"></div>
+  </div>
+
+  <!-- Loading State -->
+  <div class="loading-container" *ngIf="isLoading">
+    <mat-spinner diameter="50"></mat-spinner>
+    <p>Chargement des rappels...</p>
+  </div>
+
+  <!-- Main Content -->
+  <div class="reminders-content" *ngIf="!isLoading && dashboardData">
+
+    <!-- Summary Cards -->
+    <div class="summary-section">
+      <h2 class="section-title">
+        <mat-icon>analytics</mat-icon>
+        Vue d'ensemble
+      </h2>
+
+      <div class="summary-grid">
+        <!-- Total -->
+        <mat-card class="summary-card total">
+          <div class="card-icon">
+            <mat-icon>notifications</mat-icon>
+          </div>
+          <div class="card-content">
+            <h3 class="card-value">{{ dashboardData.summary.total }}</h3>
+            <p class="card-label">Total rappels</p>
+          </div>
+        </mat-card>
+
+        <!-- Overdue -->
+        <mat-card class="summary-card overdue" [class.pulsing]="dashboardData.summary.overdue > 0">
+          <div class="card-icon">
+            <mat-icon>error</mat-icon>
+          </div>
+          <div class="card-content">
+            <h3 class="card-value">{{ dashboardData.summary.overdue }}</h3>
+            <p class="card-label">En retard</p>
+          </div>
+          <div class="card-badge critical" *ngIf="dashboardData.summary.overdue > 0">
+            URGENT
+          </div>
+        </mat-card>
+
+        <!-- Today -->
+        <mat-card class="summary-card today">
+          <div class="card-icon">
+            <mat-icon>today</mat-icon>
+          </div>
+          <div class="card-content">
+            <h3 class="card-value">{{ dashboardData.summary.today }}</h3>
+            <p class="card-label">Aujourd'hui</p>
+          </div>
+        </mat-card>
+
+        <!-- This Week -->
+        <mat-card class="summary-card week">
+          <div class="card-icon">
+            <mat-icon>date_range</mat-icon>
+          </div>
+          <div class="card-content">
+            <h3 class="card-value">{{ dashboardData.summary.thisWeek }}</h3>
+            <p class="card-label">Cette semaine</p>
+          </div>
+        </mat-card>
+
+        <!-- Upcoming -->
+        <mat-card class="summary-card upcoming">
+          <div class="card-icon">
+            <mat-icon>schedule</mat-icon>
+          </div>
+          <div class="card-content">
+            <h3 class="card-value">{{ dashboardData.summary.upcoming }}</h3>
+            <p class="card-label">À venir</p>
+          </div>
+        </mat-card>
+      </div>
+    </div>
+
+    <!-- Priority Breakdown -->
+    <div class="priority-section" *ngIf="dashboardData.byPriority">
+      <h2 class="section-title">
+        <mat-icon>priority_high</mat-icon>
+        Répartition par priorité
+      </h2>
+
+      <div class="priority-chips">
+        <mat-chip class="priority-chip critical" [matBadge]="dashboardData.byPriority.CRITICAL"
+                  [matBadgeHidden]="dashboardData.byPriority.CRITICAL === 0"
+                  matBadgeColor="warn">
+          <mat-icon>error</mat-icon>
+          Critique
+        </mat-chip>
+        <mat-chip class="priority-chip high" [matBadge]="dashboardData.byPriority.HIGH"
+                  [matBadgeHidden]="dashboardData.byPriority.HIGH === 0"
+                  matBadgeColor="accent">
+          <mat-icon>warning</mat-icon>
+          Élevé
+        </mat-chip>
+        <mat-chip class="priority-chip medium" [matBadge]="dashboardData.byPriority.MEDIUM"
+                  [matBadgeHidden]="dashboardData.byPriority.MEDIUM === 0">
+          <mat-icon>schedule</mat-icon>
+          Moyen
+        </mat-chip>
+        <mat-chip class="priority-chip low" [matBadge]="dashboardData.byPriority.LOW"
+                  [matBadgeHidden]="dashboardData.byPriority.LOW === 0">
+          <mat-icon>check_circle</mat-icon>
+          Faible
+        </mat-chip>
+      </div>
+    </div>
+
+    <!-- Critical Reminders -->
+    <div class="critical-section" *ngIf="criticalReminders.length > 0">
+      <h2 class="section-title urgent">
+        <mat-icon class="pulse-icon">notification_important</mat-icon>
+        Rappels urgents
+        <span class="count-badge">{{ criticalReminders.length }}</span>
+      </h2>
+
+      <div class="reminders-grid">
+        <mat-card class="reminder-card"
+                  *ngFor="let reminder of criticalReminders"
+                  [ngClass]="getReminderPriorityClass(reminder)">
+
+          <!-- Priority Badge -->
+          <div class="priority-badge" [ngClass]="getReminderPriorityClass(reminder)">
+            <mat-icon>{{ getReminderPriorityIcon(reminder) }}</mat-icon>
+            <span>{{ getReminderUrgencyLabel(reminder) }}</span>
+          </div>
+
+          <!-- Card Header -->
+          <div class="reminder-header">
+            <div class="company-info">
+              <h3 class="company-name">
+                <mat-icon>business</mat-icon>
+                {{ reminder.candidacy?.company?.name || 'Entreprise non renseignée' }}
+              </h3>
+              <p class="job-title">{{ reminder.candidacy?.jobOffer?.title || 'Poste non renseigné' }}</p>
+            </div>
+          </div>
+
+          <!-- Card Body -->
+          <div class="reminder-body">
+            <div class="info-grid">
+              <div class="info-item">
+                <mat-icon class="info-icon">event</mat-icon>
+                <div class="info-content">
+                  <span class="info-label">Type de rappel</span>
+                  <span class="info-value">{{ getReminderTypeLabel(reminder.reminderType) }}</span>
+                </div>
+              </div>
+
+              <div class="info-item">
+                <mat-icon class="info-icon">schedule</mat-icon>
+                <div class="info-content">
+                  <span class="info-label">Date prévue</span>
+                  <span class="info-value">{{ formatDate(reminder.dueDate) }}</span>
+                </div>
+              </div>
+
+              <div class="info-item" *ngIf="reminder.candidacy?.currentStatus">
+                <mat-icon class="info-icon">assignment</mat-icon>
+                <div class="info-content">
+                  <span class="info-label">Statut candidature</span>
+                  <span class="info-value">{{ reminder.candidacy?.currentStatus }}</span>
+                </div>
+              </div>
+
+              <div class="info-item" *ngIf="reminder.candidacy?.jobOffer?.location">
+                <mat-icon class="info-icon">location_on</mat-icon>
+                <div class="info-content">
+                  <span class="info-label">Localisation</span>
+                  <span class="info-value">{{ reminder.candidacy?.jobOffer?.location }}</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Urgency Indicator -->
+            <div class="urgency-indicator" *ngIf="reminder.isOverdue">
+              <mat-icon class="warning-icon">warning</mat-icon>
+              <span class="urgency-text">
+                Relance en retard de <strong>{{ reminder.daysOverdue }} jour(s)</strong>
+              </span>
+            </div>
+
+            <!-- Comment if exists -->
+            <div class="reminder-comment" *ngIf="reminder.comment">
+              <mat-icon>notes</mat-icon>
+              <p>{{ reminder.comment }}</p>
+            </div>
+          </div>
+
+          <!-- Card Actions -->
+          <div class="reminder-actions">
+            <button mat-icon-button
+                    [matMenuTriggerFor]="snoozeMenu"
+                    matTooltip="Reporter le rappel"
+                    class="action-btn snooze">
+              <mat-icon>snooze</mat-icon>
+            </button>
+            <mat-menu #snoozeMenu="matMenu">
+              <button mat-menu-item (click)="snoozeReminder(reminder.id, 1)">
+                <mat-icon>looks_one</mat-icon>
+                <span>Reporter de 1 jour</span>
+              </button>
+              <button mat-menu-item (click)="snoozeReminder(reminder.id, 3)">
+                <mat-icon>looks_3</mat-icon>
+                <span>Reporter de 3 jours</span>
+              </button>
+              <button mat-menu-item (click)="snoozeReminder(reminder.id, 7)">
+                <mat-icon>date_range</mat-icon>
+                <span>Reporter de 7 jours</span>
+              </button>
+            </mat-menu>
+
+            <button mat-raised-button
+                    class="action-btn complete"
+                    (click)="completeReminder(reminder.id)"
+                    matTooltip="Marquer comme terminé">
+              <mat-icon>check_circle</mat-icon>
+              Terminé
+            </button>
+
+            <button mat-stroked-button
+                    class="action-btn view"
+                    (click)="viewCandidacyDetails(reminder.candidacyId)"
+                    matTooltip="Voir la candidature">
+              <mat-icon>visibility</mat-icon>
+              Détails
+            </button>
+
+            <button mat-icon-button
+                    [matMenuTriggerFor]="moreMenu"
+                    matTooltip="Plus d'actions"
+                    class="action-btn more">
+              <mat-icon>more_vert</mat-icon>
+            </button>
+            <mat-menu #moreMenu="matMenu">
+              <button mat-menu-item (click)="cancelReminder(reminder.id)">
+                <mat-icon>cancel</mat-icon>
+                <span>Annuler</span>
+              </button>
+            </mat-menu>
+          </div>
+        </mat-card>
+      </div>
+    </div>
+
+    <!-- Empty State -->
+    <div class="empty-state" *ngIf="criticalReminders.length === 0 && dashboardData.summary.total === 0">
+      <mat-icon class="empty-icon">check_circle</mat-icon>
+      <h3>Aucun rappel pour le moment</h3>
+      <p>Tous vos rappels sont à jour. Bravo !</p>
+      <button mat-raised-button color="primary" (click)="goBack()">
+        <mat-icon>arrow_back</mat-icon>
+        Retour au dashboard
+      </button>
+    </div>
+
+    <!-- All Clear State -->
+    <div class="all-clear-state" *ngIf="criticalReminders.length === 0 && dashboardData.summary.total > 0">
+      <mat-icon class="success-icon">task_alt</mat-icon>
+      <h3>Aucun rappel urgent</h3>
+      <p>Tous vos rappels urgents sont traités. Continuez comme ça !</p>
+    </div>
+
+  </div>
+</div>

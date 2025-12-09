@@ -61,6 +61,13 @@ import { TlsDashboardComponent } from './components/monitoring/tls-dashboard/tls
 import { MediaTemplateComponent } from './components/medias-package/media-template/media-template.component';
 import { MediaGalleryComponent } from './components/medias-package/media-gallery/media-gallery.component';
 import { VisitTrackingComponent } from './components/visit-tracking/visit-tracking.component';
+import { JobTrackTemplateComponent } from './components/job-track-package/job-track-template/job-track-template.component';
+import { ScrapingComponent } from './components/job-track-package/components/scraping/scraping.component';
+import { DashboardComponent as JobTrackDashboardComponent } from './components/job-track-package/components/dashboard/dashboard.component';
+import { CandidaciesListComponent } from './components/job-track-package/components/candidacies-list/candidacies-list.component';
+import { JobOffersListComponent } from './components/job-track-package/components/job-offers-list/job-offers-list.component';
+import { RemindersDashboardComponent } from './components/job-track-package/components/reminders-dashboard/reminders-dashboard.component';
+import { CompaniesDashboardComponent } from './components/job-track-package/components/companies-dashboard/companies-dashboard.component';
 
 const routes: Routes = [
   { path: '', loadChildren: () => import('./pages/home/home.module').then(m => m.HomeModule) },
@@ -126,7 +133,14 @@ const routes: Routes = [
   { path: 'contact-template', component : ContactTemplateComponent, canActivate : [AuthGuard]},
   { path: 'project-template', component : ProjectTemplateComponent, canActivate : [AuthGuard]},
   { path: 'media-template', component : MediaTemplateComponent, canActivate : [AuthGuard]},
-  { path: 'media-gallery', component : MediaGalleryComponent}, 
+  { path: 'media-gallery', component : MediaGalleryComponent},
+  { path: 'job-track-template', component : JobTrackTemplateComponent, canActivate : [AuthGuard]},
+  { path: 'job-track-scraping', component : ScrapingComponent, canActivate : [AuthGuard]},
+  { path: 'job-track-dashboard', component : JobTrackDashboardComponent, canActivate : [AuthGuard]},
+  { path: 'job-track-candidacies', component : CandidaciesListComponent, canActivate : [AuthGuard]},
+  { path: 'job-track-offers', component : JobOffersListComponent, canActivate : [AuthGuard]},
+  { path: 'job-track-reminders', component : RemindersDashboardComponent, canActivate : [AuthGuard]},
+  { path: 'job-track-companies', component : CompaniesDashboardComponent, canActivate : [AuthGuard]},
 
   { path: 'pdf-generator', component : PdfGeneratorComponent},
 

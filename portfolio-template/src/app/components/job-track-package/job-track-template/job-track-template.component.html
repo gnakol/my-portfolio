@@ -1,0 +1,118 @@
+<div class="dashboard-container">
+  <!-- Animated Background -->
+  <div class="animated-background">
+    <div class="gradient-circle circle-1"></div>
+    <div class="gradient-circle circle-2"></div>
+    <div class="grid-pattern"></div>
+  </div>
+
+  <!-- Header -->
+  <div class="dashboard-header">
+    <h1 class="dashboard-title">Job <span class="text-gradient">Tracker</span></h1>
+    <p class="dashboard-subtitle">Gérez vos candidatures, scrapez des offres et analysez vos statistiques</p>
+    <div class="header-divider"></div>
+  </div>
+
+  <!-- Navigation Cards -->
+  <div class="cards-container">
+    <!-- Carte Dashboard/Statistics -->
+    <mat-card class="dashboard-card" (click)="navigateTo('job-track-dashboard')" [style.--card-color]="'#10b981'">
+      <div class="card-icon">
+        <mat-icon>dashboard</mat-icon>
+      </div>
+      <h2 class="card-title">Dashboard</h2>
+      <p class="card-description">Vue d'ensemble et statistiques de vos candidatures</p>
+      <div class="card-badge">Analytics</div>
+    </mat-card>
+
+    <!-- Carte Scraping -->
+    <mat-card class="dashboard-card" (click)="navigateTo('job-track-scraping')" [style.--card-color]="'#6366f1'">
+      <div class="card-icon">
+        <mat-icon>cloud_download</mat-icon>
+      </div>
+      <h2 class="card-title">Scraper une Offre</h2>
+      <p class="card-description">Récupérez automatiquement les infos d'une offre (WTTJ, LinkedIn, Indeed)</p>
+      <div class="card-badge">Scraping</div>
+    </mat-card>
+
+    <!-- Carte Candidatures -->
+    <mat-card class="dashboard-card" (click)="navigateTo('job-track-candidacies')" [style.--card-color]="'#8b5cf6'">
+      <div class="card-icon">
+        <mat-icon>assignment</mat-icon>
+      </div>
+      <h2 class="card-title">Mes Candidatures</h2>
+      <p class="card-description">Consultez et gérez vos candidatures actives</p>
+      <div class="card-badge">CRUD</div>
+    </mat-card>
+
+    <!-- Carte Offres d'Emploi -->
+    <mat-card class="dashboard-card" (click)="navigateTo('job-track-offers')" [style.--card-color]="'#ec4899'">
+      <div class="card-icon">
+        <mat-icon>work</mat-icon>
+      </div>
+      <h2 class="card-title">Offres d'Emploi</h2>
+      <p class="card-description">Gérez les offres d'emploi sauvegardées</p>
+      <div class="card-badge">CRUD</div>
+    </mat-card>
+
+    <!-- Carte Reminders -->
+    <mat-card class="dashboard-card" (click)="navigateTo('job-track-reminders')" [style.--card-color]="'#f59e0b'">
+      <div class="card-icon">
+        <mat-icon>notifications_active</mat-icon>
+      </div>
+      <h2 class="card-title">Rappels</h2>
+      <p class="card-description">Gérez vos rappels de relance (J+3, J+7, J+14)</p>
+      <div class="card-badge">Notifications</div>
+    </mat-card>
+
+    <!-- Carte Entreprises -->
+    <mat-card class="dashboard-card" (click)="navigateTo('job-track-companies')" [style.--card-color]="'#14b8a6'">
+      <div class="card-icon">
+        <mat-icon>business</mat-icon>
+      </div>
+      <h2 class="card-title">Entreprises</h2>
+      <p class="card-description">Gérez la liste des entreprises ciblées</p>
+      <div class="card-badge">CRUD</div>
+    </mat-card>
+
+    <!-- Carte Timeline -->
+    <mat-card class="dashboard-card" (click)="navigateTo('job-track-timeline')" [style.--card-color]="'#3b82f6'">
+      <div class="card-icon">
+        <mat-icon>timeline</mat-icon>
+      </div>
+      <h2 class="card-title">Timeline</h2>
+      <p class="card-description">Historique chronologique de vos candidatures</p>
+      <div class="card-badge">Tracking</div>
+    </mat-card>
+
+    <!-- Carte Contacts -->
+    <mat-card class="dashboard-card" (click)="navigateTo('job-track-contacts')" [style.--card-color]="'#f97316'">
+      <div class="card-icon">
+        <mat-icon>contacts</mat-icon>
+      </div>
+      <h2 class="card-title">Contacts</h2>
+      <p class="card-description">Gérez vos contacts recruteurs</p>
+      <div class="card-badge">CRUD</div>
+    </mat-card>
+
+    <!-- Carte Stack Tags -->
+    <mat-card class="dashboard-card" (click)="navigateTo('job-track-stack-tags')" [style.--card-color]="'#a855f7'">
+      <div class="card-icon">
+        <mat-icon>label</mat-icon>
+      </div>
+      <h2 class="card-title">Tags Techniques</h2>
+      <p class="card-description">Gérez les tags de compétences techniques</p>
+      <div class="card-badge">Tags</div>
+    </mat-card>
+
+    <!-- Carte Statistiques Avancées -->
+    <mat-card class="dashboard-card" (click)="navigateTo('job-track-statistics')" [style.--card-color]="'#00d4ff'">
+      <div class="card-icon">
+        <mat-icon>bar_chart</mat-icon>
+      </div>
+      <h2 class="card-title">Statistiques</h2>
+      <p class="card-description">Analyses par stack, localisation et taux de succès</p>
+      <div class="card-badge">Analytics</div>
+    </mat-card>
+  </div>
+</div>

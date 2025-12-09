@@ -1,4 +1,4 @@
-import { IsString, IsOptional, MaxLength, IsUrl } from 'class-validator';
+import { IsString, IsOptional, MaxLength, IsUrl, ValidateIf } from 'class-validator';
 
 export class CreateCompanyDto {
   @IsString()
@@ -21,7 +21,8 @@ export class CreateCompanyDto {
   country?: string;
 
   @IsOptional()
-  @IsUrl()
+  @ValidateIf((o) => o.website && o.website.trim() !== '')
+  @IsUrl({}, { message: 'website must be a valid URL address' })
   @MaxLength(512)
   website?: string;
 

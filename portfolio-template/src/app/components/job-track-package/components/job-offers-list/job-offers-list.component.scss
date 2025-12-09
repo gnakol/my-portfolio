@@ -1,0 +1,635 @@
+.candidacies-container {
+  position: relative;
+  min-height: 100vh;
+  padding: 2rem;
+  background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+  overflow-x: hidden;
+
+  @media (max-width: 768px) {
+    padding: 1rem;
+  }
+}
+
+// Animated Background
+.animated-background {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.gradient-circle {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(100px);
+  opacity: 0.3;
+  animation: float 20s ease-in-out infinite;
+
+  &.circle-1 {
+    width: 600px;
+    height: 600px;
+    background: radial-gradient(circle, #f97316 0%, transparent 70%);
+    top: -200px;
+    right: -200px;
+    animation-delay: 0s;
+  }
+
+  &.circle-2 {
+    width: 500px;
+    height: 500px;
+    background: radial-gradient(circle, #ec4899 0%, transparent 70%);
+    bottom: -150px;
+    left: -150px;
+    animation-delay: 5s;
+  }
+}
+
+.grid-pattern {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background-image: linear-gradient(rgba(249, 115, 22, 0.1) 1px, transparent 1px),
+                    linear-gradient(90deg, rgba(249, 115, 22, 0.1) 1px, transparent 1px);
+  background-size: 50px 50px;
+  opacity: 0.3;
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translate(0, 0) scale(1);
+  }
+  33% {
+    transform: translate(100px, -50px) scale(1.1);
+  }
+  66% {
+    transform: translate(-50px, 100px) scale(0.9);
+  }
+}
+
+// Header
+.candidacies-header {
+  position: relative;
+  z-index: 1;
+  margin-bottom: 2rem;
+
+  .header-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+    gap: 1rem;
+
+    @media (max-width: 968px) {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+  }
+
+  .header-text {
+    flex: 1;
+  }
+
+  .header-actions {
+    display: flex;
+    gap: 1rem;
+
+    @media (max-width: 968px) {
+      width: 100%;
+
+      button {
+        flex: 1;
+      }
+    }
+  }
+}
+
+.candidacies-title {
+  font-size: 2.5rem;
+  font-weight: 800;
+  color: #f1f5f9;
+  margin: 0;
+  margin-bottom: 0.5rem;
+
+  @media (max-width: 768px) {
+    font-size: 2rem;
+  }
+}
+
+.text-gradient {
+  background: linear-gradient(135deg, #f97316 0%, #ec4899 50%, #3b82f6 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.candidacies-subtitle {
+  font-size: 1.1rem;
+  color: #94a3b8;
+  margin: 0;
+}
+
+.action-btn {
+  padding: 0.75rem 1.5rem;
+  font-weight: 600;
+  border-radius: 12px;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+
+  &.primary {
+    background: linear-gradient(135deg, #f97316 0%, #ec4899 100%);
+    color: white;
+    border: none;
+
+    &:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 25px rgba(249, 115, 22, 0.4);
+    }
+  }
+
+  &.secondary {
+    background: rgba(249, 115, 22, 0.15);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(249, 115, 22, 0.3);
+    color: #fdba74;
+
+    &:hover {
+      background: rgba(249, 115, 22, 0.25);
+      border-color: rgba(249, 115, 22, 0.5);
+      transform: translateY(-2px);
+    }
+  }
+}
+
+.header-divider {
+  height: 2px;
+  background: linear-gradient(90deg, transparent 0%, #f97316 50%, transparent 100%);
+  border-radius: 2px;
+}
+
+// Filters Section
+.filters-section {
+  position: relative;
+  z-index: 1;
+  margin-bottom: 2rem;
+}
+
+.filters-card {
+  background: rgba(30, 41, 59, 0.6);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(249, 115, 22, 0.2);
+  border-radius: 16px;
+  padding: 1.5rem;
+
+  .filters-row {
+    display: grid;
+    grid-template-columns: 2fr 1.5fr auto;
+    gap: 1rem;
+    align-items: start;
+
+    @media (max-width: 968px) {
+      grid-template-columns: 1fr;
+    }
+
+    .search-field,
+    .status-field {
+      ::ng-deep {
+        .mat-mdc-form-field {
+          width: 100%;
+        }
+
+        .mat-mdc-text-field-wrapper {
+          background: rgba(15, 23, 42, 0.6);
+          border-radius: 8px;
+        }
+
+        .mat-mdc-form-field-focus-overlay {
+          background: rgba(249, 115, 22, 0.1);
+        }
+
+        .mdc-text-field--outlined .mdc-notched-outline {
+          .mdc-notched-outline__leading,
+          .mdc-notched-outline__notch,
+          .mdc-notched-outline__trailing {
+            border-color: rgba(249, 115, 22, 0.3);
+          }
+        }
+
+        .mat-mdc-form-field.mat-focused {
+          .mdc-notched-outline__leading,
+          .mdc-notched-outline__notch,
+          .mdc-notched-outline__trailing {
+            border-color: #f97316 !important;
+          }
+        }
+
+        input,
+        .mat-mdc-select-value {
+          color: #f1f5f9;
+        }
+
+        .mat-mdc-form-field-icon-prefix,
+        .mat-mdc-form-field-icon-suffix {
+          color: #f97316;
+        }
+
+        label {
+          color: #94a3b8;
+        }
+      }
+    }
+
+    .filter-actions {
+      display: flex;
+      gap: 0.5rem;
+      align-items: center;
+
+      @media (max-width: 968px) {
+        width: 100%;
+
+        .clear-btn {
+          flex: 1;
+        }
+      }
+
+      .clear-btn {
+        background: rgba(239, 68, 68, 0.15);
+        border: 1px solid rgba(239, 68, 68, 0.3);
+        color: #fca5a5;
+        padding: 0.5rem 1.25rem;
+        border-radius: 8px;
+        transition: all 0.3s ease;
+
+        &:hover:not(:disabled) {
+          background: rgba(239, 68, 68, 0.25);
+          border-color: rgba(239, 68, 68, 0.5);
+        }
+
+        &:disabled {
+          opacity: 0.4;
+          cursor: not-allowed;
+        }
+      }
+
+      .refresh-btn {
+        background: rgba(249, 115, 22, 0.15);
+        border: 1px solid rgba(249, 115, 22, 0.3);
+        color: #fdba74;
+        transition: all 0.3s ease;
+
+        &:hover {
+          background: rgba(249, 115, 22, 0.25);
+          border-color: rgba(249, 115, 22, 0.5);
+        }
+      }
+    }
+  }
+
+  .results-info {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-top: 1rem;
+    padding-top: 1rem;
+    border-top: 1px solid rgba(249, 115, 22, 0.2);
+    color: #94a3b8;
+    font-size: 0.9rem;
+
+    mat-icon {
+      font-size: 1.2rem;
+      width: 1.2rem;
+      height: 1.2rem;
+      color: #f97316;
+    }
+  }
+}
+
+// Table Section
+.table-section {
+  position: relative;
+  z-index: 1;
+}
+
+.table-card {
+  background: rgba(30, 41, 59, 0.6);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(249, 115, 22, 0.2);
+  border-radius: 16px;
+  padding: 0;
+  overflow: hidden;
+}
+
+.table-container {
+  overflow-x: auto;
+  max-width: 100%;
+}
+
+.candidacies-table {
+  width: 100%;
+  background: transparent;
+
+  ::ng-deep {
+    .mat-mdc-header-row {
+      background: rgba(15, 23, 42, 0.6);
+    }
+
+    .mat-mdc-header-cell {
+      color: #f97316;
+      font-weight: 700;
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      border-bottom: 2px solid rgba(249, 115, 22, 0.3);
+      padding: 1rem;
+    }
+
+    .mat-mdc-cell {
+      color: #e2e8f0;
+      border-bottom: 1px solid rgba(249, 115, 22, 0.1);
+      padding: 1rem;
+    }
+
+    .mat-mdc-row {
+      transition: all 0.3s ease;
+
+      &:hover {
+        background: rgba(249, 115, 22, 0.1);
+      }
+    }
+  }
+
+  // Custom cell styles
+  .company-cell {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+
+    .company-icon {
+      color: #f97316;
+      font-size: 1.5rem;
+      width: 1.5rem;
+      height: 1.5rem;
+    }
+
+    .company-info {
+      display: flex;
+      flex-direction: column;
+      gap: 0.25rem;
+
+      .company-name {
+        font-weight: 600;
+        color: #f1f5f9;
+      }
+
+      .company-location {
+        font-size: 0.85rem;
+        color: #94a3b8;
+      }
+    }
+  }
+
+  .job-cell {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+
+    .job-title {
+      font-weight: 600;
+      color: #f1f5f9;
+    }
+
+    .remote-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      background: rgba(249, 115, 22, 0.2);
+      color: #fdba74;
+      font-size: 0.75rem;
+      padding: 0.25rem 0.5rem;
+      border-radius: 12px;
+      width: fit-content;
+
+      mat-icon {
+        font-size: 1rem;
+        width: 1rem;
+        height: 1rem;
+      }
+    }
+  }
+
+  .location-cell {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+
+    mat-icon {
+      color: #ec4899;
+      font-size: 1.2rem;
+      width: 1.2rem;
+      height: 1.2rem;
+    }
+  }
+
+  .salary-cell {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+
+    mat-icon {
+      color: #10b981;
+      font-size: 1.2rem;
+      width: 1.2rem;
+      height: 1.2rem;
+    }
+
+    span {
+      font-weight: 600;
+      color: #f1f5f9;
+    }
+  }
+
+  .platform-chip {
+    color: white !important;
+    font-weight: 600;
+    font-size: 0.8rem;
+    padding: 0.5rem 1rem;
+  }
+
+  .contract-text {
+    color: #e2e8f0;
+    font-size: 0.9rem;
+  }
+
+  .actions-cell {
+    display: flex;
+    gap: 0.25rem;
+
+    .action-icon {
+      transition: all 0.3s ease;
+
+      &.view {
+        color: #3b82f6;
+
+        &:hover {
+          background: rgba(59, 130, 246, 0.2);
+        }
+      }
+
+      &.delete {
+        color: #ef4444;
+
+        &:hover {
+          background: rgba(239, 68, 68, 0.2);
+        }
+      }
+    }
+  }
+}
+
+// Custom Pagination
+.custom-pagination {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 1.5rem;
+  border-top: 1px solid rgba(249, 115, 22, 0.2);
+  flex-wrap: wrap;
+  gap: 1rem;
+  background: rgba(15, 23, 42, 0.6);
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .pagination-info {
+    font-size: 0.9rem;
+    color: #94a3b8;
+  }
+
+  .pagination-controls {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+
+    .page-indicator {
+      font-size: 0.9rem;
+      color: #e2e8f0;
+      font-weight: 500;
+    }
+
+    .pagination-btn {
+      color: #f97316;
+      background: rgba(249, 115, 22, 0.15);
+      border: 1px solid rgba(249, 115, 22, 0.3);
+
+      &:hover:not(:disabled) {
+        background: rgba(249, 115, 22, 0.25);
+      }
+
+      &:disabled {
+        opacity: 0.4;
+        cursor: not-allowed;
+        color: #94a3b8;
+      }
+    }
+  }
+
+  .page-size-selector {
+    ::ng-deep {
+      .page-size-field {
+        .mat-mdc-form-field-wrapper {
+          background: rgba(15, 23, 42, 0.6);
+          border-radius: 8px;
+        }
+
+        .mdc-text-field--outlined .mdc-notched-outline {
+          .mdc-notched-outline__leading,
+          .mdc-notched-outline__notch,
+          .mdc-notched-outline__trailing {
+            border-color: rgba(249, 115, 22, 0.3);
+          }
+        }
+
+        input,
+        .mat-mdc-select-value {
+          color: #f1f5f9;
+        }
+
+        label {
+          color: #94a3b8;
+        }
+      }
+    }
+  }
+}
+
+// Loading
+.loading-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 4rem;
+  gap: 1.5rem;
+
+  p {
+    color: #94a3b8;
+    font-size: 1rem;
+  }
+}
+
+// Empty State
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 4rem 2rem;
+  text-align: center;
+  background: rgba(30, 41, 59, 0.6);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(249, 115, 22, 0.2);
+  border-radius: 16px;
+
+  .empty-icon {
+    font-size: 5rem;
+    width: 5rem;
+    height: 5rem;
+    color: #475569;
+    margin-bottom: 1.5rem;
+  }
+
+  h3 {
+    font-size: 1.5rem;
+    color: #f1f5f9;
+    margin: 0 0 0.75rem 0;
+  }
+
+  p {
+    font-size: 1rem;
+    color: #94a3b8;
+    margin: 0 0 2rem 0;
+    max-width: 500px;
+  }
+
+  button {
+    background: linear-gradient(135deg, #f97316 0%, #ec4899 100%);
+    color: white;
+    padding: 0.75rem 2rem;
+
+    &:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 10px 25px rgba(249, 115, 22, 0.4);
+    }
+
+    mat-icon {
+      margin-right: 0.5rem;
+    }
+  }
+}

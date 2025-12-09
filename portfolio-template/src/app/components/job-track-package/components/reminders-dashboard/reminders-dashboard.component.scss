@@ -1,0 +1,843 @@
+// ============================================================================
+// VARIABLES & COLORS
+// ============================================================================
+
+$critical-color: #ef4444;
+$high-color: #f97316;
+$medium-color: #3b82f6;
+$low-color: #10b981;
+$overdue-color: #dc2626;
+$today-color: #f59e0b;
+$upcoming-color: #10b981;
+
+// ============================================================================
+// CONTAINER & BACKGROUND (DARK THEME like candidacies)
+// ============================================================================
+
+.reminders-container {
+  min-height: 100vh;
+  padding: 2rem;
+  position: relative;
+  overflow-x: hidden;
+  background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+
+  @media (max-width: 768px) {
+    padding: 1rem;
+  }
+}
+
+// Animated background
+.animated-background {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+  pointer-events: none;
+  overflow: hidden;
+
+  .gradient-circle {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(100px);
+    opacity: 0.3;
+    animation: float 20s ease-in-out infinite;
+
+    &.circle-1 {
+      width: 600px;
+      height: 600px;
+      background: radial-gradient(circle, #f59e0b 0%, transparent 70%);
+      top: -200px;
+      right: -200px;
+      animation-delay: 0s;
+    }
+
+    &.circle-2 {
+      width: 500px;
+      height: 500px;
+      background: radial-gradient(circle, #ef4444 0%, transparent 70%);
+      bottom: -150px;
+      left: -150px;
+      animation-delay: 5s;
+    }
+
+    &.circle-3 {
+      width: 550px;
+      height: 550px;
+      background: radial-gradient(circle, #8b5cf6 0%, transparent 70%);
+      top: 50%;
+      left: 50%;
+      animation-delay: 10s;
+    }
+  }
+
+  .grid-pattern {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-image:
+      linear-gradient(rgba(245, 158, 11, 0.1) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(245, 158, 11, 0.1) 1px, transparent 1px);
+    background-size: 50px 50px;
+    opacity: 0.3;
+  }
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translate(0, 0) scale(1);
+  }
+  33% {
+    transform: translate(100px, -50px) scale(1.1);
+  }
+  66% {
+    transform: translate(-50px, 100px) scale(0.9);
+  }
+}
+
+// ============================================================================
+// HEADER
+// ============================================================================
+
+.reminders-header {
+  position: relative;
+  z-index: 1;
+  margin-bottom: 3rem;
+
+  .header-content {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    flex-wrap: wrap;
+  }
+
+  .back-btn {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    transition: all 0.3s ease;
+
+    &:hover {
+      background: rgba(255, 255, 255, 0.2);
+      transform: translateX(-5px);
+    }
+  }
+
+  .header-text {
+    flex: 1;
+  }
+
+  .reminders-title {
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: #fff;
+
+    .title-icon {
+      font-size: 2.5rem;
+      width: 2.5rem;
+      height: 2.5rem;
+      animation: bellRing 2s ease-in-out infinite;
+    }
+
+    .text-gradient {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+  }
+
+  .reminders-subtitle {
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 1rem;
+    margin: 0.5rem 0 0 3.5rem;
+  }
+
+  .refresh-btn {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    font-weight: 600;
+    transition: transform 0.3s ease;
+
+    &:hover {
+      transform: scale(1.05);
+    }
+
+    mat-icon {
+      transition: transform 0.3s ease;
+    }
+
+    &:hover mat-icon {
+      transform: rotate(180deg);
+    }
+  }
+
+  .header-divider {
+    height: 2px;
+    background: linear-gradient(90deg,
+      transparent 0%,
+      rgba(255, 255, 255, 0.1) 50%,
+      transparent 100%);
+    margin-top: 1.5rem;
+  }
+}
+
+@keyframes bellRing {
+  0%, 100% { transform: rotate(0deg); }
+  10%, 30% { transform: rotate(-10deg); }
+  20%, 40% { transform: rotate(10deg); }
+  50% { transform: rotate(0deg); }
+}
+
+// ============================================================================
+// LOADING
+// ============================================================================
+
+.loading-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 400px;
+  color: rgba(226, 232, 240, 0.9);
+  position: relative;
+  z-index: 1;
+
+  p {
+    margin-top: 1rem;
+    font-size: 1.1rem;
+    font-weight: 500;
+  }
+}
+
+// ============================================================================
+// MAIN CONTENT
+// ============================================================================
+
+.reminders-content {
+  position: relative;
+  z-index: 1;
+}
+
+// ============================================================================
+// SECTION TITLES
+// ============================================================================
+
+.section-title {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 1.5rem;
+
+  mat-icon {
+    font-size: 2rem;
+    width: 2rem;
+    height: 2rem;
+  }
+
+  &.urgent {
+    color: $critical-color;
+
+    .pulse-icon {
+      animation: pulse 1.5s ease-in-out infinite;
+    }
+  }
+
+  .count-badge {
+    background: $critical-color;
+    color: white;
+    padding: 0.25rem 0.75rem;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    margin-left: 0.5rem;
+  }
+}
+
+@keyframes pulse {
+  0%, 100% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.2); opacity: 0.8; }
+}
+
+// ============================================================================
+// SUMMARY SECTION
+// ============================================================================
+
+.summary-section {
+  margin-bottom: 3rem;
+}
+
+.summary-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1.5rem;
+}
+
+.summary-card {
+  background: rgba(30, 41, 59, 0.6);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(139, 92, 246, 0.2);
+  border-radius: 16px;
+  padding: 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+
+  &:hover {
+    transform: translateY(-5px);
+    background: rgba(30, 41, 59, 0.8);
+    border-color: rgba(139, 92, 246, 0.4);
+    box-shadow: 0 10px 30px rgba(139, 92, 246, 0.3);
+  }
+
+  .card-icon {
+    width: 60px;
+    height: 60px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2rem;
+
+    mat-icon {
+      font-size: 2rem;
+      width: 2rem;
+      height: 2rem;
+    }
+  }
+
+  .card-content {
+    flex: 1;
+
+    .card-value {
+      font-size: 2.5rem;
+      font-weight: 700;
+      margin: 0;
+      line-height: 1;
+    }
+
+    .card-label {
+      font-size: 0.9rem;
+      color: rgba(255, 255, 255, 0.6);
+      margin: 0.25rem 0 0;
+    }
+  }
+
+  .card-badge {
+    position: absolute;
+    top: 0.5rem;
+    right: 0.5rem;
+    padding: 0.25rem 0.75rem;
+    border-radius: 12px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+
+    &.critical {
+      background: $critical-color;
+      color: white;
+      animation: blink 1s ease-in-out infinite;
+    }
+  }
+
+  &.total {
+    .card-icon {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+    }
+    .card-value { color: #667eea; }
+  }
+
+  &.overdue {
+    .card-icon {
+      background: linear-gradient(135deg, $overdue-color 0%, $critical-color 100%);
+      color: white;
+    }
+    .card-value { color: $critical-color; }
+
+    &.pulsing {
+      animation: cardPulse 2s ease-in-out infinite;
+    }
+  }
+
+  &.today {
+    .card-icon {
+      background: linear-gradient(135deg, $today-color 0%, #fbbf24 100%);
+      color: white;
+    }
+    .card-value { color: $today-color; }
+  }
+
+  &.week {
+    .card-icon {
+      background: linear-gradient(135deg, $medium-color 0%, #60a5fa 100%);
+      color: white;
+    }
+    .card-value { color: $medium-color; }
+  }
+
+  &.upcoming {
+    .card-icon {
+      background: linear-gradient(135deg, $low-color 0%, #34d399 100%);
+      color: white;
+    }
+    .card-value { color: $low-color; }
+  }
+}
+
+@keyframes cardPulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.4); }
+  50% { box-shadow: 0 0 0 10px rgba(239, 68, 68, 0); }
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+// ============================================================================
+// PRIORITY SECTION
+// ============================================================================
+
+.priority-section {
+  margin-bottom: 3rem;
+}
+
+.priority-chips {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+
+  .priority-chip {
+    padding: 0.75rem 1.5rem;
+    font-size: 1rem;
+    font-weight: 600;
+    border-radius: 25px;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: all 0.3s ease;
+    cursor: default;
+
+    mat-icon {
+      font-size: 1.2rem;
+      width: 1.2rem;
+      height: 1.2rem;
+    }
+
+    &.critical {
+      background: rgba(239, 68, 68, 0.2);
+      color: $critical-color;
+      border: 2px solid $critical-color;
+    }
+
+    &.high {
+      background: rgba(249, 115, 22, 0.2);
+      color: $high-color;
+      border: 2px solid $high-color;
+    }
+
+    &.medium {
+      background: rgba(59, 130, 246, 0.2);
+      color: $medium-color;
+      border: 2px solid $medium-color;
+    }
+
+    &.low {
+      background: rgba(16, 185, 129, 0.2);
+      color: $low-color;
+      border: 2px solid $low-color;
+    }
+  }
+}
+
+// ============================================================================
+// REMINDERS GRID
+// ============================================================================
+
+.critical-section {
+  margin-bottom: 3rem;
+}
+
+.reminders-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+  gap: 2rem;
+}
+
+.reminder-card {
+  background: rgba(30, 41, 59, 0.7);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(139, 92, 246, 0.2);
+  border-radius: 20px;
+  padding: 0;
+  overflow: hidden;
+  transition: all 0.3s ease;
+  position: relative;
+
+  &:hover {
+    transform: translateY(-8px);
+    border-color: rgba(139, 92, 246, 0.4);
+    box-shadow: 0 15px 40px rgba(139, 92, 246, 0.4);
+  }
+
+  // Priority-based left border
+  &.priority-critical {
+    border-left: 5px solid $critical-color;
+    animation: criticalGlow 2s ease-in-out infinite;
+  }
+
+  &.priority-high {
+    border-left: 5px solid $high-color;
+  }
+
+  &.priority-medium {
+    border-left: 5px solid $medium-color;
+  }
+
+  &.priority-low {
+    border-left: 5px solid $low-color;
+  }
+
+  // Priority Badge
+  .priority-badge {
+    padding: 0.5rem 1rem;
+    font-size: 0.85rem;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+
+    mat-icon {
+      font-size: 1.2rem;
+      width: 1.2rem;
+      height: 1.2rem;
+    }
+
+    &.priority-critical {
+      background: linear-gradient(135deg, $overdue-color 0%, $critical-color 100%);
+      color: white;
+    }
+
+    &.priority-high {
+      background: linear-gradient(135deg, $high-color 0%, #fb923c 100%);
+      color: white;
+    }
+
+    &.priority-medium {
+      background: linear-gradient(135deg, $medium-color 0%, #60a5fa 100%);
+      color: white;
+    }
+
+    &.priority-low {
+      background: linear-gradient(135deg, $low-color 0%, #34d399 100%);
+      color: white;
+    }
+  }
+
+  // Card Content
+  .reminder-header {
+    padding: 1.5rem;
+    padding-bottom: 1rem;
+
+    .company-info {
+      .company-name {
+        font-size: 1.4rem;
+        font-weight: 700;
+        color: #fff;
+        margin: 0;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+
+        mat-icon {
+          color: #667eea;
+        }
+      }
+
+      .job-title {
+        font-size: 1rem;
+        color: rgba(255, 255, 255, 0.7);
+        margin: 0.5rem 0 0;
+      }
+    }
+  }
+
+  .reminder-body {
+    padding: 0 1.5rem 1.5rem;
+
+    .info-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 1rem;
+      margin-bottom: 1rem;
+    }
+
+    .info-item {
+      display: flex;
+      gap: 0.75rem;
+      align-items: flex-start;
+
+      .info-icon {
+        color: rgba(255, 255, 255, 0.5);
+        font-size: 1.2rem;
+        width: 1.2rem;
+        height: 1.2rem;
+        margin-top: 0.2rem;
+      }
+
+      .info-content {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+
+        .info-label {
+          font-size: 0.75rem;
+          color: rgba(255, 255, 255, 0.5);
+          text-transform: uppercase;
+          letter-spacing: 0.5px;
+        }
+
+        .info-value {
+          font-size: 0.95rem;
+          color: #fff;
+          font-weight: 600;
+          margin-top: 0.25rem;
+        }
+      }
+    }
+
+    .urgency-indicator {
+      background: rgba(239, 68, 68, 0.2);
+      border: 1px solid $critical-color;
+      border-radius: 12px;
+      padding: 0.75rem;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      margin-top: 1rem;
+
+      .warning-icon {
+        color: $critical-color;
+        font-size: 1.5rem;
+        width: 1.5rem;
+        height: 1.5rem;
+        animation: shake 0.5s ease-in-out infinite;
+      }
+
+      .urgency-text {
+        color: $critical-color;
+        font-size: 0.9rem;
+        font-weight: 600;
+      }
+    }
+
+    .reminder-comment {
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 12px;
+      padding: 0.75rem;
+      display: flex;
+      gap: 0.75rem;
+      margin-top: 1rem;
+
+      mat-icon {
+        color: rgba(255, 255, 255, 0.5);
+        font-size: 1.2rem;
+        width: 1.2rem;
+        height: 1.2rem;
+      }
+
+      p {
+        color: rgba(255, 255, 255, 0.8);
+        font-size: 0.9rem;
+        margin: 0;
+        flex: 1;
+      }
+    }
+  }
+
+  // Actions
+  .reminder-actions {
+    padding: 1rem 1.5rem;
+    background: rgba(15, 23, 42, 0.5);
+    display: flex;
+    gap: 0.75rem;
+    align-items: center;
+    border-top: 1px solid rgba(139, 92, 246, 0.2);
+
+    .action-btn {
+      transition: all 0.3s ease;
+
+      &.snooze {
+        color: $today-color;
+
+        &:hover {
+          background: rgba(245, 158, 11, 0.2);
+        }
+      }
+
+      &.complete {
+        background: linear-gradient(135deg, $low-color 0%, #34d399 100%);
+        color: white;
+        font-weight: 600;
+
+        &:hover {
+          transform: scale(1.05);
+        }
+      }
+
+      &.view {
+        color: $medium-color;
+        border-color: $medium-color;
+
+        &:hover {
+          background: rgba(59, 130, 246, 0.2);
+        }
+      }
+
+      &.more {
+        color: rgba(255, 255, 255, 0.7);
+        margin-left: auto;
+
+        &:hover {
+          background: rgba(255, 255, 255, 0.1);
+        }
+      }
+    }
+  }
+}
+
+@keyframes criticalGlow {
+  0%, 100% {
+    box-shadow: 0 0 10px rgba(239, 68, 68, 0.3);
+  }
+  50% {
+    box-shadow: 0 0 20px rgba(239, 68, 68, 0.6);
+  }
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-3px); }
+  75% { transform: translateX(3px); }
+}
+
+// ============================================================================
+// EMPTY STATE
+// ============================================================================
+
+.empty-state,
+.all-clear-state {
+  text-align: center;
+  padding: 4rem 2rem;
+  color: rgba(226, 232, 240, 0.9);
+  position: relative;
+  z-index: 1;
+
+  .empty-icon,
+  .success-icon {
+    font-size: 5rem;
+    width: 5rem;
+    height: 5rem;
+    margin: 0 auto 1.5rem;
+    color: rgba(139, 92, 246, 0.4);
+  }
+
+  .success-icon {
+    color: $low-color;
+    animation: successBounce 1s ease-in-out;
+  }
+
+  h3 {
+    font-size: 1.8rem;
+    color: rgba(248, 250, 252, 0.95);
+    margin-bottom: 1rem;
+    font-weight: 700;
+  }
+
+  p {
+    font-size: 1.1rem;
+    margin-bottom: 2rem;
+    color: rgba(226, 232, 240, 0.8);
+  }
+
+  button {
+    background: linear-gradient(135deg, #8b5cf6 0%, #6366f1 100%);
+    color: white;
+    font-weight: 600;
+    transition: all 0.3s ease;
+
+    &:hover {
+      transform: scale(1.05);
+      box-shadow: 0 8px 20px rgba(139, 92, 246, 0.4);
+    }
+  }
+}
+
+@keyframes successBounce {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.1); }
+}
+
+// ============================================================================
+// RESPONSIVE
+// ============================================================================
+
+@media (max-width: 768px) {
+  .reminders-container {
+    padding: 1rem;
+  }
+
+  .reminders-header {
+    .header-content {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+
+    .reminders-title {
+      font-size: 2rem;
+
+      .title-icon {
+        font-size: 2rem;
+        width: 2rem;
+        height: 2rem;
+      }
+    }
+
+    .reminders-subtitle {
+      margin-left: 0;
+    }
+  }
+
+  .summary-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .reminders-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .reminder-card {
+    .reminder-body {
+      .info-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .reminder-actions {
+      flex-wrap: wrap;
+    }
+  }
+}

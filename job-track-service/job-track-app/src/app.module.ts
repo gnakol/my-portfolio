@@ -11,6 +11,7 @@ import { StackTagModule } from './stack-tag/stack-tag.module';
 import { CandidacyModule } from './candidacy/candidacy.module';
 import { ApplicationEventModule } from './application-event/application-event.module';
 import { ReminderModule } from './reminder/reminder.module';
+import { StatisticsModule } from './statistics/statistics.module';
 
 @Module({
   imports: [
@@ -41,6 +42,7 @@ import { ReminderModule } from './reminder/reminder.module';
     CandidacyModule,
     ApplicationEventModule,
     ReminderModule,
+    StatisticsModule,
   ],
   controllers: [AppController],
   providers: [AppService],

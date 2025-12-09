@@ -18,6 +18,9 @@ import {
   CreateReminderDto,
   UpdateReminderDto,
   ReminderResponseDto,
+  ReminderDashboardDto,
+  SnoozeReminderDto,
+  CompleteReminderDto,
 } from './dto';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 
@@ -37,6 +40,11 @@ export class ReminderController {
     limit: number;
   }> {
     return this.reminderService.findAll(page, limit);
+  }
+
+  @Get('dashboard')
+  async getDashboard(): Promise<ReminderDashboardDto> {
+    return this.reminderService.getDashboard();
   }
 
   @Get('candidacy/:candidacyId')
@@ -83,5 +91,29 @@ export class ReminderController {
     @Param('id', ParseIntPipe) id: number,
   ): Promise<{ message: string }> {
     return this.reminderService.remove(id);
+  }
+
+  @Post(':id/snooze')
+  @HttpCode(HttpStatus.OK)
+  async snooze(
+    @Param('id', ParseIntPipe) id: number,
+    @Body(ValidationPipe) snoozeDto: SnoozeReminderDto,
+  ): Promise<ReminderResponseDto> {
+    return this.reminderService.snooze(id, snoozeDto);
+  }
+
+  @Post(':id/complete')
+  @HttpCode(HttpStatus.OK)
+  async complete(
+    @Param('id', ParseIntPipe) id: number,
+    @Body(ValidationPipe) completeDto?: CompleteReminderDto,
+  ): Promise<ReminderResponseDto> {
+    return this.reminderService.complete(id, completeDto);
+  }
+
+  @Post('update-priorities')
+  @HttpCode(HttpStatus.OK)
+  async updatePriorities(): Promise<{ updated: number }> {
+    return this.reminderService.updatePriorities();
   }
 }

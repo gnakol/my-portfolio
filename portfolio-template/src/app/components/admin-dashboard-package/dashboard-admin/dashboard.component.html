@@ -114,5 +114,15 @@
       <p class="card-description">Cockpit analytics : visites, pays, devices, durée de session</p>
       <div class="card-badge">Analytics</div>
     </mat-card>
+
+    <!-- Carte Job Track -->
+    <mat-card class="dashboard-card" (click)="showSection('job-track-template')" [style.--card-color]="'#10b981'">
+      <div class="card-icon">
+        <mat-icon>business_center</mat-icon>
+      </div>
+      <h2 class="card-title">Job Tracker</h2>
+      <p class="card-description">Suivez vos candidatures, offres et statistiques d'emploi</p>
+      <div class="card-badge">Tracking</div>
+    </mat-card>
   </div>
 </div>

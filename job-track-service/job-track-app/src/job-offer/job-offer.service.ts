@@ -143,6 +143,19 @@ export class JobOfferService {
       expirationDate: jobOffer.expirationDate,
       scrapedData: jobOffer.scrapedData,
       createdAt: jobOffer.createdAt,
+      company: jobOffer.company
+        ? {
+            id: jobOffer.company.id,
+            name: jobOffer.company.name,
+            sector: jobOffer.company.sector,
+            city: jobOffer.company.city,
+            country: jobOffer.company.country,
+            website: jobOffer.company.website,
+            personal_note: jobOffer.company.personal_note,
+            recruiter_note: jobOffer.company.recruiter_note,
+            created_at: jobOffer.company.created_at,
+          }
+        : undefined,
     };
   }
 }

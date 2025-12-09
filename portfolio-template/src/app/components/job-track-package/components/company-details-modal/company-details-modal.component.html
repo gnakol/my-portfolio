@@ -1,0 +1,112 @@
+<div class="modal-container">
+  <!-- Header -->
+  <div class="modal-header">
+    <div class="header-content">
+      <div class="company-icon">
+        <mat-icon>{{ getSectorIcon(company.sector) }}</mat-icon>
+      </div>
+      <div class="header-text">
+        <h2 class="company-name">{{ company.name }}</h2>
+        <mat-chip class="sector-chip" *ngIf="company.sector">
+          <mat-icon>category</mat-icon>
+          {{ company.sector }}
+        </mat-chip>
+      </div>
+    </div>
+    <button mat-icon-button class="close-button" (click)="onClose()">
+      <mat-icon>close</mat-icon>
+    </button>
+  </div>
+
+  <!-- Content -->
+  <div class="modal-content">
+    <!-- Location Section -->
+    <div class="info-section" *ngIf="company.city || company.country">
+      <div class="section-title">
+        <mat-icon>location_on</mat-icon>
+        <span>Localisation</span>
+      </div>
+      <div class="section-content">
+        <p class="info-text">
+          <span *ngIf="company.city">{{ company.city }}</span>
+          <span *ngIf="company.city && company.country">, </span>
+          <span *ngIf="company.country">{{ company.country }}</span>
+        </p>
+      </div>
+    </div>
+
+    <mat-divider *ngIf="company.city || company.country"></mat-divider>
+
+    <!-- Website Section -->
+    <div class="info-section" *ngIf="company.website">
+      <div class="section-title">
+        <mat-icon>link</mat-icon>
+        <span>Site web</span>
+      </div>
+      <div class="section-content">
+        <a class="website-link" (click)="openWebsite()">
+          <mat-icon>open_in_new</mat-icon>
+          {{ company.website }}
+        </a>
+      </div>
+    </div>
+
+    <mat-divider *ngIf="company.website"></mat-divider>
+
+    <!-- Personal Note Section -->
+    <div class="info-section" *ngIf="company.personal_note">
+      <div class="section-title">
+        <mat-icon>note</mat-icon>
+        <span>Notes personnelles</span>
+      </div>
+      <div class="section-content">
+        <p class="note-text">{{ company.personal_note }}</p>
+      </div>
+    </div>
+
+    <mat-divider *ngIf="company.personal_note"></mat-divider>
+
+    <!-- Recruiter Note Section -->
+    <div class="info-section" *ngIf="company.recruiter_note">
+      <div class="section-title">
+        <mat-icon>person</mat-icon>
+        <span>Notes sur le recruteur</span>
+      </div>
+      <div class="section-content">
+        <p class="note-text">{{ company.recruiter_note }}</p>
+      </div>
+    </div>
+
+    <mat-divider *ngIf="company.recruiter_note"></mat-divider>
+
+    <!-- Metadata Section -->
+    <div class="info-section metadata-section">
+      <div class="section-title">
+        <mat-icon>schedule</mat-icon>
+        <span>Informations</span>
+      </div>
+      <div class="section-content">
+        <div class="metadata-item">
+          <span class="metadata-label">ID :</span>
+          <span class="metadata-value">{{ company.id }}</span>
+        </div>
+        <div class="metadata-item">
+          <span class="metadata-label">Ajoutée le :</span>
+          <span class="metadata-value">{{ formatDate(company.created_at) }}</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Actions -->
+  <div class="modal-actions">
+    <button mat-stroked-button class="action-button delete-button" (click)="onDelete()">
+      <mat-icon>delete</mat-icon>
+      Supprimer
+    </button>
+    <button mat-raised-button color="primary" class="action-button edit-button" (click)="onEdit()">
+      <mat-icon>edit</mat-icon>
+      Modifier
+    </button>
+  </div>
+</div>
