@@ -16,41 +16,50 @@ export class ScrapingService {
    * Scrape une offre d'emploi depuis une URL
    * Détecte automatiquement la plateforme et utilise le bon scraper
    */
-  async scrapeJobOffer(url: string): Promise<ScrapedJobDataDto> {
-    this.logger.log(`Scraping job offer from URL: ${url}`);
+async scrapeJobOffer(url: string): Promise<ScrapedJobDataDto> {
+  this.logger.log(`Scraping job offer from URL: ${url}`);
 
-    // Validation de l'URL
-    if (!this.isValidUrl(url)) {
-      throw new BadRequestException('Invalid URL format');
-    }
-
-    // Déterminer quelle plateforme et utiliser le bon scraper
-    let scraper: WttjScraper | LinkedinScraper | IndeedScraper;
-
-    if (this.wttjScraper.canHandle(url)) {
-      scraper = this.wttjScraper;
-      this.logger.log('Using WTTJ scraper');
-    } else if (this.linkedinScraper.canHandle(url)) {
-      scraper = this.linkedinScraper;
-      this.logger.log('Using LinkedIn scraper');
-    } else if (this.indeedScraper.canHandle(url)) {
-      scraper = this.indeedScraper;
-      this.logger.log('Using Indeed scraper');
-    } else {
-      throw new BadRequestException(
-        'Unsupported job platform. Supported platforms: WTTJ, LinkedIn, Indeed',
-      );
-    }
-
-    try {
-      const scrapedData = await scraper.scrape(url);
-      this.logger.log(`Successfully scraped job offer from ${scrapedData.platform}`);
-      return scrapedData;
-    } catch (error) {
-      this.logger.error(`Scraping failed: ${error.message}`, error.stack);
-      throw new BadRequestException(`Failed to scrape job offer: ${error.message}`);
-    }
+  if (!this.isValidUrl(url)) {
+    throw new BadRequestException('Invalid URL format');
   }
+
+  let scraper: WttjScraper | LinkedinScraper | IndeedScraper;
+
+  if (this.wttjScraper.canHandle(url)) {
+    scraper = this.wttjScraper;
+    this.logger.log('Using WTTJ scraper');
+  } else if (this.linkedinScraper.canHandle(url)) {
+    scraper = this.linkedinScraper;
+    this.logger.log('Using LinkedIn scraper');
+  } else if (this.indeedScraper.canHandle(url)) {
+    scraper = this.indeedScraper;
+    this.logger.log('Using Indeed scraper');
+  } else {
+    throw new BadRequestException(
+      'Unsupported job platform. Supported platforms: WTTJ, LinkedIn, Indeed',
+    );
+  }
+
+  const start = Date.now();
+  this.logger.log('🚀 Starting scrapeJobOffer...');
+
+  try {
+    const scrapedData = await scraper.scrape(url);
+    const duration = Date.now() - start;
+    this.logger.log(`✅ scrapeJobOffer finished in ${duration} ms`);
+
+    this.logger.log(`Successfully scraped job offer from ${scrapedData.platform}`);
+    return scrapedData;
+  } catch (error) {
+    const duration = Date.now() - start;
+    this.logger.error(
+      `❌ scrapeJobOffer failed after ${duration} ms: ${error.message}`,
+      error.stack,
+    );
+    throw new BadRequestException(`Failed to scrape job offer: ${error.message}`);
+  }
+}
+
 
   /**
    * Valide qu'une chaîne est une URL valide
