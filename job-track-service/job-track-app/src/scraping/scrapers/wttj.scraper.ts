@@ -35,9 +35,10 @@ export class WttjScraper {
 
       // Navigate to the page
       await page.goto(url, {
-        waitUntil: 'networkidle2',
-        timeout: 30000,
+        waitUntil: 'domcontentloaded',
+        timeout: 60000,
       });
+      await page.waitForSelector('h1', { timeout: 20000 }).catch(() => {});
 
       // Wait for the page to load completely
       await new Promise(resolve => setTimeout(resolve, 3000));
