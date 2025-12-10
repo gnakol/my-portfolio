@@ -12,6 +12,8 @@ export class WttjScraper {
     try {
       this.logger.log(`Scraping WTTJ job from: ${url}`);
 
+      this.logger.log('Step 1 - Launching browser...');
+
       // Launch Puppeteer browser
       browser = await puppeteer.launch({
         headless: true,
@@ -26,6 +28,8 @@ export class WttjScraper {
         ]
       });
 
+      this.logger.log('Step 2 - Browser launched, opening new page...');
+
       const page = await browser.newPage();
 
       // Set user agent
@@ -33,11 +37,15 @@ export class WttjScraper {
         'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'
       );
 
+      this.logger.log('Step 3 - Calling page.goto...');
+
       // Navigate to the page
       await page.goto(url, {
         waitUntil: 'domcontentloaded',
         timeout: 60000,
       });
+
+      this.logger.log('Step 4 - page.goto done, waiting for selector h1...');
       await page.waitForSelector('h1', { timeout: 20000 }).catch(() => {});
 
       // Wait for the page to load completely
