@@ -17,9 +17,11 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatDialogModule, MatDialog } from '@angular/material/dialog';
+import { MatMenuModule } from '@angular/material/menu';
 
 // Services & Models
 import { CandidacyService } from '../../services/candidacy.service';
+import { ExcelExportService } from '../../services/excel-export.service';
 import { Candidacy, CandidacyStatus } from '../../models/candidacy.model';
 
 // Modals
@@ -44,7 +46,8 @@ import { EditCandidacyModalComponent } from '../edit-candidacy-modal/edit-candid
     MatProgressSpinnerModule,
     MatSnackBarModule,
     MatTooltipModule,
-    MatDialogModule
+    MatDialogModule,
+    MatMenuModule
   ],
   templateUrl: './candidacies-list.component.html',
   styleUrls: ['./candidacies-list.component.scss']
@@ -82,6 +85,7 @@ export class CandidaciesListComponent implements OnInit {
 
   constructor(
     private candidacyService: CandidacyService,
+    private excelExportService: ExcelExportService,
     private snackBar: MatSnackBar,
     private router: Router,
     private dialog: MatDialog
@@ -279,6 +283,38 @@ export class CandidaciesListComponent implements OnInit {
       month: '2-digit',
       year: 'numeric'
     });
+  }
+
+  // Export Excel
+  exportToExcel(): void {
+    if (this.filteredCandidacies.length === 0) {
+      this.showError('Aucune candidature à exporter');
+      return;
+    }
+
+    try {
+      this.excelExportService.exportFilteredCandidacies(this.filteredCandidacies);
+      this.showSuccess(`${this.filteredCandidacies.length} candidature(s) exportée(s) en Excel avec succès`);
+    } catch (error) {
+      console.error('Erreur lors de l\'export Excel:', error);
+      this.showError('Erreur lors de l\'export Excel');
+    }
+  }
+
+  // Export PDF
+  exportToPDF(): void {
+    if (this.filteredCandidacies.length === 0) {
+      this.showError('Aucune candidature à exporter');
+      return;
+    }
+
+    try {
+      this.excelExportService.exportFilteredCandidaciesToPDF(this.filteredCandidacies);
+      this.showSuccess(`${this.filteredCandidacies.length} candidature(s) exportée(s) en PDF avec succès`);
+    } catch (error) {
+      console.error('Erreur lors de l\'export PDF:', error);
+      this.showError('Erreur lors de l\'export PDF');
+    }
   }
 
   // Notifications

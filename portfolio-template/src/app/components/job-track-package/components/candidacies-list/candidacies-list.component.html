@@ -21,6 +21,21 @@
           <mat-icon>dashboard</mat-icon>
           Dashboard
         </button>
+        <button mat-raised-button class="action-btn success" [matMenuTriggerFor]="exportMenu" matTooltip="Exporter les candidatures">
+          <mat-icon>download</mat-icon>
+          Exporter
+          <mat-icon>arrow_drop_down</mat-icon>
+        </button>
+        <mat-menu #exportMenu="matMenu">
+          <button mat-menu-item (click)="exportToExcel()">
+            <mat-icon>table_chart</mat-icon>
+            <span>Excel (.xlsx)</span>
+          </button>
+          <button mat-menu-item (click)="exportToPDF()">
+            <mat-icon>picture_as_pdf</mat-icon>
+            <span>PDF (.pdf)</span>
+          </button>
+        </mat-menu>
         <button mat-raised-button class="action-btn primary" (click)="navigateToScraping()">
           <mat-icon>add</mat-icon>
           Nouvelle candidature
