@@ -300,6 +300,50 @@ $upcoming-color: #10b981;
     box-shadow: 0 10px 30px rgba(139, 92, 246, 0.3);
   }
 
+  // 🆕 Style pour cartes cliquables
+  &.clickable {
+    cursor: pointer;
+
+    &:hover {
+      transform: translateY(-8px) scale(1.02);
+    }
+
+    &:active {
+      transform: translateY(-2px) scale(0.98);
+    }
+  }
+
+  // 🆕 Style pour carte active (sélectionnée)
+  &.active {
+    background: rgba(139, 92, 246, 0.2);
+    border: 2px solid rgba(139, 92, 246, 0.6);
+    box-shadow: 0 0 20px rgba(139, 92, 246, 0.4);
+
+    &.overdue {
+      background: rgba(239, 68, 68, 0.2);
+      border-color: rgba(239, 68, 68, 0.6);
+      box-shadow: 0 0 20px rgba(239, 68, 68, 0.4);
+    }
+
+    &.today {
+      background: rgba(245, 158, 11, 0.2);
+      border-color: rgba(245, 158, 11, 0.6);
+      box-shadow: 0 0 20px rgba(245, 158, 11, 0.4);
+    }
+
+    &.week {
+      background: rgba(59, 130, 246, 0.2);
+      border-color: rgba(59, 130, 246, 0.6);
+      box-shadow: 0 0 20px rgba(59, 130, 246, 0.4);
+    }
+
+    &.upcoming {
+      background: rgba(16, 185, 129, 0.2);
+      border-color: rgba(16, 185, 129, 0.6);
+      box-shadow: 0 0 20px rgba(16, 185, 129, 0.4);
+    }
+  }
+
   .card-icon {
     width: 60px;
     height: 60px;

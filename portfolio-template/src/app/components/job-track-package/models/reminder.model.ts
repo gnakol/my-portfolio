@@ -80,6 +80,12 @@ export interface ReminderDashboard {
   };
   byCandidacyStatus: { [key: string]: number };
   criticalReminders: Reminder[];
+
+  // Listes filtrées pour affichage interactif
+  overdueReminders: Reminder[];
+  todayReminders: Reminder[];
+  thisWeekReminders: Reminder[];
+  upcomingReminders: Reminder[];
 }
 
 // ============================================================================

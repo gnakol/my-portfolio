@@ -19,4 +19,10 @@ export class ReminderDashboardDto {
   byCandidacyStatus: { [key: string]: number };
 
   criticalReminders: ReminderResponseDto[];
+
+  // Listes filtrées pour l'affichage interactif
+  overdueReminders: ReminderResponseDto[];
+  todayReminders: ReminderResponseDto[];
+  thisWeekReminders: ReminderResponseDto[];
+  upcomingReminders: ReminderResponseDto[];
 }

@@ -50,6 +50,10 @@ export class RemindersDashboardComponent implements OnInit {
   dashboardData: ReminderDashboard | null = null;
   criticalReminders: ReminderWithDaysInfo[] = [];
 
+  // 🆕 Filtrage interactif
+  selectedFilter: 'critical' | 'overdue' | 'today' | 'thisWeek' | 'upcoming' | null = 'overdue';
+  displayedReminders: ReminderWithDaysInfo[] = [];
+
   // Enums for template
   ReminderPriority = ReminderPriority;
   ReminderStatus = ReminderStatus;
@@ -78,6 +82,10 @@ export class RemindersDashboardComponent implements OnInit {
         this.criticalReminders = data.criticalReminders.map((reminder) =>
           this.reminderService.calculateDaysInfo(reminder)
         );
+
+        // 🆕 Initialiser les rappels affichés selon le filtre sélectionné
+        this.applyFilter(this.selectedFilter || 'critical');
+
         this.isLoading = false;
       },
       error: (error) => {
@@ -86,6 +94,41 @@ export class RemindersDashboardComponent implements OnInit {
         this.isLoading = false;
       },
     });
+  }
+
+  // 🆕 Appliquer un filtre pour afficher les rappels correspondants
+  applyFilter(filter: 'critical' | 'overdue' | 'today' | 'thisWeek' | 'upcoming'): void {
+    this.selectedFilter = filter;
+
+    if (!this.dashboardData) {
+      this.displayedReminders = [];
+      return;
+    }
+
+    let reminders: Reminder[] = [];
+
+    switch (filter) {
+      case 'critical':
+        reminders = this.dashboardData.criticalReminders;
+        break;
+      case 'overdue':
+        reminders = this.dashboardData.overdueReminders;
+        break;
+      case 'today':
+        reminders = this.dashboardData.todayReminders;
+        break;
+      case 'thisWeek':
+        reminders = this.dashboardData.thisWeekReminders;
+        break;
+      case 'upcoming':
+        reminders = this.dashboardData.upcomingReminders;
+        break;
+    }
+
+    // Enrichir avec les informations de jours
+    this.displayedReminders = reminders.map((reminder) =>
+      this.reminderService.calculateDaysInfo(reminder)
+    );
   }
 
   refresh(): void {

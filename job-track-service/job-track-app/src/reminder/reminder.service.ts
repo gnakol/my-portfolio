@@ -199,7 +199,7 @@ export class ReminderService {
 
       // 🔥 FILTRAGE INTELLIGENT : Ne garder que les candidatures qui nécessitent un suivi
       // Statuts qui nécessitent des reminders (pas de réponse de l'employeur)
-      const STATUS_NEEDING_FOLLOWUP = ['SENT', 'UNDER_REVIEW', 'VIEWED'];
+      const STATUS_NEEDING_FOLLOWUP = ['PENDING', 'SENT', 'UNDER_REVIEW', 'VIEWED'];
 
       // Statuts en cours (entretiens programmés, en attente) - reminders en pause
       const STATUS_IN_PROGRESS = [
@@ -310,6 +310,27 @@ export class ReminderService {
         .slice(0, 10) // Top 10
         .map((r) => this.toResponseDto(r));
 
+      // 🆕 LISTES FILTRÉES pour affichage interactif
+      const overdueReminders = remindersWithPriority
+        .filter((r) => new Date(r.dueDate) < now)
+        .sort((a, b) => new Date(a.dueDate).getTime() - new Date(b.dueDate).getTime())
+        .map((r) => this.toResponseDto(r));
+
+      const todayReminders = remindersWithPriority
+        .filter((r) => new Date(r.dueDate) >= startOfToday && new Date(r.dueDate) < endOfToday)
+        .sort((a, b) => new Date(a.dueDate).getTime() - new Date(b.dueDate).getTime())
+        .map((r) => this.toResponseDto(r));
+
+      const thisWeekReminders = remindersWithPriority
+        .filter((r) => new Date(r.dueDate) >= startOfToday && new Date(r.dueDate) < endOfWeek)
+        .sort((a, b) => new Date(a.dueDate).getTime() - new Date(b.dueDate).getTime())
+        .map((r) => this.toResponseDto(r));
+
+      const upcomingReminders = remindersWithPriority
+        .filter((r) => new Date(r.dueDate) >= endOfWeek)
+        .sort((a, b) => new Date(a.dueDate).getTime() - new Date(b.dueDate).getTime())
+        .map((r) => this.toResponseDto(r));
+
       this.logger.log(
         `Dashboard: ${remindersWithPriority.length} relevant reminders, ${remindersToCancel.length} cancelled`,
       );
@@ -325,6 +346,10 @@ export class ReminderService {
         byPriority,
         byCandidacyStatus,
         criticalReminders,
+        overdueReminders,
+        todayReminders,
+        thisWeekReminders,
+        upcomingReminders,
       };
     } catch (error) {
       this.logger.error(`Error fetching dashboard: ${error.message}`, error.stack);

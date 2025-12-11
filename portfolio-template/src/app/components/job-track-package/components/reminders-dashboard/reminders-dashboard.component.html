@@ -45,19 +45,12 @@
       </h2>
 
       <div class="summary-grid">
-        <!-- Total -->
-        <mat-card class="summary-card total">
-          <div class="card-icon">
-            <mat-icon>notifications</mat-icon>
-          </div>
-          <div class="card-content">
-            <h3 class="card-value">{{ dashboardData.summary.total }}</h3>
-            <p class="card-label">Total rappels</p>
-          </div>
-        </mat-card>
-
         <!-- Overdue -->
-        <mat-card class="summary-card overdue" [class.pulsing]="dashboardData.summary.overdue > 0">
+        <mat-card class="summary-card overdue clickable"
+                  [class.pulsing]="dashboardData.summary.overdue > 0"
+                  [class.active]="selectedFilter === 'overdue'"
+                  (click)="applyFilter('overdue')"
+                  matTooltip="Cliquer pour afficher les rappels en retard">
           <div class="card-icon">
             <mat-icon>error</mat-icon>
           </div>
@@ -71,7 +64,10 @@
         </mat-card>
 
         <!-- Today -->
-        <mat-card class="summary-card today">
+        <mat-card class="summary-card today clickable"
+                  [class.active]="selectedFilter === 'today'"
+                  (click)="applyFilter('today')"
+                  matTooltip="Cliquer pour afficher les rappels d'aujourd'hui">
           <div class="card-icon">
             <mat-icon>today</mat-icon>
           </div>
@@ -82,7 +78,10 @@
         </mat-card>
 
         <!-- This Week -->
-        <mat-card class="summary-card week">
+        <mat-card class="summary-card week clickable"
+                  [class.active]="selectedFilter === 'thisWeek'"
+                  (click)="applyFilter('thisWeek')"
+                  matTooltip="Cliquer pour afficher les rappels de cette semaine">
           <div class="card-icon">
             <mat-icon>date_range</mat-icon>
           </div>
@@ -93,13 +92,27 @@
         </mat-card>
 
         <!-- Upcoming -->
-        <mat-card class="summary-card upcoming">
+        <mat-card class="summary-card upcoming clickable"
+                  [class.active]="selectedFilter === 'upcoming'"
+                  (click)="applyFilter('upcoming')"
+                  matTooltip="Cliquer pour afficher les rappels à venir">
           <div class="card-icon">
             <mat-icon>schedule</mat-icon>
           </div>
           <div class="card-content">
             <h3 class="card-value">{{ dashboardData.summary.upcoming }}</h3>
             <p class="card-label">À venir</p>
+          </div>
+        </mat-card>
+
+        <!-- Total -->
+        <mat-card class="summary-card total">
+          <div class="card-icon">
+            <mat-icon>notifications</mat-icon>
+          </div>
+          <div class="card-content">
+            <h3 class="card-value">{{ dashboardData.summary.total }}</h3>
+            <p class="card-label">Total rappels</p>
           </div>
         </mat-card>
       </div>
@@ -138,17 +151,21 @@
       </div>
     </div>
 
-    <!-- Critical Reminders -->
-    <div class="critical-section" *ngIf="criticalReminders.length > 0">
+    <!-- Filtered Reminders -->
+    <div class="critical-section" *ngIf="displayedReminders.length > 0">
       <h2 class="section-title urgent">
         <mat-icon class="pulse-icon">notification_important</mat-icon>
-        Rappels urgents
-        <span class="count-badge">{{ criticalReminders.length }}</span>
+        <span *ngIf="selectedFilter === 'critical'">Rappels urgents</span>
+        <span *ngIf="selectedFilter === 'overdue'">Rappels en retard</span>
+        <span *ngIf="selectedFilter === 'today'">Rappels d'aujourd'hui</span>
+        <span *ngIf="selectedFilter === 'thisWeek'">Rappels de cette semaine</span>
+        <span *ngIf="selectedFilter === 'upcoming'">Rappels à venir</span>
+        <span class="count-badge">{{ displayedReminders.length }}</span>
       </h2>
 
       <div class="reminders-grid">
         <mat-card class="reminder-card"
-                  *ngFor="let reminder of criticalReminders"
+                  *ngFor="let reminder of displayedReminders"
                   [ngClass]="getReminderPriorityClass(reminder)">
 
           <!-- Priority Badge -->
@@ -276,7 +293,7 @@
     </div>
 
     <!-- Empty State -->
-    <div class="empty-state" *ngIf="criticalReminders.length === 0 && dashboardData.summary.total === 0">
+    <div class="empty-state" *ngIf="dashboardData.summary.total === 0">
       <mat-icon class="empty-icon">check_circle</mat-icon>
       <h3>Aucun rappel pour le moment</h3>
       <p>Tous vos rappels sont à jour. Bravo !</p>
@@ -286,11 +303,15 @@
       </button>
     </div>
 
-    <!-- All Clear State -->
-    <div class="all-clear-state" *ngIf="criticalReminders.length === 0 && dashboardData.summary.total > 0">
+    <!-- All Clear State for selected filter -->
+    <div class="all-clear-state" *ngIf="displayedReminders.length === 0 && dashboardData.summary.total > 0">
       <mat-icon class="success-icon">task_alt</mat-icon>
-      <h3>Aucun rappel urgent</h3>
-      <p>Tous vos rappels urgents sont traités. Continuez comme ça !</p>
+      <h3 *ngIf="selectedFilter === 'critical'">Aucun rappel urgent</h3>
+      <h3 *ngIf="selectedFilter === 'overdue'">Aucun rappel en retard</h3>
+      <h3 *ngIf="selectedFilter === 'today'">Aucun rappel pour aujourd'hui</h3>
+      <h3 *ngIf="selectedFilter === 'thisWeek'">Aucun rappel cette semaine</h3>
+      <h3 *ngIf="selectedFilter === 'upcoming'">Aucun rappel à venir</h3>
+      <p>Cliquez sur les cartes ci-dessus pour voir d'autres rappels.</p>
     </div>
 
   </div>

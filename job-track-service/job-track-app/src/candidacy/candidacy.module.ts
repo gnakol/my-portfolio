@@ -3,13 +3,14 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { Candidacy } from './entities/candidacy.entity';
 import { Company } from '../company/entities/company.entity';
 import { JobOffer } from '../job-offer/entities/job-offer.entity';
+import { Reminder } from '../reminder/entities/reminder.entity';
 import { CandidacyService } from './candidacy.service';
 import { CandidacyController } from './candidacy.controller';
 import { ReminderModule } from '../reminder/reminder.module';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([Candidacy, Company, JobOffer]),
+    TypeOrmModule.forFeature([Candidacy, Company, JobOffer, Reminder]),
     ReminderModule,
   ],
   controllers: [CandidacyController],
