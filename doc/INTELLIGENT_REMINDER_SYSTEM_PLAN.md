@@ -1,6 +1,6 @@
-# 🔥 PLAN D'ATTAQUE: Système de Rappels Intelligent
+# Système de Rappels Intelligent
 
-## 📋 État actuel (Ce qui existe déjà)
+## 📋 État actuel
 
 ### Backend (NestJS)
 - ✅ Entity `Reminder` complète avec tous les champs
@@ -27,7 +27,7 @@ Table "reminder"
 ```
 
 ### Frontend
-- ❌ **RIEN N'EXISTE ENCORE** - C'est ce qu'on va créer!
+- ❌ **RIEN N'EXISTE ENCORE** - C'est ce je vais créer!
 
 ---
 
@@ -514,7 +514,7 @@ $upcoming: #10b981;  // Vert (à venir)
 
 ---
 
-## 🔥 INNOVATIONS QUI TUENT
+## 🔥 INNOVATIONS
 
 1. **Auto-prioritization intelligente**: Pas besoin de marquer manuellement, le système sait ce qui est urgent
 
@@ -544,13 +544,6 @@ Un système de rappels qui:
 
 **LE GOAL**: Tu ouvres l'app → tu vois immédiatement ce qui nécessite ton attention → tu agis en 1 clic → tu continues ta recherche d'emploi efficacement.
 
----
-
-## 🚀 READY TO BUILD?
-
-On commence par quoi?
 1. Backend d'abord (endpoints + logique)
 2. Frontend ensuite (dashboard + composants)
 3. Intégration finale
-
-Ou on y va en parallèle si tu veux aller vite!
