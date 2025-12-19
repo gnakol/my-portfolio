@@ -216,8 +216,11 @@ export class IndeedScraper {
         if (!salaryMatch) {
           salaryMatch = descriptionText.match(/(\d+)\s*\d{3}\s*€?\s*[-–]\s*(\d+)\s*\d{3}\s*€?/i);
           if (salaryMatch) {
-            minSalary = parseInt(salaryMatch[0].match(/\d+/g)?.[0] + salaryMatch[0].match(/\d+/g)?.[1] || '0');
-            maxSalary = parseInt(salaryMatch[0].match(/\d+/g)?.[2] + salaryMatch[0].match(/\d+/g)?.[3] || '0');
+            const numbers = salaryMatch[0].match(/\d+/g);
+            if (numbers && numbers.length >= 4) {
+              minSalary = parseInt(numbers[0] + numbers[1]);
+              maxSalary = parseInt(numbers[2] + numbers[3]);
+            }
           }
         }
       }
