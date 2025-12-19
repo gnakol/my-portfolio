@@ -48,13 +48,35 @@ export class IndeedScraper {
       this.logger.log('🌐 Chargement de la page Indeed...');
       await page.goto(url, {
         waitUntil: 'networkidle2',
-        timeout: 30000,
+        timeout: 45000, // Augmenter le timeout pour laisser Cloudflare finir
       });
 
       // Attendre que le contenu principal soit chargé
       await page.waitForSelector('body', { timeout: 10000 });
 
-      // Petit délai pour éviter d'être détecté comme bot
+      // 🔥 Attendre que Cloudflare finisse son challenge (si présent)
+      // Cloudflare affiche "Just a moment..." pendant le challenge
+      let attempts = 0;
+      const maxAttempts = 10;
+      while (attempts < maxAttempts) {
+        const title = await page.title();
+        if (title.includes('Just a moment') || title.includes('Please wait')) {
+          this.logger.log(`⏳ Cloudflare challenge detected, waiting... (attempt ${attempts + 1}/${maxAttempts})`);
+          await new Promise(resolve => setTimeout(resolve, 2000));
+          attempts++;
+        } else {
+          this.logger.log('✅ Page fully loaded, no Cloudflare challenge detected');
+          break;
+        }
+      }
+
+      // Simuler un comportement humain : mouvements de souris aléatoires
+      await page.mouse.move(100, 200);
+      await new Promise(resolve => setTimeout(resolve, 300));
+      await page.mouse.move(500, 400);
+      await new Promise(resolve => setTimeout(resolve, 500));
+
+      // Petit délai supplémentaire pour éviter d'être détecté comme bot
       await new Promise(resolve => setTimeout(resolve, 1500));
 
       // 🐛 DEBUG: Prendre un screenshot pour voir ce que Chrome voit
