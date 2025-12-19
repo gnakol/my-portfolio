@@ -1,216 +1,66 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { ScrapedJobDataDto } from '../dto';
-import puppeteer from 'puppeteer-extra';
-import StealthPlugin from 'puppeteer-extra-plugin-stealth';
-import * as net from 'net';
+import * as puppeteer from 'puppeteer';
 
-// Ajouter le plugin stealth pour éviter la détection
-puppeteer.use(StealthPlugin());
+// ⚠️ PAS de puppeteer-extra ni Stealth - approche simple comme WTTJ qui fonctionne
 
 @Injectable()
 export class IndeedScraper {
   private readonly logger = new Logger(IndeedScraper.name);
 
-  /**
-   * Renouvelle le circuit Tor pour obtenir une nouvelle IP
-   */
-  private async renewTorCircuit(): Promise<void> {
-    return new Promise((resolve, reject) => {
-      const socket = new net.Socket();
-
-      socket.connect(9051, '127.0.0.1', () => {
-        this.logger.log('🔄 Renewing Tor circuit to get fresh IP...');
-        socket.write('AUTHENTICATE ""\r\n');
-        socket.write('SIGNAL NEWNYM\r\n');
-        socket.write('QUIT\r\n');
-      });
-
-      socket.on('data', (data) => {
-        this.logger.debug(`Tor ControlPort response: ${data.toString()}`);
-      });
-
-      socket.on('close', () => {
-        this.logger.log('✅ Tor circuit renewed');
-        resolve();
-      });
-
-      socket.on('error', (err) => {
-        this.logger.warn(`⚠️ Could not renew Tor circuit: ${err.message}`);
-        // Ne pas bloquer si la rotation échoue
-        resolve();
-      });
-
-      // Timeout de 5 secondes
-      setTimeout(() => {
-        socket.destroy();
-        resolve();
-      }, 5000);
-    });
-  }
-
   async scrape(url: string): Promise<ScrapedJobDataDto> {
-    let browser;
+    let browser: puppeteer.Browser | null = null;
+
     try {
       this.logger.log(`🔍 Scraping Indeed job from: ${url}`);
 
-      // Détecter si on est en production (Tor est disponible)
-      const isProduction = process.env.NODE_ENV === 'production';
+      // ✅ Approche SIMPLE comme WTTJ qui fonctionne - PAS de Tor, PAS de Stealth
+      this.logger.log('Step 1 - Launching browser...');
 
-      // 🔄 Renouveler le circuit Tor pour obtenir une nouvelle IP (éviter blacklist)
-      if (isProduction) {
-        await this.renewTorCircuit();
-        // Attendre un peu que le nouveau circuit soit établi
-        await new Promise(resolve => setTimeout(resolve, 3000));
-      }
-
-      // Lancer Puppeteer avec des options anti-détection AMÉLIORÉES
-      const launchOptions: any = {
+      browser = await puppeteer.launch({
         headless: true,
         args: [
           '--no-sandbox',
           '--disable-setuid-sandbox',
-          '--disable-blink-features=AutomationControlled',
           '--disable-dev-shm-usage',
-          '--window-size=1920,1080',
-          // Nouveaux flags pour paraître plus humain
-          '--disable-features=IsolateOrigins',
-          '--disable-site-isolation-trials',
-          '--disable-features=BlockInsecurePrivateNetworkRequests',
-          '--lang=fr-FR',
-        ],
-      };
+          '--disable-accelerated-2d-canvas',
+          '--no-first-run',
+          '--no-zygote',
+          '--disable-gpu'
+        ]
+      });
 
-      // En production, utiliser Tor pour masquer l'IP AWS
-      if (isProduction) {
-        this.logger.log('🧅 Using Tor proxy with improved anti-detection...');
-        launchOptions.args.push('--proxy-server=socks5://127.0.0.1:9050');
-      }
-
-      browser = await puppeteer.launch(launchOptions);
+      this.logger.log('Step 2 - Browser launched, opening new page...');
 
       const page = await browser.newPage();
 
-      // Masquer le fait qu'on utilise automation (webdriver, navigator.plugins, etc.)
-      await page.evaluateOnNewDocument(() => {
-        // Masquer webdriver
-        Object.defineProperty(navigator, 'webdriver', {
-          get: () => false,
-        });
-
-        // Ajouter Chrome comme vendor
-        Object.defineProperty(navigator, 'vendor', {
-          get: () => 'Google Inc.',
-        });
-
-        // Ajouter des plugins pour paraître réel
-        Object.defineProperty(navigator, 'plugins', {
-          get: () => [1, 2, 3, 4, 5],
-        });
-
-        // Ajouter des langues
-        Object.defineProperty(navigator, 'languages', {
-          get: () => ['fr-FR', 'fr', 'en-US', 'en'],
-        });
-      });
-
-      // Configurer la page pour ressembler à un vrai navigateur
+      // User-Agent simple
       await page.setUserAgent(
-        'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36'
+        'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'
       );
-      await page.setViewport({ width: 1920, height: 1080 });
 
-      // Ajouter des headers réalistes pour éviter la détection
-      await page.setExtraHTTPHeaders({
-        'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8',
-        'Accept-Language': 'fr-FR,fr;q=0.9,en-US;q=0.8,en;q=0.7',
-        'Accept-Encoding': 'gzip, deflate, br',
-        'Connection': 'keep-alive',
-        'Upgrade-Insecure-Requests': '1',
-        'Sec-Fetch-Dest': 'document',
-        'Sec-Fetch-Mode': 'navigate',
-        'Sec-Fetch-Site': 'none',
-        'Sec-Fetch-User': '?1',
-        'Cache-Control': 'max-age=0',
-      });
+      this.logger.log('Step 3 - Calling page.goto...');
 
-      // ⚠️ NE PAS bloquer les images/CSS - Cloudflare détecte ce comportement de bot
-      // Laisser charger toutes les ressources pour paraître plus humain
-
-      // 🎭 STRATÉGIE EN 2 ÉTAPES : Visiter d'abord la homepage pour paraître humain
-      this.logger.log('🏠 Step 1: Visiting Indeed homepage to establish session...');
-      await page.goto('https://fr.indeed.com/', {
-        waitUntil: 'domcontentloaded',
-        timeout: 30000,
-      });
-
-      // Simuler un comportement humain sur la homepage
-      await new Promise(resolve => setTimeout(resolve, 2000));
-      await page.mouse.move(300, 400);
-      await new Promise(resolve => setTimeout(resolve, 500));
-
-      // Scroll un peu pour paraître humain
-      await page.evaluate(() => window.scrollBy(0, 200));
-      await new Promise(resolve => setTimeout(resolve, 1000));
-
-      // Maintenant aller sur l'offre d'emploi
-      this.logger.log('🎯 Step 2: Navigating to job offer...');
+      // Navigation directe (pas de 2 étapes)
       await page.goto(url, {
         waitUntil: 'domcontentloaded',
         timeout: 60000,
       });
 
-      // Attendre que le contenu principal soit chargé
-      await page.waitForSelector('body', { timeout: 10000 });
+      this.logger.log('Step 4 - page.goto done, waiting for selector h1...');
+      await page.waitForSelector('h1', { timeout: 20000 }).catch(() => {});
 
-      // 🔥 Nouvelle stratégie : attendre que le contenu Indeed soit visible
-      // Au lieu de vérifier "Just a moment...", on attend les vrais sélecteurs Indeed
-      this.logger.log('⏳ Waiting for Indeed job content to load...');
+      // Attendre que la page charge complètement
+      await new Promise(resolve => setTimeout(resolve, 3000));
 
-      try {
-        // Attendre qu'au moins un des sélecteurs principaux d'Indeed soit présent
-        await Promise.race([
-          page.waitForSelector('h1.jobsearch-JobInfoHeader-title', { timeout: 30000 }),
-          page.waitForSelector('.jobTitle', { timeout: 30000 }),
-          page.waitForSelector('h1[data-testid="jobTitle"]', { timeout: 30000 }),
-        ]);
-        this.logger.log('✅ Indeed job content loaded successfully');
-      } catch (error) {
-        // Si timeout, vérifier si c'est Cloudflare
-        try {
-          const title = await page.title();
-          if (title.includes('Just a moment') || title.includes('Please wait')) {
-            this.logger.warn('⚠️ Cloudflare challenge detected but not resolved after 30s');
-          } else {
-            this.logger.warn(`⚠️ Could not find job content. Page title: ${title}`);
-          }
-        } catch (e) {
-          this.logger.warn('⚠️ Could not verify page state');
-        }
-      }
-
-      // Simuler un comportement humain : mouvements de souris aléatoires
-      await page.mouse.move(100, 200);
-      await new Promise(resolve => setTimeout(resolve, 300));
-      await page.mouse.move(500, 400);
-      await new Promise(resolve => setTimeout(resolve, 500));
-
-      // Petit délai supplémentaire pour éviter d'être détecté comme bot
-      await new Promise(resolve => setTimeout(resolve, 1000));
-
-      // 🐛 DEBUG: Prendre un screenshot pour voir ce que Chrome voit
+      // Prendre un screenshot pour debugging
       const screenshotPath = '/tmp/indeed-scraping-debug.png';
-      await page.screenshot({ path: screenshotPath, fullPage: false });
-      this.logger.debug(`📸 Screenshot saved to: ${screenshotPath}`);
+      await page.screenshot({ path: screenshotPath, fullPage: true });
+      this.logger.log(`Screenshot saved to: ${screenshotPath}`);
 
-      // 🐛 DEBUG: Afficher le titre de la page
+      // Log du titre de la page
       const pageTitle = await page.title();
-      this.logger.debug(`📄 Page title: ${pageTitle}`);
-
-      // 🐛 DEBUG: Vérifier si on a un captcha ou une page de blocage
-      const bodyText = await page.evaluate(() => document.body.innerText);
-      if (bodyText.includes('captcha') || bodyText.includes('robot') || bodyText.includes('access denied')) {
-        this.logger.warn(`⚠️ Possible bot detection! Page contains: ${bodyText.substring(0, 200)}`);
-      }
+      this.logger.log(`Page title: ${pageTitle}`);
 
       // Extraire les données avec plusieurs sélecteurs (Indeed change parfois)
       const jobData = await page.evaluate(() => {
@@ -401,16 +251,13 @@ export class IndeedScraper {
         }
       }
 
-      // 🐛 DEBUG: Afficher les données extraites
-      this.logger.debug(`📊 Extracted data:`);
-      this.logger.debug(`  - Title: "${jobData.title}"`);
-      this.logger.debug(`  - Company: "${jobData.companyName}"`);
-      this.logger.debug(`  - Location: "${jobData.location}"`);
-      this.logger.debug(`  - Description length: ${jobData.description?.length || 0} chars`);
-      this.logger.debug(`  - Salary: "${jobData.salaryText}"`);
-      this.logger.debug(`  - Contract: "${jobData.contractType}"`);
+      this.logger.log(`Extracted data: ${JSON.stringify({
+        title: jobData.title,
+        company: jobData.companyName,
+        location: jobData.location,
+      })}`);
 
-      this.logger.log(`✅ Scraping Indeed réussi: ${jobData.title}`);
+      await browser.close();
 
       return {
         title: jobData.title || undefined,
@@ -429,28 +276,16 @@ export class IndeedScraper {
         technologies: jobData.technologies.length > 0 ? jobData.technologies : undefined,
         rawData: {
           scrapedAt: new Date().toISOString(),
-          method: 'puppeteer-stealth',
-          note: 'Indeed scraping avec Puppeteer + Stealth plugin',
+          method: 'puppeteer-simple',
+          note: 'Indeed scraping avec approche simple (comme WTTJ)',
         },
       };
     } catch (error) {
-      this.logger.error(`❌ Error scraping Indeed job: ${error.message}`);
-      this.logger.error(error.stack);
-
-      return {
-        title: '⚠️ Erreur lors du scraping Indeed',
-        platform: 'Indeed',
-        sourceUrl: url,
-        rawData: {
-          error: error.message,
-          note: 'Erreur lors du scraping Indeed. Vérifiez l\'URL ou essayez la saisie manuelle.',
-        },
-      };
-    } finally {
       if (browser) {
         await browser.close();
-        this.logger.log('🔒 Navigateur fermé');
       }
+      this.logger.error(`Error scraping Indeed job: ${error.message}`);
+      throw new Error(`Failed to scrape Indeed job: ${error.message}`);
     }
   }
 
