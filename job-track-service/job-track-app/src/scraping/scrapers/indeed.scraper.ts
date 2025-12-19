@@ -23,50 +23,96 @@ export class IndeedScraper {
           '--disable-setuid-sandbox',
           '--disable-blink-features=AutomationControlled',
           '--disable-dev-shm-usage',
+          '--disable-web-security',
+          '--disable-features=IsolateOrigins,site-per-process',
+          '--window-size=1920,1080',
         ],
       });
 
       const page = await browser.newPage();
 
+      // Masquer le fait qu'on utilise automation (webdriver, navigator.plugins, etc.)
+      await page.evaluateOnNewDocument(() => {
+        // Masquer webdriver
+        Object.defineProperty(navigator, 'webdriver', {
+          get: () => false,
+        });
+
+        // Ajouter Chrome comme vendor
+        Object.defineProperty(navigator, 'vendor', {
+          get: () => 'Google Inc.',
+        });
+
+        // Ajouter des plugins pour paraître réel
+        Object.defineProperty(navigator, 'plugins', {
+          get: () => [1, 2, 3, 4, 5],
+        });
+
+        // Ajouter des langues
+        Object.defineProperty(navigator, 'languages', {
+          get: () => ['fr-FR', 'fr', 'en-US', 'en'],
+        });
+      });
+
       // Configurer la page pour ressembler à un vrai navigateur
       await page.setUserAgent(
-        'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36'
+        'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36'
       );
       await page.setViewport({ width: 1920, height: 1080 });
 
-      // Désactiver les images et CSS pour accélérer
-      await page.setRequestInterception(true);
-      page.on('request', (req) => {
-        if (['image', 'stylesheet', 'font'].includes(req.resourceType())) {
-          req.abort();
-        } else {
-          req.continue();
-        }
+      // Ajouter des headers réalistes pour éviter la détection
+      await page.setExtraHTTPHeaders({
+        'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8',
+        'Accept-Language': 'fr-FR,fr;q=0.9,en-US;q=0.8,en;q=0.7',
+        'Accept-Encoding': 'gzip, deflate, br',
+        'Connection': 'keep-alive',
+        'Upgrade-Insecure-Requests': '1',
+        'Sec-Fetch-Dest': 'document',
+        'Sec-Fetch-Mode': 'navigate',
+        'Sec-Fetch-Site': 'none',
+        'Sec-Fetch-User': '?1',
+        'Cache-Control': 'max-age=0',
       });
+
+      // ⚠️ NE PAS bloquer les images/CSS - Cloudflare détecte ce comportement de bot
+      // Laisser charger toutes les ressources pour paraître plus humain
+
+      // Petit délai avant navigation pour simuler un humain
+      await new Promise(resolve => setTimeout(resolve, 500));
 
       // Naviguer vers l'URL
       this.logger.log('🌐 Chargement de la page Indeed...');
       await page.goto(url, {
-        waitUntil: 'networkidle2',
-        timeout: 45000, // Augmenter le timeout pour laisser Cloudflare finir
+        waitUntil: 'domcontentloaded', // Plus rapide que networkidle2
+        timeout: 60000, // 60 secondes pour laisser Cloudflare finir
       });
 
       // Attendre que le contenu principal soit chargé
       await page.waitForSelector('body', { timeout: 10000 });
 
-      // 🔥 Attendre que Cloudflare finisse son challenge (si présent)
-      // Cloudflare affiche "Just a moment..." pendant le challenge
-      let attempts = 0;
-      const maxAttempts = 10;
-      while (attempts < maxAttempts) {
-        const title = await page.title();
-        if (title.includes('Just a moment') || title.includes('Please wait')) {
-          this.logger.log(`⏳ Cloudflare challenge detected, waiting... (attempt ${attempts + 1}/${maxAttempts})`);
-          await new Promise(resolve => setTimeout(resolve, 2000));
-          attempts++;
-        } else {
-          this.logger.log('✅ Page fully loaded, no Cloudflare challenge detected');
-          break;
+      // 🔥 Nouvelle stratégie : attendre que le contenu Indeed soit visible
+      // Au lieu de vérifier "Just a moment...", on attend les vrais sélecteurs Indeed
+      this.logger.log('⏳ Waiting for Indeed job content to load...');
+
+      try {
+        // Attendre qu'au moins un des sélecteurs principaux d'Indeed soit présent
+        await Promise.race([
+          page.waitForSelector('h1.jobsearch-JobInfoHeader-title', { timeout: 30000 }),
+          page.waitForSelector('.jobTitle', { timeout: 30000 }),
+          page.waitForSelector('h1[data-testid="jobTitle"]', { timeout: 30000 }),
+        ]);
+        this.logger.log('✅ Indeed job content loaded successfully');
+      } catch (error) {
+        // Si timeout, vérifier si c'est Cloudflare
+        try {
+          const title = await page.title();
+          if (title.includes('Just a moment') || title.includes('Please wait')) {
+            this.logger.warn('⚠️ Cloudflare challenge detected but not resolved after 30s');
+          } else {
+            this.logger.warn(`⚠️ Could not find job content. Page title: ${title}`);
+          }
+        } catch (e) {
+          this.logger.warn('⚠️ Could not verify page state');
         }
       }
 
@@ -77,7 +123,7 @@ export class IndeedScraper {
       await new Promise(resolve => setTimeout(resolve, 500));
 
       // Petit délai supplémentaire pour éviter d'être détecté comme bot
-      await new Promise(resolve => setTimeout(resolve, 1500));
+      await new Promise(resolve => setTimeout(resolve, 1000));
 
       // 🐛 DEBUG: Prendre un screenshot pour voir ce que Chrome voit
       const screenshotPath = '/tmp/indeed-scraping-debug.png';
