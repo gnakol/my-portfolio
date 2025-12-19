@@ -57,6 +57,21 @@ export class IndeedScraper {
       // Petit délai pour éviter d'être détecté comme bot
       await new Promise(resolve => setTimeout(resolve, 1500));
 
+      // 🐛 DEBUG: Prendre un screenshot pour voir ce que Chrome voit
+      const screenshotPath = '/tmp/indeed-scraping-debug.png';
+      await page.screenshot({ path: screenshotPath, fullPage: false });
+      this.logger.debug(`📸 Screenshot saved to: ${screenshotPath}`);
+
+      // 🐛 DEBUG: Afficher le titre de la page
+      const pageTitle = await page.title();
+      this.logger.debug(`📄 Page title: ${pageTitle}`);
+
+      // 🐛 DEBUG: Vérifier si on a un captcha ou une page de blocage
+      const bodyText = await page.evaluate(() => document.body.innerText);
+      if (bodyText.includes('captcha') || bodyText.includes('robot') || bodyText.includes('access denied')) {
+        this.logger.warn(`⚠️ Possible bot detection! Page contains: ${bodyText.substring(0, 200)}`);
+      }
+
       // Extraire les données avec plusieurs sélecteurs (Indeed change parfois)
       const jobData = await page.evaluate(() => {
         const getText = (selectors: string[]): string => {
@@ -245,6 +260,15 @@ export class IndeedScraper {
           locationCountry = 'France';
         }
       }
+
+      // 🐛 DEBUG: Afficher les données extraites
+      this.logger.debug(`📊 Extracted data:`);
+      this.logger.debug(`  - Title: "${jobData.title}"`);
+      this.logger.debug(`  - Company: "${jobData.companyName}"`);
+      this.logger.debug(`  - Location: "${jobData.location}"`);
+      this.logger.debug(`  - Description length: ${jobData.description?.length || 0} chars`);
+      this.logger.debug(`  - Salary: "${jobData.salaryText}"`);
+      this.logger.debug(`  - Contract: "${jobData.contractType}"`);
 
       this.logger.log(`✅ Scraping Indeed réussi: ${jobData.title}`);
 
