@@ -15,8 +15,11 @@ export class IndeedScraper {
     try {
       this.logger.log(`🔍 Scraping Indeed job from: ${url}`);
 
+      // Détecter si on est en production (Tor est disponible)
+      const isProduction = process.env.NODE_ENV === 'production';
+
       // Lancer Puppeteer avec des options anti-détection
-      browser = await puppeteer.launch({
+      const launchOptions: any = {
         headless: true,
         args: [
           '--no-sandbox',
@@ -27,7 +30,15 @@ export class IndeedScraper {
           '--disable-features=IsolateOrigins,site-per-process',
           '--window-size=1920,1080',
         ],
-      });
+      };
+
+      // En production, utiliser Tor pour masquer l'IP AWS
+      if (isProduction) {
+        this.logger.log('🧅 Using Tor proxy to bypass Cloudflare...');
+        launchOptions.args.push('--proxy-server=socks5://127.0.0.1:9050');
+      }
+
+      browser = await puppeteer.launch(launchOptions);
 
       const page = await browser.newPage();
 
