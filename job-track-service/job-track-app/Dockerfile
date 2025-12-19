@@ -80,6 +80,17 @@ COPY package*.json ./
 # Install only production dependencies
 RUN npm ci --only=production && npm cache clean --force
 
+# Create startup script that launches Tor then the app (AVANT de passer en user nestjs)
+RUN echo '#!/bin/sh' > /app/start.sh && \
+    echo 'echo "🧅 Starting Tor proxy..."' >> /app/start.sh && \
+    echo 'tor -f /home/nestjs/torrc &' >> /app/start.sh && \
+    echo 'echo "⏳ Waiting for Tor to establish circuit..."' >> /app/start.sh && \
+    echo 'sleep 10' >> /app/start.sh && \
+    echo 'echo "✅ Tor is ready, launching application..."' >> /app/start.sh && \
+    echo 'exec node dist/main.js' >> /app/start.sh && \
+    chmod +x /app/start.sh && \
+    chown nestjs:nodejs /app/start.sh
+
 # ----- Puppeteer / Chrome setup -----
 # On passe en user nestjs pour que le cache et Chrome soient sous /home/nestjs
 USER nestjs
@@ -99,16 +110,6 @@ EXPOSE 3001
 # Health check
 HEALTHCHECK --interval=30s --timeout=10s --start-period=40s --retries=3 \
   CMD node -e "require('http').get('http://localhost:3001/api/health', (r) => {process.exit(r.statusCode === 200 ? 0 : 1)})"
-
-# Create startup script that launches Tor then the app
-RUN echo '#!/bin/sh' > /app/start.sh && \
-    echo 'echo "🧅 Starting Tor proxy..."' >> /app/start.sh && \
-    echo 'tor -f /home/nestjs/torrc &' >> /app/start.sh && \
-    echo 'echo "⏳ Waiting for Tor to establish circuit..."' >> /app/start.sh && \
-    echo 'sleep 10' >> /app/start.sh && \
-    echo 'echo "✅ Tor is ready, launching application..."' >> /app/start.sh && \
-    echo 'exec node dist/main.js' >> /app/start.sh && \
-    chmod +x /app/start.sh
 
 # Use dumb-init to handle signals properly
 ENTRYPOINT ["dumb-init", "--"]
