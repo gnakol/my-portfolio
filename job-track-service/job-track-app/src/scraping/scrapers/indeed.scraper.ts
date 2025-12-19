@@ -2,6 +2,7 @@ import { Injectable, Logger } from '@nestjs/common';
 import { ScrapedJobDataDto } from '../dto';
 import puppeteer from 'puppeteer-extra';
 import StealthPlugin from 'puppeteer-extra-plugin-stealth';
+import * as net from 'net';
 
 // Ajouter le plugin stealth pour éviter la détection
 puppeteer.use(StealthPlugin());
@@ -9,6 +10,43 @@ puppeteer.use(StealthPlugin());
 @Injectable()
 export class IndeedScraper {
   private readonly logger = new Logger(IndeedScraper.name);
+
+  /**
+   * Renouvelle le circuit Tor pour obtenir une nouvelle IP
+   */
+  private async renewTorCircuit(): Promise<void> {
+    return new Promise((resolve, reject) => {
+      const socket = new net.Socket();
+
+      socket.connect(9051, '127.0.0.1', () => {
+        this.logger.log('🔄 Renewing Tor circuit to get fresh IP...');
+        socket.write('AUTHENTICATE ""\r\n');
+        socket.write('SIGNAL NEWNYM\r\n');
+        socket.write('QUIT\r\n');
+      });
+
+      socket.on('data', (data) => {
+        this.logger.debug(`Tor ControlPort response: ${data.toString()}`);
+      });
+
+      socket.on('close', () => {
+        this.logger.log('✅ Tor circuit renewed');
+        resolve();
+      });
+
+      socket.on('error', (err) => {
+        this.logger.warn(`⚠️ Could not renew Tor circuit: ${err.message}`);
+        // Ne pas bloquer si la rotation échoue
+        resolve();
+      });
+
+      // Timeout de 5 secondes
+      setTimeout(() => {
+        socket.destroy();
+        resolve();
+      }, 5000);
+    });
+  }
 
   async scrape(url: string): Promise<ScrapedJobDataDto> {
     let browser;
@@ -18,7 +56,14 @@ export class IndeedScraper {
       // Détecter si on est en production (Tor est disponible)
       const isProduction = process.env.NODE_ENV === 'production';
 
-      // Lancer Puppeteer avec des options anti-détection
+      // 🔄 Renouveler le circuit Tor pour obtenir une nouvelle IP (éviter blacklist)
+      if (isProduction) {
+        await this.renewTorCircuit();
+        // Attendre un peu que le nouveau circuit soit établi
+        await new Promise(resolve => setTimeout(resolve, 3000));
+      }
+
+      // Lancer Puppeteer avec des options anti-détection AMÉLIORÉES
       const launchOptions: any = {
         headless: true,
         args: [
@@ -26,15 +71,18 @@ export class IndeedScraper {
           '--disable-setuid-sandbox',
           '--disable-blink-features=AutomationControlled',
           '--disable-dev-shm-usage',
-          '--disable-web-security',
-          '--disable-features=IsolateOrigins,site-per-process',
           '--window-size=1920,1080',
+          // Nouveaux flags pour paraître plus humain
+          '--disable-features=IsolateOrigins',
+          '--disable-site-isolation-trials',
+          '--disable-features=BlockInsecurePrivateNetworkRequests',
+          '--lang=fr-FR',
         ],
       };
 
       // En production, utiliser Tor pour masquer l'IP AWS
       if (isProduction) {
-        this.logger.log('🧅 Using Tor proxy to bypass Cloudflare...');
+        this.logger.log('🧅 Using Tor proxy with improved anti-detection...');
         launchOptions.args.push('--proxy-server=socks5://127.0.0.1:9050');
       }
 
@@ -88,14 +136,27 @@ export class IndeedScraper {
       // ⚠️ NE PAS bloquer les images/CSS - Cloudflare détecte ce comportement de bot
       // Laisser charger toutes les ressources pour paraître plus humain
 
-      // Petit délai avant navigation pour simuler un humain
+      // 🎭 STRATÉGIE EN 2 ÉTAPES : Visiter d'abord la homepage pour paraître humain
+      this.logger.log('🏠 Step 1: Visiting Indeed homepage to establish session...');
+      await page.goto('https://fr.indeed.com/', {
+        waitUntil: 'domcontentloaded',
+        timeout: 30000,
+      });
+
+      // Simuler un comportement humain sur la homepage
+      await new Promise(resolve => setTimeout(resolve, 2000));
+      await page.mouse.move(300, 400);
       await new Promise(resolve => setTimeout(resolve, 500));
 
-      // Naviguer vers l'URL
-      this.logger.log('🌐 Chargement de la page Indeed...');
+      // Scroll un peu pour paraître humain
+      await page.evaluate(() => window.scrollBy(0, 200));
+      await new Promise(resolve => setTimeout(resolve, 1000));
+
+      // Maintenant aller sur l'offre d'emploi
+      this.logger.log('🎯 Step 2: Navigating to job offer...');
       await page.goto(url, {
-        waitUntil: 'domcontentloaded', // Plus rapide que networkidle2
-        timeout: 60000, // 60 secondes pour laisser Cloudflare finir
+        waitUntil: 'domcontentloaded',
+        timeout: 60000,
       });
 
       // Attendre que le contenu principal soit chargé

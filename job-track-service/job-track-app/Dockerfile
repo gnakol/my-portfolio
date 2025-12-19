@@ -71,6 +71,7 @@ RUN mkdir -p /home/nestjs/tor-data && \
     chown -R nestjs:nodejs /home/nestjs/tor-data && \
     echo "SocksPort 9050" > /home/nestjs/torrc && \
     echo "ControlPort 9051" >> /home/nestjs/torrc && \
+    echo "CookieAuthentication 0" >> /home/nestjs/torrc && \
     echo "DataDirectory /home/nestjs/tor-data" >> /home/nestjs/torrc && \
     chown nestjs:nodejs /home/nestjs/torrc
 
