@@ -65,9 +65,29 @@
     </mat-card>
 
     <!-- Step 2: Scraped Data & Candidacy Form -->
-    <div *ngIf="showCandidacyForm && scrapedData" class="candidacy-section">
-      <!-- Scraped Data Preview -->
-      <mat-card class="glass-card preview-card">
+    <div *ngIf="showCandidacyForm" class="candidacy-section">
+      <!-- Alert for Indeed in Production (Manual Entry) -->
+      <mat-card *ngIf="isIndeedInProduction" class="glass-card alert-card manual-entry-alert">
+        <mat-card-content>
+          <div class="alert-content">
+            <mat-icon class="alert-icon">info</mat-icon>
+            <div class="alert-text">
+              <h3>Saisie manuelle requise</h3>
+              <p>{{ indeedManualEntryMessage }}</p>
+              <p class="sub-text">
+                <strong>Pourquoi ?</strong> Indeed utilise des protections anti-bot avancées (Cloudflare) qui bloquent le scraping automatique en production.
+                En environnement local, le scraping fonctionne correctement.
+              </p>
+              <p class="sub-text">
+                <strong>Plateformes avec scraping automatique :</strong> Welcome to the Jungle, LinkedIn
+              </p>
+            </div>
+          </div>
+        </mat-card-content>
+      </mat-card>
+
+      <!-- Scraped Data Preview (only if not Indeed in production) -->
+      <mat-card *ngIf="scrapedData && !isIndeedInProduction" class="glass-card preview-card">
         <mat-card-header>
           <mat-icon class="step-icon success-icon">check_circle</mat-icon>
           <mat-card-title>Données récupérées automatiquement</mat-card-title>

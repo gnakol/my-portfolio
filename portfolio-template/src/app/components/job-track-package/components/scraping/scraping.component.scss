@@ -161,6 +161,58 @@
   animation: fadeIn 0.5s ease-in-out;
 }
 
+.manual-entry-alert {
+  margin-bottom: 2rem;
+  background: rgba(59, 130, 246, 0.1) !important; // Bleu info
+  border: 1px solid rgba(59, 130, 246, 0.3) !important;
+
+  .alert-content {
+    display: flex;
+    gap: 1.5rem;
+    align-items: flex-start;
+
+    .alert-icon {
+      font-size: 3rem;
+      width: 3rem;
+      height: 3rem;
+      color: #3b82f6;
+      flex-shrink: 0;
+    }
+
+    .alert-text {
+      flex: 1;
+
+      h3 {
+        color: #f8fafc;
+        font-size: 1.5rem;
+        font-weight: 600;
+        margin: 0 0 1rem 0;
+      }
+
+      p {
+        color: #cbd5e1;
+        font-size: 1rem;
+        line-height: 1.6;
+        margin: 0 0 1rem 0;
+
+        &:last-child {
+          margin-bottom: 0;
+        }
+      }
+
+      .sub-text {
+        font-size: 0.9rem;
+        color: #94a3b8;
+
+        strong {
+          color: #e2e8f0;
+          font-weight: 600;
+        }
+      }
+    }
+  }
+}
+
 .scraped-data-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -222,40 +274,99 @@
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
   gap: 1.5rem;
   margin-bottom: 1.5rem;
+}
 
-  ::ng-deep .mat-mdc-form-field {
-    .mat-mdc-text-field-wrapper {
-      background: rgba(255, 255, 255, 0.05);
-      border-radius: 8px;
+/* Styles pour TOUS les mat-form-field du formulaire (dans et hors grid) */
+::ng-deep .mat-mdc-form-field {
+  .mat-mdc-text-field-wrapper {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 8px;
+  }
+
+  .mat-mdc-form-field-label {
+    color: #94a3b8 !important;
+  }
+
+  .mat-mdc-input-element {
+    color: #f8fafc !important;
+  }
+
+  .mat-mdc-form-field-icon-prefix {
+    color: #6366f1 !important;
+    margin-right: 12px !important;
+  }
+
+  /* ============================================================
+     ✅ FIX ULTIME: Suppression COMPLÈTE de tous les traits verticaux
+     ============================================================ */
+
+  /* Suppression de TOUS les pseudo-éléments qui créent des traits */
+  *::before,
+  *::after {
+    border-left: none !important;
+    border-right: none !important;
+  }
+
+  /* Ciblage spécifique des icônes prefix/suffix */
+  .mat-mdc-form-field-icon-prefix,
+  .mat-mdc-form-field-icon-suffix {
+    &::before,
+    &::after {
+      display: none !important;
+      content: none !important;
+      width: 0 !important;
+      height: 0 !important;
+      border: none !important;
+      background: none !important;
     }
+  }
 
-    .mat-mdc-form-field-label {
-      color: #94a3b8 !important;
+  /* Suppression de tous les séparateurs dans le text field */
+  .mat-mdc-form-field-text-prefix,
+  .mat-mdc-form-field-text-suffix {
+    &::before,
+    &::after {
+      display: none !important;
+      border: none !important;
     }
+  }
 
-    .mat-mdc-input-element {
-      color: #f8fafc !important;
-    }
+  /* Les jonctions de l'outline */
+  .mdc-notched-outline__leading,
+  .mdc-notched-outline__notch,
+  .mdc-notched-outline__trailing {
+    border-left: none !important;
+    border-right: none !important;
+    border-color: rgba(255, 255, 255, 0.2) !important;
+  }
 
-    .mat-mdc-form-field-icon-prefix {
-      color: #6366f1 !important;
-    }
+  /* Conservation des bordures horizontales uniquement */
+  .mdc-notched-outline__leading {
+    border-top: 1px solid rgba(255, 255, 255, 0.2) !important;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2) !important;
+  }
 
+  .mdc-notched-outline__notch {
+    border-top: 1px solid rgba(255, 255, 255, 0.2) !important;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2) !important;
+  }
+
+  .mdc-notched-outline__trailing {
+    border-top: 1px solid rgba(255, 255, 255, 0.2) !important;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2) !important;
+  }
+
+  /* État focus */
+  &.mat-focused {
     .mdc-notched-outline__leading,
     .mdc-notched-outline__notch,
     .mdc-notched-outline__trailing {
-      border-color: rgba(255, 255, 255, 0.2) !important;
-    }
-
-    &.mat-focused {
-      .mdc-notched-outline__leading,
-      .mdc-notched-outline__notch,
-      .mdc-notched-outline__trailing {
-        border-color: #6366f1 !important;
-      }
+      border-top-color: #6366f1 !important;
+      border-bottom-color: #6366f1 !important;
     }
   }
 }
+
 
 .action-buttons {
   display: flex;
@@ -329,6 +440,11 @@
 
   .error-snackbar {
     background: #ef4444 !important;
+    color: white !important;
+  }
+
+  .info-snackbar {
+    background: #3b82f6 !important;
     color: white !important;
   }
 }

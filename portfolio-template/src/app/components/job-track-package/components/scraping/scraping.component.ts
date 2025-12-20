@@ -26,6 +26,9 @@ import { CandidacyService } from '../../services/candidacy.service';
 import { ScrapedJobData } from '../../models/job-offer.model';
 import { CandidacyStatus } from '../../models/candidacy.model';
 
+// Environment
+import { environment } from '../../../../../environments/environment';
+
 @Component({
   selector: 'app-job-track-scraping',
   standalone: true,
@@ -55,6 +58,8 @@ export class ScrapingComponent {
   isLoading = false;
   scrapedData: ScrapedJobData | null = null;
   showCandidacyForm = false;
+  isIndeedInProduction = false; // Flag pour Indeed en prod
+  indeedManualEntryMessage = ''; // Message explicatif
 
   candidacyStatuses = Object.values(CandidacyStatus);
 
@@ -99,8 +104,36 @@ export class ScrapingComponent {
       return;
     }
 
-    this.isLoading = true;
     const url = this.urlForm.value.url;
+
+    // 🎯 Détection Indeed + Production = Saisie manuelle
+    const isIndeedUrl = url.toLowerCase().includes('indeed.') || url.toLowerCase().includes('indeed.com') || url.toLowerCase().includes('indeed.fr');
+
+    if (isIndeedUrl && environment.production) {
+      // Mode saisie manuelle pour Indeed en production
+      this.isIndeedInProduction = true;
+      this.indeedManualEntryMessage = `🔒 Le scraping automatique d'Indeed n'est pas disponible en production en raison des protections anti-bot de la plateforme. Veuillez saisir les informations manuellement.`;
+
+      // Pré-remplir avec les infos de base
+      this.candidacyForm.patchValue({
+        platform: 'Indeed',
+        applicationChannel: 'Indeed'
+      });
+
+      this.showCandidacyForm = true;
+
+      this.snackBar.open('ℹ️ Saisie manuelle requise pour Indeed', 'Fermer', {
+        duration: 4000,
+        panelClass: ['info-snackbar']
+      });
+
+      return;
+    }
+
+    // Scraping normal pour WTTJ, LinkedIn, et Indeed en local
+    this.isLoading = true;
+    this.isIndeedInProduction = false;
+    this.indeedManualEntryMessage = '';
 
     this.jobOfferService.scrapeJobOffer({ url }).subscribe({
       next: (data) => {
@@ -293,6 +326,8 @@ export class ScrapingComponent {
     this.candidacyForm.reset();
     this.scrapedData = null;
     this.showCandidacyForm = false;
+    this.isIndeedInProduction = false;
+    this.indeedManualEntryMessage = '';
   }
 
   goBack(): void {
