@@ -22,22 +22,27 @@ export class AuthComponent {
   ) {
     this.loginForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
-      password: ['', [Validators.required, Validators.minLength(3)]]
+      password: ['', [Validators.required, Validators.minLength(3)]],
+      otpCode: ['', [Validators.pattern(/^\d{6}$/)]]
     });
   }
 
   onSubmit(): void {
     if (this.loginForm.valid) {
-      const { email, password } = this.loginForm.value;
+      const { email, password, otpCode } = this.loginForm.value;
 
-      this.authService.login(email, password).subscribe(
+      this.authService.login(email, password, otpCode || undefined).subscribe(
         token => {
           //console.log('Connexion réussie, token reçu:', token);
           this.router.navigate(['/dashboard-admin']);
         },
         error => {
           //console.error('Erreur de connexion:', error);
-          this.snackBar.open('Identifiants incorrects', 'Fermer', { duration: 3000 });
+          if (error.status === 401) {
+            this.snackBar.open('Code OTP requis ou incorrect', 'Fermer', { duration: 5000 });
+          } else {
+            this.snackBar.open('Identifiants incorrects', 'Fermer', { duration: 3000 });
+          }
         }
       );
     } else {

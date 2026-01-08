@@ -32,16 +32,20 @@ export class AuthenticationService {
   }
 
 
-login(email: string, password: string): Observable<string> {
+login(email: string, password: string, otpCode?: string): Observable<string> {
+  const payload: any = { email, password };
+  if (otpCode) {
+    payload.totp = otpCode;
+  }
+
   return this.http.post<{
     access_token: string;
     refresh_token: string;
     expires_in: string;
-  }>(this.authUrl, { email, password })
+  }>(this.authUrl, payload)
     .pipe(
       map(response => {
         if (response?.access_token) {
-          // on stocke le token d’accès ET le refresh token
           localStorage.setItem('jwtToken', response.access_token);
           if (response.refresh_token) {
             localStorage.setItem('refreshToken', response.refresh_token);

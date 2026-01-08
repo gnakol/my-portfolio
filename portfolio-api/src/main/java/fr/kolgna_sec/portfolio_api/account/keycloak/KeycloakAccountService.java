@@ -55,6 +55,10 @@ public class KeycloakAccountService {
                 formData.add("client_secret", clientSecret);
             }
 
+            if (loginRequestDTO.getTotp() != null && !loginRequestDTO.getTotp().isEmpty()) {
+                formData.add("totp", loginRequestDTO.getTotp());
+            }
+
             HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<>(formData, headers);
 
             ResponseEntity<Map> response = restTemplate.postForEntity(

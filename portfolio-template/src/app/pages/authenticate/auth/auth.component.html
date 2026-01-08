@@ -30,6 +30,14 @@
           <mat-error *ngIf="loginForm.get('password')?.invalid">Minimum 3 caractères</mat-error>
         </mat-form-field>
 
+        <mat-form-field appearance="fill" class="login-field">
+          <mat-label>Code 2FA</mat-label>
+          <input matInput formControlName="otpCode" type="text" maxlength="6" placeholder="123456">
+          <mat-icon matSuffix>phonelink_lock</mat-icon>
+          <mat-error *ngIf="loginForm.get('otpCode')?.invalid">Code à 6 chiffres requis</mat-error>
+          <mat-hint>Code généré par Google Authenticator</mat-hint>
+        </mat-form-field>
+
         <button mat-raised-button type="submit" class="login-button">
           Se connecter
         </button>
